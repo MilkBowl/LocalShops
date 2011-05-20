@@ -32,6 +32,7 @@ import cuboidLocale.QuadTree;
 public class LocalShops extends JavaPlugin {
     // Listeners & Objects
     public ShopsPlayerListener playerListener = new ShopsPlayerListener(this);
+    public ShopsBlockListener blockListener = new ShopsBlockListener(this);
     private ShopData shopData = new ShopData(this);
     public PluginDescriptionFile pdfFile = null;
     protected ReportThread reportThread = null;
@@ -47,10 +48,12 @@ public class LocalShops extends JavaPlugin {
 
     // TBD
     private static QuadTree cuboidTree = new QuadTree();
-    static String folderPath = "plugins/LocalShops/";
-    static File folderDir;
-    static String shopsPath = "shops/";
+    
+    //
+    static final String folderPath = "plugins/LocalShops/";
+    static final String shopsPath = "shops/";
     static File shopsDir;
+    static File folderDir;
     static List<World> foundWorlds;
 
     static PropertyHandler properties;
@@ -74,6 +77,8 @@ public class LocalShops extends JavaPlugin {
         pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
         pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
         pm.registerEvent(Event.Type.PLAYER_KICK, playerListener, Priority.Monitor, this);
+        pm.registerEvent(Event.Type.SIGN_CHANGE, blockListener, Priority.Normal, this);
+        pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Priority.Normal, this);
         
         // Register Commands
         getCommand("shop").setExecutor(new ShopCommandExecutor(this));
