@@ -4,7 +4,6 @@
 package net.centerleft.localshops;
 
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -25,8 +24,6 @@ import cuboidLocale.PrimitiveCuboid;
 public class ShopsBlockListener extends BlockListener {
     private LocalShops plugin;
 
-    // Logging
-    private static final Logger log = Logger.getLogger("Minecraft");    
 
     public ShopsBlockListener(LocalShops plugin) {
         this.plugin = plugin;
