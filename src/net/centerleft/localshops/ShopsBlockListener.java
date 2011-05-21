@@ -4,6 +4,7 @@
 package net.centerleft.localshops;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -163,7 +164,15 @@ public class ShopsBlockListener extends BlockListener {
             event.setCancelled(true);
             return;
         } else {
-            //TODO: Remove Sign from the shop signlist
+            Location blockLoc = block.getLocation();
+            Iterator<Location> iter = shop.getSignMap().keySet().iterator();
+            while (iter.hasNext()) {
+                Location signLoc = iter.next();
+                if ( signLoc.getBlockX() == blockLoc.getBlockX() && signLoc.getBlockY() == blockLoc.getBlockY() && signLoc.getBlockZ() == blockLoc.getBlockZ()) {
+                    iter.remove();
+                    return;
+                }
+            }
         }
         
     }
