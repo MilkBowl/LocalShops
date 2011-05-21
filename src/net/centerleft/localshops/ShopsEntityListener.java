@@ -53,6 +53,9 @@ public class ShopsEntityListener extends EntityListener {
                 }
                 shop = plugin.getShopData().getShop(cuboid.uuid);
             }
+            if (shop == null) {
+                return;
+            }
             Location blockLoc = block.getLocation();
             Iterator<Location> iter = shop.getSignMap().keySet().iterator();
             while (iter.hasNext()) {
