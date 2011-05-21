@@ -102,7 +102,7 @@ public class ShopsBlockListener extends BlockListener {
         Block block = event.getBlock();
         
         //If not a sign ignore event.
-        if ( !(block.getType() == Material.SIGN_POST) && !(block.getType() == Material.WALL_SIGN)) {
+        if ( (!(block.getType() == Material.SIGN_POST) && !(block.getType() == Material.WALL_SIGN)) || event.isCancelled() ) {
             return;
         }
         
@@ -136,7 +136,7 @@ public class ShopsBlockListener extends BlockListener {
         Block block = event.getBlock();
         
         //If not a sign ignore event.
-        if ( !(block.getType() == Material.SIGN_POST) && !(block.getType() == Material.WALL_SIGN)) {
+        if ( (!(block.getType() == Material.SIGN_POST) && !(block.getType() == Material.WALL_SIGN)) || event.isCancelled()) {
             return;
         }
         
