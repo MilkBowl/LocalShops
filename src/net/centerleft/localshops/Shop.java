@@ -31,7 +31,7 @@ public class Shop implements Comparator<Shop> {
     private double minBalance = 0;
     private ArrayBlockingQueue<Transaction> transactions;
     private boolean notification = true;
-    private HashMap<Location, String> signList = null;
+    private HashMap<Location, String> signMap = null;
     
     // Logging
     private static final Logger log = Logger.getLogger("Minecraft");    
@@ -355,12 +355,12 @@ public class Shop implements Comparator<Shop> {
         return o1.getUuid().compareTo(o2.uuid);
     }
 
-    public void setSignList(HashMap<Location, String> signList) {
-        this.signList = signList;
+    public void setSignMap(HashMap<Location, String> signList) {
+        this.signMap = signList;
     }
 
-    public HashMap<Location, String> getSignList() {
-        return signList;
+    public HashMap<Location, String> getSignMap() {
+        return signMap;
     }
 
 }

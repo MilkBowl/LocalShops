@@ -19,6 +19,8 @@ import java.util.logging.Logger;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 
 import cuboidLocale.BookmarkedResult;
 import cuboidLocale.PrimitiveCuboid;
@@ -92,7 +94,7 @@ public class ShopData {
     public int getNumShops() {
         return shops.size();
     }
-    
+
     public int numOwnedShops(String playerName) {
         int numShops = 0;
         for ( Shop shop : shops.values() ) {
@@ -324,7 +326,7 @@ public class ShopData {
             return null;
         }
     }
-    
+
     public static double[] convertStringArraytoDoubleArray(String[] sarray) {
         if (sarray != null) {
             double longArray[] = new double[sarray.length];
@@ -337,8 +339,8 @@ public class ShopData {
     }    
 
     public Shop loadShop(File file) throws Exception {
-        HashMap<Location, String> signList = new HashMap<Location, String>(4);
-        
+        HashMap<Location, String> signMap = new HashMap<Location, String>(4);
+
         SortedProperties props = new SortedProperties();
         try {
             props.load(new FileInputStream(file));
@@ -388,7 +390,7 @@ public class ShopData {
         shop.setManagers(managers);
         shop.setCreator(creator);
         shop.setNotification(notification);
-        
+
         // Make sure minimum balance isn't negative
         if (minBalance < 0) {
             shop.setMinBalance(0);
@@ -430,43 +432,70 @@ public class ShopData {
                     return null;
                 }
             } else if (key.matches("sign:\\d+,\\d+,\\d+")) {
-                
+
                 String[] k = key.split(":");
                 k = k[1].split(",");
-                
+
                 int x = Integer.parseInt(k[0]);
                 int y = Integer.parseInt(k[1]);
                 int z = Integer.parseInt(k[2]);
-                
-                String value = props.getProperty(key);
-                
-                signList.put( new Location (plugin.getServer().getWorld(world), x, y, z), value );
+
+                String itemName = props.getProperty(key);
+
+                signMap.put( new Location (plugin.getServer().getWorld(world), x, y, z), itemName );
             }
         }
-        
+
         //After loading sign data, verify they exist in the world
-        Iterator<Location> iter = signList.keySet().iterator();
+        Iterator<Location> iter = signMap.keySet().iterator();
         while (iter.hasNext() ) {
-            Location sign = iter.next();
-          //Load the chunk so we don't try getting blocks that are non-existent
-            plugin.getServer().getWorld(world).loadChunk(plugin.getServer().getWorld(world).getChunkAt(sign));
+            Location signLoc = iter.next();
+            //Load the chunk so we don't try getting blocks that are non-existent
+            plugin.getServer().getWorld(world).loadChunk(plugin.getServer().getWorld(world).getChunkAt(signLoc));
             //Check if the block is not a sign.
-            if (!(sign.getBlock().getType() == Material.WALL_SIGN) && !(sign.getBlock().getType() == Material.SIGN_POST)) {
+            if (!(signLoc.getBlock().getType() == Material.WALL_SIGN) && !(signLoc.getBlock().getType() == Material.SIGN_POST)) {
                 //Spit out an invalid error to the log then remove it from the Hash.
-                log.warning(String.format("[%s] Shop File \"%s\" has bad Sign Data, ignoring erroneous entry (%d,%d,%d) and continuing.", plugin.pdfFile.getName(), file.toString(), sign.getX(), sign.getY(), sign.getZ()));
+                log.warning(String.format("[%s] Shop File \"%s\" has bad Sign Data, ignoring erroneous entry (%d,%d,%d) and continuing.", plugin.pdfFile.getName(), file.toString(), signLoc.getX(), signLoc.getY(), signLoc.getZ()));
                 iter.remove();
             } else {
-                //TODO: Parse the contents and update the sign text
+                ItemInfo item = Search.itemByName(signMap.get(signLoc));
+                if (!(shop.containsItem(item))) {
+                    log.warning(String.format("[%s] Shop File \"%s\" has Sign (%d,%d,%d), but no matching item in stock.", plugin.pdfFile.getName(), file.toString(), signLoc.getX(), signLoc.getY(), signLoc.getZ()));
+                    continue;
+                } else {
+                   //Get the lines for future use?
+                   String signLines[] = ((Sign) signLoc.getBlock().getState()).getLines();
+                   signLines[0] = item.name;
+                   signLines[1] = "Buy: ";
+                   signLines[2] = "Sell: ";
+                   signLines[3] = "";
+                   
+                   if (shop.getItem(item.name).getBuyPrice() == 0) {
+                       signLines[1] += "-";
+                   } else {
+                       signLines[1] += shop.getItem(item.name).getBuyPrice();
+                   }
+                   if (shop.getItem(item.name).getSellPrice() == 0) {
+                       signLines[2] += "-";
+                   } else {
+                       signLines[2] += shop.getItem(item.name).getSellPrice();
+                   }
+                   //Set the lines
+                   ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[0]);
+                   ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[1]);
+                   ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[2]);
+                   ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[3]);
+                }
             }
         }
-        //Set the sign list for the shop
-        shop.setSignList(signList);
-        
+        //Set the sign mapping for the shop
+        shop.setSignMap(signMap);
+
         // Sanity Checks
         // Check that filename == UUID from file
         if(!file.getName().equalsIgnoreCase(String.format("%s.shop", shop.getUuid().toString()))) {
             shop = null;
-            
+
             if(isolateBrokenShopFile(file)) {
                 log.warning(String.format("[%s] Shop file %s has bad data!  Moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.getName()));
             } else {
@@ -476,7 +505,7 @@ public class ShopData {
 
         return shop;
     }
-    
+
     public boolean isolateBrokenShopFile(File file) {
         File dir = new File("plugins/LocalShops/shops-broken/");
         dir.mkdir();
@@ -534,16 +563,16 @@ public class ShopData {
 
             props.setProperty(String.format("%d:%d", info.typeId, info.subTypeId), String.format("%f:%d,%f:%d,%d:%d", buyPrice, buySize, sellPrice, sellSize, stock, maxStock));
         }
-        
+
         //Sign Data
-        for (Location sign : shop.getSignList().keySet()) {
-            int x = sign.getBlockX();
-            int y = sign.getBlockY();
-            int z = sign.getBlockZ();
-            
-            props.setProperty(String.format("sign:%d,%d,%d", x, y, z), shop.getSignList().get(sign));
+        for (Location signLoc : shop.getSignMap().keySet()) {
+            int x = signLoc.getBlockX();
+            int y = signLoc.getBlockY();
+            int z = signLoc.getBlockZ();
+
+            props.setProperty(String.format("sign:%d,%d,%d", x, y, z), shop.getSignMap().get(signLoc));
         }
-        
+
         String fileName = LocalShops.folderPath + LocalShops.shopsPath + shop.getUuid().toString() + ".shop";
         try {
             props.store(new FileOutputStream(fileName), "LocalShops Config Version 2.0");
