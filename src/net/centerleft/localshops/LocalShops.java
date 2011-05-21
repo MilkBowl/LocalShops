@@ -33,6 +33,7 @@ public class LocalShops extends JavaPlugin {
     // Listeners & Objects
     public ShopsPlayerListener playerListener = new ShopsPlayerListener(this);
     public ShopsBlockListener blockListener = new ShopsBlockListener(this);
+    public ShopsEntityListener entityListener = new ShopsEntityListener(this);
     private ShopData shopData = new ShopData(this);
     public PluginDescriptionFile pdfFile = null;
     protected ReportThread reportThread = null;
@@ -79,6 +80,7 @@ public class LocalShops extends JavaPlugin {
         pm.registerEvent(Event.Type.PLAYER_KICK, playerListener, Priority.Monitor, this);
         pm.registerEvent(Event.Type.SIGN_CHANGE, blockListener, Priority.Normal, this);
         pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Priority.Normal, this);
+        pm.registerEvent(Event.Type.ENTITY_EXPLODE, entityListener, Priority.Normal, this);
         
         // Register Commands
         getCommand("shop").setExecutor(new ShopCommandExecutor(this));
