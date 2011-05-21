@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
@@ -449,18 +450,21 @@ public class ShopData {
         //After loading sign data, verify they exist in the world
         Iterator<Location> iter = signMap.keySet().iterator();
         while (iter.hasNext() ) {
+            World signWorld = plugin.getServer().getWorld(world);
+            log.info("[LocalShops] - Iterating through map");
             Location signLoc = iter.next();
             //Load the chunk so we don't try getting blocks that are non-existent
-            plugin.getServer().getWorld(world).loadChunk(plugin.getServer().getWorld(world).getChunkAt(signLoc));
+            signWorld.loadChunk(plugin.getServer().getWorld(world).getChunkAt(signLoc));
+            
+            log.info("[LocalShops] - Got Chunk: " + signWorld.isChunkLoaded(signWorld.getChunkAt(signLoc)));
             //Check if the block is not a sign.
-            if (!(signLoc.getBlock().getType() == Material.WALL_SIGN) && !(signLoc.getBlock().getType() == Material.SIGN_POST)) {
-                //Spit out an invalid error to the log then remove it from the Hash.
-                log.warning(String.format("[%s] Shop File \"%s\" has bad Sign Data, ignoring erroneous entry (%d,%d,%d) and continuing.", plugin.pdfFile.getName(), file.toString(), signLoc.getX(), signLoc.getY(), signLoc.getZ()));
+            
+            if ( signWorld.getBlockAt(signLoc).getType() != Material.WALL_SIGN && signWorld.getBlockAt(signLoc).getType() != Material.SIGN_POST ) {
                 iter.remove();
+                continue;
             } else {
                 ItemInfo item = Search.itemByName(signMap.get(signLoc));
                 if (!(shop.containsItem(item))) {
-                    log.warning(String.format("[%s] Shop File \"%s\" has Sign (%d,%d,%d), but no matching item in stock.", plugin.pdfFile.getName(), file.toString(), signLoc.getX(), signLoc.getY(), signLoc.getZ()));
                     continue;
                 } else {
                    //Get the lines for future use?
