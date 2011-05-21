@@ -26,6 +26,7 @@ import cuboidLocale.PrimitiveCuboid;
 public class ShopsBlockListener extends BlockListener {
     private LocalShops plugin;
 
+
     public ShopsBlockListener(LocalShops plugin) {
         this.plugin = plugin;
     }
@@ -139,7 +140,7 @@ public class ShopsBlockListener extends BlockListener {
         Block block = event.getBlock();
 
         //If not a sign ignore event.
-        if ( (!(block.getType() == Material.SIGN_POST) && !(block.getType() == Material.WALL_SIGN)) || event.isCancelled()) {
+        if ( (block.getType() != Material.SIGN_POST && block.getType() != Material.WALL_SIGN) || event.isCancelled()) {
             return;
         }
 

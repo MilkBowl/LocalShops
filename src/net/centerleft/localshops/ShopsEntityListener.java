@@ -56,6 +56,7 @@ public class ShopsEntityListener extends EntityListener {
             if (shop == null) {
                 return;
             }
+            
             Location blockLoc = block.getLocation();
             Iterator<Location> iter = shop.getSignMap().keySet().iterator();
             while (iter.hasNext()) {
