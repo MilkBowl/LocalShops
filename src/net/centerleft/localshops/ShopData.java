@@ -16,6 +16,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Sign;
+
 import cuboidLocale.BookmarkedResult;
 import cuboidLocale.PrimitiveCuboid;
 import cuboidLocale.QuadTree;
@@ -88,7 +93,7 @@ public class ShopData {
     public int getNumShops() {
         return shops.size();
     }
-    
+
     public int numOwnedShops(String playerName) {
         int numShops = 0;
         for ( Shop shop : shops.values() ) {
@@ -320,7 +325,7 @@ public class ShopData {
             return null;
         }
     }
-    
+
     public static double[] convertStringArraytoDoubleArray(String[] sarray) {
         if (sarray != null) {
             double longArray[] = new double[sarray.length];
@@ -333,6 +338,8 @@ public class ShopData {
     }    
 
     public Shop loadShop(File file) throws Exception {
+        HashMap<Location, String> signMap = new HashMap<Location, String>(4);
+
         SortedProperties props = new SortedProperties();
         try {
             props.load(new FileInputStream(file));
@@ -382,7 +389,7 @@ public class ShopData {
         shop.setManagers(managers);
         shop.setCreator(creator);
         shop.setNotification(notification);
-        
+
         // Make sure minimum balance isn't negative
         if (minBalance < 0) {
             shop.setMinBalance(0);
@@ -423,14 +430,74 @@ public class ShopData {
                     }
                     return null;
                 }
+            } else if (key.matches("sign:\\d+,\\d+,\\d+")) {
+
+                String[] k = key.split(":");
+                k = k[1].split(",");
+
+                int x = Integer.parseInt(k[0]);
+                int y = Integer.parseInt(k[1]);
+                int z = Integer.parseInt(k[2]);
+
+                String itemName = props.getProperty(key);
+
+                signMap.put( new Location (plugin.getServer().getWorld(world), x, y, z), itemName );
             }
         }
-        
+
+        //After loading sign data, verify they exist in the world
+        Iterator<Location> iter = signMap.keySet().iterator();
+        while (iter.hasNext() ) {
+            World signWorld = plugin.getServer().getWorld(world);
+            log.info("[LocalShops] - Iterating through map");
+            Location signLoc = iter.next();
+            //Load the chunk so we don't try getting blocks that are non-existent
+            signWorld.loadChunk(plugin.getServer().getWorld(world).getChunkAt(signLoc));
+            
+            log.info("[LocalShops] - Got Chunk: " + signWorld.isChunkLoaded(signWorld.getChunkAt(signLoc)));
+            //Check if the block is not a sign.
+            
+            if ( signWorld.getBlockAt(signLoc).getType() != Material.WALL_SIGN && signWorld.getBlockAt(signLoc).getType() != Material.SIGN_POST ) {
+                iter.remove();
+                continue;
+            } else {
+                ItemInfo item = Search.itemByName(signMap.get(signLoc));
+                if (!(shop.containsItem(item))) {
+                    continue;
+                } else {
+                   //Get the lines for future use?
+                   String signLines[] = ((Sign) signLoc.getBlock().getState()).getLines();
+                   signLines[0] = item.name;
+                   signLines[1] = "Buy: ";
+                   signLines[2] = "Sell: ";
+                   signLines[3] = "";
+                   
+                   if (shop.getItem(item.name).getBuyPrice() == 0) {
+                       signLines[1] += "-";
+                   } else {
+                       signLines[1] += shop.getItem(item.name).getBuyPrice();
+                   }
+                   if (shop.getItem(item.name).getSellPrice() == 0) {
+                       signLines[2] += "-";
+                   } else {
+                       signLines[2] += shop.getItem(item.name).getSellPrice();
+                   }
+                   //Set the lines
+                   ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[0]);
+                   ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[1]);
+                   ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[2]);
+                   ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[3]);
+                }
+            }
+        }
+        //Set the sign mapping for the shop
+        shop.setSignMap(signMap);
+
         // Sanity Checks
         // Check that filename == UUID from file
         if(!file.getName().equalsIgnoreCase(String.format("%s.shop", shop.getUuid().toString()))) {
             shop = null;
-            
+
             if(isolateBrokenShopFile(file)) {
                 log.warning(String.format("[%s] Shop file %s has bad data!  Moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.getName()));
             } else {
@@ -440,7 +507,7 @@ public class ShopData {
 
         return shop;
     }
-    
+
     public boolean isolateBrokenShopFile(File file) {
         File dir = new File("plugins/LocalShops/shops-broken/");
         dir.mkdir();
@@ -497,6 +564,15 @@ public class ShopData {
             int maxStock = item.getMaxStock();
 
             props.setProperty(String.format("%d:%d", info.typeId, info.subTypeId), String.format("%f:%d,%f:%d,%d:%d", buyPrice, buySize, sellPrice, sellSize, stock, maxStock));
+        }
+
+        //Sign Data
+        for (Location signLoc : shop.getSignMap().keySet()) {
+            int x = signLoc.getBlockX();
+            int y = signLoc.getBlockY();
+            int z = signLoc.getBlockZ();
+
+            props.setProperty(String.format("sign:%d,%d,%d", x, y, z), shop.getSignMap().get(signLoc));
         }
 
         String fileName = LocalShops.folderPath + LocalShops.shopsPath + shop.getUuid().toString() + ".shop";
