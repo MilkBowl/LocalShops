@@ -12,8 +12,6 @@ import java.util.logging.Logger;
 
 import org.bukkit.Location;
 
-import cuboidLocale.PrimitiveCuboid;
-
 public class Shop implements Comparator<Shop> {
     // Attributes
     private UUID uuid = null;
@@ -27,11 +25,11 @@ public class Shop implements Comparator<Shop> {
     private boolean unlimitedMoney = false;
     private boolean unlimitedStock = false;
     private HashMap<String, InventoryItem> inventory = new HashMap<String, InventoryItem>();
-    private PrimitiveCuboid cuboid = null;
     private double minBalance = 0;
     private ArrayBlockingQueue<Transaction> transactions;
     private boolean notification = true;
     private HashMap<Location, String> signMap = null;
+    private int locationLowX, locationHighX, locationLowY, locationHighY, locationLowZ, locationHighZ;
     
     // Logging
     private static final Logger log = Logger.getLogger("Minecraft");    
@@ -64,22 +62,28 @@ public class Shop implements Comparator<Shop> {
     public void setLocations(ShopLocation locationA, ShopLocation locationB) {
         this.locationA = locationA;
         this.locationB = locationB;
+        
+        organizeLocation();
     }
 
     public void setLocationA(ShopLocation locationA) {
         this.locationA = locationA;
+        organizeLocation();
     }
 
-    public void setLocationA(long x, long y, long z) {
+    public void setLocationA(int x, int y, int z) {
         locationA = new ShopLocation(x, y, z);
+        organizeLocation();
     }
 
     public void setLocationB(ShopLocation locationB) {
         this.locationB = locationB;
+        organizeLocation();
     }
 
-    public void setLocationB(long x, long y, long z) {
+    public void setLocationB(int x, int y, int z) {
         locationB = new ShopLocation(x, y, z);
+        organizeLocation();
     }
 
     public ShopLocation[] getLocations() {
@@ -95,9 +99,9 @@ public class Shop implements Comparator<Shop> {
     }
     
     public ShopLocation getLocationCenter() {
-        double[] xyz = new double[3];
-        double[] xyzA = locationA.toArray();
-        double[] xyzB = locationA.toArray();
+        int[] xyz = new int[3];
+        int[] xyzA = locationA.toArray();
+        int[] xyzB = locationA.toArray();
 
         for (int i = 0; i < 3; i++) {
             if (xyzA[i] < xyzB[i]) {
@@ -108,6 +112,30 @@ public class Shop implements Comparator<Shop> {
         }
 
         return new ShopLocation(xyz);
+    }
+    
+    public int getLocationLowX() {
+        return locationLowX;
+    }
+    
+    public int getLocationLowY() {
+        return locationLowY;
+    }
+    
+    public int getLocationLowZ() {
+        return locationLowZ;
+    }
+    
+    public int getLocationHighX() {
+        return locationHighX;
+    }
+    
+    public int getLocationHighY() {
+        return locationHighY;
+    }
+    
+    public int getLocationHighZ() {
+        return locationHighZ;
     }
 
     public void setOwner(String owner) {
@@ -304,21 +332,6 @@ public class Shop implements Comparator<Shop> {
         transactions.clear();
     }
 
-    public PrimitiveCuboid getCuboid() {
-        // If no cuboid, create it
-        if (cuboid == null) {
-            // Check if either locaiton is null and return appropriately
-            if (locationA == null || locationB == null) {
-                return null;
-            }
-            cuboid = new PrimitiveCuboid(getLocationA().toArray(), getLocationB().toArray());
-            cuboid.uuid = uuid;
-            cuboid.world = world;
-        }
-
-        return cuboid;
-    }
-
     public String toString() {
         return String.format("Shop \"%s\" at [%s], [%s] %d items - %s", this.name, locationA.toString(), locationB.toString(), inventory.size(), uuid.toString());
     }
@@ -361,6 +374,57 @@ public class Shop implements Comparator<Shop> {
 
     public HashMap<Location, String> getSignMap() {
         return signMap;
+    }
+    
+    public boolean containsPoint(String worldName, int x, int y, int z) {
+        if(!worldName.equals(world)) {
+            return false;
+        }
+        
+        if (x >= locationLowX &&
+                x <= locationHighX &&
+                y >= locationLowY &&
+                y <= locationHighY &&
+                z >= locationLowZ &&
+                z <= locationHighZ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    //private int locationLowX, locationHighX, locationLowY, locationHighY, locationLowZ, locationHighZ;
+    private void organizeLocation() {
+        if(locationA == null || locationB == null) {
+            return;
+        }
+        
+        // X
+        if(locationA.getX() > locationB.getX()) {
+            locationHighX = locationA.getX();
+            locationLowX = locationB.getX();
+        } else {
+            locationHighX = locationB.getX();
+            locationLowX = locationA.getX();            
+        }
+        
+        // Y
+        if(locationA.getY() > locationB.getY()) {
+            locationHighY = locationA.getY();
+            locationLowY = locationB.getY();
+        } else {
+            locationHighY = locationB.getY();
+            locationLowY = locationA.getY();            
+        }
+        
+        // Z
+        if(locationA.getZ() > locationB.getZ()) {
+            locationHighZ = locationA.getZ();
+            locationLowZ = locationB.getZ();
+        } else {
+            locationHighZ = locationB.getZ();
+            locationLowZ = locationA.getZ();            
+        }
     }
 
 }

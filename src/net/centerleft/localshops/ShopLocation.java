@@ -3,41 +3,45 @@ package net.centerleft.localshops;
 import org.bukkit.Location;
 
 public class ShopLocation {
-    private double x = 0;
-    private double y = 0;
-    private double z = 0;
+    private int x = 0;
+    private int y = 0;
+    private int z = 0;
 
-    public ShopLocation(double x, double y, double z) {
+    public ShopLocation(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public ShopLocation(double[] xyz) {
-        this.x = xyz[0];
-        this.y = xyz[1];
-        this.z = xyz[2];
+    public ShopLocation(int[] locationB) {
+        this.x = locationB[0];
+        this.y = locationB[1];
+        this.z = locationB[2];
     }
     
     public ShopLocation(Location loc) {
-        this.x = loc.getX();
-        this.y = loc.getY();
-        this.z = loc.getZ();
+        this.x = loc.getBlockX();
+        this.y = loc.getBlockY();
+        this.z = loc.getBlockZ();
     }
 
-    public double getX() {
+    public int getX() {
         return x;
     }
 
-    public double getY() {
+    public int getY() {
         return y;
     }
 
-    public double getZ() {
+    public int getZ() {
         return z;
     }
 
-    public double[] toArray() {
+    public int[] toArray() {
+        return new int[] { x, y, z };
+    }
+    
+    public double[] toDoubleArray() {
         return new double[] { x, y, z };
     }
 

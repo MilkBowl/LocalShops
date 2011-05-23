@@ -22,8 +22,6 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import cuboidLocale.QuadTree;
-
 /**
  * Local Shops Plugin
  * 
@@ -46,9 +44,6 @@ public class LocalShops extends JavaPlugin {
 
     // Constants
     public static final String CHAT_PREFIX = ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] ";
-
-    // TBD
-    private static QuadTree cuboidTree = new QuadTree();
     
     //
     static final String folderPath = "plugins/LocalShops/";
@@ -188,25 +183,25 @@ public class LocalShops extends JavaPlugin {
         }
 
         if (properties.keyExists("shop-width")) {
-            Config.SHOP_SIZE_DEF_WIDTH = properties.getLong("shop-width");
+            Config.SHOP_SIZE_DEF_WIDTH = properties.getInt("shop-width");
         } else {
             properties.setLong("shop-width", Config.SHOP_SIZE_DEF_WIDTH);
         }
 
         if (properties.keyExists("shop-height")) {
-            Config.SHOP_SIZE_DEF_HEIGHT = properties.getLong("shop-height");
+            Config.SHOP_SIZE_DEF_HEIGHT = properties.getInt("shop-height");
         } else {
             properties.setLong("shop-height", Config.SHOP_SIZE_DEF_HEIGHT);
         }
 
         if (properties.keyExists("max-width")) {
-            Config.SHOP_SIZE_MAX_WIDTH = properties.getLong("max-width");
+            Config.SHOP_SIZE_MAX_WIDTH = properties.getInt("max-width");
         } else {
             properties.setLong("max-width", Config.SHOP_SIZE_MAX_WIDTH);
         }
 
         if (properties.keyExists("max-height")) {
-            Config.SHOP_SIZE_MAX_HEIGHT = properties.getLong("max-height");
+            Config.SHOP_SIZE_MAX_HEIGHT = properties.getInt("max-height");
         } else {
             properties.setLong("max-height", Config.SHOP_SIZE_MAX_HEIGHT);
         }
@@ -308,14 +303,6 @@ public class LocalShops extends JavaPlugin {
 
     public static ItemData getItemList() {
         return itemList;
-    }
-
-    public static void setCuboidTree(QuadTree cuboidTree) {
-        LocalShops.cuboidTree = cuboidTree;
-    }
-
-    public static QuadTree getCuboidTree() {
-        return cuboidTree;
     }
 
     public void setEconManager(EconomyManager econManager) {

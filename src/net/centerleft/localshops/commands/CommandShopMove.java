@@ -14,9 +14,6 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import cuboidLocale.BookmarkedResult;
-import cuboidLocale.PrimitiveCuboid;
-
 public class CommandShopMove extends Command {
 
     public CommandShopMove(LocalShops plugin, String commandLabel, CommandSender sender, String command) {
@@ -48,9 +45,6 @@ public class CommandShopMove extends Command {
             Location location = player.getLocation();
             Shop thisShop = null;
 
-            double[] xyzAold = new double[3];
-            double[] xyzBold = new double[3];
-
             // check to see if that shop exists
             thisShop = plugin.getShopManager().getShop(id);
             if(thisShop == null) {
@@ -64,18 +58,14 @@ public class CommandShopMove extends Command {
                 return false;
             }
 
-            // store shop info
-            String shopName = thisShop.getName();
-            xyzAold = thisShop.getLocationA().toArray();
-            xyzBold = thisShop.getLocationB().toArray();
-
-            double x = location.getX();
-            double y = location.getY();
-            double z = location.getZ();
+            // Get current player location
+            int x = location.getBlockX();
+            int y = location.getBlockY();
+            int z = location.getBlockZ();
 
             // setup the cuboid for the tree
-            double[] xyzA = new double[3];
-            double[] xyzB = new double[3];
+            int[] xyzA = new int[3];
+            int[] xyzB = new int[3];
 
             if (plugin.getPlayerData().containsKey(player.getName()) && plugin.getPlayerData().get(player.getName()).isSelecting()) {
 
@@ -114,40 +104,13 @@ public class CommandShopMove extends Command {
 
             }
 
-            // remove the old shop from the cuboid
-            ShopLocation xyz = thisShop.getLocationCenter();
-            BookmarkedResult res = new BookmarkedResult();
-            res = LocalShops.getCuboidTree().relatedSearch(res.bookmark, xyz.getX(), xyz.getY(), xyz.getZ());
-
-            // get the shop's tree node and delete it
-            for (PrimitiveCuboid shopLocation : res.results) {
-
-                // for each shop that you find, check to see if we're already in
-                // it
-                // this should only find one shop node
-                if (shopLocation.uuid == null)
-                    continue;
-                if (!shopLocation.world.equalsIgnoreCase(thisShop.getWorld()))
-                    continue;
-
-                LocalShops.getCuboidTree().delete(shopLocation);
-            }
-
             // need to check to see if the shop overlaps another shop
-            if (shopPositionOk(xyzA, xyzB, player.getWorld().getName())) {
-
-                PrimitiveCuboid tempShopCuboid = new PrimitiveCuboid(xyzA, xyzB);
-                tempShopCuboid.uuid = thisShop.getUuid();
-                tempShopCuboid.world = player.getWorld().getName();
+            if (plugin.getShopManager().shopPositionOk(xyzA, xyzB, player.getWorld().getName())) {
 
                 if (Config.SHOP_CHARGE_MOVE) {
                     if (!canUseCommand(CommandTypes.MOVE_FREE)) {
                         if (!plugin.getPlayerData().get(player.getName()).chargePlayer(player.getName(), Config.SHOP_CHARGE_MOVE_COST)) {
-                            // insert the old cuboid back into the world
-                            tempShopCuboid = new PrimitiveCuboid(xyzAold, xyzBold);
-                            tempShopCuboid.uuid = thisShop.getUuid();
-                            tempShopCuboid.world = thisShop.getWorld();
-                            LocalShops.getCuboidTree().insert(tempShopCuboid);
+                            // return, this player did not have enough money
 
                             player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You need " + plugin.getEconManager().format(Config.SHOP_CHARGE_MOVE_COST) + " to move a shop.");
                             return false;
@@ -155,31 +118,23 @@ public class CommandShopMove extends Command {
                     }
                 }
 
-                // insert the shop into the world
+                // update the shop
                 thisShop.setWorld(player.getWorld().getName());
                 thisShop.setLocations(new ShopLocation(xyzA), new ShopLocation(xyzB));
                 log.info(thisShop.getUuid().toString());
-                plugin.getShopManager().deleteShop(thisShop);
-                plugin.getShopManager().addShop(thisShop);
-                LocalShops.getCuboidTree().insert(tempShopCuboid);
+                //plugin.getShopManager().deleteShop(thisShop);
+                //plugin.getShopManager().addShop(thisShop);
 
                 plugin.getPlayerData().put(player.getName(), new PlayerData(plugin, player.getName()));
 
                 // write the file
                 if (plugin.getShopManager().saveShop(thisShop)) {
-                    player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.WHITE + shopName + ChatColor.DARK_AQUA + " was moved successfully.");
+                    player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.WHITE + thisShop.getName() + ChatColor.DARK_AQUA + " was moved successfully.");
                     return true;
                 } else {
                     player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "There was an error, could not move shop.");
                     return false;
                 }
-            } else {
-                // insert the old cuboid back into the world
-                PrimitiveCuboid tempShopCuboid = new PrimitiveCuboid(xyzAold, xyzBold);
-                tempShopCuboid.uuid = thisShop.getUuid();
-                tempShopCuboid.world = thisShop.getWorld();
-                LocalShops.getCuboidTree().insert(tempShopCuboid);
-                return true;
             }            
         }
 

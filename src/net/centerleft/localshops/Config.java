@@ -8,10 +8,10 @@ import java.util.UUID;
 public class Config {
 
     // Shop Size settings
-    public static long SHOP_SIZE_DEF_WIDTH = 5;
-    public static long SHOP_SIZE_DEF_HEIGHT = 3;
-    public static long SHOP_SIZE_MAX_WIDTH = 30;
-    public static long SHOP_SIZE_MAX_HEIGHT = 10;
+    public static int SHOP_SIZE_DEF_WIDTH = 5;
+    public static int SHOP_SIZE_DEF_HEIGHT = 3;
+    public static int SHOP_SIZE_MAX_WIDTH = 30;
+    public static int SHOP_SIZE_MAX_HEIGHT = 10;
     
     // Shop Charge settings
     public static double SHOP_CHARGE_CREATE_COST = 100;

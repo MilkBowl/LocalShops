@@ -18,9 +18,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import cuboidLocale.BookmarkedResult;
-import cuboidLocale.PrimitiveCuboid;
-
 public abstract class Command {
     
     // Attributes
@@ -144,47 +141,6 @@ public abstract class Command {
             // Console, true
             return true;
         }
-    }
-    
-    protected boolean shopPositionOk(double[] xyzA, double[] xyzB, String worldName) {
-        BookmarkedResult res = new BookmarkedResult();
-
-        // make sure coords are in right order
-        for (int i = 0; i < 3; i++) {
-            if (xyzA[i] > xyzB[i]) {
-                double temp = xyzA[i];
-                xyzA[i] = xyzB[i];
-                xyzB[i] = temp;
-            }
-        }
-
-        // Need to test every position to account for variable shop sizes
-
-        for (double x = xyzA[0]; x <= xyzB[0]; x++) {
-            for (double z = xyzA[2]; z <= xyzB[2]; z++) {
-                for (double y = xyzA[1]; y <= xyzB[1]; y++) {
-                    res = LocalShops.getCuboidTree().relatedSearch(res.bookmark, x, y, z);
-                    if (shopOverlaps(res, worldName))
-                        return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    protected boolean shopOverlaps(BookmarkedResult res, String worldName) {
-        if (res.results.size() != 0) {
-            for (PrimitiveCuboid cuboid : res.results) {
-                if (cuboid.uuid != null) {
-                    if (cuboid.world.equalsIgnoreCase(worldName)) {
-                        Shop shop = plugin.getShopManager().getShop(cuboid.uuid);
-                        sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "Could not create shop, it overlaps with " + ChatColor.WHITE + shop.getName());
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
     }
     
     protected void givePlayerItem(ItemStack item, int amount) {

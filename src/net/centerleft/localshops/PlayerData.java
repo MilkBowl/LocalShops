@@ -6,14 +6,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import net.centerleft.localshops.modules.economy.Economy;
 import net.centerleft.localshops.modules.economy.EconomyResponse;
 
 import org.bukkit.entity.Player;
-
-import com.nijiko.coelho.iConomy.system.Account;
-
-import cuboidLocale.BookmarkedResult;
 
 public class PlayerData {
     // Objects
@@ -21,11 +16,10 @@ public class PlayerData {
 
     // Attributes
     public List<UUID> shopList = Collections.synchronizedList(new ArrayList<UUID>());
-    protected BookmarkedResult bookmark = new BookmarkedResult();
     public String playerName = null;
     private boolean isSelecting = false;
-    private double xyzA[] = null;
-    private double xyzB[] = null;
+    private int xyzA[] = null;
+    private int xyzB[] = null;
     protected String size = "";
     
     // Logging
@@ -37,19 +31,19 @@ public class PlayerData {
         this.playerName = playerName;
     }
 
-    public double[] getPositionA() {
+    public int[] getPositionA() {
         return xyzA;
     }
 
-    public double[] getPositionB() {
+    public int[] getPositionB() {
         return xyzB;
     }
 
-    public void setPositionA(double[] xyz) {
+    public void setPositionA(int[] xyz) {
         xyzA = xyz.clone();
     }
 
-    public void setPositionB(double[] xyz) {
+    public void setPositionB(int[] xyz) {
         xyzB = xyz.clone();
     }
 

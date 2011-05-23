@@ -23,10 +23,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Sign;
 
-import cuboidLocale.BookmarkedResult;
-import cuboidLocale.PrimitiveCuboid;
-import cuboidLocale.QuadTree;
-
 public class ShopManager {
     private LocalShops plugin = null;
     private Map<UUID, Shop> shops = Collections.synchronizedMap(new HashMap<UUID, Shop>());
@@ -52,6 +48,54 @@ public class ShopManager {
         }
 
         return null;
+    }
+    
+    public Shop getShop(Location loc) {
+        return getShop(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+    }
+    
+    public Shop getShop(String world, int x, int y, int z) {
+        for(Shop shop : shops.values()) {
+            if(!shop.getWorld().equals(world)) {
+                continue;
+            }
+            
+            ShopLocation[] sLocs = shop.getLocations();
+            if(sLocs.length != 2) {
+                continue;
+            }
+
+            if(shop.containsPoint(world, x, y, z)) {
+                return shop;
+            }
+        }
+        return null;
+    }
+
+    public boolean shopPositionOk(int[] xyzA, int[] xyzB, String worldName) {
+        // make sure coords are in right order
+        for (int i = 0; i < 3; i++) {
+            if (xyzA[i] > xyzB[i]) {
+                int temp = xyzA[i];
+                xyzA[i] = xyzB[i];
+                xyzB[i] = temp;
+            }
+        }
+
+        // Need to test every position to account for variable shop sizes
+
+        for (int x = xyzA[0]; x <= xyzB[0]; x++) {
+            for (int z = xyzA[2]; z <= xyzB[2]; z++) {
+                for (int y = xyzA[1]; y <= xyzB[1]; y++) {
+                    for(Shop shop : shops.values()) {
+                        if(shop.containsPoint(worldName, x, y, z)) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     public void addShop(Shop shop) {
@@ -111,8 +155,6 @@ public class ShopManager {
             log.info(String.format("[%s] %s.%s", plugin.pdfFile.getName(), "ShopData", "loadShops(File shopsDir)"));
         }
 
-        LocalShops.setCuboidTree(new QuadTree());
-
         File[] shopsList = shopsDir.listFiles();
         for (File file : shopsList) {
 
@@ -139,7 +181,6 @@ public class ShopManager {
                 if(Config.SRV_DEBUG) {
                     log.info(String.format("[%s] Loaded %s", plugin.pdfFile.getName(), shop.toString()));
                 }
-                LocalShops.getCuboidTree().insert(shop.getCuboid());
                 plugin.getShopManager().addShop(shop);
             } else {
                 log.warning(String.format("[%s] Failed to load Shop file: \"%s\"", plugin.pdfFile.getName(), file.getName()));
@@ -196,9 +237,9 @@ public class ShopManager {
                     // A
                     String[] xyzStr = cols[1].split(",");
                     try {
-                        long x = Long.parseLong(xyzStr[0].trim());
-                        long y = Long.parseLong(xyzStr[1].trim());
-                        long z = Long.parseLong(xyzStr[2].trim());
+                        int x = Integer.parseInt(xyzStr[0].trim());
+                        int y = Integer.parseInt(xyzStr[1].trim());
+                        int z = Integer.parseInt(xyzStr[2].trim());
 
                         ShopLocation loc = new ShopLocation(x, y, z);
                         shop.setLocationA(loc);
@@ -214,9 +255,9 @@ public class ShopManager {
                     // B
                     String[] xyzStr = cols[1].split(",");
                     try {
-                        long x = Long.parseLong(xyzStr[0].trim());
-                        long y = Long.parseLong(xyzStr[1].trim());
-                        long z = Long.parseLong(xyzStr[2].trim());
+                        int x = Integer.parseInt(xyzStr[0].trim());
+                        int y = Integer.parseInt(xyzStr[1].trim());
+                        int z = Integer.parseInt(xyzStr[2].trim());
 
                         ShopLocation loc = new ShopLocation(x, y, z);
                         shop.setLocationB(loc);
@@ -337,7 +378,18 @@ public class ShopManager {
             return longArray;
         }
         return null;
-    }    
+    }
+    
+    public static int[] convertStringArraytoIntArray(String[] sarray) {
+        if (sarray != null) {
+            int intArray[] = new int[sarray.length];
+            for (int i = 0; i < sarray.length; i++) {
+                intArray[i] = Integer.parseInt(sarray[i]);
+            }
+            return intArray;
+        }
+        return null;
+    }
 
     public Shop loadShop(File file) throws Exception {
         HashMap<Location, String> signMap = new HashMap<Location, String>(4);
@@ -359,12 +411,12 @@ public class ShopManager {
         boolean notification = Boolean.parseBoolean(props.getProperty("notification", "true"));
 
         // Location - locationB=-88, 50, -127
-        double[] locationA;
-        double[] locationB;
+        int[] locationA;
+        int[] locationB;
         String world;
         try {
-            locationA = convertStringArraytoDoubleArray(props.getProperty("locationA").split(", "));
-            locationB = convertStringArraytoDoubleArray(props.getProperty("locationB").split(", "));
+            locationA = convertStringArraytoIntArray(props.getProperty("locationA").split(", "));
+            locationB = convertStringArraytoIntArray(props.getProperty("locationB").split(", "));
             world = props.getProperty("world", "world1");
         } catch (Exception e) {
             if(isolateBrokenShopFile(file)) {
@@ -589,25 +641,6 @@ public class ShopManager {
 
     public boolean deleteShop(Shop shop) {
         String shortUuid = shop.getShortUuidString();
-        ShopLocation loc = shop.getLocationCenter();
-        BookmarkedResult res = new BookmarkedResult();
-
-        res = LocalShops.getCuboidTree().relatedSearch(res.bookmark, loc.getX(), loc.getY(), loc.getZ());
-
-        // get the shop's tree node and delete it
-        for (PrimitiveCuboid shopLocation : res.results) {
-
-            // for each shop that you find, check to see if we're already in it
-            // this should only find one shop node
-            if (shopLocation.uuid == null) {
-                continue;
-            }
-            if (!shopLocation.world.equalsIgnoreCase(shop.getWorld())) {
-                continue;
-            }
-            LocalShops.getCuboidTree().delete(shopLocation);
-
-        }
 
         // remove string from uuid short list
         Config.UUID_LIST.remove(shortUuid);
@@ -621,47 +654,6 @@ public class ShopManager {
         shops.remove(shop.getUuid());
 
         return true;
-    }
-
-    private boolean shopPositionOk(Shop shop, long[] xyzA, long[] xyzB) {
-        BookmarkedResult res = new BookmarkedResult();
-
-        // make sure coords are in right order
-        for (int i = 0; i < 3; i++) {
-            if (xyzA[i] > xyzB[i]) {
-                long temp = xyzA[i];
-                xyzA[i] = xyzB[i];
-                xyzB[i] = temp;
-            }
-        }
-
-        // Need to test every position to account for variable shop sizes
-
-        for (long x = xyzA[0]; x <= xyzB[0]; x++) {
-            for (long z = xyzA[2]; z <= xyzB[2]; z++) {
-                for (long y = xyzA[1]; y <= xyzB[1]; y++) {
-                    res = LocalShops.getCuboidTree().relatedSearch(res.bookmark, x, y, z);
-                    if (shopOverlaps(shop, res))
-                        return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private boolean shopOverlaps(Shop shop, BookmarkedResult res) {
-        if (res.results.size() != 0) {
-            for (PrimitiveCuboid foundShop : res.results) {
-                if (foundShop.uuid != null) {
-                    if (foundShop.world.equalsIgnoreCase(shop.getWorld())) {
-                        Shop fShop = getShop(foundShop.uuid);
-                        System.out.println("Could not create shop, it overlaps with " + fShop.getName());
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
     }
 
     public boolean logItems(String playerName, String shopName, String action, String itemName, int numberOfItems, int startNumberOfItems, int endNumberOfItems) {

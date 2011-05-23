@@ -28,8 +28,8 @@ public class CommandShopCreate extends Command {
     public boolean process() {
         String creator = null;
         String world = null;
-        double[] xyzA = new double[3];
-        double[] xyzB = new double[3];
+        int[] xyzA = new int[3];
+        int[] xyzB = new int[3];
 
         // Get current shop
         if (sender instanceof Player) {
@@ -63,9 +63,9 @@ public class CommandShopCreate extends Command {
             } else {
                 // get current position
                 Location loc = player.getLocation();
-                long x = loc.getBlockX();
-                long y = loc.getBlockY();
-                long z = loc.getBlockZ();
+                int x = loc.getBlockX();
+                int y = loc.getBlockY();
+                int z = loc.getBlockZ();
 
                 if (Config.SHOP_SIZE_DEF_WIDTH % 2 == 0) {
                     xyzA[0] = x - (Config.SHOP_SIZE_DEF_WIDTH / 2);
@@ -83,7 +83,7 @@ public class CommandShopCreate extends Command {
                 xyzB[1] = y + Config.SHOP_SIZE_DEF_HEIGHT - 1;
             }
 
-            if(!shopPositionOk(xyzA, xyzB, world)) {
+            if(!plugin.getShopManager().shopPositionOk(xyzA, xyzB, world)) {
                 sender.sendMessage("A shop already exists here!");
                 return false;
             }
@@ -116,8 +116,6 @@ public class CommandShopCreate extends Command {
             shop.setWorld(world);
             shop.setLocations(new ShopLocation(xyzA), new ShopLocation(xyzB));
 
-            // insert the shop into the world
-            LocalShops.getCuboidTree().insert(shop.getCuboid());
             log.info(String.format("[%s] Created: %s", plugin.pdfFile.getName(), shop.toString()));
             plugin.getShopManager().addShop(shop);
 

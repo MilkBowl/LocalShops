@@ -3,7 +3,6 @@
  */
 package net.centerleft.localshops;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.bukkit.Location;
@@ -11,9 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityListener;
-
-import cuboidLocale.BookmarkedResult;
-import cuboidLocale.PrimitiveCuboid;
 
 /**
  * @author sleaker
@@ -39,20 +35,10 @@ public class ShopsEntityListener extends EntityListener {
             if (block.getType() != Material.WALL_SIGN && block.getType() != Material.SIGN_POST ) {
                 continue;
             }
-            BookmarkedResult res = null;
-            //Search for Shops near event block and add them to the array list.
-            res = LocalShops.getCuboidTree().relatedSearch(null, block.getX(), block.getY(), block.getZ());
-            @SuppressWarnings("unchecked")
-            ArrayList<PrimitiveCuboid> cuboids = (ArrayList<PrimitiveCuboid>) res.results.clone();
             
-            for (PrimitiveCuboid cuboid : cuboids) {
-                if (cuboid.uuid == null)
-                    continue;
-                if(!cuboid.world.equalsIgnoreCase(block.getWorld().getName())) {
-                    continue;
-                }
-                shop = plugin.getShopManager().getShop(cuboid.uuid);
-            }
+            //Search for Shops near event block and add them to the array list.
+            shop = plugin.getShopManager().getShop(block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
+
             if (shop == null) {
                 return;
             }

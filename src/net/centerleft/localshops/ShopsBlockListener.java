@@ -16,9 +16,6 @@ import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 
-import cuboidLocale.BookmarkedResult;
-import cuboidLocale.PrimitiveCuboid;
-
 /**
  * @author sleaker
  *
@@ -34,24 +31,9 @@ public class ShopsBlockListener extends BlockListener {
 
     public void onSignChange(SignChangeEvent event) {
         Shop shop = null;
-        Player player = event.getPlayer();
         Block block = event.getBlock();
-        PlayerData pData = plugin.getPlayerData().get(player.getName());
         
-        BookmarkedResult res = pData.bookmark;
-        //Search for Shops near event block and add them to the array list.
-        res = LocalShops.getCuboidTree().relatedSearch(res.bookmark, block.getX(), block.getY(), block.getZ());
-        @SuppressWarnings("unchecked")
-        ArrayList<PrimitiveCuboid> cuboids = (ArrayList<PrimitiveCuboid>) res.results.clone();
-
-        for (PrimitiveCuboid cuboid : cuboids) {
-            if (cuboid.uuid == null)
-                continue;
-            if(!cuboid.world.equalsIgnoreCase(player.getWorld().getName())) {
-                continue;
-            }
-            shop = plugin.getShopManager().getShop(cuboid.uuid);
-        }
+        shop = plugin.getShopManager().getShop(event.getBlock().getLocation());
 
         //Return if we still don't have a shop.
         if (shop == null) {
@@ -108,22 +90,10 @@ public class ShopsBlockListener extends BlockListener {
 
         Shop shop = null;
         Player player = event.getPlayer();
-        PlayerData pData = plugin.getPlayerData().get(player.getName());
 
         //Find the current shop.
-        BookmarkedResult res = pData.bookmark;
-        res = LocalShops.getCuboidTree().relatedSearch(res.bookmark, block.getX(), block.getY(), block.getZ());
-        @SuppressWarnings("unchecked")
-        ArrayList<PrimitiveCuboid> cuboids = (ArrayList<PrimitiveCuboid>) res.results.clone();
+        shop = plugin.getShopManager().getShop(block.getLocation());
 
-        for (PrimitiveCuboid cuboid : cuboids) {
-            if (cuboid.uuid == null)
-                continue;
-            if(!cuboid.world.equalsIgnoreCase(player.getWorld().getName())) {
-                continue;
-            }
-            shop = plugin.getShopManager().getShop(cuboid.uuid);
-        }
         //If we weren't in a shop then exit event
         if (shop == null) {
             return;
@@ -146,22 +116,9 @@ public class ShopsBlockListener extends BlockListener {
 
         Shop shop = null;
         Player player = event.getPlayer();
-        PlayerData pData = plugin.getPlayerData().get(player.getName());
 
         //Find the current shop.
-        BookmarkedResult res = pData.bookmark;
-        res = LocalShops.getCuboidTree().relatedSearch(res.bookmark, block.getX(), block.getY(), block.getZ());
-        @SuppressWarnings("unchecked")
-        ArrayList<PrimitiveCuboid> cuboids = (ArrayList<PrimitiveCuboid>) res.results.clone();
-
-        for (PrimitiveCuboid cuboid : cuboids) {
-            if (cuboid.uuid == null)
-                continue;
-            if(!cuboid.world.equalsIgnoreCase(player.getWorld().getName())) {
-                continue;
-            }
-            shop = plugin.getShopManager().getShop(cuboid.uuid);
-        }
+        shop = plugin.getShopManager().getShop(block.getLocation());
 
         //If we weren't in a shop then exit
         if (shop == null) {
