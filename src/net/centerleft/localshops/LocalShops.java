@@ -15,6 +15,7 @@ import net.centerleft.localshops.threads.NotificationThread;
 
 import org.bukkit.ChatColor;
 import org.bukkit.World;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
@@ -83,8 +84,15 @@ public class LocalShops extends JavaPlugin {
         pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Normal, this);
         pm.registerEvent(Event.Type.ENTITY_EXPLODE, entityListener, Priority.Normal, this);
         
+        
         // Register Commands
-        getCommand("shop").setExecutor(new ShopCommandExecutor(this));
+        CommandExecutor cmdExec = new ShopCommandExecutor(this);
+        getCommand("lshop").setExecutor(cmdExec);
+        getCommand("gshop").setExecutor(cmdExec);
+        getCommand("buy").setExecutor(cmdExec);
+        getCommand("sell").setExecutor(cmdExec);
+        getCommand("gbuy").setExecutor(cmdExec);
+        getCommand("gsell").setExecutor(cmdExec);
 
         // setup the file IO
         folderDir = new File(folderPath);
