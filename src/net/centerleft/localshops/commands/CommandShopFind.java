@@ -136,7 +136,10 @@ public class CommandShopFind extends Command {
             // This shop is valid, add to list
             foundShops.put(shop.getUuid(), distance);
         }
-
+        if (Config.GLOBAL_SHOP && Config.GLOBAL_SHOP_UUID != null) {
+            foundShops.put(Config.GLOBAL_SHOP_UUID, 0D);
+        }
+        
         @SuppressWarnings("unchecked")
         SortedSet<Entry<UUID, Double>> entries = new TreeSet<Entry<UUID, Double>>(new EntryValueComparator());
         entries.addAll(foundShops.entrySet());

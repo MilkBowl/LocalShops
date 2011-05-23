@@ -30,6 +30,8 @@ public class Config {
     public static boolean SRV_DEBUG = false;
     public static UUID SRV_UUID = null;
     public static boolean SRV_REPORT = true;
+    public static boolean GLOBAL_SHOP = false;
+    public static UUID GLOBAL_SHOP_UUID = null;
     
     // Player Settings
     public static int PLAYER_MAX_SHOPS = -1;        // Anything < 0 = unlimited player shops.
