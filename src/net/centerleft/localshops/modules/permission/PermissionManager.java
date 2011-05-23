@@ -5,8 +5,7 @@ import java.util.TreeMap;
 import java.util.logging.Logger;
 
 import net.centerleft.localshops.LocalShops;
-import net.centerleft.localshops.modules.permission.plugins.Permission_None;
-import net.centerleft.localshops.modules.permission.plugins.Permission_Permissions;
+import net.centerleft.localshops.modules.permission.plugins.*;
 
 import org.bukkit.entity.Player;
 
@@ -22,6 +21,15 @@ public class PermissionManager {
     }
     
     public boolean load() {
+        
+        // Try to load PermissionsEx
+        if(packageExists(new String[] { "ru.tehkode.permissions.bukkit.PermissionsEx" })) {
+            Permission ePerms = new Permission_PermissionsEx(plugin);
+            perms.put(8, ePerms);
+            log.info(String.format("[%s][Permission] PermissionsEx found: %s", plugin.getDescription().getName(), ePerms.isEnabled() ? "Loaded" : "Waiting"));
+        } else {
+            log.info(String.format("[%s][Permission] PermissionsEx not found.", plugin.getDescription().getName()));
+        }
 
         // Try to load Permissions (Phoenix)
         if (packageExists(new String[] { "com.nijikokun.bukkit.Permissions.Permissions" })) {
