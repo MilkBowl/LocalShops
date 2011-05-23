@@ -350,7 +350,7 @@ public class ShopManager {
 
             br.close();
 
-            File dir = new File("plugins/LocalShops/shops-converted/");
+            File dir = new File(Config.DIR_PATH + Config.DIR_SHOPS_CONVERTED);
             dir.mkdir();
             if (file.renameTo(new File(dir, file.getName()))) {
                 file.delete();
@@ -563,7 +563,7 @@ public class ShopManager {
     }
 
     public boolean isolateBrokenShopFile(File file) {
-        File dir = new File("plugins/LocalShops/shops-broken/");
+        File dir = new File(Config.DIR_PATH + Config.DIR_SHOPS_BROKEN);
         dir.mkdir();
         if (file.renameTo(new File(dir, file.getName()))) {
             file.delete();
@@ -629,7 +629,7 @@ public class ShopManager {
             props.setProperty(String.format("sign:%d,%d,%d", x, y, z), shop.getSignMap().get(signLoc));
         }
 
-        String fileName = LocalShops.folderPath + LocalShops.shopsPath + shop.getUuid().toString() + ".shop";
+        String fileName = Config.DIR_PATH + Config.DIR_SHOPS_ACTIVE + shop.getUuid().toString() + ".shop";
         try {
             props.store(new FileOutputStream(fileName), "LocalShops Config Version 2.0");
         } catch (IOException e) {
@@ -646,7 +646,7 @@ public class ShopManager {
         Config.UUID_LIST.remove(shortUuid);
 
         // delete the file from the directory
-        String filePath = LocalShops.folderPath + LocalShops.shopsPath + shop.getUuid() + ".shop";
+        String filePath = Config.DIR_PATH + Config.DIR_SHOPS_ACTIVE + shop.getUuid() + ".shop";
         File shopFile = new File(filePath);
         shopFile.delete();
 
@@ -671,7 +671,7 @@ public class ShopManager {
         if (!Config.SRV_LOG_TRANSACTIONS)
             return false;
 
-        String filePath = LocalShops.folderPath + "transactions.log";
+        String filePath = Config.DIR_PATH + "transactions.log";
 
         File logFile = new File(filePath);
         try {

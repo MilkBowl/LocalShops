@@ -44,18 +44,16 @@ public class LocalShops extends JavaPlugin {
 
     // Constants
     public static final String CHAT_PREFIX = ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] ";
-    
-    //
-    static final String folderPath = "plugins/LocalShops/";
-    static final String shopsPath = "shops/";
     static File shopsDir;
     static File folderDir;
     static List<World> foundWorlds;
 
-    static PropertyHandler properties;
-
     private static ItemData itemList = new ItemData();
     private Map<String, PlayerData> playerData; // synchronized player hash
+    
+    public LocalShops() {
+        Config.loadProperties();
+    }
 
     public void onEnable() {
         pdfFile = getDescription();
@@ -82,15 +80,10 @@ public class LocalShops extends JavaPlugin {
         getCommand("shop").setExecutor(new ShopCommandExecutor(this));
 
         // setup the file IO
-        folderDir = new File(folderPath);
+        folderDir = new File(Config.DIR_PATH);
         folderDir.mkdir();
-        shopsDir = new File(folderPath + shopsPath);
+        shopsDir = new File(Config.DIR_PATH + Config.DIR_SHOPS_ACTIVE);
         shopsDir.mkdir();
-
-        properties = new PropertyHandler(folderPath + "localshops.properties");
-        properties.load();
-        loadProperties(properties);
-        properties.save();
 
         foundWorlds = getServer().getWorlds();
         // read the shops into memory
@@ -160,130 +153,6 @@ public class LocalShops extends JavaPlugin {
         
         // update the console that we've stopped
         log.info(String.format("[%s] %s", pdfFile.getName(), "Version " + pdfFile.getVersion() + " is disabled!"));
-    }
-
-    private void loadProperties(PropertyHandler properties) {
-        if (properties.keyExists("charge-for-shop")) {
-            Config.SHOP_CHARGE_CREATE = properties.getBoolean("charge-for-shop");
-            Config.SHOP_CHARGE_MOVE = properties.getBoolean("charge-for-shop");
-        } else {
-            properties.setBoolean("charge-for-shop", Config.SHOP_CHARGE_CREATE);
-        }
-
-        if (properties.keyExists("shop-cost")) {
-            Config.SHOP_CHARGE_CREATE_COST = properties.getDouble("shop-cost");
-        } else {
-            properties.setDouble("shop-cost", Config.SHOP_CHARGE_CREATE_COST);
-        }
-
-        if (properties.keyExists("move-cost")) {
-            Config.SHOP_CHARGE_MOVE_COST = properties.getDouble("move-cost");
-        } else {
-            properties.setDouble("move-cost", Config.SHOP_CHARGE_MOVE_COST);
-        }
-
-        if (properties.keyExists("shop-width")) {
-            Config.SHOP_SIZE_DEF_WIDTH = properties.getInt("shop-width");
-        } else {
-            properties.setLong("shop-width", Config.SHOP_SIZE_DEF_WIDTH);
-        }
-
-        if (properties.keyExists("shop-height")) {
-            Config.SHOP_SIZE_DEF_HEIGHT = properties.getInt("shop-height");
-        } else {
-            properties.setLong("shop-height", Config.SHOP_SIZE_DEF_HEIGHT);
-        }
-
-        if (properties.keyExists("max-width")) {
-            Config.SHOP_SIZE_MAX_WIDTH = properties.getInt("max-width");
-        } else {
-            properties.setLong("max-width", Config.SHOP_SIZE_MAX_WIDTH);
-        }
-
-        if (properties.keyExists("max-height")) {
-            Config.SHOP_SIZE_MAX_HEIGHT = properties.getInt("max-height");
-        } else {
-            properties.setLong("max-height", Config.SHOP_SIZE_MAX_HEIGHT);
-        }
-        if (properties.keyExists("shops-per-player")) {
-            Config.PLAYER_MAX_SHOPS = properties.getInt("shops-per-player");
-        } else {
-            properties.setInt("shops-per-player", Config.PLAYER_MAX_SHOPS);
-        }
-
-        if (properties.keyExists("log-transactions")) {
-            Config.SRV_LOG_TRANSACTIONS = properties.getBoolean("log-transactions");
-        } else {
-            properties.setBoolean("log-transactions", Config.SRV_LOG_TRANSACTIONS);
-        }
-
-        if (properties.keyExists("max-damage")) {
-            Config.ITEM_MAX_DAMAGE = properties.getInt("max-damage");
-            if (Config.ITEM_MAX_DAMAGE < 0)
-                Config.ITEM_MAX_DAMAGE = 0;
-        } else {
-            properties.setInt("max-damage", Config.ITEM_MAX_DAMAGE);
-        }
-        
-        if(properties.keyExists("uuid")) {
-            Config.SRV_UUID = properties.getUuid("uuid");
-        } else {
-            Config.SRV_UUID = UUID.randomUUID();
-            properties.setUuid("uuid", Config.SRV_UUID);
-        }
-        
-        if(properties.keyExists("report-stats")) {
-            Config.SRV_REPORT = properties.getBoolean("report-stats");
-        } else {
-            properties.setBoolean("report-stats", Config.SRV_REPORT);
-        }
-        
-        if(properties.keyExists("debug")) {
-            Config.SRV_DEBUG = properties.getBoolean("debug");
-        } else {
-            properties.setBoolean("debug", Config.SRV_DEBUG);
-        }
-        
-        if(properties.keyExists("find-max-distance")) {
-            Config.FIND_MAX_DISTANCE = properties.getInt("find-max-distance");
-        } else {
-            properties.setInt("find-max-distance", Config.FIND_MAX_DISTANCE);
-        }
-        
-        if(properties.keyExists("shop-transaction-notice")) {
-            Config.SHOP_TRANSACTION_NOTICE = properties.getBoolean("shop-notification");
-        } else {
-            properties.setBoolean("shop-notification", Config.SHOP_TRANSACTION_NOTICE);
-        }
-        
-        if(properties.keyExists("shop-transactin-notice-timer")) {
-            Config.SHOP_TRANSACTION_NOTICE_TIMER = properties.getInt("shop-notification-timer");
-        } else {
-            properties.setInt("shop-notification-timer", Config.SHOP_TRANSACTION_NOTICE_TIMER);
-        }
-        
-        if(properties.keyExists("shop-transaction-max-size")) {
-            Config.SHOP_TRANSACTION_MAX_SIZE = properties.getInt("shop-transaction-max-size");
-        } else {
-            properties.setInt("shop-transaction-max-size", Config.SHOP_TRANSACTION_MAX_SIZE);
-        }
-        
-        if(properties.keyExists("global-shop")) {
-            Config.GLOBAL_SHOP = properties.getBoolean("global-shop");
-        } else {
-            properties.setBoolean("global-shop", Config.GLOBAL_SHOP);
-        }
-        if(properties.keyExists("global-shop-uuid")) {
-            Config.GLOBAL_SHOP_UUID = properties.getUuid("global-shop-uuid");
-        } else {
-            Config.GLOBAL_SHOP_UUID = UUID.randomUUID();
-            properties.setUuid("global-shop-uuid", Config.GLOBAL_SHOP_UUID);
-        }
-        if(properties.keyExists("chat-max-lines")) {
-            Config.CHAT_MAX_LINES = properties.getInt("chat-max-lines");
-        } else {
-            properties.setInt("chat-max-lines", Config.CHAT_MAX_LINES);
-        }
     }
 
     public void setShopData(ShopManager shopData) {
