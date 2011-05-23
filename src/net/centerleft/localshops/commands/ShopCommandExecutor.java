@@ -84,6 +84,8 @@ public class ShopCommandExecutor implements CommandExecutor {
                 cmd = new CommandShopInfo(plugin, commandLabel, sender, cmdString);
             } else if (type.equalsIgnoreCase("version")) {
                 cmd = new CommandShopVersion(plugin, commandLabel, sender, cmdString);
+            } else if (type.equalsIgnoreCase("global")) {
+                cmd = new CommandShopVersion(plugin, commandLabel, sender, cmdString);
             } else {
                 cmd = new CommandShopHelp(plugin, commandLabel, sender, cmdString);
             }

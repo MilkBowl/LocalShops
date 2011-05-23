@@ -5,6 +5,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.centerleft.localshops.Config;
 import net.centerleft.localshops.InventoryItem;
 import net.centerleft.localshops.ItemInfo;
 import net.centerleft.localshops.LocalShops;
@@ -54,6 +55,8 @@ public class CommandShopSet extends Command {
             return shopSetOwner();
         } else if (command.matches("(?i)set\\s+name.*")) {
             return shopSetName();
+        } else if (command.matches("(?i)set\\s+global.*")) {
+            return shopSetGlobal();
         } else {
             return shopSetHelp();
         }
@@ -840,6 +843,55 @@ public class CommandShopSet extends Command {
         return true;
     }
     
+    /**
+     * Sets a shop to be the current global shop
+     */
+    private boolean shopSetGlobal() {
+        Shop shop = null;
+        
+        //Exit if global shops are disabled.
+        if (!Config.GLOBAL_SHOP) {
+            sender.sendMessage("Globalshop is disable on the server");
+            return true;
+        }
+        // Get current shop
+        if (sender instanceof Player) {
+            // Get player & data
+            Player player = (Player) sender;
+            PlayerData pData = plugin.getPlayerData().get(player.getName());
+
+            // Get Current Shop
+            UUID shopUuid = pData.getCurrentShop();
+            if (shopUuid != null) {
+                shop = plugin.getShopData().getShop(shopUuid);
+            }
+            if (shop == null) {
+                sender.sendMessage("You are not in a shop!");
+                return true;
+            }
+
+            // Check Permissions
+            if (!canUseCommand(CommandTypes.ADMIN)) {
+                player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You must be a shop admin to do this.");
+                return true;
+            }            
+        } else {
+            sender.sendMessage("Console is not implemented yet.");
+            return true;
+        }
+        
+        // shop set global
+        Pattern pattern = Pattern.compile("(?i)set\\s+global");
+        Matcher matcher = pattern.matcher(command);
+        if (matcher.find()) {
+            Config.GLOBAL_SHOP_UUID = shop.getUuid();
+            sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "This shop is now the globalshop and can be access from anywhere.");
+            return true;
+        }
+        
+        return true;
+    }
+    
     private boolean shopSetHelp() {
         // Display list of set commands & return
         sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "The following set commands are available: ");
@@ -853,6 +905,7 @@ public class CommandShopSet extends Command {
         if (canUseCommand(CommandTypes.ADMIN)) {
             sender.sendMessage("   " + "/" + commandLabel + " set unlimited money");
             sender.sendMessage("   " + "/" + commandLabel + " set unlimited stock");
+            sender.sendMessage("   " + "/" + commandLabel + " set global");
         }
         return true;
     }

@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.centerleft.localshops.Config;
 import net.centerleft.localshops.InventoryItem;
 import net.centerleft.localshops.LocalShops;
 import net.centerleft.localshops.PlayerData;
@@ -40,6 +41,8 @@ public class CommandShopBrowse extends Command {
             UUID shopUuid = pData.getCurrentShop();
             if (shopUuid != null) {
                 shop = plugin.getShopData().getShop(shopUuid);
+            } else if (Config.GLOBAL_SHOP && shopUuid == null) {
+                shop = plugin.getShopData().getShop(Config.GLOBAL_SHOP_UUID);
             }
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
@@ -112,11 +115,11 @@ public class CommandShopBrowse extends Command {
      * @param shop
      * @param player
      * @param buySellorList
-     */
+     
     private void printInventory(Shop shop, String buySellorList) {
         printInventory(shop, buySellorList, 1);
     }
-
+    */
     /**
      * Prints shop inventory list. Takes buy, sell, or list as arguments for
      * which format to print.
