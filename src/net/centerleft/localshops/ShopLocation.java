@@ -46,6 +46,6 @@ public class ShopLocation {
     }
 
     public String toString() {
-        return String.format("%.0f, %.0f, %.0f", x, y, z);
+        return String.format("%d, %d, %d", x, y, z);
     }
 }
