@@ -38,7 +38,7 @@ public class CommandShopAdd extends Command {
             // Get Current Shop
             UUID shopUuid = pData.getCurrentShop();
             if (shopUuid != null) {
-                shop = plugin.getShopData().getShop(shopUuid);
+                shop = plugin.getShopManager().getShop(shopUuid);
             }
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
@@ -330,14 +330,14 @@ public class CommandShopAdd extends Command {
             if (startInv < 0) {
                 startInv = 0;
             }
-            plugin.getShopData().logItems(player.getName(), shop.getName(), "add-item", item.name, amount, startInv, itemInv);
+            plugin.getShopManager().logItems(player.getName(), shop.getName(), "add-item", item.name, amount, startInv, itemInv);
 
             // take items from player only if shop doesn't have unlim stock
             if(!shop.isUnlimitedStock()) {
                 removeItemsFromInventory(player.getInventory(), item.toStack(), amount);
             }
         }
-        plugin.getShopData().saveShop(shop);
+        plugin.getShopManager().saveShop(shop);
         return true;
     }
 }

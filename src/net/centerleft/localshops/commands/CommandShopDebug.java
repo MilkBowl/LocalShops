@@ -34,7 +34,7 @@ public class CommandShopDebug extends Command {
                 // Get Current Shop
                 UUID shopUuid = pData.getCurrentShop();
                 if (shopUuid != null) {
-                    shop = plugin.getShopData().getShop(shopUuid);
+                    shop = plugin.getShopManager().getShop(shopUuid);
                 }
                 if (shop == null) {
                     sender.sendMessage("You are not in a shop!");
@@ -50,7 +50,7 @@ public class CommandShopDebug extends Command {
         Matcher matcher = pattern.matcher(command);
         if (matcher.find()) {
             String input = matcher.group(1);
-            shop = plugin.getShopData().getShop(input);
+            shop = plugin.getShopManager().getShop(input);
             if (shop == null) {
                 sender.sendMessage("Could not find shop with ID " + input);
                 return false;

@@ -74,7 +74,7 @@ public class CommandShopSet extends Command {
             // Get Current Shop
             UUID shopUuid = pData.getCurrentShop();
             if (shopUuid != null) {
-                shop = plugin.getShopData().getShop(shopUuid);
+                shop = plugin.getShopManager().getShop(shopUuid);
             }
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
@@ -191,7 +191,7 @@ public class CommandShopSet extends Command {
         shop.setItemSellPrice(item.name, price);
 
         // Save Shop
-        plugin.getShopData().saveShop(shop);
+        plugin.getShopManager().saveShop(shop);
 
         // Send Result
         sender.sendMessage(ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " now is purchased for "+ ChatColor.WHITE + plugin.getEconManager().format(price));
@@ -225,7 +225,7 @@ public class CommandShopSet extends Command {
         shop.setItemSellPrice(item.name, price);
 
         // Save Shop
-        plugin.getShopData().saveShop(shop);
+        plugin.getShopManager().saveShop(shop);
 
         // Send Result
         sender.sendMessage(ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " now is purchased for "+ ChatColor.WHITE + plugin.getEconManager().format(price) + ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + "Bundle: " + size + ChatColor.DARK_AQUA + "]");
@@ -244,7 +244,7 @@ public class CommandShopSet extends Command {
             // Get Current Shop
             UUID shopUuid = pData.getCurrentShop();
             if (shopUuid != null) {
-                shop = plugin.getShopData().getShop(shopUuid);
+                shop = plugin.getShopManager().getShop(shopUuid);
             }
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
@@ -367,7 +367,7 @@ public class CommandShopSet extends Command {
         shop.setItemBuyPrice(item.name, price);
 
         // Save Shop
-        plugin.getShopData().saveShop(shop);
+        plugin.getShopManager().saveShop(shop);
 
         // Send Result
         sender.sendMessage(ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " now sells for "+ ChatColor.WHITE + plugin.getEconManager().format(price) + ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + "Bundle: " + size + ChatColor.DARK_AQUA + "]");
@@ -397,7 +397,7 @@ public class CommandShopSet extends Command {
         shop.setItemBuyPrice(item.name, price);
 
         // Save Shop
-        plugin.getShopData().saveShop(shop);
+        plugin.getShopManager().saveShop(shop);
 
         // Send Result
         sender.sendMessage(ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " now sells for "+ ChatColor.WHITE + plugin.getEconManager().format(price));
@@ -417,7 +417,7 @@ public class CommandShopSet extends Command {
             // Get Current Shop
             UUID shopUuid = pData.getCurrentShop();
             if (shopUuid != null) {
-                shop = plugin.getShopData().getShop(shopUuid);
+                shop = plugin.getShopManager().getShop(shopUuid);
             }
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
@@ -498,7 +498,7 @@ public class CommandShopSet extends Command {
         shop.setItemMaxStock(item.name, max);
 
         // Save Shop
-        plugin.getShopData().saveShop(shop);
+        plugin.getShopManager().saveShop(shop);
 
         // Send Message
         sender.sendMessage(item.name + " maximum stock is now " + max);
@@ -518,7 +518,7 @@ public class CommandShopSet extends Command {
             // Get Current Shop
             UUID shopUuid = pData.getCurrentShop();
             if (shopUuid != null) {
-                shop = plugin.getShopData().getShop(shopUuid);
+                shop = plugin.getShopManager().getShop(shopUuid);
             }
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
@@ -554,7 +554,7 @@ public class CommandShopSet extends Command {
         if (matcher.find()) {
             shop.setUnlimitedMoney(!shop.isUnlimitedMoney());
             sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "Unlimited money was set to " + ChatColor.WHITE + shop.isUnlimitedMoney());
-            plugin.getShopData().saveShop(shop);
+            plugin.getShopManager().saveShop(shop);
             return true;
         }
 
@@ -565,7 +565,7 @@ public class CommandShopSet extends Command {
         if (matcher.find()) {
             shop.setUnlimitedStock(!shop.isUnlimitedStock());
             sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "Unlimited stock was set to " + ChatColor.WHITE + shop.isUnlimitedStock());
-            plugin.getShopData().saveShop(shop);
+            plugin.getShopManager().saveShop(shop);
             return true;
         }
 
@@ -587,7 +587,7 @@ public class CommandShopSet extends Command {
             // Get Current Shop
             UUID shopUuid = pData.getCurrentShop();
             if (shopUuid != null) {
-                shop = plugin.getShopData().getShop(shopUuid);
+                shop = plugin.getShopManager().getShop(shopUuid);
             }
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
@@ -624,7 +624,7 @@ public class CommandShopSet extends Command {
             }
 
             // Save Shop
-            plugin.getShopData().saveShop(shop);
+            plugin.getShopManager().saveShop(shop);
 
             notifyPlayers(shop, new String[] { ChatColor.DARK_AQUA + "The shop managers have been updated. The current managers are:", Search.join(shop.getManagers(), ", ") } );
             return true;            
@@ -647,7 +647,7 @@ public class CommandShopSet extends Command {
             // Get current shop
             UUID shopUuid = pData.getCurrentShop();
             if(shopUuid != null) {
-                shop = plugin.getShopData().getShop(shopUuid);
+                shop = plugin.getShopManager().getShop(shopUuid);
             }
             if(shop == null) {
                 sender.sendMessage("You are not in a shop!");
@@ -669,7 +669,7 @@ public class CommandShopSet extends Command {
         shop.setNotification(!shop.getNotification());
         
         // Save Shop
-        plugin.getShopData().saveShop(shop);
+        plugin.getShopManager().saveShop(shop);
         
         // Output
         sender.sendMessage(String.format(ChatColor.DARK_AQUA + "Notices for " + ChatColor.WHITE + "%s" + ChatColor.DARK_AQUA + " are now " + ChatColor.WHITE + "%s", shop.getName(), shop.getNotification() ? "on" : "off"));
@@ -688,7 +688,7 @@ public class CommandShopSet extends Command {
             // Get Current Shop
             UUID shopUuid = pData.getCurrentShop();
             if (shopUuid != null) {
-                shop = plugin.getShopData().getShop(shopUuid);
+                shop = plugin.getShopManager().getShop(shopUuid);
             }
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
@@ -713,7 +713,7 @@ public class CommandShopSet extends Command {
             double min = Double.parseDouble(matcher.group(1));
             shop.setMinBalance(min);
             // Save Shop
-            plugin.getShopData().saveShop(shop);
+            plugin.getShopManager().saveShop(shop);
 
             sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " now has a minimum balance of "+ ChatColor.WHITE + plugin.getEconManager().format(min));
             return true;
@@ -736,7 +736,7 @@ public class CommandShopSet extends Command {
             // Get Current Shop
             UUID shopUuid = pData.getCurrentShop();
             if (shopUuid != null) {
-                shop = plugin.getShopData().getShop(shopUuid);
+                shop = plugin.getShopManager().getShop(shopUuid);
             }
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
@@ -779,7 +779,7 @@ public class CommandShopSet extends Command {
                 shop.setOwner(name);
 
                 // Save Shop
-                plugin.getShopData().saveShop(shop);
+                plugin.getShopManager().saveShop(shop);
 
                 // Reset buy prices (0)
                 if(reset) {
@@ -811,7 +811,7 @@ public class CommandShopSet extends Command {
             // Get Current Shop
             UUID shopUuid = pData.getCurrentShop();
             if(shopUuid != null) {
-                shop = plugin.getShopData().getShop(shopUuid);
+                shop = plugin.getShopManager().getShop(shopUuid);
             }
             if(shop == null) {
                 sender.sendMessage("You are not in a shop!");
@@ -834,7 +834,7 @@ public class CommandShopSet extends Command {
         if (matcher.find()) {
             String name = matcher.group(1).trim();
             shop.setName(name);
-            plugin.getShopData().saveShop(shop);
+            plugin.getShopManager().saveShop(shop);
             notifyPlayers(shop, new String[] { LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "Shop name is now " + ChatColor.WHITE + shop.getName() } );
             return true;
         }
@@ -863,7 +863,7 @@ public class CommandShopSet extends Command {
             // Get Current Shop
             UUID shopUuid = pData.getCurrentShop();
             if (shopUuid != null) {
-                shop = plugin.getShopData().getShop(shopUuid);
+                shop = plugin.getShopManager().getShop(shopUuid);
             }
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");

@@ -51,7 +51,7 @@ public class ShopsEntityListener extends EntityListener {
                 if(!cuboid.world.equalsIgnoreCase(block.getWorld().getName())) {
                     continue;
                 }
-                shop = plugin.getShopData().getShop(cuboid.uuid);
+                shop = plugin.getShopManager().getShop(cuboid.uuid);
             }
             if (shop == null) {
                 return;

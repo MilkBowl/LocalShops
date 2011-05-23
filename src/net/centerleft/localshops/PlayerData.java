@@ -138,8 +138,8 @@ public class PlayerData {
         }
         
         if (withdrawResp.transactionSuccess() && depositResp.transactionSuccess()) {
-            plugin.getShopData().logPayment(playerFrom, "payment", withdrawResp.amount, balanceFromResp.amount, withdrawResp.balance);
-            plugin.getShopData().logPayment(playerTo, "payment", depositResp.amount, balanceToResp.amount, depositResp.balance);
+            plugin.getShopManager().logPayment(playerFrom, "payment", withdrawResp.amount, balanceFromResp.amount, withdrawResp.balance);
+            plugin.getShopManager().logPayment(playerTo, "payment", depositResp.amount, balanceToResp.amount, depositResp.balance);
             return true;
         } else {
             return false;
@@ -159,7 +159,7 @@ public class PlayerData {
         
         EconomyResponse withdrawResp = plugin.getEconManager().withdrawPlayer(playerName, chargeAmount);
         if(withdrawResp.transactionSuccess()) {
-            plugin.getShopData().logPayment(playerName, "payment", withdrawResp.amount, balanceResp.balance, withdrawResp.balance);
+            plugin.getShopManager().logPayment(playerName, "payment", withdrawResp.amount, balanceResp.balance, withdrawResp.balance);
             return true;
         } else {
             return false;

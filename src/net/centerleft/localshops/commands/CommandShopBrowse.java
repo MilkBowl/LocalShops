@@ -40,9 +40,9 @@ public class CommandShopBrowse extends Command {
             // Get Current Shop
             UUID shopUuid = pData.getCurrentShop();
             if (shopUuid != null) {
-                shop = plugin.getShopData().getShop(shopUuid);
+                shop = plugin.getShopManager().getShop(shopUuid);
             } else if (Config.GLOBAL_SHOP && shopUuid == null) {
-                shop = plugin.getShopData().getShop(Config.GLOBAL_SHOP_UUID);
+                shop = plugin.getShopManager().getShop(Config.GLOBAL_SHOP_UUID);
             }
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");

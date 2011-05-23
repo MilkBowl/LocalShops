@@ -37,7 +37,7 @@ public class CommandShopRemove extends Command {
             // Get Current Shop
             UUID shopUuid = pData.getCurrentShop();
             if (shopUuid != null) {
-                shop = plugin.getShopData().getShop(shopUuid);
+                shop = plugin.getShopManager().getShop(shopUuid);
             }
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
@@ -134,7 +134,7 @@ public class CommandShopRemove extends Command {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
                 // log the transaction
-                plugin.getShopData().logItems(player.getName(), shop.getName(), "remove-item", item.name, amount, amount, 0);
+                plugin.getShopManager().logItems(player.getName(), shop.getName(), "remove-item", item.name, amount, amount, 0);
 
                 givePlayerItem(item.toStack(), amount);
                 player.sendMessage("" + ChatColor.WHITE + amount + ChatColor.DARK_AQUA + " have been returned to your inventory");
@@ -142,7 +142,7 @@ public class CommandShopRemove extends Command {
         }
 
         shop.removeItem(item.name);
-        plugin.getShopData().saveShop(shop);        
+        plugin.getShopManager().saveShop(shop);        
 
         return true;
     }

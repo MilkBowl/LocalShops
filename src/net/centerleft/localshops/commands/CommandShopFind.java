@@ -120,7 +120,7 @@ public class CommandShopFind extends Command {
         ShopLocation playerLoc = new ShopLocation(player.getLocation());
 
         TreeMap<UUID, Double> foundShops = new TreeMap<UUID, Double>();
-        List<Shop> shops = plugin.getShopData().getAllShops();
+        List<Shop> shops = plugin.getShopManager().getAllShops();
         for (Shop shop : shops) {
             // Check that its the current world
             if (!playerWorld.equals(shop.getWorld())) {
@@ -155,7 +155,7 @@ public class CommandShopFind extends Command {
             for (Entry<UUID, Double> entry : entries) {
                 UUID uuid = entry.getKey();
                 double distance = entry.getValue();
-                Shop shop = plugin.getShopData().getShop(uuid);
+                Shop shop = plugin.getShopManager().getShop(uuid);
                 InventoryItem item = shop.getItem(found.name);
 
                 String sellPrice;

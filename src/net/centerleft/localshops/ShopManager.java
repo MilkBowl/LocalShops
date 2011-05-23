@@ -9,10 +9,12 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -27,7 +29,7 @@ import cuboidLocale.QuadTree;
 
 public class ShopManager {
     private LocalShops plugin = null;
-    private HashMap<UUID, Shop> shops = new HashMap<UUID, Shop>();
+    private Map<UUID, Shop> shops = Collections.synchronizedMap(new HashMap<UUID, Shop>());
 
     // Logging
     private final Logger log = Logger.getLogger("Minecraft");
@@ -138,7 +140,7 @@ public class ShopManager {
                     log.info(String.format("[%s] Loaded %s", plugin.pdfFile.getName(), shop.toString()));
                 }
                 LocalShops.getCuboidTree().insert(shop.getCuboid());
-                plugin.getShopData().addShop(shop);
+                plugin.getShopManager().addShop(shop);
             } else {
                 log.warning(String.format("[%s] Failed to load Shop file: \"%s\"", plugin.pdfFile.getName(), file.getName()));
             }

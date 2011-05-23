@@ -35,7 +35,7 @@ public class LocalShops extends JavaPlugin {
     public ShopsPlayerListener playerListener = new ShopsPlayerListener(this);
     public ShopsBlockListener blockListener = new ShopsBlockListener(this);
     public ShopsEntityListener entityListener = new ShopsEntityListener(this);
-    private ShopManager shopData = new ShopManager(this);
+    private ShopManager shopManager = new ShopManager(this);
     public PluginDescriptionFile pdfFile = null;
     protected ReportThread reportThread = null;
     protected NotificationThread notificationThread = null;
@@ -107,10 +107,10 @@ public class LocalShops extends JavaPlugin {
 
         foundWorlds = getServer().getWorlds();
         // read the shops into memory
-        getShopData().loadShops(shopsDir);
+        getShopManager().loadShops(shopsDir);
 
         // update the console that we've started
-        log.info(String.format("[%s] %s", pdfFile.getName(), "Loaded with " + getShopData().getNumShops() + " shop(s)"));
+        log.info(String.format("[%s] %s", pdfFile.getName(), "Loaded with " + getShopManager().getNumShops() + " shop(s)"));
         log.info(String.format("[%s] %s", pdfFile.getName(), "Version " + pdfFile.getVersion() + " is enabled: " + Config.SRV_UUID.toString()));
 
         // check which shops players are inside
@@ -147,7 +147,7 @@ public class LocalShops extends JavaPlugin {
 
     public void onDisable() {
         // Save all shops
-        getShopData().saveAllShops();
+        getShopManager().saveAllShops();
         
         // Stop Reporting thread
         if(Config.SRV_REPORT && reportThread != null && reportThread.isAlive()) {
@@ -295,11 +295,11 @@ public class LocalShops extends JavaPlugin {
     }
 
     public void setShopData(ShopManager shopData) {
-        this.shopData = shopData;
+        this.shopManager = shopData;
     }
 
-    public ShopManager getShopData() {
-        return shopData;
+    public ShopManager getShopManager() {
+        return shopManager;
     }
 
     public void setPlayerData(Map<String, PlayerData> playerData) {

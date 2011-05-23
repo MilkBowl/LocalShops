@@ -50,7 +50,7 @@ public class CommandShopList extends Command {
             sender.sendMessage(String.format("%-"+idWidth+"s  %-25s %s", "Id", "Name", "Owner"));
         }
         
-        List<Shop> shops = plugin.getShopData().getAllShops();
+        List<Shop> shops = plugin.getShopManager().getAllShops();
         Collections.sort(shops, new ShopSortByName());
         
         Iterator<Shop> it = shops.iterator();

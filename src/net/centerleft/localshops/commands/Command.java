@@ -117,7 +117,7 @@ public abstract class Command {
     protected boolean canCreateShop(String playerName) {
         if (canUseCommand(CommandTypes.ADMIN)) {
             return true;
-        } else if (( plugin.getShopData().numOwnedShops(playerName) < Config.PLAYER_MAX_SHOPS || Config.PLAYER_MAX_SHOPS < 0) && canUseCommand(CommandTypes.CREATE)) {
+        } else if (( plugin.getShopManager().numOwnedShops(playerName) < Config.PLAYER_MAX_SHOPS || Config.PLAYER_MAX_SHOPS < 0) && canUseCommand(CommandTypes.CREATE)) {
             return true;
         }
 
@@ -177,7 +177,7 @@ public abstract class Command {
             for (PrimitiveCuboid cuboid : res.results) {
                 if (cuboid.uuid != null) {
                     if (cuboid.world.equalsIgnoreCase(worldName)) {
-                        Shop shop = plugin.getShopData().getShop(cuboid.uuid);
+                        Shop shop = plugin.getShopManager().getShop(cuboid.uuid);
                         sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "Could not create shop, it overlaps with " + ChatColor.WHITE + shop.getName());
                         return true;
                     }
