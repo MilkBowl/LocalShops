@@ -4,6 +4,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.centerleft.localshops.Config;
 import net.centerleft.localshops.InventoryItem;
 import net.centerleft.localshops.ItemInfo;
 import net.centerleft.localshops.LocalShops;
@@ -41,6 +42,8 @@ public class CommandShopBuy extends Command {
             UUID shopUuid = pData.getCurrentShop();
             if (shopUuid != null) {
                 shop = plugin.getShopData().getShop(shopUuid);
+            } else if (Config.GLOBAL_SHOP && shopUuid == null) {
+                shop = plugin.getShopData().getShop(Config.GLOBAL_SHOP_UUID);
             }
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");

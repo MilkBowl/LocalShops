@@ -1,8 +1,5 @@
 package net.centerleft.localshops.commands;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,8 +12,6 @@ import net.centerleft.localshops.PlayerData;
 import net.centerleft.localshops.Search;
 import net.centerleft.localshops.Shop;
 import net.centerleft.localshops.Transaction;
-import net.centerleft.localshops.Transaction.Type;
-import net.centerleft.localshops.comparator.InventoryItemSortByName;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -46,6 +41,8 @@ public class CommandShopSell extends Command {
             UUID shopUuid = pData.getCurrentShop();
             if (shopUuid != null) {
                 shop = plugin.getShopData().getShop(shopUuid);
+            } else if (Config.GLOBAL_SHOP && shopUuid == null) {
+                shop = plugin.getShopData().getShop(Config.GLOBAL_SHOP_UUID);
             }
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
