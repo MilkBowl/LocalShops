@@ -35,6 +35,7 @@ public class LocalShops extends JavaPlugin {
     public ShopsPlayerListener playerListener = new ShopsPlayerListener(this);
     public ShopsBlockListener blockListener = new ShopsBlockListener(this);
     public ShopsEntityListener entityListener = new ShopsEntityListener(this);
+    public ShopsWorldListener worldListener = new ShopsWorldListener(this);
     private ShopManager shopManager = new ShopManager(this);
     public PluginDescriptionFile pdfFile = null;
     protected ReportThread reportThread = null;
@@ -83,6 +84,7 @@ public class LocalShops extends JavaPlugin {
         pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Priority.Normal, this);
         pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Normal, this);
         pm.registerEvent(Event.Type.ENTITY_EXPLODE, entityListener, Priority.Normal, this);
+        pm.registerEvent(Event.Type.WORLD_LOAD, worldListener, Priority.Monitor, this);
         
         
         // Register Commands
@@ -108,6 +110,9 @@ public class LocalShops extends JavaPlugin {
         foundWorlds = getServer().getWorlds();
         // read the shops into memory
         getShopManager().loadShops(shopsDir);
+        for (World world : foundWorlds) {
+            setupGlobalShop(world.getName());
+        }
 
         // update the console that we've started
         log.info(String.format("[%s] %s", pdfFile.getName(), "Loaded with " + getShopManager().getNumShops() + " shop(s)"));
@@ -280,18 +285,18 @@ public class LocalShops extends JavaPlugin {
         } else {
             properties.setInt("shop-transaction-max-size", Config.SHOP_TRANSACTION_MAX_SIZE);
         }
-        
+
         if(properties.keyExists("global-shop")) {
-            Config.GLOBAL_SHOP = properties.getBoolean("global-shop");
+            Config.GLOBAL_SHOPS_ENABLED = properties.getBoolean("global-shop");
         } else {
-            properties.setBoolean("global-shop", Config.GLOBAL_SHOP);
+            properties.setBoolean("global-shop", Config.GLOBAL_SHOPS_ENABLED);
         }
-        if(properties.keyExists("global-shop-uuid")) {
-            Config.GLOBAL_SHOP_UUID = properties.getUuid("global-shop-uuid");
-        } else {
-            Config.GLOBAL_SHOP_UUID = UUID.randomUUID();
-            properties.setUuid("global-shop-uuid", Config.GLOBAL_SHOP_UUID);
-        }
+    }
+
+    public static void setupGlobalShop(String worldName) {
+        if(properties.keyExists(worldName + "-shop-UUID")) {
+            Config.GLOBAL_SHOPS.put(worldName, properties.getUuid(worldName));
+        } 
     }
 
     public void setShopData(ShopManager shopData) {
