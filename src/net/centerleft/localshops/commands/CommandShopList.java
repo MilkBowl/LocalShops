@@ -34,7 +34,7 @@ public class CommandShopList extends Command {
         boolean isPlayer = false;
 
         // list all
-        Pattern pattern = Pattern.compile("(?i)list\\s+all$");
+        Pattern pattern = Pattern.compile("(?i)list\\s+(.*)");
         Matcher matcher = pattern.matcher(command);
         if (matcher.find()) {
             showAll = true;

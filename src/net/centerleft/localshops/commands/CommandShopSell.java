@@ -1,6 +1,5 @@
 package net.centerleft.localshops.commands;
 
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,12 +19,12 @@ import org.bukkit.inventory.ItemStack;
 
 public class CommandShopSell extends Command {
 
-    public CommandShopSell(LocalShops plugin, String commandLabel, CommandSender sender, String command) {
-        super(plugin, commandLabel, sender, command);
+    public CommandShopSell(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
+        super(plugin, commandLabel, sender, command, isGlobal);
     }
 
-    public CommandShopSell(LocalShops plugin, String commandLabel, CommandSender sender, String[] command) {
-        super(plugin, commandLabel, sender, command);
+    public CommandShopSell(LocalShops plugin, String commandLabel, CommandSender sender, String[] command, boolean isGlobal) {
+        super(plugin, commandLabel, sender, command, isGlobal);
     }
 
     public boolean process() {
@@ -35,16 +34,9 @@ public class CommandShopSell extends Command {
         if (sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            PlayerData pData = plugin.getPlayerData().get(player.getName());
-
-            // Get Current Shop
-            UUID shopUuid = pData.getCurrentShop();
-            if (shopUuid != null) {
-                shop = plugin.getShopManager().getShop(shopUuid);
-            } else if (Config.GLOBAL_SHOP && shopUuid == null) {
-                shop = plugin.getShopManager().getShop(Config.GLOBAL_SHOP_UUID);
-            }
-            if (shop == null) {
+            
+            shop = getCurrentShop(player);
+            if (shop == null || (isGlobal && !Config.GLOBAL_SHOPS_ENABLED)) {
                 sender.sendMessage("You are not in a shop!");
                 return true;
             }

@@ -1,10 +1,12 @@
 package net.centerleft.localshops;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -31,7 +33,8 @@ public class Shop implements Comparator<Shop> {
     private double minBalance = 0;
     private ArrayBlockingQueue<Transaction> transactions;
     private boolean notification = true;
-    private HashMap<Location, String> signMap = null;
+    private Map<Location, String> signMap = Collections.synchronizedMap(new HashMap<Location, String>());
+    private boolean global = false;
     
     // Logging
     private static final Logger log = Logger.getLogger("Minecraft");    
@@ -355,11 +358,20 @@ public class Shop implements Comparator<Shop> {
         return o1.getUuid().compareTo(o2.uuid);
     }
 
-    public void setSignMap(HashMap<Location, String> signList) {
-        this.signMap = signList;
+
+    public void setGlobal(boolean global) {
+        this.global = global;
     }
 
-    public HashMap<Location, String> getSignMap() {
+    public boolean isGlobal() {
+        return global;
+    }
+
+    public void setSignMap(Map<Location, String> signMap) {
+        this.signMap = signMap;
+    }
+
+    public Map<Location, String> getSignMap() {
         return signMap;
     }
 

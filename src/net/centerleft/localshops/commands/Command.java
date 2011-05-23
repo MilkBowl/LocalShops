@@ -1,6 +1,7 @@
 package net.centerleft.localshops.commands;
 
 import java.util.Iterator;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import net.centerleft.localshops.Config;
@@ -22,7 +23,7 @@ import cuboidLocale.BookmarkedResult;
 import cuboidLocale.PrimitiveCuboid;
 
 public abstract class Command {
-    
+
     // Attributes
     protected LocalShops plugin = null;
     protected String commandLabel = null;
@@ -71,14 +72,14 @@ public abstract class Command {
             return permissions;
         }
     }
-    
+
     public Command(LocalShops plugin, String commandLabel, CommandSender sender, String command){
         this.plugin = plugin;
         this.commandLabel = commandLabel;
         this.sender = sender;
         this.command = command.trim();
     }
-    
+
     public Command(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal){
         this.plugin = plugin;
         this.commandLabel = commandLabel;
@@ -86,24 +87,24 @@ public abstract class Command {
         this.command = command.trim();
         this.isGlobal = isGlobal;
     }
-    
+
     public Command(LocalShops plugin, String commandLabel, CommandSender sender, String[] args) {
         this(plugin, commandLabel, sender, Search.join(args, " ").trim());
     }
-    
+
     public Command(LocalShops plugin, String commandLabel, CommandSender sender, String[] args, boolean isGlobal) {
         this(plugin, commandLabel, sender, Search.join(args, " ").trim(), isGlobal);
     }
-    
+
     public String getCommand() {
         return command;
     }
-    
+
     public boolean process() {
         // Does nothing and needs to be overloaded by subclasses
         return false;
     }
-    
+
     protected boolean canUseCommand(CommandTypes type) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
@@ -126,7 +127,7 @@ public abstract class Command {
             return true;
         }
     }
-    
+
     protected boolean canCreateShop(String playerName) {
         if (canUseCommand(CommandTypes.ADMIN)) {
             return true;
@@ -136,7 +137,7 @@ public abstract class Command {
 
         return false;
     }
-    
+
     protected boolean canModifyShop(Shop shop) {
         if(sender instanceof Player) {
             Player player = (Player) sender;
@@ -158,7 +159,7 @@ public abstract class Command {
             return true;
         }
     }
-    
+
     protected boolean shopPositionOk(double[] xyzA, double[] xyzB, String worldName) {
         BookmarkedResult res = new BookmarkedResult();
 
@@ -199,7 +200,7 @@ public abstract class Command {
         }
         return false;
     }
-    
+
     protected void givePlayerItem(ItemStack item, int amount) {
         Player player = (Player) sender;
 
@@ -254,7 +255,7 @@ public abstract class Command {
         }
 
     }
-    
+
     /**
      * Returns true if the player is in the shop manager list or is the shop
      * owner
@@ -280,7 +281,7 @@ public abstract class Command {
             return true;
         }
     }
-    
+
     protected int countItemsInInventory(PlayerInventory inventory, ItemStack item) {
         int totalAmount = 0;
         boolean isDurable = LocalShops.getItemList().isDurable(item);
@@ -300,7 +301,7 @@ public abstract class Command {
 
         return totalAmount;
     }
-    
+
     protected static int calcDurabilityPercentage(ItemStack item) {
 
         // calc durability prcnt
@@ -313,7 +314,7 @@ public abstract class Command {
 
         return damage;
     }
-    
+
     protected int removeItemsFromInventory(PlayerInventory inventory, ItemStack item, int amount) {
 
         boolean isDurable = LocalShops.getItemList().isDurable(item);
@@ -346,7 +347,7 @@ public abstract class Command {
         return amount;
 
     }
-    
+
 
     protected int countAvailableSpaceForItemInInventory(PlayerInventory inventory, ItemInfo item) {
         int count = 0;
@@ -362,7 +363,7 @@ public abstract class Command {
 
         return count;
     }
-    
+
     protected boolean notifyPlayers(Shop shop, String[] messages) {
         Iterator<PlayerData> it = plugin.getPlayerData().values().iterator();
         while(it.hasNext()) {
@@ -376,7 +377,7 @@ public abstract class Command {
         }
         return true;
     }
-    
+
     protected double calculateDistance(ShopLocation from, ShopLocation to) {        
         double x1 = from.getX();
         double x2 = to.getX();
@@ -388,7 +389,23 @@ public abstract class Command {
         double z2 = to.getZ();
 
         double distance = Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2) + Math.pow((z1 - z2), 2));
-        
+
         return distance;
-}
+    }
+    
+    protected Shop getCurrentShop (Player player) {
+        Shop shop = null;
+        UUID shopUuid = null;
+        PlayerData pData = plugin.getPlayerData().get(player.getName());
+        // Get Current Shop
+        if (isGlobal && Config.GLOBAL_SHOPS.containsKey(player.getWorld().getName())) 
+            shopUuid = Config.GLOBAL_SHOPS.get(player.getWorld().getName());
+        else if (!isGlobal)
+            shopUuid = pData.getCurrentShop();
+        
+        if (shopUuid != null) 
+            shop = plugin.getShopManager().getShop(shopUuid);
+        
+        return shop;
+    }
 }

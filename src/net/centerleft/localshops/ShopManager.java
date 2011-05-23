@@ -12,9 +12,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -139,7 +141,11 @@ public class ShopManager {
                 if(Config.SRV_DEBUG) {
                     log.info(String.format("[%s] Loaded %s", plugin.pdfFile.getName(), shop.toString()));
                 }
-                LocalShops.getCuboidTree().insert(shop.getCuboid());
+                if (shop.isGlobal()) {
+                    Config.GLOBAL_SHOPS.put(shop.getWorld(), shop.getUuid());
+                } else {
+                    LocalShops.getCuboidTree().insert(shop.getCuboid());
+                }
                 plugin.getShopManager().addShop(shop);
             } else {
                 log.warning(String.format("[%s] Failed to load Shop file: \"%s\"", plugin.pdfFile.getName(), file.getName()));
@@ -341,6 +347,10 @@ public class ShopManager {
 
     public Shop loadShop(File file) throws Exception {
         HashMap<Location, String> signMap = new HashMap<Location, String>(4);
+        
+        Shop shop = null;
+        double[] locationA = null;
+        double[] locationB = null;
 
         SortedProperties props = new SortedProperties();
         try {
@@ -357,41 +367,45 @@ public class ShopManager {
         boolean unlimitedStock = Boolean.parseBoolean(props.getProperty("unlimited-stock", "false"));
         double minBalance = Double.parseDouble((props.getProperty("min-balance", "0.0")));
         boolean notification = Boolean.parseBoolean(props.getProperty("notification", "true"));
-
-        // Location - locationB=-88, 50, -127
-        double[] locationA;
-        double[] locationB;
-        String world;
-        try {
-            locationA = convertStringArraytoDoubleArray(props.getProperty("locationA").split(", "));
-            locationB = convertStringArraytoDoubleArray(props.getProperty("locationB").split(", "));
-            world = props.getProperty("world", "world1");
-        } catch (Exception e) {
-            if(isolateBrokenShopFile(file)) {
-                log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.toString()));
-            } else {
-                log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Error moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.toString()));
+        boolean global = Boolean.parseBoolean(props.getProperty("global", "false"));
+        
+        if (!global) {
+            // Location - locationB=-88, 50, -127
+            try {
+                locationA = convertStringArraytoDoubleArray(props.getProperty("locationA").split(", "));
+                locationB = convertStringArraytoDoubleArray(props.getProperty("locationB").split(", "));
+                
+            } catch (Exception e) {
+                if(isolateBrokenShopFile(file)) {
+                    log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.toString()));
+                } else {
+                    log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Error moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.toString()));
+                }
+                return null;
             }
-            return null;
-        }
+        } 
 
         // People
         String owner = props.getProperty("owner", "");
         String[] managers = props.getProperty("managers", "").replaceAll("[\\[\\]]", "").split(", ");
         String creator = props.getProperty("creator", "LocalShops");
-
-        Shop shop = new Shop(uuid);
+        String world = props.getProperty("world", "world1");
+        
+        shop = new Shop(uuid);
         shop.setName(name);
         shop.setUnlimitedMoney(unlimitedMoney);
         shop.setUnlimitedStock(unlimitedStock);
-        shop.setLocationA(new ShopLocation(locationA));
-        shop.setLocationB(new ShopLocation(locationB));
-        shop.setWorld(world);
         shop.setOwner(owner);
         shop.setManagers(managers);
         shop.setCreator(creator);
         shop.setNotification(notification);
-
+        shop.setWorld(world);
+        if (!global) {
+            shop.setLocationA(new ShopLocation(locationA));
+            shop.setLocationB(new ShopLocation(locationB));
+        } else {
+            
+        }
         // Make sure minimum balance isn't negative
         if (minBalance < 0) {
             shop.setMinBalance(0);
@@ -455,10 +469,10 @@ public class ShopManager {
             Location signLoc = iter.next();
             //Load the chunk so we don't try getting blocks that are non-existent
             signWorld.loadChunk(plugin.getServer().getWorld(world).getChunkAt(signLoc));
-            
+
             log.info("[LocalShops] - Got Chunk: " + signWorld.isChunkLoaded(signWorld.getChunkAt(signLoc)));
             //Check if the block is not a sign.
-            
+
             if ( signWorld.getBlockAt(signLoc).getType() != Material.WALL_SIGN && signWorld.getBlockAt(signLoc).getType() != Material.SIGN_POST ) {
                 iter.remove();
                 continue;
@@ -467,34 +481,35 @@ public class ShopManager {
                 if (!(shop.containsItem(item))) {
                     continue;
                 } else {
-                   //Get the lines for future use?
-                   String signLines[] = ((Sign) signLoc.getBlock().getState()).getLines();
-                   signLines[0] = item.name;
-                   signLines[1] = "Buy: ";
-                   signLines[2] = "Sell: ";
-                   signLines[3] = "";
-                   
-                   if (shop.getItem(item.name).getBuyPrice() == 0) {
-                       signLines[1] += "-";
-                   } else {
-                       signLines[1] += shop.getItem(item.name).getBuyPrice();
-                   }
-                   if (shop.getItem(item.name).getSellPrice() == 0) {
-                       signLines[2] += "-";
-                   } else {
-                       signLines[2] += shop.getItem(item.name).getSellPrice();
-                   }
-                   //Set the lines
-                   ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[0]);
-                   ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[1]);
-                   ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[2]);
-                   ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[3]);
+                    //Get the lines for future use?
+                    String signLines[] = ((Sign) signLoc.getBlock().getState()).getLines();
+                    signLines[0] = item.name;
+                    signLines[1] = "Buy: ";
+                    signLines[2] = "Sell: ";
+                    signLines[3] = "";
+
+                    if (shop.getItem(item.name).getBuyPrice() == 0) {
+                        signLines[1] += "-";
+                    } else {
+                        signLines[1] += shop.getItem(item.name).getBuyPrice();
+                    }
+                    if (shop.getItem(item.name).getSellPrice() == 0) {
+                        signLines[2] += "-";
+                    } else {
+                        signLines[2] += shop.getItem(item.name).getSellPrice();
+                    }
+                    //Set the lines
+                    ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[0]);
+                    ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[1]);
+                    ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[2]);
+                    ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[3]);
                 }
             }
         }
+        
         //Set the sign mapping for the shop
-        shop.setSignMap(signMap);
-
+        shop.getSignMap().putAll(signMap);
+        
         // Sanity Checks
         // Check that filename == UUID from file
         if(!file.getName().equalsIgnoreCase(String.format("%s.shop", shop.getUuid().toString()))) {
@@ -576,7 +591,7 @@ public class ShopManager {
 
             props.setProperty(String.format("sign:%d,%d,%d", x, y, z), shop.getSignMap().get(signLoc));
         }
-
+        
         String fileName = LocalShops.folderPath + LocalShops.shopsPath + shop.getUuid().toString() + ".shop";
         try {
             props.store(new FileOutputStream(fileName), "LocalShops Config Version 2.0");
@@ -591,7 +606,16 @@ public class ShopManager {
         String shortUuid = shop.getShortUuidString();
         ShopLocation loc = shop.getLocationCenter();
         BookmarkedResult res = new BookmarkedResult();
-
+        if (shop.isGlobal()) {
+            if (Config.GLOBAL_SHOPS.containsKey(shop.getWorld())) {
+                Config.GLOBAL_SHOPS.remove(shop.getWorld());
+                LocalShops.getProperties().removeKey(shop.getWorld() + "-shop-UUID");
+                LocalShops.getProperties().save();
+                return true;
+            } else {
+                return false;
+            }
+        }
         res = LocalShops.getCuboidTree().relatedSearch(res.bookmark, loc.getX(), loc.getY(), loc.getZ());
 
         // get the shop's tree node and delete it

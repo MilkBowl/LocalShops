@@ -3,14 +3,12 @@ package net.centerleft.localshops.commands;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.centerleft.localshops.Config;
 import net.centerleft.localshops.InventoryItem;
 import net.centerleft.localshops.LocalShops;
-import net.centerleft.localshops.PlayerData;
 import net.centerleft.localshops.Shop;
 import net.centerleft.localshops.comparator.InventoryItemSortByName;
 
@@ -20,12 +18,12 @@ import org.bukkit.entity.Player;
 
 public class CommandShopBrowse extends Command {
 
-    public CommandShopBrowse(LocalShops plugin, String commandLabel, CommandSender sender, String command) {
-        super(plugin, commandLabel, sender, command);
+    public CommandShopBrowse(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
+        super(plugin, commandLabel, sender, command, isGlobal);
     }
 
-    public CommandShopBrowse(LocalShops plugin, String commandLabel, CommandSender sender, String[] command) {
-        super(plugin, commandLabel, sender, command);
+    public CommandShopBrowse(LocalShops plugin, String commandLabel, CommandSender sender, String[] command, boolean isGlobal) {
+        super(plugin, commandLabel, sender, command, isGlobal);
     }
 
     public boolean process() {
@@ -35,16 +33,9 @@ public class CommandShopBrowse extends Command {
         if (sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            PlayerData pData = plugin.getPlayerData().get(player.getName());
-
-            // Get Current Shop
-            UUID shopUuid = pData.getCurrentShop();
-            if (shopUuid != null) {
-                shop = plugin.getShopManager().getShop(shopUuid);
-            } else if (Config.GLOBAL_SHOP && shopUuid == null) {
-                shop = plugin.getShopManager().getShop(Config.GLOBAL_SHOP_UUID);
-            }
-            if (shop == null) {
+            
+            shop = getCurrentShop(player);
+            if (shop == null || (isGlobal && !Config.GLOBAL_SHOPS_ENABLED)) {
                 sender.sendMessage("You are not in a shop!");
                 return true;
             }

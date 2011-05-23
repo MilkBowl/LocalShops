@@ -32,7 +32,7 @@ public class Config {
     public static boolean SRV_DEBUG = false;
     public static UUID SRV_UUID = null;
     public static boolean SRV_REPORT = true;
-    public static Map<String, UUID> GLOBAL_SHOPS = Collections.synchronizedMap(new HashMap<String, UUID>());
+    public static Map<String, UUID> GLOBAL_SHOPS = Collections.synchronizedMap(new HashMap<String, UUID>(2));
     public static boolean GLOBAL_SHOPS_ENABLED = false;
     
     // Player Settings

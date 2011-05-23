@@ -346,4 +346,9 @@ public class LocalShops extends JavaPlugin {
     public PermissionManager getPermManager() {
         return permManager;
     }
+    
+    public static PropertyHandler getProperties() {
+        return properties;
+    }
+    
 }

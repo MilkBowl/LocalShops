@@ -17,23 +17,24 @@ import org.bukkit.entity.Player;
 
 public class CommandShopCreate extends Command {
 
-    public CommandShopCreate(LocalShops plugin, String commandLabel, CommandSender sender, String command) {
-        super(plugin, commandLabel, sender, command);
+    public CommandShopCreate(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
+        super(plugin, commandLabel, sender, command, isGlobal);
     }
-    
-    public CommandShopCreate(LocalShops plugin, String commandLabel, CommandSender sender, String[] command) {
-        super(plugin, commandLabel, sender, command);
+
+    public CommandShopCreate(LocalShops plugin, String commandLabel, CommandSender sender, String[] command, boolean isGlobal) {
+        super(plugin, commandLabel, sender, command, isGlobal);
     }
 
     public boolean process() {
         String creator = null;
         String world = null;
+        Player player = null;
         double[] xyzA = new double[3];
         double[] xyzB = new double[3];
 
         // Get current shop
         if (sender instanceof Player) {
-            Player player = (Player) sender;
+            player = (Player) sender;
             PlayerData pData = plugin.getPlayerData().get(player.getName());          
 
             creator = player.getName();
@@ -87,7 +88,10 @@ public class CommandShopCreate extends Command {
                 sender.sendMessage("A shop already exists here!");
                 return false;
             }
-
+            if (isGlobal && Config.GLOBAL_SHOPS.containsKey(world)) {
+                sender.sendMessage(world + " already has a global shop. Remove it before creating a new one!");
+                return false;
+            }
             if (Config.SHOP_CHARGE_CREATE) {
                 if (!canUseCommand(CommandTypes.CREATE_FREE)) {
                     if (!plugin.getPlayerData().get(player.getName()).chargePlayer(player.getName(), Config.SHOP_CHARGE_CREATE_COST)) {
@@ -103,46 +107,63 @@ public class CommandShopCreate extends Command {
         }
 
         // Command matching     
+        String name = null;
 
-        Pattern pattern = Pattern.compile("(?i)create\\s+(.*)");
+        Pattern pattern = Pattern.compile("(?i)create$");
         Matcher matcher = pattern.matcher(command);
         if (matcher.find()) {
-            String name = matcher.group(1);
+            if (isGlobal) {
+                name = player.getWorld().getName() + " Shop";
+            } else {
+                name = player.getName() + " Shop";
+            }
+        }
 
-            Shop shop = new Shop(UUID.randomUUID());
-            shop.setCreator(creator);
-            shop.setOwner(creator);
-            shop.setName(name);
-            shop.setWorld(world);
+        matcher.reset();
+        Pattern.compile("(?i)create\\s+(.*)");
+        matcher = pattern.matcher(command);
+        if (matcher.find()) {
+            name = matcher.group(1);
+        }
+
+        Shop shop = new Shop(UUID.randomUUID());
+        shop.setCreator(creator);
+        shop.setOwner(creator);
+        shop.setName(name);
+        shop.setWorld(world);
+        if ( !isGlobal) {
             shop.setLocations(new ShopLocation(xyzA), new ShopLocation(xyzB));
 
             // insert the shop into the world
             LocalShops.getCuboidTree().insert(shop.getCuboid());
             log.info(String.format("[%s] Created: %s", plugin.pdfFile.getName(), shop.toString()));
-            plugin.getShopManager().addShop(shop);
-
-            for (Player player : plugin.getServer().getOnlinePlayers()) {
-                plugin.playerListener.checkPlayerPosition(player);
-            }
-
-            // Disable selecting for player (if player)
-            if(sender instanceof Player) {
-                Player player = (Player) sender;
-                plugin.getPlayerData().get(player.getName()).setSelecting(false);
-            }
-
-            // write the file
-            if (plugin.getShopManager().saveShop(shop)) {
-                sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " was created successfully.");
-                return true;
-            } else {
-                sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "There was an error, could not create shop.");
-                return false;
-            }
+        } else {
+            shop.setUnlimitedMoney(true);
+            shop.setUnlimitedStock(true);
+            shop.setGlobal(true);
+            Config.GLOBAL_SHOPS.put(world, shop.getUuid());
+            LocalShops.getProperties().setUuid(world + "-shop-UUID", shop.getUuid());
+            LocalShops.getProperties().save();
+        }
+        plugin.getShopManager().addShop(shop);
+        for (Player p : plugin.getServer().getOnlinePlayers()) {
+            plugin.playerListener.checkPlayerPosition(p);
         }
 
-        // Show usage
-        sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " create [ShopName]" + ChatColor.DARK_AQUA + " - Create a shop at your location.");
-        return true;
+        // Disable selecting for player (if player)
+        if(sender instanceof Player) {
+            plugin.getPlayerData().get(player.getName()).setSelecting(false);
+        }
+
+        // write the file
+
+        if (plugin.getShopManager().saveShop(shop)) {
+            sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " was created successfully.");
+            return true;
+        } else {
+            sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "There was an error, could not create shop.");
+            return false;
+        }
+
     }
 }
