@@ -8,12 +8,12 @@ import org.bukkit.command.CommandSender;
 
 public class CommandShopHelp extends Command {
 
-    public CommandShopHelp(LocalShops plugin, String commandLabel, CommandSender sender, String command) {
-        super(plugin, commandLabel, sender, command);
+    public CommandShopHelp(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
+        super(plugin, commandLabel, sender, command, isGlobal);
     }
     
-    public CommandShopHelp(LocalShops plugin, String commandLabel, CommandSender sender, String[] command) {
-        super(plugin, commandLabel, sender, command);
+    public CommandShopHelp(LocalShops plugin, String commandLabel, CommandSender sender, String[] command, boolean isGlobal) {
+        super(plugin, commandLabel, sender, command, isGlobal);
     }
 
     public boolean process() {
@@ -34,14 +34,14 @@ public class CommandShopHelp extends Command {
         if (canUseCommand(CommandTypes.DESTROY)) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " destroy" + ChatColor.DARK_AQUA + " - Destroy the shop you're in.");
         }
-        if(Config.FIND_MAX_DISTANCE != 0) {
+        if(Config.FIND_MAX_DISTANCE != 0 && !isGlobal) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " find [itemname]" + ChatColor.DARK_AQUA + " - Find closest shops by item name.");
         }
-        if (canUseCommand(CommandTypes.MOVE)) {
+        if (canUseCommand(CommandTypes.MOVE) && !isGlobal) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " move [ShopID]" + ChatColor.DARK_AQUA + " - Move a shop to your location.");
         }
         sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " search [itemname]" + ChatColor.DARK_AQUA + " - Search for an item by name.");
-        if (canUseCommand(CommandTypes.SELECT)) {
+        if (canUseCommand(CommandTypes.SELECT) && !isGlobal) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " select" + ChatColor.DARK_AQUA + " - Select two corners for custom shop size.");
         }
         if (canUseCommand(CommandTypes.SELL)) {
