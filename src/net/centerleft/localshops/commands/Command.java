@@ -30,6 +30,7 @@ public abstract class Command {
     protected String command = null;
     protected static String DECIMAL_REGEX = "(\\d+\\.\\d+)|(\\d+\\.)|(\\.\\d+)|(\\d+)";
     protected static final Logger log = Logger.getLogger("Minecraft");
+    protected boolean isGlobal = false;
 
     // Command Types Enum
     public static enum CommandTypes {
@@ -78,8 +79,20 @@ public abstract class Command {
         this.command = command.trim();
     }
     
+    public Command(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal){
+        this.plugin = plugin;
+        this.commandLabel = commandLabel;
+        this.sender = sender;
+        this.command = command.trim();
+        this.isGlobal = isGlobal;
+    }
+    
     public Command(LocalShops plugin, String commandLabel, CommandSender sender, String[] args) {
         this(plugin, commandLabel, sender, Search.join(args, " ").trim());
+    }
+    
+    public Command(LocalShops plugin, String commandLabel, CommandSender sender, String[] args, boolean isGlobal) {
+        this(plugin, commandLabel, sender, Search.join(args, " ").trim(), isGlobal);
     }
     
     public String getCommand() {
