@@ -22,7 +22,7 @@ public class EconomyManager {
     
     public boolean loadEconomies() {
         // Try to load BOSEconomy
-        if (packageExists(new String[] { "com.earth2me.essentials.api.Economy", "com.earth2me.essentials.api.NoLoanPermittedException", "com.earth2me.essentials.api.UserDoesNotExistException" })) {
+        if (packageExists(new String[] { "cosine.boseconomy.BOSEconomy" })) {
             Economy bose = new Economy_BOSE(plugin);
             econs.put(10, bose);
             log.info(String.format("[%s][Economy] BOSEconomy found: %s", plugin.getDescription().getName(), bose.isEnabled() ? "Loaded" : "Waiting"));
