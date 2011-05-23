@@ -37,7 +37,7 @@ public class ShopsBlockListener extends BlockListener {
         Player player = event.getPlayer();
         Block block = event.getBlock();
         PlayerData pData = plugin.getPlayerData().get(player.getName());
-
+        
         BookmarkedResult res = pData.bookmark;
         //Search for Shops near event block and add them to the array list.
         res = LocalShops.getCuboidTree().relatedSearch(res.bookmark, block.getX(), block.getY(), block.getZ());

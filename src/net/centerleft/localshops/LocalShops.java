@@ -272,6 +272,18 @@ public class LocalShops extends JavaPlugin {
         } else {
             properties.setInt("shop-transaction-max-size", Config.SHOP_TRANSACTION_MAX_SIZE);
         }
+        
+        if(properties.keyExists("global-shop")) {
+            Config.GLOBAL_SHOP = properties.getBoolean("global-shop");
+        } else {
+            properties.setBoolean("global-shop", Config.GLOBAL_SHOP);
+        }
+        if(properties.keyExists("global-shop-uuid")) {
+            Config.GLOBAL_SHOP_UUID = properties.getUuid("global-shop-uuid");
+        } else {
+            Config.GLOBAL_SHOP_UUID = UUID.randomUUID();
+            properties.setUuid("global-shop-uuid", Config.GLOBAL_SHOP_UUID);
+        }
     }
 
     public void setShopData(ShopData shopData) {
