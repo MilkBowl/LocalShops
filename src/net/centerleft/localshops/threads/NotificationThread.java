@@ -32,7 +32,7 @@ public class NotificationThread extends Thread {
         log.info(String.format("[%s] Starting NotificationThread with Timer of %d seconds", plugin.getDescription().getName(), Config.SHOP_TRANSACTION_NOTICE_TIMER));
         
         while(true) {
-            List<Shop> shops = plugin.getShopData().getAllShops();
+            List<Shop> shops = plugin.getShopManager().getAllShops();
             for(final Shop shop : shops) {
                 if(!shop.getNotification()) {
                     shop.clearTransactions();

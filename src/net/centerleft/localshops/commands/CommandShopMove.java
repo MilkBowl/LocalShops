@@ -52,7 +52,7 @@ public class CommandShopMove extends Command {
             double[] xyzBold = new double[3];
 
             // check to see if that shop exists
-            thisShop = plugin.getShopData().getShop(id);
+            thisShop = plugin.getShopManager().getShop(id);
             if(thisShop == null) {
                 sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "Could not find shop: " + ChatColor.WHITE + id);
                 return false;
@@ -159,14 +159,14 @@ public class CommandShopMove extends Command {
                 thisShop.setWorld(player.getWorld().getName());
                 thisShop.setLocations(new ShopLocation(xyzA), new ShopLocation(xyzB));
                 log.info(thisShop.getUuid().toString());
-                plugin.getShopData().deleteShop(thisShop);
-                plugin.getShopData().addShop(thisShop);
+                plugin.getShopManager().deleteShop(thisShop);
+                plugin.getShopManager().addShop(thisShop);
                 LocalShops.getCuboidTree().insert(tempShopCuboid);
 
                 plugin.getPlayerData().put(player.getName(), new PlayerData(plugin, player.getName()));
 
                 // write the file
-                if (plugin.getShopData().saveShop(thisShop)) {
+                if (plugin.getShopManager().saveShop(thisShop)) {
                     player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.WHITE + shopName + ChatColor.DARK_AQUA + " was moved successfully.");
                     return true;
                 } else {

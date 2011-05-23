@@ -32,7 +32,7 @@ public class CommandShopGlobal extends Command {
         if (Config.GLOBAL_SHOP_UUID == null) {
             sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "Currently no shop is set to global, make sure to set one!");
         } else {
-            sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "The current global shop is: " + plugin.getShopData().getShop(Config.GLOBAL_SHOP_UUID));
+            sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "The current global shop is: " + plugin.getShopManager().getShop(Config.GLOBAL_SHOP_UUID));
         }
         
         return true;

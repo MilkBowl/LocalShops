@@ -178,7 +178,7 @@ public class ShopsPlayerListener extends PlayerListener {
             if (!cuboid.world.equalsIgnoreCase(player.getWorld().getName()))
                 continue;
 
-            Shop shop = plugin.getShopData().getShop(cuboid.uuid);
+            Shop shop = plugin.getShopManager().getShop(cuboid.uuid);
             if(shop == null) {
                 // shop no longer exists...remove from cuboid
                 res.results.remove(cuboid);
@@ -214,13 +214,13 @@ public class ShopsPlayerListener extends PlayerListener {
 
     private void notifyPlayerLeftShop(Player player, UUID shopUuid) {
         // TODO Add formatting
-        Shop shop = plugin.getShopData().getShop(shopUuid);
+        Shop shop = plugin.getShopManager().getShop(shopUuid);
         player.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] You have left the shop " + ChatColor.WHITE + shop.getName());
     }
 
     private void notifyPlayerEnterShop(Player player, UUID shopUuid) {
         // TODO Add formatting
-        Shop shop = plugin.getShopData().getShop(shopUuid);
+        Shop shop = plugin.getShopManager().getShop(shopUuid);
         player.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA
                 + "] You have entered the shop " + ChatColor.WHITE + shop.getName());
 

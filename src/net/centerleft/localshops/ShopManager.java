@@ -138,7 +138,7 @@ public class ShopManager {
                     log.info(String.format("[%s] Loaded %s", plugin.pdfFile.getName(), shop.toString()));
                 }
                 LocalShops.getCuboidTree().insert(shop.getCuboid());
-                plugin.getShopData().addShop(shop);
+                plugin.getShopManager().addShop(shop);
             } else {
                 log.warning(String.format("[%s] Failed to load Shop file: \"%s\"", plugin.pdfFile.getName(), file.getName()));
             }

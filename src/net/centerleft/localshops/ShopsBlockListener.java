@@ -50,7 +50,7 @@ public class ShopsBlockListener extends BlockListener {
             if(!cuboid.world.equalsIgnoreCase(player.getWorld().getName())) {
                 continue;
             }
-            shop = plugin.getShopData().getShop(cuboid.uuid);
+            shop = plugin.getShopManager().getShop(cuboid.uuid);
         }
 
         //Return if we still don't have a shop.
@@ -80,7 +80,7 @@ public class ShopsBlockListener extends BlockListener {
                 }
                 //Add the sign to the Shop signlist and save the shop
                 shop.getSignMap().put(new Location(event.getBlock().getWorld(), block.getX(), block.getY(), block.getZ()), item.name);
-                plugin.getShopData().saveShop(shop);
+                plugin.getShopManager().saveShop(shop);
 
                 //Write back the lines for the sign
                 event.setLine(0, line1);
@@ -122,7 +122,7 @@ public class ShopsBlockListener extends BlockListener {
             if(!cuboid.world.equalsIgnoreCase(player.getWorld().getName())) {
                 continue;
             }
-            shop = plugin.getShopData().getShop(cuboid.uuid);
+            shop = plugin.getShopManager().getShop(cuboid.uuid);
         }
         //If we weren't in a shop then exit event
         if (shop == null) {
@@ -160,7 +160,7 @@ public class ShopsBlockListener extends BlockListener {
             if(!cuboid.world.equalsIgnoreCase(player.getWorld().getName())) {
                 continue;
             }
-            shop = plugin.getShopData().getShop(cuboid.uuid);
+            shop = plugin.getShopManager().getShop(cuboid.uuid);
         }
 
         //If we weren't in a shop then exit

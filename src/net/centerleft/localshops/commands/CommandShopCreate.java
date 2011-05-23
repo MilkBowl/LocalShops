@@ -119,7 +119,7 @@ public class CommandShopCreate extends Command {
             // insert the shop into the world
             LocalShops.getCuboidTree().insert(shop.getCuboid());
             log.info(String.format("[%s] Created: %s", plugin.pdfFile.getName(), shop.toString()));
-            plugin.getShopData().addShop(shop);
+            plugin.getShopManager().addShop(shop);
 
             for (Player player : plugin.getServer().getOnlinePlayers()) {
                 plugin.playerListener.checkPlayerPosition(player);
@@ -132,7 +132,7 @@ public class CommandShopCreate extends Command {
             }
 
             // write the file
-            if (plugin.getShopData().saveShop(shop)) {
+            if (plugin.getShopManager().saveShop(shop)) {
                 sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " was created successfully.");
                 return true;
             } else {

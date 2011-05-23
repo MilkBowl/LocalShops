@@ -39,7 +39,7 @@ public class CommandShopDestroy extends Command {
         // get the shop the player is currently in
         if (plugin.getPlayerData().get(playerName).shopList.size() == 1) {
             UUID shopUuid = plugin.getPlayerData().get(playerName).shopList.get(0);
-            Shop shop = plugin.getShopData().getShop(shopUuid);
+            Shop shop = plugin.getShopManager().getShop(shopUuid);
 
             if (!shop.getOwner().equalsIgnoreCase(player.getName()) && !canUseCommand(CommandTypes.ADMIN)) {
                 player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner to destroy it.");
@@ -58,7 +58,7 @@ public class CommandShopDestroy extends Command {
 
             Collection<InventoryItem> shopItems = shop.getItems();
 
-            if (plugin.getShopData().deleteShop(shop)) {
+            if (plugin.getShopManager().deleteShop(shop)) {
                 // return items to player (if a player)
                 if (sender instanceof Player) {
                     for (InventoryItem item : shopItems) {
