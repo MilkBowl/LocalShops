@@ -1,5 +1,6 @@
 package net.centerleft.localshops.commands;
 
+import net.centerleft.localshops.Config;
 import net.centerleft.localshops.LocalShops;
 
 import org.bukkit.ChatColor;
@@ -33,7 +34,9 @@ public class CommandShopHelp extends Command {
         if (canUseCommand(CommandTypes.DESTROY)) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " destroy" + ChatColor.DARK_AQUA + " - Destroy the shop you're in.");
         }
-        sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " find [itemname]" + ChatColor.DARK_AQUA + " - Find closest shops by item name.");
+        if(Config.FIND_MAX_DISTANCE != 0) {
+            sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " find [itemname]" + ChatColor.DARK_AQUA + " - Find closest shops by item name.");
+        }
         if (canUseCommand(CommandTypes.MOVE)) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " move [ShopID]" + ChatColor.DARK_AQUA + " - Move a shop to your location.");
         }

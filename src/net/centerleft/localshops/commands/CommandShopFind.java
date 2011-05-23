@@ -34,6 +34,11 @@ public class CommandShopFind extends Command {
     }
 
     public boolean process() {
+        if(Config.FIND_MAX_DISTANCE == 0) {
+            sender.sendMessage(String.format("[%s] Shop finding has been disabled on this server.", plugin.getDescription().getName()));
+            return true;
+        }
+        
         if (!(sender instanceof Player)) {
             sender.sendMessage("Console is not implemented");
         }
