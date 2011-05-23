@@ -124,7 +124,7 @@ public class CommandShopFind extends Command {
 
             // Determine distance, if too far away ignore
             double distance = calculateDistance(playerLoc, shop.getLocationCenter());
-            if (Config.SEARCH_MAX_DISTANCE > 0 && distance > Config.SEARCH_MAX_DISTANCE) {
+            if (Config.FIND_MAX_DISTANCE > 0 && distance > Config.FIND_MAX_DISTANCE) {
                 continue;
             }
 

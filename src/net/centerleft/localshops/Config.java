@@ -22,8 +22,8 @@ public class Config {
     public static int SHOP_TRANSACTION_NOTICE_TIMER = 300;
     public static int SHOP_TRANSACTION_MAX_SIZE = 100;
     
-    // Search Settings
-    public static int SEARCH_MAX_DISTANCE = 150;
+    // Find Settings
+    public static int FIND_MAX_DISTANCE = 150;
     
     // Server Settings
     public static boolean SRV_LOG_TRANSACTIONS = true;

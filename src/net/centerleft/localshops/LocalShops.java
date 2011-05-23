@@ -249,10 +249,10 @@ public class LocalShops extends JavaPlugin {
             properties.setBoolean("debug", Config.SRV_DEBUG);
         }
         
-        if(properties.keyExists("search-max-distance")) {
-            Config.SEARCH_MAX_DISTANCE = properties.getInt("search-max-distance");
+        if(properties.keyExists("find-max-distance")) {
+            Config.FIND_MAX_DISTANCE = properties.getInt("find-max-distance");
         } else {
-            properties.setInt("search-max-distance", Config.SEARCH_MAX_DISTANCE);
+            properties.setInt("find-max-distance", Config.FIND_MAX_DISTANCE);
         }
         
         if(properties.keyExists("shop-transaction-notice")) {
