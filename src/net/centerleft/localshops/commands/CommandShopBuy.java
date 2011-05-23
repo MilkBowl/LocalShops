@@ -98,7 +98,7 @@ public class CommandShopBuy extends Command {
 
             // buy int all
             matcher.reset();
-            pattern = Pattern.compile("(?i)buy\\s+(\\d+)\\s+all");
+            pattern = Pattern.compile("(?i)buy\\s+(\\d+)\\s+all$");
             matcher = pattern.matcher(command);
             if (matcher.find()) {
                 int id = Integer.parseInt(matcher.group(1));
@@ -124,7 +124,7 @@ public class CommandShopBuy extends Command {
 
             // buy int:int all
             matcher.reset();
-            pattern = Pattern.compile("(?i)buy\\s+(\\d+):(\\d+)\\s+all");
+            pattern = Pattern.compile("(?i)buy\\s+(\\d+):(\\d+)\\s+all$");
             matcher = pattern.matcher(command);
             if (matcher.find()) {
                 int id = Integer.parseInt(matcher.group(1));
@@ -151,7 +151,7 @@ public class CommandShopBuy extends Command {
 
             // buy name, ... all
             matcher.reset();
-            pattern = Pattern.compile("(?i)buy\\s+(.*)\\s+all");
+            pattern = Pattern.compile("(?i)buy\\s+(.*)\\s+all$");
             matcher = pattern.matcher(command);
             if (matcher.find()) {
                 String itemName = matcher.group(1);
@@ -183,7 +183,7 @@ public class CommandShopBuy extends Command {
         // Command matching
 
         // buy int
-        Pattern pattern = Pattern.compile("(?i)buy\\s+(\\d+)");
+        Pattern pattern = Pattern.compile("(?i)buy\\s+(\\d+)$");
         Matcher matcher = pattern.matcher(command);
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
@@ -197,7 +197,7 @@ public class CommandShopBuy extends Command {
 
         // buy int int
         matcher.reset();
-        pattern = Pattern.compile("(?i)buy\\s+(\\d+)\\s+(\\d+)");
+        pattern = Pattern.compile("(?i)buy\\s+(\\d+)\\s+(\\d+)$");
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
@@ -216,7 +216,7 @@ public class CommandShopBuy extends Command {
 
         // buy int:int
         matcher.reset();
-        pattern = Pattern.compile("(?i)buy\\s+(\\d+):(\\d+)");
+        pattern = Pattern.compile("(?i)buy\\s+(\\d+):(\\d+)$");
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
@@ -231,7 +231,7 @@ public class CommandShopBuy extends Command {
 
         // buy int:int int
         matcher.reset();
-        pattern = Pattern.compile("(?i)buy\\s+(\\d+):(\\d+)\\s+(\\d+)");
+        pattern = Pattern.compile("(?i)buy\\s+(\\d+):(\\d+)\\s+(\\d+)$");
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
@@ -251,7 +251,7 @@ public class CommandShopBuy extends Command {
 
         // buy name, ... int
         matcher.reset();
-        pattern = Pattern.compile("(?i)buy\\s+(.*)\\s+(\\d+)");
+        pattern = Pattern.compile("(?i)buy\\s+(.*)\\s+(\\d+)$");
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             String itemName = matcher.group(1);
@@ -270,7 +270,7 @@ public class CommandShopBuy extends Command {
 
         // buy name, ...
         matcher.reset();
-        pattern = Pattern.compile("(?i)buy\\s+(.*)");
+        pattern = Pattern.compile("(?i)buy\\s+(.*)$");
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             String itemName = matcher.group(1);
