@@ -44,6 +44,8 @@ public class ShopCommandExecutor implements CommandExecutor {
             if (args.length > 0) {
                 cmdString = Search.join(args, " ");
                 type = args[0];
+            } else if (command.getName().equalsIgnoreCase("gshop")){
+                return (new CommandShopHelp(plugin, commandLabel, sender, args, true)).process();
             } else {
                 return (new CommandShopHelp(plugin, commandLabel, sender, args, false)).process();
             }
