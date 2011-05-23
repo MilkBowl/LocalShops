@@ -205,17 +205,17 @@ public class CommandShopBrowse extends Command {
             message += " trades in: ";
         }
 
-        message += " (Page " + pageNumber + " of " + (int) Math.ceil((double) inventoryMessage.size() / (double) 7) + ")";
+        message += " (Page " + pageNumber + " of " + (int) Math.ceil((double) inventoryMessage.size() / (double) Config.CHAT_MAX_LINES) + ")";
 
         sender.sendMessage(message);
 
-        if(inventoryMessage.size() <= (pageNumber - 1) * 7) {
+        if(inventoryMessage.size() <= (pageNumber - 1) * Config.CHAT_MAX_LINES) {
             sender.sendMessage(String.format("%s does not have this many pages!", shop.getName()));
             return;
         }
 
-        int amount = (pageNumber > 0 ? (pageNumber - 1) * 7 : 0);
-        for (int i = amount; i < amount + 7; i++) {
+        int amount = (pageNumber > 0 ? (pageNumber - 1) * Config.CHAT_MAX_LINES : 0);
+        for (int i = amount; i < amount + Config.CHAT_MAX_LINES; i++) {
             if (inventoryMessage.size() > i) {
                 sender.sendMessage(inventoryMessage.get(i));
             }

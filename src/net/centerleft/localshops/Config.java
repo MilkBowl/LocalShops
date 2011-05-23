@@ -25,6 +25,9 @@ public class Config {
     // Find Settings
     public static int FIND_MAX_DISTANCE = 150;
     
+    // Chat Settings
+    public static int CHAT_MAX_LINES = 7;
+    
     // Server Settings
     public static boolean SRV_LOG_TRANSACTIONS = true;
     public static boolean SRV_DEBUG = false;

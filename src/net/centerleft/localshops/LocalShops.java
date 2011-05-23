@@ -279,6 +279,11 @@ public class LocalShops extends JavaPlugin {
             Config.GLOBAL_SHOP_UUID = UUID.randomUUID();
             properties.setUuid("global-shop-uuid", Config.GLOBAL_SHOP_UUID);
         }
+        if(properties.keyExists("chat-max-lines")) {
+            Config.CHAT_MAX_LINES = properties.getInt("chat-max-lines");
+        } else {
+            properties.setInt("chat-max-lines", Config.CHAT_MAX_LINES);
+        }
     }
 
     public void setShopData(ShopManager shopData) {
