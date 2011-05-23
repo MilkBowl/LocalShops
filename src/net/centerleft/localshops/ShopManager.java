@@ -25,14 +25,14 @@ import cuboidLocale.BookmarkedResult;
 import cuboidLocale.PrimitiveCuboid;
 import cuboidLocale.QuadTree;
 
-public class ShopData {
+public class ShopManager {
     private LocalShops plugin = null;
     private HashMap<UUID, Shop> shops = new HashMap<UUID, Shop>();
 
     // Logging
     private final Logger log = Logger.getLogger("Minecraft");
 
-    public ShopData(LocalShops plugin) {
+    public ShopManager(LocalShops plugin) {
         this.plugin = plugin;
     }
 

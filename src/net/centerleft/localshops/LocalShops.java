@@ -34,7 +34,7 @@ public class LocalShops extends JavaPlugin {
     public ShopsPlayerListener playerListener = new ShopsPlayerListener(this);
     public ShopsBlockListener blockListener = new ShopsBlockListener(this);
     public ShopsEntityListener entityListener = new ShopsEntityListener(this);
-    private ShopData shopData = new ShopData(this);
+    private ShopManager shopData = new ShopManager(this);
     public PluginDescriptionFile pdfFile = null;
     protected ReportThread reportThread = null;
     protected NotificationThread notificationThread = null;
@@ -286,11 +286,11 @@ public class LocalShops extends JavaPlugin {
         }
     }
 
-    public void setShopData(ShopData shopData) {
+    public void setShopData(ShopManager shopData) {
         this.shopData = shopData;
     }
 
-    public ShopData getShopData() {
+    public ShopManager getShopData() {
         return shopData;
     }
 
