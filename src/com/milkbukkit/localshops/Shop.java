@@ -336,7 +336,19 @@ public class Shop implements Comparator<Shop> {
     }
 
     public String toString() {
-        return String.format("Shop \"%s\" at [%s], [%s] %d items - %s", this.name, locationA.toString(), locationB.toString(), inventory.size(), uuid.toString());
+        if(global) {
+            return String.format("Shop \"%s\" in world \"%s\" %d items - %s", this.name, world, inventory.size(), uuid.toString());
+        } else {
+            String locA = "";
+            String locB = "";
+            if(locA != null) {
+                locA = locationA.toString();
+            }
+            if(locB != null) {
+                locB = locationB.toString();
+            }
+            return String.format("Shop \"%s\" at [%s], [%s] %d items - %s", this.name, locA, locB, inventory.size(), uuid.toString());
+        }
     }
     
     public void log() {
