@@ -80,6 +80,7 @@ public class CommandShopDestroy extends Command {
                 return false;
             } else {
                 if (plugin.getShopManager().deleteShop(shop)) {
+                    Config.globalShopsRemove(player.getWorld().getName());
                     player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " has been destroyed");
                 } else {
                     player.sendMessage(LocalShops.CHAT_PREFIX + " Error while attempting to destroy shop: " +  ChatColor.WHITE + shop.getName());
