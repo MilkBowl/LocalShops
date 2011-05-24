@@ -143,11 +143,7 @@ public class CommandShopCreate extends Command {
             shop.setUnlimitedMoney(true);
             shop.setUnlimitedStock(true);
             shop.setGlobal(true);
-            /**
-            Config.GLOBAL_SHOPS.put(world, shop.getUuid());
-            LocalShops.getProperties().setUuid(world + "-shop-UUID", shop.getUuid());
-            LocalShops.getProperties().save();
-            */
+            Config.globalShopsAdd(world, shop.getUuid());
         }
         plugin.getShopManager().addShop(shop);
         for (Player p : plugin.getServer().getOnlinePlayers()) {
