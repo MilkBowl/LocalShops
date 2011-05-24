@@ -19,34 +19,33 @@ public class ShopCommandExecutor implements CommandExecutor {
     private final LocalShops plugin;
     private final Logger log = Logger.getLogger("Minecraft");
     private static Map<String, String> commandMap = new HashMap<String, String>();
+    static {
+        commandMap.put("add", "CommandShopAdd");
+        commandMap.put("browse", "CommandShopBrowse");
+        commandMap.put("buy", "CommandShopBuy");
+        commandMap.put("create", "CommandShopCreate");
+        commandMap.put("debug", "CommandShopDebug");
+        commandMap.put("destroy", "CommandShopDestroy");
+        commandMap.put("find", "CommandShopFind");
+        commandMap.put("gbuy", "CommandShopBuy");
+        commandMap.put("gsell", "CommandShopSell");
+        commandMap.put("gshop", "CommandShopHelp");
+        commandMap.put("help", "CommandShopHelp");
+        commandMap.put("info", "CommandShopInfo");
+        commandMap.put("link", "CommandShopLink");
+        commandMap.put("list", "CommandShopList");
+        commandMap.put("move", "CommandShopMove");
+        commandMap.put("remove", "CommandShopRemove");
+        commandMap.put("search", "CommandShopSearch");
+        commandMap.put("select", "CommandShopSelect");
+        commandMap.put("sell", "CommandShopSell");
+        commandMap.put("set", "CommandShopSet");
+        commandMap.put("shop", "CommandShopHelp");
+        commandMap.put("version", "CommandShopVersion");
+    }
+    
     public ShopCommandExecutor(LocalShops plugin) {
         this.plugin = plugin;
-        
-        //Add mappings for commands only on first instantiation
-        if (commandMap.isEmpty()) {
-            commandMap.put("add", "CommandShopAdd");
-            commandMap.put("browse", "CommandShopBrowse");
-            commandMap.put("buy", "CommandShopBuy");
-            commandMap.put("create", "CommandShopCreate");
-            commandMap.put("debug", "CommandShopDebug");
-            commandMap.put("destroy", "CommandShopDestroy");
-            commandMap.put("find", "CommandShopFind");
-            commandMap.put("gbuy", "CommandShopBuy");
-            commandMap.put("gsell", "CommandShopSell");
-            commandMap.put("gshop", "CommandShopHelp");
-            commandMap.put("help", "CommandShopHelp");
-            commandMap.put("info", "CommandShopInfo");
-            commandMap.put("link", "CommandShopLink");
-            commandMap.put("list", "CommandShopList");
-            commandMap.put("move", "CommandShopMove");
-            commandMap.put("remove", "CommandShopRemove");
-            commandMap.put("search", "CommandShopSearch");
-            commandMap.put("select", "CommandShopSelect");
-            commandMap.put("sell", "CommandShopSell");
-            commandMap.put("set", "CommandShopSet");
-            commandMap.put("shop", "CommandShopHelp");
-            commandMap.put("version", "CommandShopVersion");
-        }
     }
 
     @Override
