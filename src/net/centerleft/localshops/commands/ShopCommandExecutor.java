@@ -1,8 +1,6 @@
 package net.centerleft.localshops.commands;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -46,7 +44,6 @@ public class ShopCommandExecutor implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
-        String commandName = command.getName();
         String type = null;
         boolean global = false;
         String user = "CONSOLE";
@@ -95,95 +92,11 @@ public class ShopCommandExecutor implements CommandExecutor {
                 }
             }
 
+            log.info(String.format("[%s] %s issued %s command: %s", plugin.getDescription().getName(), global ? "global" : "local", user, cmd.getCommand()));
+            
             return cVal;
         } else {
             return false;
         }
-        
-        /**
-        boolean checkPlayerPos = false;
-        //TODO: remove deprecated useage of equalsignore case & multiple if statemes
-        //TODO: switch to cmd = Class.forName(commandMap.Obj)
-        if (commandName.equalsIgnoreCase("lshop") || commandLabel.equalsIgnoreCase("buy") || commandLabel.equalsIgnoreCase("sell")) {
-            if (type.equalsIgnoreCase("search")) {
-                cmd = new CommandShopSearch(plugin, commandLabel, sender, cmdString, false);
-            } else if (type.equalsIgnoreCase("find")) {
-                cmd = new CommandShopFind(plugin, commandLabel, sender, cmdString, false);
-            } else if (type.equalsIgnoreCase("debug")) {
-                cmd = new CommandShopDebug(plugin, commandLabel, sender, cmdString, false);
-            } else if (type.equalsIgnoreCase("create")) {
-                cmd = new CommandShopCreate(plugin, commandLabel, sender, cmdString, false);
-                checkPlayerPos = true;
-            } else if (type.equalsIgnoreCase("destroy")) {
-                cmd = new CommandShopDestroy(plugin, commandLabel, sender, cmdString, false);
-                checkPlayerPos = true;
-            } else if (type.equalsIgnoreCase("move")) {
-                cmd = new CommandShopMove(plugin, commandLabel, sender, cmdString, false);
-                checkPlayerPos = true;
-            } else if (type.equalsIgnoreCase("browse") || type.equalsIgnoreCase("bro")) {
-                cmd = new CommandShopBrowse(plugin, commandLabel, sender, cmdString, false);
-            } else if (type.equalsIgnoreCase("sell")) {
-                cmd = new CommandShopSell(plugin, commandLabel, sender, cmdString, false);
-            } else if (type.equalsIgnoreCase("add")) {
-                cmd = new CommandShopAdd(plugin, commandLabel, sender, cmdString, false);
-            } else if (type.equalsIgnoreCase("remove")) {
-                cmd = new CommandShopRemove(plugin, commandLabel, sender, cmdString, false);
-            } else if (type.equalsIgnoreCase("buy")) {
-                cmd = new CommandShopBuy(plugin, commandLabel, sender, cmdString, false);
-            } else if (type.equalsIgnoreCase("set")) {
-                cmd = new CommandShopSet(plugin, commandLabel, sender, cmdString, false);
-            } else if (type.equalsIgnoreCase("select")) {
-                cmd = new CommandShopSelect(plugin, commandLabel, sender, cmdString, false);
-            } else if (type.equalsIgnoreCase("list")) {
-                cmd = new CommandShopList(plugin, commandLabel, sender, cmdString, false);
-            } else if (type.equalsIgnoreCase("info")) {
-                cmd = new CommandShopInfo(plugin, commandLabel, sender, cmdString, false);
-            } else if (type.equalsIgnoreCase("version")) {
-                cmd = new CommandShopVersion(plugin, commandLabel, sender, cmdString, true);
-            } else {
-                cmd = new CommandShopHelp(plugin, commandLabel, sender, cmdString, false);
-            }
-
-            log.info(String.format("[%s] %s issued: %s", plugin.getDescription().getName(), user, cmd.getCommand()));
-            boolean cVal = cmd.process();
-            if(cVal && checkPlayerPos) {
-
-            }
-
-            return cVal;
-        } else if (commandName.equalsIgnoreCase("gshop") || commandLabel.equalsIgnoreCase("gbuy") || commandLabel.equalsIgnoreCase("gsell")) {
-            if (type.equalsIgnoreCase("create")) {
-                cmd = new CommandShopCreate(plugin, commandLabel, sender, cmdString, true);
-            } else if (type.equalsIgnoreCase("find")) {
-                cmd = new CommandShopFind(plugin, commandLabel, sender, cmdString, true);
-            } else if (type.equalsIgnoreCase("destroy")) {
-                cmd = new CommandShopDestroy(plugin, commandLabel, sender, cmdString, true);
-            } else if (type.equalsIgnoreCase("browse") || type.equalsIgnoreCase("bro")) {
-                cmd = new CommandShopBrowse(plugin, commandLabel, sender, cmdString, true);
-            } else if (type.equalsIgnoreCase("sell")) {
-                cmd = new CommandShopSell(plugin, commandLabel, sender, cmdString, true);
-            } else if (type.equalsIgnoreCase("add")) {
-                cmd = new CommandShopAdd(plugin, commandLabel, sender, cmdString, true);
-            } else if (type.equalsIgnoreCase("remove")) {
-                cmd = new CommandShopRemove(plugin, commandLabel, sender, cmdString, true);
-            } else if (type.equalsIgnoreCase("buy")) {
-                cmd = new CommandShopBuy(plugin, commandLabel, sender, cmdString, true);
-            } else if (type.equalsIgnoreCase("set")) {
-                cmd = new CommandShopSet(plugin, commandLabel, sender, cmdString, true);
-            } else if (type.equalsIgnoreCase("info")) {
-                cmd = new CommandShopInfo(plugin, commandLabel, sender, cmdString, true);
-            } else if (type.equalsIgnoreCase("enable")) {
-                cmd = new CommandShopVersion(plugin, commandLabel, sender, cmdString, true);
-            } else if (type.equalsIgnoreCase("link")) {
-                cmd = new CommandShopLink(plugin, commandLabel, sender, cmdString, true);
-            } else {
-                cmd = new CommandShopHelp(plugin, commandLabel, sender, cmdString, true);
-            }
-
-            log.info(String.format("[%s] %s issued: %s", plugin.getDescription().getName(), user, cmd.getCommand()));
-            boolean cVal = cmd.process();
-            return cVal;
-        }
-        */
     }
 }
