@@ -1,5 +1,5 @@
 name: LocalShops
-main: net.centerleft.localshops.LocalShops
+main: com.milkbukkit.localshops.LocalShops
 version: 3.1.0
 author: Cereal, Jonbas
 description: >
