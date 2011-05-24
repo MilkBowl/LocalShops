@@ -8,30 +8,27 @@ import net.centerleft.localshops.LocalShops;
 import org.bukkit.command.CommandSender;
 
 public class SubCommandInfo {
-    public String className;
+    public Class<?> commandClass;
     public boolean global;
     public boolean local;
     public boolean checkPlayerPositions;
 
-    public SubCommandInfo(String className) {
-        this.className = className;
+    public SubCommandInfo(Class<?> commandClass) {
+        this.commandClass = commandClass;
         global = false;
         local = false;
         checkPlayerPositions = false;
     }
 
-    public SubCommandInfo(String className, boolean local, boolean global, boolean checkPlayerPositions) {
-        this.className = className;
+    public SubCommandInfo(Class<?> commandClass, boolean local, boolean global, boolean checkPlayerPositions) {
+        this.commandClass = commandClass;
         this.local = local;
         this.global = global;
         this.checkPlayerPositions = checkPlayerPositions;
     }
 
     public Command getCommandInstance(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
-        try {
-            // Get class
-            Class<?> cls = Class.forName(className);
-            
+        try {            
             // Define Constructor parameter types
             Class<?> paramTypes[] = new Class[5];
             paramTypes[0] = LocalShops.class;
@@ -41,7 +38,7 @@ public class SubCommandInfo {
             paramTypes[4] = boolean.class;
 
             // Get Constructor
-            Constructor<?> ct = cls.getConstructor(paramTypes);
+            Constructor<?> ct = commandClass.getConstructor(paramTypes);
 
             // Define parameters
             Object argList[] = new Object[5];
@@ -58,9 +55,6 @@ public class SubCommandInfo {
             if (obj instanceof Command) {
                 return (Command) obj;
             }
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         } catch (SecurityException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

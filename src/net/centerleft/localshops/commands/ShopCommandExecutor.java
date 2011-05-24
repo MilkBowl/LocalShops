@@ -20,24 +20,24 @@ public class ShopCommandExecutor implements CommandExecutor {
     private final Logger log = Logger.getLogger("Minecraft");
     private static Map<String, SubCommandInfo> subCommandMap = new HashMap<String, SubCommandInfo>();
     static {
-        subCommandMap.put("add", new SubCommandInfo("CommandShopAdd", true, true, false));
-        subCommandMap.put("browse", new SubCommandInfo("CommandShopBrowse", true, true, false));
-        subCommandMap.put("buy", new SubCommandInfo("CommandShopBuy", true, true, false));
-        subCommandMap.put("create", new SubCommandInfo("CommandShopCreate", true, true, true));
-        subCommandMap.put("debug", new SubCommandInfo("CommandShopDebug", true, true, false));
-        subCommandMap.put("destroy", new SubCommandInfo("CommandShopDestroy", true, true, true));
-        subCommandMap.put("find", new SubCommandInfo("CommandShopFind", true, false, false));
-        subCommandMap.put("help", new SubCommandInfo("CommandShopHelp", true, true, false));
-        subCommandMap.put("info", new SubCommandInfo("CommandShopInfo", true, true, false));
-        subCommandMap.put("link", new SubCommandInfo("CommandShopLink", false, true, false));
-        subCommandMap.put("list", new SubCommandInfo("CommandShopList", true, false, false));
-        subCommandMap.put("move", new SubCommandInfo("CommandShopMove", true, false, true));
-        subCommandMap.put("remove", new SubCommandInfo("CommandShopRemove", true, true, false));
-        subCommandMap.put("search", new SubCommandInfo("CommandShopSearch", true, true, false));
-        subCommandMap.put("select", new SubCommandInfo("CommandShopSelect", true, false, false));
-        subCommandMap.put("sell", new SubCommandInfo("CommandShopSell", true, true, false));
-        subCommandMap.put("set", new SubCommandInfo("CommandShopSet", true, true, false));
-        subCommandMap.put("version", new SubCommandInfo("CommandShopVersion", true, true, false));
+        subCommandMap.put("add", new SubCommandInfo(net.centerleft.localshops.commands.CommandShopAdd.class, true, true, false));
+        subCommandMap.put("browse", new SubCommandInfo(net.centerleft.localshops.commands.CommandShopBrowse.class, true, true, false));
+        subCommandMap.put("buy", new SubCommandInfo(net.centerleft.localshops.commands.CommandShopBuy.class, true, true, false));
+        subCommandMap.put("create", new SubCommandInfo(net.centerleft.localshops.commands.CommandShopCreate.class, true, true, true));
+        subCommandMap.put("debug", new SubCommandInfo(net.centerleft.localshops.commands.CommandShopDebug.class, true, true, false));
+        subCommandMap.put("destroy", new SubCommandInfo(net.centerleft.localshops.commands.CommandShopDestroy.class, true, true, true));
+        subCommandMap.put("find", new SubCommandInfo(net.centerleft.localshops.commands.CommandShopFind.class, true, false, false));
+        subCommandMap.put("help", new SubCommandInfo(net.centerleft.localshops.commands.CommandShopHelp.class, true, true, false));
+        subCommandMap.put("info", new SubCommandInfo(net.centerleft.localshops.commands.CommandShopInfo.class, true, true, false));
+        subCommandMap.put("link", new SubCommandInfo(net.centerleft.localshops.commands.CommandShopLink.class, false, true, false));
+        subCommandMap.put("list", new SubCommandInfo(net.centerleft.localshops.commands.CommandShopList.class, true, false, false));
+        subCommandMap.put("move", new SubCommandInfo(net.centerleft.localshops.commands.CommandShopMove.class, true, false, true));
+        subCommandMap.put("remove", new SubCommandInfo(net.centerleft.localshops.commands.CommandShopRemove.class, true, true, false));
+        subCommandMap.put("search", new SubCommandInfo(net.centerleft.localshops.commands.CommandShopSearch.class, true, true, false));
+        subCommandMap.put("select", new SubCommandInfo(net.centerleft.localshops.commands.CommandShopSelect.class, true, false, false));
+        subCommandMap.put("sell", new SubCommandInfo(net.centerleft.localshops.commands.CommandShopSell.class, true, true, false));
+        subCommandMap.put("set", new SubCommandInfo(net.centerleft.localshops.commands.CommandShopSet.class, true, true, false));
+        subCommandMap.put("version", new SubCommandInfo(net.centerleft.localshops.commands.CommandShopVersion.class, true, true, false));
     }
     
     public ShopCommandExecutor(LocalShops plugin) {
@@ -84,18 +84,21 @@ public class ShopCommandExecutor implements CommandExecutor {
                 global = true;
             }
         }
-        
-        net.centerleft.localshops.commands.Command cmd = null;
-        
+
         SubCommandInfo cInfo = subCommandMap.get(type);
-        boolean cVal = cInfo.getCommandInstance(plugin, commandLabel, sender, cmdString, global).process();
-        if(cVal && cInfo.checkPlayerPositions) {
-            for (Player player : plugin.getServer().getOnlinePlayers()) {
-                plugin.playerListener.checkPlayerPosition(player);
-            }            
+        net.centerleft.localshops.commands.Command cmd = cInfo.getCommandInstance(plugin, commandLabel, sender, cmdString, global);
+        if (cmd != null) {
+            boolean cVal = cmd.process();
+            if (cVal && cInfo.checkPlayerPositions) {
+                for (Player player : plugin.getServer().getOnlinePlayers()) {
+                    plugin.playerListener.checkPlayerPosition(player);
+                }
+            }
+
+            return cVal;
+        } else {
+            return false;
         }
-        
-        return cVal;
         
         /**
         boolean checkPlayerPos = false;
