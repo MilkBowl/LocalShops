@@ -18,30 +18,34 @@ public class ShopCommandExecutor implements CommandExecutor {
 
     private final LocalShops plugin;
     private final Logger log = Logger.getLogger("Minecraft");
-    private static Map<String, List<String>> commandMap = new HashMap<String, List<String>>();
+    private static Map<String, String> commandMap = new HashMap<String, String>();
     public ShopCommandExecutor(LocalShops plugin) {
         this.plugin = plugin;
         
         //Add mappings for commands only on first instantiation
         if (commandMap.isEmpty()) {
-            commandMap.put("CommandShopAdd", Arrays.asList("shop gshop"));
-            commandMap.put("CommandShopBrowse", Arrays.asList("shop gshop"));
-            commandMap.put("CommandShopBuy", Arrays.asList("shop gshop"));
-            commandMap.put("CommandShopCreate", Arrays.asList("shop gshop"));
-            commandMap.put("CommandShopDebug", Arrays.asList("shop gshop"));
-            commandMap.put("CommandShopDestroy", Arrays.asList("shop gshop"));
-            commandMap.put("CommandShopFind", Arrays.asList("shop gshop"));
-            commandMap.put("CommandShopHelp", Arrays.asList("shop gshop"));
-            commandMap.put("CommandShopInfo", Arrays.asList("shop gshop"));
-            commandMap.put("CommandShopLink", Arrays.asList("gshop"));
-            commandMap.put("CommandShopList", Arrays.asList("shop"));
-            commandMap.put("CommandShopMove", Arrays.asList("shop"));
-            commandMap.put("CommandShopRemove", Arrays.asList("shop gshop"));
-            commandMap.put("CommandShopSearch", Arrays.asList("shop"));
-            commandMap.put("CommandShopSelect", Arrays.asList("shop"));
-            commandMap.put("CommandShopSell", Arrays.asList("shop gshop"));
-            commandMap.put("CommandShopSet", Arrays.asList("shop gshop"));
-            commandMap.put("CommandShopVersion", Arrays.asList("shop gshop"));
+            commandMap.put("add", "CommandShopAdd");
+            commandMap.put("browse", "CommandShopBrowse");
+            commandMap.put("buy", "CommandShopBuy");
+            commandMap.put("create", "CommandShopCreate");
+            commandMap.put("debug", "CommandShopDebug");
+            commandMap.put("destroy", "CommandShopDestroy");
+            commandMap.put("find", "CommandShopFind");
+            commandMap.put("gbuy", "CommandShopBuy");
+            commandMap.put("gsell", "CommandShopSell");
+            commandMap.put("gshop", "CommandShopHelp");
+            commandMap.put("help", "CommandShopHelp");
+            commandMap.put("info", "CommandShopInfo");
+            commandMap.put("link", "CommandShopLink");
+            commandMap.put("list", "CommandShopList");
+            commandMap.put("move", "CommandShopMove");
+            commandMap.put("remove", "CommandShopRemove");
+            commandMap.put("search", "CommandShopSearch");
+            commandMap.put("select", "CommandShopSelect");
+            commandMap.put("sell", "CommandShopSell");
+            commandMap.put("set", "CommandShopSet");
+            commandMap.put("shop", "CommandShopHelp");
+            commandMap.put("version", "CommandShopVersion");
         }
     }
 
@@ -78,10 +82,11 @@ public class ShopCommandExecutor implements CommandExecutor {
         }
 
         String commandName = command.getName().toLowerCase();
-
+        
         net.centerleft.localshops.commands.Command cmd = null;
         boolean checkPlayerPos = false;
-
+        //TODO: remove deprecated useage of equalsignore case & multiple if statemes
+        //TODO: switch to cmd = Class.forName(commandMap.Obj)
         if (commandName.equalsIgnoreCase("lshop") || commandLabel.equalsIgnoreCase("buy") || commandLabel.equalsIgnoreCase("sell")) {
             if (type.equalsIgnoreCase("search")) {
                 cmd = new CommandShopSearch(plugin, commandLabel, sender, cmdString, false);
