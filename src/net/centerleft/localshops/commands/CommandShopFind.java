@@ -25,11 +25,11 @@ import org.bukkit.inventory.ItemStack;
 
 public class CommandShopFind extends Command {
 
-    public CommandShopFind(LocalShops plugin, String commandLabel, CommandSender sender, String command) {
+    public CommandShopFind(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command);
     }
     
-    public CommandShopFind(LocalShops plugin, String commandLabel, CommandSender sender, String[] command) {
+    public CommandShopFind(LocalShops plugin, String commandLabel, CommandSender sender, String[] command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command);
     }
 

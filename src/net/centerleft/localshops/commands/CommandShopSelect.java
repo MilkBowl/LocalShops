@@ -9,11 +9,11 @@ import org.bukkit.entity.Player;
 
 public class CommandShopSelect extends Command {
 
-    public CommandShopSelect(LocalShops plugin, String commandLabel, CommandSender sender, String command) {
+    public CommandShopSelect(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command);
     }
     
-    public CommandShopSelect(LocalShops plugin, String commandLabel, CommandSender sender, String[] command) {
+    public CommandShopSelect(LocalShops plugin, String commandLabel, CommandSender sender, String[] command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command);
     }
 

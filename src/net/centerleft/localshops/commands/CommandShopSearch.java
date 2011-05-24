@@ -12,11 +12,11 @@ import org.bukkit.command.CommandSender;
 
 public class CommandShopSearch extends Command {
 
-    public CommandShopSearch(LocalShops plugin, String commandLabel, CommandSender sender, String command) {
+    public CommandShopSearch(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command);
     }
     
-    public CommandShopSearch(LocalShops plugin, String commandLabel, CommandSender sender, String[] command) {
+    public CommandShopSearch(LocalShops plugin, String commandLabel, CommandSender sender, String[] command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command);
     }
 

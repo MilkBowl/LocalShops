@@ -13,11 +13,11 @@ import org.bukkit.entity.Player;
 
 public class CommandShopDebug extends Command {
 
-    public CommandShopDebug(LocalShops plugin, String commandLabel, CommandSender sender, String command) {
+    public CommandShopDebug(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command);
     }
     
-    public CommandShopDebug(LocalShops plugin, String commandLabel, CommandSender sender, String[] command) {
+    public CommandShopDebug(LocalShops plugin, String commandLabel, CommandSender sender, String[] command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command);
     }
 

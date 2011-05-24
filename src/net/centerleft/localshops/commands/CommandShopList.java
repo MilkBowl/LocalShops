@@ -16,11 +16,11 @@ import org.bukkit.entity.Player;
 
 public class CommandShopList extends Command {
 
-    public CommandShopList(LocalShops plugin, String commandLabel, CommandSender sender, String command) {
+    public CommandShopList(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command);
     }
     
-    public CommandShopList(LocalShops plugin, String commandLabel, CommandSender sender, String[] command) {
+    public CommandShopList(LocalShops plugin, String commandLabel, CommandSender sender, String[] command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command);
     }
 
