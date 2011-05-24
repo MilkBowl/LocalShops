@@ -39,7 +39,7 @@ public class CommandShopHelp extends Command {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " find [itemname]" + ChatColor.DARK_AQUA + " - Find closest shops by item name.");
         }
         if (canUseCommand(CommandTypes.ADMIN) && isGlobal) {
-            sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " link [ShopID] [worldname]" + ChatColor.DARK_AQUA + " - Link a global shop to another world");
+            sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " link [worldname]" + ChatColor.DARK_AQUA + " - Link a global shop to another world");
         }
         if (canUseCommand(CommandTypes.MOVE) && !isGlobal) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " move [ShopID]" + ChatColor.DARK_AQUA + " - Move a shop to your location.");
