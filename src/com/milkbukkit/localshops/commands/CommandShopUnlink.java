@@ -57,7 +57,7 @@ public class CommandShopUnlink extends Command {
         }
         // Show link help
         sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " unlink [worldname] " + ChatColor.DARK_AQUA + "- Link a global shop to this world.");
-        
+
         return false;
     }
 }

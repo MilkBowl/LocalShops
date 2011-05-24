@@ -58,7 +58,11 @@ public class CommandShopList extends Command {
         while(it.hasNext()) {
             Shop shop = it.next();
             if(!showAll && isPlayer && !isShopController(shop)) {
-                continue;
+                if (!shop.isGlobal())
+                    continue;
+            } else if (isGlobal) {
+                if(!shop.isGlobal())
+                    continue;
             }
             
             if(isPlayer) {
