@@ -17,26 +17,26 @@ public class ShopCommandExecutor implements CommandExecutor {
 
     private final LocalShops plugin;
     private final Logger log = Logger.getLogger("Minecraft");
-    private static Map<String, SubCommandInfo> subCommandMap = new HashMap<String, SubCommandInfo>();
+    private static Map<String, CommandTypeInfo> commandTypeMap = new HashMap<String, CommandTypeInfo>();
     static {
-        subCommandMap.put("add", new SubCommandInfo(com.milkbukkit.localshops.commands.CommandShopAdd.class, true, true, false));
-        subCommandMap.put("browse", new SubCommandInfo(com.milkbukkit.localshops.commands.CommandShopBrowse.class, true, true, false));
-        subCommandMap.put("buy", new SubCommandInfo(com.milkbukkit.localshops.commands.CommandShopBuy.class, true, true, false));
-        subCommandMap.put("create", new SubCommandInfo(com.milkbukkit.localshops.commands.CommandShopCreate.class, true, true, true));
-        subCommandMap.put("debug", new SubCommandInfo(com.milkbukkit.localshops.commands.CommandShopDebug.class, true, true, false));
-        subCommandMap.put("destroy", new SubCommandInfo(com.milkbukkit.localshops.commands.CommandShopDestroy.class, true, true, true));
-        subCommandMap.put("find", new SubCommandInfo(com.milkbukkit.localshops.commands.CommandShopFind.class, true, false, false));
-        subCommandMap.put("help", new SubCommandInfo(com.milkbukkit.localshops.commands.CommandShopHelp.class, true, true, false));
-        subCommandMap.put("info", new SubCommandInfo(com.milkbukkit.localshops.commands.CommandShopInfo.class, true, true, false));
-        subCommandMap.put("link", new SubCommandInfo(com.milkbukkit.localshops.commands.CommandShopLink.class, false, true, false));
-        subCommandMap.put("list", new SubCommandInfo(com.milkbukkit.localshops.commands.CommandShopList.class, true, false, false));
-        subCommandMap.put("move", new SubCommandInfo(com.milkbukkit.localshops.commands.CommandShopMove.class, true, false, true));
-        subCommandMap.put("remove", new SubCommandInfo(com.milkbukkit.localshops.commands.CommandShopRemove.class, true, true, false));
-        subCommandMap.put("search", new SubCommandInfo(com.milkbukkit.localshops.commands.CommandShopSearch.class, true, true, false));
-        subCommandMap.put("select", new SubCommandInfo(com.milkbukkit.localshops.commands.CommandShopSelect.class, true, false, false));
-        subCommandMap.put("sell", new SubCommandInfo(com.milkbukkit.localshops.commands.CommandShopSell.class, true, true, false));
-        subCommandMap.put("set", new SubCommandInfo(com.milkbukkit.localshops.commands.CommandShopSet.class, true, true, false));
-        subCommandMap.put("version", new SubCommandInfo(com.milkbukkit.localshops.commands.CommandShopVersion.class, true, true, false));
+        commandTypeMap.put("add", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopAdd.class, true, true, false));
+        commandTypeMap.put("browse", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopBrowse.class, true, true, false));
+        commandTypeMap.put("buy", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopBuy.class, true, true, false));
+        commandTypeMap.put("create", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopCreate.class, true, true, true));
+        commandTypeMap.put("debug", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopDebug.class, true, true, false));
+        commandTypeMap.put("destroy", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopDestroy.class, true, true, true));
+        commandTypeMap.put("find", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopFind.class, true, false, false));
+        commandTypeMap.put("help", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopHelp.class, true, true, false));
+        commandTypeMap.put("info", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopInfo.class, true, true, false));
+        commandTypeMap.put("link", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopLink.class, false, true, false));
+        commandTypeMap.put("list", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopList.class, true, false, false));
+        commandTypeMap.put("move", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopMove.class, true, false, true));
+        commandTypeMap.put("remove", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopRemove.class, true, true, false));
+        commandTypeMap.put("search", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopSearch.class, true, true, false));
+        commandTypeMap.put("select", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopSelect.class, true, false, false));
+        commandTypeMap.put("sell", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopSell.class, true, true, false));
+        commandTypeMap.put("set", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopSet.class, true, true, false));
+        commandTypeMap.put("version", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopVersion.class, true, true, false));
     }
     
     public ShopCommandExecutor(LocalShops plugin) {
@@ -83,7 +83,7 @@ public class ShopCommandExecutor implements CommandExecutor {
             }
         }
 
-        SubCommandInfo cInfo = subCommandMap.get(type);
+        CommandTypeInfo cInfo = commandTypeMap.get(type);
         com.milkbukkit.localshops.commands.Command cmd = cInfo.getCommandInstance(plugin, commandLabel, sender, cmdString, global);
         if (cmd != null) {
             boolean cVal = cmd.process();

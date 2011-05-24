@@ -8,20 +8,20 @@ import org.bukkit.command.CommandSender;
 
 import com.milkbukkit.localshops.LocalShops;
 
-public class SubCommandInfo {
+public class CommandTypeInfo {
     public Class<?> commandClass;
     public boolean global;
     public boolean local;
     public boolean checkPlayerPositions;
 
-    public SubCommandInfo(Class<?> commandClass) {
+    public CommandTypeInfo(Class<?> commandClass) {
         this.commandClass = commandClass;
         global = false;
         local = false;
         checkPlayerPositions = false;
     }
 
-    public SubCommandInfo(Class<?> commandClass, boolean local, boolean global, boolean checkPlayerPositions) {
+    public CommandTypeInfo(Class<?> commandClass, boolean local, boolean global, boolean checkPlayerPositions) {
         this.commandClass = commandClass;
         this.local = local;
         this.global = global;
