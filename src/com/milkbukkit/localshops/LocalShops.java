@@ -98,11 +98,8 @@ public class LocalShops extends JavaPlugin {
         // read the shops into memory
         getShopManager().loadShops(shopsDir);
         
-        /* deprecated?
-        for (World world : foundWorlds) {
-            setupGlobalShop(world.getName());
-        }
-         */
+        //Make sure our global shop definitions are valid in case someone monkeyed with the config
+        Config.verifyGlobalShops(getShopManager());
         
         // update the console that we've started
         log.info(String.format("[%s] %s", pdfFile.getName(), "Loaded with " + getShopManager().getNumShops() + " shop(s)"));

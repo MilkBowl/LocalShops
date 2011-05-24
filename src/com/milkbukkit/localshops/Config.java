@@ -683,4 +683,16 @@ public class Config {
     public static void clearUuidList() {
         uuidList.clear();
     }
+    
+    public static void verifyGlobalShops(ShopManager shopManager) {
+        Iterator<String> iter = globalShops.keySet().iterator();
+        while (iter.hasNext())
+        {
+            iter.next();
+            if (shopManager.getShop(globalShops.get(iter)) == null) {
+                iter.remove();
+            }
+            
+        }
+    }
 }
