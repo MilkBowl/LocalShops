@@ -614,6 +614,8 @@ public class ShopManager {
         if (!shop.isGlobal() ) {
             props.setProperty("locationA", shop.getLocationA().toString());
             props.setProperty("locationB", shop.getLocationB().toString());
+        } else {
+            props.setProperty("global", "true");
         }
         
         props.setProperty("world", shop.getWorld());
