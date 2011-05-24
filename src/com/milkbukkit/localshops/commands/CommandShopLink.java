@@ -57,7 +57,7 @@ public class CommandShopLink extends Command {
                                 if (Config.getGlobalShopUuid(worldName) == shop.getUuid()) {
                                     sender.sendMessage(worldName + " is already linked to that shop.");
                                 } else {
-                                    sender.sendMessage(worldName + " already has a global shop, delete the shop before attempting to link a new one.");
+                                    sender.sendMessage(worldName + " already has a global shop, delete or unlink the shop before attempting to link a new one.");
                                 }
                                 return true;
                             } else {
