@@ -11,17 +11,20 @@ public class SubCommandInfo {
     public String className;
     public boolean global;
     public boolean local;
+    public boolean checkPlayerPositions;
 
     public SubCommandInfo(String className) {
         this.className = className;
         global = false;
         local = false;
+        checkPlayerPositions = false;
     }
 
-    public SubCommandInfo(String className, boolean local, boolean global) {
+    public SubCommandInfo(String className, boolean local, boolean global, boolean checkPlayerPositions) {
         this.className = className;
         this.local = local;
         this.global = global;
+        this.checkPlayerPositions = checkPlayerPositions;
     }
 
     public Command getCommandInstance(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
