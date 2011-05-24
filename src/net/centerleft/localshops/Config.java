@@ -180,16 +180,6 @@ public class Config {
             }
         }
         
-        /**
-         * Not sure if this is really used, need to discuss with Sleaker on his design
-        if(properties.keyExists("global-shop-uuid")) {
-            GLOBAL_SHOP_UUID = properties.getUuid("global-shop-uuid");
-        } else {
-            GLOBAL_SHOP_UUID = UUID.randomUUID();
-            properties.setUuid("global-shop-uuid", GLOBAL_SHOP_UUID);
-        }
-        */
-        
         if(save) {
             save();
         }
