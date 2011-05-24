@@ -119,11 +119,13 @@ public class CommandShopCreate extends Command {
             }
         }
 
-        matcher.reset();
-        Pattern.compile("(?i)create\\s+(.*)");
-        matcher = pattern.matcher(command);
-        if (matcher.find()) {
-            name = matcher.group(1);
+        if (name == null) {
+            matcher.reset();
+            Pattern.compile("(?i)create\\s+(.*)");
+            matcher = pattern.matcher(command);
+            if (matcher.find()) {
+                name = matcher.group(1);
+            }
         }
 
         Shop shop = new Shop(UUID.randomUUID());

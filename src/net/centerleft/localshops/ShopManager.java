@@ -347,7 +347,7 @@ public class ShopManager {
 
     public Shop loadShop(File file) throws Exception {
         HashMap<Location, String> signMap = new HashMap<Location, String>(4);
-        
+
         Shop shop = null;
         double[] locationA = null;
         double[] locationB = null;
@@ -368,13 +368,13 @@ public class ShopManager {
         double minBalance = Double.parseDouble((props.getProperty("min-balance", "0.0")));
         boolean notification = Boolean.parseBoolean(props.getProperty("notification", "true"));
         boolean global = Boolean.parseBoolean(props.getProperty("global", "false"));
-        
+
         if (!global) {
             // Location - locationB=-88, 50, -127
             try {
                 locationA = convertStringArraytoDoubleArray(props.getProperty("locationA").split(", "));
                 locationB = convertStringArraytoDoubleArray(props.getProperty("locationB").split(", "));
-                
+
             } catch (Exception e) {
                 if(isolateBrokenShopFile(file)) {
                     log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.toString()));
@@ -390,7 +390,7 @@ public class ShopManager {
         String[] managers = props.getProperty("managers", "").replaceAll("[\\[\\]]", "").split(", ");
         String creator = props.getProperty("creator", "LocalShops");
         String world = props.getProperty("world", "world1");
-        
+
         shop = new Shop(uuid);
         shop.setName(name);
         shop.setUnlimitedMoney(unlimitedMoney);
@@ -404,7 +404,7 @@ public class ShopManager {
             shop.setLocationA(new ShopLocation(locationA));
             shop.setLocationB(new ShopLocation(locationB));
         } else {
-            
+
         }
         // Make sure minimum balance isn't negative
         if (minBalance < 0) {
@@ -506,10 +506,10 @@ public class ShopManager {
                 }
             }
         }
-        
+
         //Set the sign mapping for the shop
         shop.getSignMap().putAll(signMap);
-        
+
         // Sanity Checks
         // Check that filename == UUID from file
         if(!file.getName().equalsIgnoreCase(String.format("%s.shop", shop.getUuid().toString()))) {
@@ -561,10 +561,13 @@ public class ShopManager {
         props.setProperty("notification", String.valueOf(shop.getNotification()));
 
         // Location
-        props.setProperty("locationA", shop.getLocationA().toString());
-        props.setProperty("locationB", shop.getLocationB().toString());
+        if (!shop.isGlobal() ) {
+            props.setProperty("locationA", shop.getLocationA().toString());
+            props.setProperty("locationB", shop.getLocationB().toString());
+        }
+        
         props.setProperty("world", shop.getWorld());
-
+        
         // People
         props.setProperty("owner", shop.getOwner());
         props.setProperty("managers", Search.join(shop.getManagers(), ", "));
@@ -591,7 +594,7 @@ public class ShopManager {
 
             props.setProperty(String.format("sign:%d,%d,%d", x, y, z), shop.getSignMap().get(signLoc));
         }
-        
+
         String fileName = LocalShops.folderPath + LocalShops.shopsPath + shop.getUuid().toString() + ".shop";
         try {
             props.store(new FileOutputStream(fileName), "LocalShops Config Version 2.0");
