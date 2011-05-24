@@ -56,6 +56,12 @@ public class Config {
     private static String srvReportUrl = "http://stats.cereal.sh/";
     private static int srvReportInterval = 21600;
     
+    //Dynamic Shop Price Change variables
+    private static int dynamicInterval = 60;
+    private static int maxPriceChange = 50;
+    private static int minPriceChange = 0;
+    private static int dynamicChance = 0;
+    
     // Global Shops
     private static Map<String, UUID> globalShops = Collections.synchronizedMap(new HashMap<String, UUID>(2));
     private static boolean globalShopsEnabled = false;
@@ -82,7 +88,10 @@ public class Config {
         properties.setProperty("shop-transaction-notice", String.valueOf(shopTransactionNotice));
         properties.setProperty("shop-notification-timer", String.valueOf(shopTransactionNoticeTimer));
         properties.setProperty("shop-transaction-max-size", String.valueOf(shopTransactionMaxSize));
-        
+        properties.setProperty("dynamic-interval", String.valueOf(dynamicInterval));
+        properties.setProperty("max-price-change", String.valueOf(maxPriceChange));
+        properties.setProperty("min-price-change", String.valueOf(minPriceChange));
+        properties.setProperty("dynamic-chance", String.valueOf(dynamicChance));
         properties.setProperty("shops-per-player", String.valueOf(playerMaxShops));
         
         properties.setProperty("max-damage", String.valueOf(itemMaxDamage));
@@ -140,6 +149,10 @@ public class Config {
         shopTransactionNotice = Boolean.parseBoolean(properties.getProperty("shop-transaction-notice", String.valueOf(shopTransactionNotice)));
         shopTransactionNoticeTimer = Integer.parseInt(properties.getProperty("shop-notification-timer", String.valueOf(shopTransactionNoticeTimer)));
         shopTransactionMaxSize = Integer.parseInt(properties.getProperty("shop-transaction-max-size", String.valueOf(shopTransactionMaxSize)));
+        dynamicInterval = Integer.parseInt(properties.getProperty("dynamic-interval", String.valueOf(dynamicInterval)));
+        maxPriceChange = Integer.parseInt(properties.getProperty("max-price-change", String.valueOf(maxPriceChange)));
+        minPriceChange = Integer.parseInt(properties.getProperty("min-price-change", String.valueOf(minPriceChange)));
+        dynamicChance = Integer.parseInt(properties.getProperty("dynamic-chance", String.valueOf(dynamicChance)));
         
         playerMaxShops = Integer.parseInt(properties.getProperty("shops-per-player", String.valueOf(playerMaxShops)));
         
@@ -682,6 +695,38 @@ public class Config {
      */
     public static void clearUuidList() {
         uuidList.clear();
+    }
+    
+    public static int getDynamicInterval() {
+        return dynamicInterval;
+    }
+
+    public static void setDynamicInterval(int dynamicInterval) {
+        Config.dynamicInterval = dynamicInterval;
+    }
+
+    public static int getMaxPriceChange() {
+        return maxPriceChange;
+    }
+
+    public static void setMaxPriceChange(int maxPriceChange) {
+        Config.maxPriceChange = maxPriceChange;
+    }
+
+    public static int getMinPriceChange() {
+        return minPriceChange;
+    }
+
+    public static void setMinPriceChange(int minPriceChange) {
+        Config.minPriceChange = minPriceChange;
+    }
+
+    public static int getDynamicChance() {
+        return dynamicChance;
+    }
+
+    public static void setDynamicChance(int dynamicChance) {
+        Config.dynamicChance = dynamicChance;
     }
     
     public static void verifyGlobalShops(ShopManager shopManager) {

@@ -22,6 +22,7 @@ import com.milkbukkit.localshops.modules.economy.EconomyManager;
 import com.milkbukkit.localshops.modules.permission.PermissionManager;
 import com.milkbukkit.localshops.threads.NotificationThread;
 import com.milkbukkit.localshops.threads.ReportThread;
+import com.milkbukkit.localshops.threads.SchedulerThread;
 
 /**
  * Local Shops Plugin
@@ -35,10 +36,12 @@ public class LocalShops extends JavaPlugin {
     public ShopsEntityListener entityListener = new ShopsEntityListener(this);
     private ShopManager shopManager = new ShopManager(this);
     public PluginDescriptionFile pdfFile = null;
+    public SchedulerThread shopSchedulerThread = null;
     protected ReportThread reportThread = null;
     protected NotificationThread notificationThread = null;
     private EconomyManager econManager = null;
     private PermissionManager permManager = null;
+    public boolean dynamicScheduled = false;
 
     // Logging
     private final Logger log = Logger.getLogger("Minecraft");
@@ -101,6 +104,10 @@ public class LocalShops extends JavaPlugin {
         //Make sure our global shop definitions are valid in case someone monkeyed with the config
         Config.verifyGlobalShops(getShopManager());
         
+        //Check if we should run the scheduler
+		if (dynamicScheduled)
+            enableShedule();
+            
         // update the console that we've started
         log.info(String.format("[%s] %s", pdfFile.getName(), "Loaded with " + getShopManager().getNumShops() + " shop(s)"));
         log.info(String.format("[%s] %s", pdfFile.getName(), "Version " + pdfFile.getVersion() + " is enabled: " + Config.getSrvUuid().toString()));
@@ -152,6 +159,16 @@ public class LocalShops extends JavaPlugin {
             } catch (InterruptedException e) {
                 // hmm, thread didn't die
                 log.warning(String.format("[%s] %s", pdfFile.getName(), "ReportThread did not exit"));
+            }
+        }
+         //Disable the scheduler
+        if ( shopSchedulerThread != null && shopSchedulerThread.isAlive()) {
+            try {
+                shopSchedulerThread.setRun(false);
+                shopSchedulerThread.join(2000);
+            } catch (InterruptedException e) {
+                // hmm, thread didn't die
+                log.warning(String.format("[%s] %s", pdfFile.getName(), "dynamicThread did not exit"));
             }
         }
         
@@ -209,4 +226,35 @@ public class LocalShops extends JavaPlugin {
     public PermissionManager getPermManager() {
         return permManager;
     }
+        /**
+     * Checks if the task is set to be scheduled
+     * Does not check if it is already running or not.
+     * 
+     * @return dynamicScheduled 
+     */
+    public boolean isDynamicScheduled() {
+        return dynamicScheduled;
+    }
+    /**
+     * Tags the scheduler as enabled or disabled.
+     * 
+     * @param dynamicScheduled variable to determine if scheduler is set to run
+     */
+    public void setDynamicScheduler(boolean dynamicScheduled) {
+        this.dynamicScheduled = dynamicScheduled;
+    }
+        /**
+     * Attempts to Enable the dynamic price adjusting schedule
+     * Will do nothing if the Thread has already been initialized
+     * 
+     */
+    public void enableShedule() {
+        //Check to make sure we don't already have a scheduler running.
+        if ( dynamicScheduled && shopSchedulerThread == null) {
+            shopSchedulerThread = new SchedulerThread(this);
+            shopSchedulerThread.start();
+        } 
+
+    }
+    
 }
