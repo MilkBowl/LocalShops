@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.CommandExecutor;
@@ -82,6 +81,7 @@ public class LocalShops extends JavaPlugin {
         // Register Commands
         CommandExecutor cmdExec = new ShopCommandExecutor(this);
         getCommand("lshop").setExecutor(cmdExec);
+        getCommand("lsadmin").setExecutor(cmdExec);
         getCommand("gshop").setExecutor(cmdExec);
         getCommand("buy").setExecutor(cmdExec);
         getCommand("sell").setExecutor(cmdExec);

@@ -19,6 +19,7 @@ public class ShopCommandExecutor implements CommandExecutor {
     private final Logger log = Logger.getLogger("Minecraft");
     private static Map<String, CommandTypeInfo> commandTypeMap = new HashMap<String, CommandTypeInfo>();
     static {
+        commandTypeMap.put("admin", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandAdminSet.class, false, false, false));
         commandTypeMap.put("add", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopAdd.class, true, true, false));
         commandTypeMap.put("browse", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopBrowse.class, true, true, false));
         commandTypeMap.put("buy", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopBuy.class, true, true, false));
@@ -55,7 +56,10 @@ public class ShopCommandExecutor implements CommandExecutor {
         }
 
         String cmdString = null;
-        if (commandLabel.equalsIgnoreCase("buy")) {
+        if(commandLabel.equalsIgnoreCase("lsadmin")) {
+            cmdString = Search.join(args, " ");
+            type = "admin";
+        } else if (commandLabel.equalsIgnoreCase("buy")) {
             cmdString = "buy " + Search.join(args, " ");
             type = "buy";
         } else if (commandLabel.equalsIgnoreCase("sell")) {
@@ -94,7 +98,7 @@ public class ShopCommandExecutor implements CommandExecutor {
                 }
             }
 
-            log.info(String.format("[%s] %s issued %s command: %s", plugin.getDescription().getName(), global ? "global" : "local", user, cmd.getCommand()));
+            log.info(String.format("[%s] %s issued %s command: %s", plugin.getDescription().getName(), user, global ? "global" : "local", cmd.getCommand()));
             
             return cVal;
         } else {
