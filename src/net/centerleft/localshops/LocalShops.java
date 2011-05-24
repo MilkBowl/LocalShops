@@ -33,7 +33,6 @@ public class LocalShops extends JavaPlugin {
     public ShopsPlayerListener playerListener = new ShopsPlayerListener(this);
     public ShopsBlockListener blockListener = new ShopsBlockListener(this);
     public ShopsEntityListener entityListener = new ShopsEntityListener(this);
-    public ShopsWorldListener worldListener = new ShopsWorldListener(this);
     private ShopManager shopManager = new ShopManager(this);
     public PluginDescriptionFile pdfFile = null;
     protected ReportThread reportThread = null;
@@ -77,7 +76,6 @@ public class LocalShops extends JavaPlugin {
         pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Priority.Normal, this);
         pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Normal, this);
         pm.registerEvent(Event.Type.ENTITY_EXPLODE, entityListener, Priority.Normal, this);
-        pm.registerEvent(Event.Type.WORLD_LOAD, worldListener, Priority.Monitor, this);
         
         
         // Register Commands
