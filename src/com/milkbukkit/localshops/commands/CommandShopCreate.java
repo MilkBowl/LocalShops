@@ -86,7 +86,7 @@ public class CommandShopCreate extends Command {
                 xyzB[1] = y + Config.getShopSizeDefHeight() - 1;
             }
 
-            if(!plugin.getShopManager().shopPositionOk(xyzA, xyzB, world)) {
+            if(!plugin.getShopManager().shopPositionOk(xyzA, xyzB, world) && !isGlobal) {
                 sender.sendMessage("A shop already exists here!");
                 return false;
             }
