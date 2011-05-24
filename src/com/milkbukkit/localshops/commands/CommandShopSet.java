@@ -893,9 +893,11 @@ public class CommandShopSet extends Command {
         }
 
 
-        // show set buy usage
+        // show set dynamic usage
         sender.sendMessage("   " + "/" + commandLabel + " set dynamic");
         sender.sendMessage("   " + "/" + commandLabel + " set dynamic item");
+        sender.sendMessage("   " + "/" + commandLabel + " set dynamic id");
+        sender.sendMessage("   " + "/" + commandLabel + " set dynamic id:id");
         return true;
     }
     
@@ -912,6 +914,7 @@ public class CommandShopSet extends Command {
         if (canUseCommand(CommandTypes.ADMIN)) {
             sender.sendMessage("   " + "/" + commandLabel + " set unlimited money");
             sender.sendMessage("   " + "/" + commandLabel + " set unlimited stock");
+            sender.sendMessage("   " + "/" + commandLabel + " set dynamic <id>");
         }
         return true;
     }
