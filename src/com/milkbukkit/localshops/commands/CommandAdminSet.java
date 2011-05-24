@@ -1,20 +1,14 @@
 package com.milkbukkit.localshops.commands;
 
-import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import com.milkbukkit.localshops.Config;
-import com.milkbukkit.localshops.InventoryItem;
-import com.milkbukkit.localshops.ItemInfo;
 import com.milkbukkit.localshops.LocalShops;
-import com.milkbukkit.localshops.Search;
-import com.milkbukkit.localshops.Shop;
 
 public class CommandAdminSet extends Command {
 
