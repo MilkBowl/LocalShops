@@ -71,7 +71,7 @@ public class CommandShopMove extends Command {
 
                 // Check if size is ok
                 if (!plugin.getPlayerData().get(player.getName()).checkSize()) {
-                    String size = Config.SHOP_SIZE_MAX_WIDTH + "x" + Config.SHOP_SIZE_MAX_HEIGHT + "x" + Config.SHOP_SIZE_MAX_WIDTH;
+                    String size = Config.getShopSizeMaxWidth() + "x" + Config.getShopSizeDefHeight() + "x" + Config.getShopSizeMaxWidth();
                     player.sendMessage(ChatColor.DARK_AQUA + "Problem with selection. Max size is " + ChatColor.WHITE + size);
                     return false;
                 }
@@ -87,32 +87,32 @@ public class CommandShopMove extends Command {
                 }
             } else {
                 // otherwise calculate the shop from the player's location
-                if (Config.SHOP_SIZE_DEF_WIDTH % 2 == 0) {
-                    xyzA[0] = x - (Config.SHOP_SIZE_DEF_WIDTH / 2);
-                    xyzB[0] = x + (Config.SHOP_SIZE_DEF_WIDTH / 2);
-                    xyzA[2] = z - (Config.SHOP_SIZE_DEF_WIDTH / 2);
-                    xyzB[2] = z + (Config.SHOP_SIZE_DEF_WIDTH / 2);
+                if (Config.getShopSizeDefWidth() % 2 == 0) {
+                    xyzA[0] = x - (Config.getShopSizeDefWidth() / 2);
+                    xyzB[0] = x + (Config.getShopSizeDefWidth() / 2);
+                    xyzA[2] = z - (Config.getShopSizeDefWidth() / 2);
+                    xyzB[2] = z + (Config.getShopSizeDefWidth() / 2);
                 } else {
-                    xyzA[0] = x - (Config.SHOP_SIZE_DEF_WIDTH / 2) + 1;
-                    xyzB[0] = x + (Config.SHOP_SIZE_DEF_WIDTH / 2);
-                    xyzA[2] = z - (Config.SHOP_SIZE_DEF_WIDTH / 2) + 1;
-                    xyzB[2] = z + (Config.SHOP_SIZE_DEF_WIDTH / 2);
+                    xyzA[0] = x - (Config.getShopSizeDefWidth() / 2) + 1;
+                    xyzB[0] = x + (Config.getShopSizeDefWidth() / 2);
+                    xyzA[2] = z - (Config.getShopSizeDefWidth() / 2) + 1;
+                    xyzB[2] = z + (Config.getShopSizeDefWidth() / 2);
                 }
 
                 xyzA[1] = y - 1;
-                xyzB[1] = y + Config.SHOP_SIZE_DEF_HEIGHT - 1;
+                xyzB[1] = y + Config.getShopSizeDefHeight() - 1;
 
             }
 
             // need to check to see if the shop overlaps another shop
             if (plugin.getShopManager().shopPositionOk(xyzA, xyzB, player.getWorld().getName())) {
 
-                if (Config.SHOP_CHARGE_MOVE) {
+                if (Config.getShopChargeMove()) {
                     if (!canUseCommand(CommandTypes.MOVE_FREE)) {
-                        if (!plugin.getPlayerData().get(player.getName()).chargePlayer(player.getName(), Config.SHOP_CHARGE_MOVE_COST)) {
+                        if (!plugin.getPlayerData().get(player.getName()).chargePlayer(player.getName(), Config.getShopChargeMoveCost())) {
                             // return, this player did not have enough money
 
-                            player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You need " + plugin.getEconManager().format(Config.SHOP_CHARGE_MOVE_COST) + " to move a shop.");
+                            player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You need " + plugin.getEconManager().format(Config.getShopChargeMoveCost()) + " to move a shop.");
                             return false;
                         }
                     }

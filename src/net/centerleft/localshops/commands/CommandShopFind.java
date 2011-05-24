@@ -34,7 +34,7 @@ public class CommandShopFind extends Command {
     }
 
     public boolean process() {
-        if(Config.FIND_MAX_DISTANCE == 0) {
+        if(Config.getFindMaxDistance() == 0) {
             sender.sendMessage(String.format("[%s] Shop finding has been disabled on this server.", plugin.getDescription().getName()));
             return true;
         }
@@ -129,7 +129,7 @@ public class CommandShopFind extends Command {
 
             // Determine distance, if too far away ignore
             double distance = calculateDistance(playerLoc, shop.getLocationCenter());
-            if (Config.FIND_MAX_DISTANCE > 0 && distance > Config.FIND_MAX_DISTANCE) {
+            if (Config.getFindMaxDistance() > 0 && distance > Config.getFindMaxDistance()) {
                 continue;
             }
 
@@ -141,8 +141,8 @@ public class CommandShopFind extends Command {
             // This shop is valid, add to list
             foundShops.put(shop.getUuid(), distance);
         }
-        if (Config.GLOBAL_SHOP && Config.GLOBAL_SHOP_UUID != null) {
-            foundShops.put(Config.GLOBAL_SHOP_UUID, 0D);
+        if (Config.getGlobalShopsEnabled() && Config.globalShopsContainsKey(playerWorld)) {
+            foundShops.put(Config.getGlobalShopUuid(playerWorld), 0D);
         }
         
         @SuppressWarnings("unchecked")

@@ -1,39 +1,22 @@
-package net.centerleft.localshops;
+package net.centerleft.localshops.threads;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.UUID;
 import java.util.logging.Logger;
+
+import net.centerleft.localshops.Config;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ReportThread extends Thread {
-    private String statsBaseUrl;
     protected final Logger log = Logger.getLogger("Minecraft");
-    private static final int REPORT_DELAY = 21600;
-
     private JavaPlugin plugin = null;
-    private UUID uuid = null;
-    private boolean debug = false;
-    private boolean run = true;
 
-    public ReportThread(JavaPlugin plugin, UUID uuid, boolean debug) {
+    public ReportThread(JavaPlugin plugin) {
         this.plugin = plugin;
-        this.uuid = uuid;
-        this.debug = debug;
-        this.statsBaseUrl = "http://stats.cereal.sh/";
-    }
-
-    public ReportThread(JavaPlugin plugin, UUID uuid, boolean debug, String statsBaseUrl) {
-        this(plugin, uuid, debug);
-        this.statsBaseUrl = statsBaseUrl;
-    }
-
-    public void setRun(boolean run) {
-        this.run = run;
     }
 
     public void run() {
@@ -46,7 +29,7 @@ public class ReportThread extends Thread {
         String pluginVersion = plugin.getDescription().getVersion();
         String bukkitVersion = plugin.getServer().getVersion();
 
-        if (debug) {
+        if (Config.getSrvDebug()) {
             log.info(String.format("[%s] Start of ReportThread", pluginName));
         }
 
@@ -54,8 +37,8 @@ public class ReportThread extends Thread {
             try {
                 URL statsUrl = new URL(String.format(
                                                         "%s?uuid=%s&plugin=%s&version=%s&bVersion=%s&osName=%s&osArch=%s&osVersion=%s&java=%s",
-                                                        statsBaseUrl,
-                                                        URLEncoder.encode(uuid.toString(), "ISO-8859-1"),
+                                                        Config.getSrvReportUrl(),
+                                                        URLEncoder.encode(Config.getSrvUuid().toString(), "ISO-8859-1"),
                                                         URLEncoder.encode(pluginName, "ISO-8859-1"),
                                                         URLEncoder.encode(pluginVersion, "ISO-8859-1"),
                                                         URLEncoder.encode(bukkitVersion, "ISO-8859-1"),
@@ -69,7 +52,7 @@ public class ReportThread extends Thread {
                 String inputLine;
                 BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
-                if (debug) {
+                if (Config.getSrvDebug()) {
                     // Output the contents -- wee
                     log.info(String.format("[%s] StatsURL: %s", pluginName, statsUrl.toString()));
                     while ((inputLine = in.readLine()) != null) {
@@ -83,9 +66,9 @@ public class ReportThread extends Thread {
                 in.close();
 
                 // Sleep for 6 hours...
-                for (int i = 0; i < REPORT_DELAY; i++) {
-                    if (!run) {
-                        if (debug) {
+                for (int i = 0; i < Config.getSrvReportInterval(); i++) {
+                    if (!Config.getSrvReport()) {
+                        if (Config.getSrvDebug()) {
                             log.info(String.format("[%s] Graceful quit of ReportThread", pluginName));
                         }
                         return;

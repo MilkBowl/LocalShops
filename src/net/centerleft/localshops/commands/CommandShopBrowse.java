@@ -3,14 +3,12 @@ package net.centerleft.localshops.commands;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.centerleft.localshops.Config;
 import net.centerleft.localshops.InventoryItem;
 import net.centerleft.localshops.LocalShops;
-import net.centerleft.localshops.PlayerData;
 import net.centerleft.localshops.Shop;
 import net.centerleft.localshops.comparator.InventoryItemSortByName;
 
@@ -20,12 +18,12 @@ import org.bukkit.entity.Player;
 
 public class CommandShopBrowse extends Command {
 
-    public CommandShopBrowse(LocalShops plugin, String commandLabel, CommandSender sender, String command) {
-        super(plugin, commandLabel, sender, command);
+    public CommandShopBrowse(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
+        super(plugin, commandLabel, sender, command, isGlobal);
     }
 
-    public CommandShopBrowse(LocalShops plugin, String commandLabel, CommandSender sender, String[] command) {
-        super(plugin, commandLabel, sender, command);
+    public CommandShopBrowse(LocalShops plugin, String commandLabel, CommandSender sender, String[] command, boolean isGlobal) {
+        super(plugin, commandLabel, sender, command, isGlobal);
     }
 
     public boolean process() {
@@ -35,16 +33,9 @@ public class CommandShopBrowse extends Command {
         if (sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            PlayerData pData = plugin.getPlayerData().get(player.getName());
-
-            // Get Current Shop
-            UUID shopUuid = pData.getCurrentShop();
-            if (shopUuid != null) {
-                shop = plugin.getShopManager().getShop(shopUuid);
-            } else if (Config.GLOBAL_SHOP && shopUuid == null) {
-                shop = plugin.getShopManager().getShop(Config.GLOBAL_SHOP_UUID);
-            }
-            if (shop == null) {
+            
+            shop = getCurrentShop(player);
+            if (shop == null || (isGlobal && !Config.getGlobalShopsEnabled())) {
                 sender.sendMessage("You are not in a shop!");
                 return true;
             }
@@ -205,17 +196,17 @@ public class CommandShopBrowse extends Command {
             message += " trades in: ";
         }
 
-        message += " (Page " + pageNumber + " of " + (int) Math.ceil((double) inventoryMessage.size() / (double) Config.CHAT_MAX_LINES) + ")";
+        message += " (Page " + pageNumber + " of " + (int) Math.ceil((double) inventoryMessage.size() / (double) Config.getChatMaxLines()) + ")";
 
         sender.sendMessage(message);
 
-        if(inventoryMessage.size() <= (pageNumber - 1) * Config.CHAT_MAX_LINES) {
+        if(inventoryMessage.size() <= (pageNumber - 1) * Config.getChatMaxLines()) {
             sender.sendMessage(String.format("%s does not have this many pages!", shop.getName()));
             return;
         }
 
-        int amount = (pageNumber > 0 ? (pageNumber - 1) * Config.CHAT_MAX_LINES : 0);
-        for (int i = amount; i < amount + Config.CHAT_MAX_LINES; i++) {
+        int amount = (pageNumber > 0 ? (pageNumber - 1) * Config.getChatMaxLines() : 0);
+        for (int i = amount; i < amount + Config.getChatMaxLines(); i++) {
             if (inventoryMessage.size() > i) {
                 sender.sendMessage(inventoryMessage.get(i));
             }

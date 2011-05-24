@@ -12,9 +12,11 @@ import net.centerleft.localshops.commands.ShopCommandExecutor;
 import net.centerleft.localshops.modules.economy.EconomyManager;
 import net.centerleft.localshops.modules.permission.PermissionManager;
 import net.centerleft.localshops.threads.NotificationThread;
+import net.centerleft.localshops.threads.ReportThread;
 
 import org.bukkit.ChatColor;
 import org.bukkit.World;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
@@ -32,6 +34,7 @@ public class LocalShops extends JavaPlugin {
     public ShopsPlayerListener playerListener = new ShopsPlayerListener(this);
     public ShopsBlockListener blockListener = new ShopsBlockListener(this);
     public ShopsEntityListener entityListener = new ShopsEntityListener(this);
+    public ShopsWorldListener worldListener = new ShopsWorldListener(this);
     private ShopManager shopManager = new ShopManager(this);
     public PluginDescriptionFile pdfFile = null;
     protected ReportThread reportThread = null;
@@ -52,7 +55,7 @@ public class LocalShops extends JavaPlugin {
     private Map<String, PlayerData> playerData; // synchronized player hash
     
     public LocalShops() {
-        Config.loadProperties();
+        Config.load();
     }
 
     public void onEnable() {
@@ -75,23 +78,34 @@ public class LocalShops extends JavaPlugin {
         pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Priority.Normal, this);
         pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Normal, this);
         pm.registerEvent(Event.Type.ENTITY_EXPLODE, entityListener, Priority.Normal, this);
+        pm.registerEvent(Event.Type.WORLD_LOAD, worldListener, Priority.Monitor, this);
+        
         
         // Register Commands
-        getCommand("shop").setExecutor(new ShopCommandExecutor(this));
+        CommandExecutor cmdExec = new ShopCommandExecutor(this);
+        getCommand("lshop").setExecutor(cmdExec);
+        getCommand("gshop").setExecutor(cmdExec);
+        getCommand("buy").setExecutor(cmdExec);
+        getCommand("sell").setExecutor(cmdExec);
+        getCommand("gbuy").setExecutor(cmdExec);
+        getCommand("gsell").setExecutor(cmdExec);
 
         // setup the file IO
-        folderDir = new File(Config.DIR_PATH);
+        folderDir = new File(Config.getDirPath());
         folderDir.mkdir();
-        shopsDir = new File(Config.DIR_PATH + Config.DIR_SHOPS_ACTIVE);
+        shopsDir = new File(Config.getDirShopsActivePath());
         shopsDir.mkdir();
 
         foundWorlds = getServer().getWorlds();
         // read the shops into memory
         getShopManager().loadShops(shopsDir);
+        for (World world : foundWorlds) {
+            //setupGlobalShop(world.getName());
+        }
 
         // update the console that we've started
         log.info(String.format("[%s] %s", pdfFile.getName(), "Loaded with " + getShopManager().getNumShops() + " shop(s)"));
-        log.info(String.format("[%s] %s", pdfFile.getName(), "Version " + pdfFile.getVersion() + " is enabled: " + Config.SRV_UUID.toString()));
+        log.info(String.format("[%s] %s", pdfFile.getName(), "Version " + pdfFile.getVersion() + " is enabled: " + Config.getSrvUuid().toString()));
 
         // check which shops players are inside
         for (Player player : this.getServer().getOnlinePlayers()) {
@@ -99,13 +113,13 @@ public class LocalShops extends JavaPlugin {
         }
         
         // Start reporting thread
-        if(Config.SRV_REPORT) {
-            reportThread = new ReportThread(this, Config.SRV_UUID, false);
+        if(Config.getSrvReport()) {
+            reportThread = new ReportThread(this);
             reportThread.start();
         }
         
         // Start Notification thread
-        if (Config.SHOP_TRANSACTION_NOTICE) {
+        if (Config.getShopTransactionNotice()) {
             notificationThread = new NotificationThread(this);
             notificationThread.start();
         }
@@ -129,10 +143,13 @@ public class LocalShops extends JavaPlugin {
         // Save all shops
         getShopManager().saveAllShops();
         
+        // Save config file
+        Config.save();
+        
         // Stop Reporting thread
-        if(Config.SRV_REPORT && reportThread != null && reportThread.isAlive()) {
+        if(Config.getSrvReport() && reportThread != null && reportThread.isAlive()) {
             try {
-                reportThread.setRun(false);
+                Config.setSrvReport(false);
                 reportThread.join(2000);
             } catch (InterruptedException e) {
                 // hmm, thread didn't die
@@ -141,9 +158,9 @@ public class LocalShops extends JavaPlugin {
         }
         
         // Stop notification thread
-        if(Config.SHOP_TRANSACTION_NOTICE && notificationThread != null && notificationThread.isAlive()) {
+        if(Config.getShopTransactionNotice() && notificationThread != null && notificationThread.isAlive()) {
             try {
-                notificationThread.setRun(false);
+                Config.setShopTransactionNotice(false);
                 notificationThread.join(2000);
             } catch (InterruptedException e) {
                 // hmm, thread didn't die

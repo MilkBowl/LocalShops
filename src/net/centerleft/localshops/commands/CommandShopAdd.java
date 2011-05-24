@@ -1,13 +1,11 @@
 package net.centerleft.localshops.commands;
 
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.centerleft.localshops.Config;
 import net.centerleft.localshops.ItemInfo;
 import net.centerleft.localshops.LocalShops;
-import net.centerleft.localshops.PlayerData;
 import net.centerleft.localshops.Search;
 import net.centerleft.localshops.Shop;
 
@@ -18,12 +16,12 @@ import org.bukkit.inventory.ItemStack;
 
 public class CommandShopAdd extends Command {
 
-    public CommandShopAdd(LocalShops plugin, String commandLabel, CommandSender sender, String command) {
-        super(plugin, commandLabel, sender, command);
+    public CommandShopAdd(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
+        super(plugin, commandLabel, sender, command, isGlobal);
     }
 
-    public CommandShopAdd(LocalShops plugin, String commandLabel, CommandSender sender, String[] command) {
-        super(plugin, commandLabel, sender, command);
+    public CommandShopAdd(LocalShops plugin, String commandLabel, CommandSender sender, String[] command, boolean isGlobal) {
+        super(plugin, commandLabel, sender, command, isGlobal);
     }
 
     public boolean process() {
@@ -33,13 +31,8 @@ public class CommandShopAdd extends Command {
         if (sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            PlayerData pData = plugin.getPlayerData().get(player.getName());
-
-            // Get Current Shop
-            UUID shopUuid = pData.getCurrentShop();
-            if (shopUuid != null) {
-                shop = plugin.getShopManager().getShop(shopUuid);
-            }
+            
+            shop = getCurrentShop(player);
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
                 return false;
@@ -70,9 +63,9 @@ public class CommandShopAdd extends Command {
                 int amount = itemStack.getAmount();
                 if(LocalShops.getItemList().isDurable(itemStack)) {
                     item = Search.itemById(itemStack.getTypeId());
-                    if (calcDurabilityPercentage(itemStack) > Config.ITEM_MAX_DAMAGE && Config.ITEM_MAX_DAMAGE != 0) {
+                    if (calcDurabilityPercentage(itemStack) > Config.getItemMaxDamage() && Config.getItemMaxDamage() != 0) {
                         sender.sendMessage(ChatColor.DARK_AQUA + "Your " + ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " is too damaged to add to stock!");
-                        sender.sendMessage(ChatColor.DARK_AQUA + "Items must be damanged less than " + ChatColor.WHITE + Config.ITEM_MAX_DAMAGE + "%");
+                        sender.sendMessage(ChatColor.DARK_AQUA + "Items must be damanged less than " + ChatColor.WHITE + Config.getItemMaxDamage() + "%");
                         return true;
                     }
                 } else {
@@ -97,9 +90,9 @@ public class CommandShopAdd extends Command {
                 ItemInfo item = null;
                 if(LocalShops.getItemList().isDurable(itemStack)) {
                     item = Search.itemById(itemStack.getTypeId());
-                    if (calcDurabilityPercentage(itemStack) > Config.ITEM_MAX_DAMAGE && Config.ITEM_MAX_DAMAGE != 0) {
+                    if (calcDurabilityPercentage(itemStack) > Config.getItemMaxDamage() && Config.getItemMaxDamage() != 0) {
                         sender.sendMessage(ChatColor.DARK_AQUA + "Your " + ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " is too damaged to add to stock!");
-                        sender.sendMessage(ChatColor.DARK_AQUA + "Items must be damanged less than " + ChatColor.WHITE + Config.ITEM_MAX_DAMAGE + "%");
+                        sender.sendMessage(ChatColor.DARK_AQUA + "Items must be damanged less than " + ChatColor.WHITE + Config.getItemMaxDamage() + "%");
                         return true;
                     }
                 } else {

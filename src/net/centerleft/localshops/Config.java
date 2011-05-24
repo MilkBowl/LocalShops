@@ -1,183 +1,696 @@
 package net.centerleft.localshops;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Config {
+    
+    // File paths
+    private static final String dirPath = "plugins/LocalShops/";
+    private static final String dirShopsActive = "shops/";
+    private static final String dirShopsBroken = "shops-broken/";
+    private static final String dirShopsConverted = "shops-converted/";
+    private static final String fileTransactionLog = "transactions.log";
+    
+    // Properties file
+    private static Properties properties = null;
 
     // Shop Size settings
-    public static int SHOP_SIZE_DEF_WIDTH = 5;
-    public static int SHOP_SIZE_DEF_HEIGHT = 3;
-    public static int SHOP_SIZE_MAX_WIDTH = 30;
-    public static int SHOP_SIZE_MAX_HEIGHT = 10;
+    private static int shopSizeDefWidth = 5;
+    private static int shopSizeDefHeight = 3;
+    private static int shopSizeMaxWidth = 30;
+    private static int shopSizeMaxHeight = 10;
     
     // Shop Charge settings
-    public static double SHOP_CHARGE_CREATE_COST = 100;
-    public static double SHOP_CHARGE_MOVE_COST = 10;
-    public static boolean SHOP_CHARGE_CREATE = true;
-    public static boolean SHOP_CHARGE_MOVE = true;
-    public static boolean SHOP_TRANSACTION_NOTICE = true;
-    public static int SHOP_TRANSACTION_NOTICE_TIMER = 300;
-    public static int SHOP_TRANSACTION_MAX_SIZE = 100;
+    private static double shopChargeCreateCost = 100;
+    private static double shopChargeMoveCost = 10;
+    private static boolean shopChargeCreate = true;
+    private static boolean shopChargeMove = true;
+    private static boolean shopTransactionNotice = true;
+    private static int shopTransactionNoticeTimer = 300;
+    private static int shopTransactionMaxSize = 100;
     
     // Find Settings
-    public static int FIND_MAX_DISTANCE = 150;
+    private static int findMaxDistance = 150;
     
     // Chat Settings
-    public static int CHAT_MAX_LINES = 7;
+    private static int chatMaxLines = 7;
     
     // Server Settings
-    public static boolean SRV_LOG_TRANSACTIONS = true;
-    public static boolean SRV_DEBUG = false;
-    public static UUID SRV_UUID = null;
-    public static boolean SRV_REPORT = true;
-    public static boolean GLOBAL_SHOP = false;
-    public static UUID GLOBAL_SHOP_UUID = null;
+    private static boolean srvLogTransactions = true;
+    private static boolean srvDebug = false;
+    private static UUID srvUuid = null;
+    private static boolean srvReport = true;
+    private static String srvReportUrl = "http://stats.cereal.sh/";
+    private static int srvReportInterval = 21600;
+    
+    // Global Shops
+    private static Map<String, UUID> globalShops = Collections.synchronizedMap(new HashMap<String, UUID>(2));
+    private static boolean globalShopsEnabled = false;
     
     // Player Settings
-    public static int PLAYER_MAX_SHOPS = -1;        // Anything < 0 = unlimited player shops.
+    private static int playerMaxShops = -1;        // Anything < 0 = unlimited player shops.
     
     // Item Settings
-    public static int ITEM_MAX_DAMAGE = 35;
+    private static int itemMaxDamage = 35;
     
     // UUID settings
-    public static int UUID_MIN_LENGTH = 1;
-    protected static List<String> UUID_LIST = Collections.synchronizedList(new ArrayList<String>());
+    private static int uuidMinLength = 1;
+    private static List<String> uuidList = Collections.synchronizedList(new ArrayList<String>());
     
-    // Other
-    public static final String DIR_PATH = "plugins/LocalShops/";
-    public static final String DIR_SHOPS_ACTIVE = "shops/";
-    public static final String DIR_SHOPS_BROKEN = "shops-broken/";
-    public static final String DIR_SHOPS_CONVERTED = "shops-converted/";
+    public static void save() {
+        properties.setProperty("charge-for-shop", String.valueOf(shopChargeCreate));
+        properties.setProperty("charge-for-shop", String.valueOf(shopChargeCreate));
+        properties.setProperty("shop-cost", String.valueOf(shopChargeCreateCost));
+        properties.setProperty("move-cost", String.valueOf(shopChargeMoveCost));
+        properties.setProperty("shop-width", String.valueOf(shopSizeDefWidth));
+        properties.setProperty("shop-height", String.valueOf(shopSizeDefHeight));
+        properties.setProperty("max-width", String.valueOf(shopSizeMaxWidth));
+        properties.setProperty("max-height", String.valueOf(shopSizeMaxHeight));
+        properties.setProperty("shop-transaction-notice", String.valueOf(shopTransactionNotice));
+        properties.setProperty("shop-notification-timer", String.valueOf(shopTransactionNoticeTimer));
+        properties.setProperty("shop-transaction-max-size", String.valueOf(shopTransactionMaxSize));
+        
+        properties.setProperty("shops-per-player", String.valueOf(playerMaxShops));
+        
+        properties.setProperty("max-damage", String.valueOf(itemMaxDamage));
+        
+        properties.setProperty("log-transactions", String.valueOf(srvLogTransactions));
+        properties.setProperty("uuid", UUID.randomUUID().toString());
+        properties.setProperty("report-stats", String.valueOf(srvReport));
+        properties.setProperty("debug", String.valueOf(srvDebug));
+        
+        properties.setProperty("find-max-distance", String.valueOf(findMaxDistance));
+        
+        properties.setProperty("global-shop", String.valueOf(globalShopsEnabled));
+        
+        properties.setProperty("chat-max-lines", String.valueOf(chatMaxLines));
+        
+        Iterator<String> it = globalShops.keySet().iterator();
+        while(it.hasNext()) {
+            String key = it.next();
+            UUID value = globalShops.get(key);
+            
+            properties.setProperty(String.format("%s-shop-UUID", key), value.toString());
+        }
+        
+        try {
+            properties.store(new FileOutputStream(Config.dirPath + "localshops.properties"), null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     
-    public static void loadProperties() {
-        PropertyHandler properties = new PropertyHandler(Config.DIR_PATH + "localshops.properties");
-        properties.load();
+    public static void load() {
+        new File(Config.dirPath).mkdir();
         
-        if (properties.keyExists("charge-for-shop")) {
-            SHOP_CHARGE_CREATE = properties.getBoolean("charge-for-shop");
-            SHOP_CHARGE_MOVE = properties.getBoolean("charge-for-shop");
+        boolean save = false;
+        properties = new Properties();
+        File file = new File(Config.dirPath + "localshops.properties");
+        if(file.exists()) {
+            try {
+                properties.load(new FileInputStream(Config.dirPath + "localshops.properties"));
+            } catch (IOException e) {
+                save = true;
+            }
         } else {
-            properties.setBoolean("charge-for-shop", SHOP_CHARGE_CREATE);
-        }
-
-        if (properties.keyExists("shop-cost")) {
-            SHOP_CHARGE_CREATE_COST = properties.getDouble("shop-cost");
-        } else {
-            properties.setDouble("shop-cost", SHOP_CHARGE_CREATE_COST);
-        }
-
-        if (properties.keyExists("move-cost")) {
-            SHOP_CHARGE_MOVE_COST = properties.getDouble("move-cost");
-        } else {
-            properties.setDouble("move-cost", SHOP_CHARGE_MOVE_COST);
-        }
-
-        if (properties.keyExists("shop-width")) {
-            SHOP_SIZE_DEF_WIDTH = properties.getInt("shop-width");
-        } else {
-            properties.setLong("shop-width", SHOP_SIZE_DEF_WIDTH);
-        }
-
-        if (properties.keyExists("shop-height")) {
-            SHOP_SIZE_DEF_HEIGHT = properties.getInt("shop-height");
-        } else {
-            properties.setLong("shop-height", SHOP_SIZE_DEF_HEIGHT);
-        }
-
-        if (properties.keyExists("max-width")) {
-            SHOP_SIZE_MAX_WIDTH = properties.getInt("max-width");
-        } else {
-            properties.setLong("max-width", SHOP_SIZE_MAX_WIDTH);
-        }
-
-        if (properties.keyExists("max-height")) {
-            SHOP_SIZE_MAX_HEIGHT = properties.getInt("max-height");
-        } else {
-            properties.setLong("max-height", SHOP_SIZE_MAX_HEIGHT);
-        }
-        if (properties.keyExists("shops-per-player")) {
-            PLAYER_MAX_SHOPS = properties.getInt("shops-per-player");
-        } else {
-            properties.setInt("shops-per-player", PLAYER_MAX_SHOPS);
-        }
-
-        if (properties.keyExists("log-transactions")) {
-            SRV_LOG_TRANSACTIONS = properties.getBoolean("log-transactions");
-        } else {
-            properties.setBoolean("log-transactions", SRV_LOG_TRANSACTIONS);
-        }
-
-        if (properties.keyExists("max-damage")) {
-            ITEM_MAX_DAMAGE = properties.getInt("max-damage");
-            if (ITEM_MAX_DAMAGE < 0)
-                ITEM_MAX_DAMAGE = 0;
-        } else {
-            properties.setInt("max-damage", ITEM_MAX_DAMAGE);
+            save = true;
         }
         
-        if(properties.keyExists("uuid")) {
-            SRV_UUID = properties.getUuid("uuid");
-        } else {
-            SRV_UUID = UUID.randomUUID();
-            properties.setUuid("uuid", SRV_UUID);
+        shopChargeCreate = Boolean.parseBoolean(properties.getProperty("charge-for-shop", String.valueOf(shopChargeCreate)));
+        shopChargeCreate = Boolean.parseBoolean(properties.getProperty("charge-for-shop", String.valueOf(shopChargeCreate)));
+        shopChargeCreateCost = Double.parseDouble(properties.getProperty("shop-cost", String.valueOf(shopChargeCreateCost)));
+        shopChargeMoveCost = Double.parseDouble(properties.getProperty("move-cost", String.valueOf(shopChargeMoveCost)));
+        shopSizeDefWidth = Integer.parseInt(properties.getProperty("shop-width", String.valueOf(shopSizeDefWidth)));
+        shopSizeDefHeight = Integer.parseInt(properties.getProperty("shop-height", String.valueOf(shopSizeDefHeight)));
+        shopSizeMaxWidth = Integer.parseInt(properties.getProperty("max-width", String.valueOf(shopSizeMaxWidth)));
+        shopSizeMaxHeight = Integer.parseInt(properties.getProperty("max-height", String.valueOf(shopSizeMaxHeight)));
+        shopTransactionNotice = Boolean.parseBoolean(properties.getProperty("shop-transaction-notice", String.valueOf(shopTransactionNotice)));
+        shopTransactionNoticeTimer = Integer.parseInt(properties.getProperty("shop-notification-timer", String.valueOf(shopTransactionNoticeTimer)));
+        shopTransactionMaxSize = Integer.parseInt(properties.getProperty("shop-transaction-max-size", String.valueOf(shopTransactionMaxSize)));
+        
+        playerMaxShops = Integer.parseInt(properties.getProperty("shops-per-player", String.valueOf(playerMaxShops)));
+        
+        itemMaxDamage = Integer.parseInt(properties.getProperty("max-damage", String.valueOf(itemMaxDamage)));
+        if(itemMaxDamage < 0) {
+            itemMaxDamage = 0;
         }
         
-        if(properties.keyExists("report-stats")) {
-            SRV_REPORT = properties.getBoolean("report-stats");
-        } else {
-            properties.setBoolean("report-stats", SRV_REPORT);
+        srvLogTransactions = Boolean.parseBoolean(properties.getProperty("log-transactions", String.valueOf(srvLogTransactions)));
+        srvUuid = UUID.fromString(properties.getProperty("uuid", UUID.randomUUID().toString()));
+        srvReport = Boolean.parseBoolean(properties.getProperty("report-stats", String.valueOf(srvReport)));
+        srvDebug = Boolean.parseBoolean(properties.getProperty("debug", String.valueOf(srvDebug)));
+        
+        
+        findMaxDistance = Integer.parseInt(properties.getProperty("find-max-distance", String.valueOf(findMaxDistance)));
+        
+        globalShopsEnabled = Boolean.parseBoolean(properties.getProperty("global-shop", String.valueOf(globalShopsEnabled)));
+        
+        chatMaxLines = Integer.parseInt(properties.getProperty("chat-max-lines", String.valueOf(chatMaxLines)));
+        
+        Pattern pattern = Pattern.compile("(?i)(.*)-shop-UUID$");
+        Iterator<Object> it = properties.keySet().iterator();
+        while(it.hasNext()) {
+            Object o = it.next();
+            if(o instanceof String) {
+                String key = (String) o;
+                Matcher matcher = pattern.matcher(key);
+                if(matcher.find()) {
+                    // This is a global shop key
+                    String world = matcher.group(1);
+                    UUID uuid = UUID.fromString(properties.getProperty(key));
+                    
+                    globalShops.put(world, uuid);
+                }
+            } else {
+                // gtfo
+                continue;
+            }
         }
         
-        if(properties.keyExists("debug")) {
-            SRV_DEBUG = properties.getBoolean("debug");
-        } else {
-            properties.setBoolean("debug", SRV_DEBUG);
-        }
-        
-        if(properties.keyExists("find-max-distance")) {
-            FIND_MAX_DISTANCE = properties.getInt("find-max-distance");
-        } else {
-            properties.setInt("find-max-distance", FIND_MAX_DISTANCE);
-        }
-        
-        if(properties.keyExists("shop-transaction-notice")) {
-            SHOP_TRANSACTION_NOTICE = properties.getBoolean("shop-notification");
-        } else {
-            properties.setBoolean("shop-notification", SHOP_TRANSACTION_NOTICE);
-        }
-        
-        if(properties.keyExists("shop-transactin-notice-timer")) {
-            SHOP_TRANSACTION_NOTICE_TIMER = properties.getInt("shop-notification-timer");
-        } else {
-            properties.setInt("shop-notification-timer", SHOP_TRANSACTION_NOTICE_TIMER);
-        }
-        
-        if(properties.keyExists("shop-transaction-max-size")) {
-            SHOP_TRANSACTION_MAX_SIZE = properties.getInt("shop-transaction-max-size");
-        } else {
-            properties.setInt("shop-transaction-max-size", SHOP_TRANSACTION_MAX_SIZE);
-        }
-        
-        if(properties.keyExists("global-shop")) {
-            GLOBAL_SHOP = properties.getBoolean("global-shop");
-        } else {
-            properties.setBoolean("global-shop", GLOBAL_SHOP);
-        }
+        /**
+         * Not sure if this is really used, need to discuss with Sleaker on his design
         if(properties.keyExists("global-shop-uuid")) {
             GLOBAL_SHOP_UUID = properties.getUuid("global-shop-uuid");
         } else {
             GLOBAL_SHOP_UUID = UUID.randomUUID();
             properties.setUuid("global-shop-uuid", GLOBAL_SHOP_UUID);
         }
-        if(properties.keyExists("chat-max-lines")) {
-            CHAT_MAX_LINES = properties.getInt("chat-max-lines");
-        } else {
-            properties.setInt("chat-max-lines", CHAT_MAX_LINES);
-        }
+        */
         
-        properties.save();
+        if(save) {
+            save();
+        }
+    }
+    
+    /**
+     * Get shop default width in blocks
+     * @return default width
+     */
+    public static int getShopSizeDefWidth() { return shopSizeDefWidth; }
+    
+    /**
+     * Get shop default height in blocks
+     * @return default height
+     */
+    public static int getShopSizeDefHeight() { return shopSizeDefHeight; }
+    
+    /**
+     * Get shop maximum width in blocks
+     * @return maximum width
+     */
+    public static int getShopSizeMaxWidth() { return shopSizeMaxWidth; }
+    
+    /**
+     * Get shop maximum height in blocks
+     * @return maximum height
+     */
+    public static int getShopSizeMaxHeight() { return shopSizeMaxHeight; }
+    
+    /**
+     * Set shop default width in blocks
+     * @param size blocks
+     */
+    public static void setShopSizeDefWidth(int size) {
+        shopSizeDefWidth = size;
+    }
+    
+    /**
+     * Set shop default height in blocks
+     * @param size blocks
+     */
+    public static void setShopSizeDefHeight(int size) {
+        shopSizeDefHeight = size;
+    }
+    
+    /**
+     * Set shop maximum width in blocks
+     * @param size blocks
+     */
+    public static void setShopSizeMaxWidth(int size) {
+        shopSizeMaxWidth = size;
+    }
+    
+    /**
+     * Set shop maximum height in blocks
+     * @param size blocks
+     */
+    public static void setShopSizeMaxHeight(int size) {
+        shopSizeMaxHeight = size;
+    }
+    
+    /**
+     * Get main directory path
+     * 
+     * @return
+     */
+    public static String getDirPath() {
+        return dirPath;
+    }
+
+    /**
+     * Get active shops path
+     * 
+     * @return
+     */
+    public static String getDirShopsActivePath() {
+        return dirPath + dirShopsActive;
+    }
+
+    /**
+     * Get broken shops path
+     * 
+     * @return
+     */
+    public static String getDirShopsBrokenPath() {
+        return dirPath + dirShopsBroken;
+    }
+
+    /**
+     * Get converted shops path
+     * 
+     * @return
+     */
+    public static String getDirShopsConvertedPath() {
+        return dirPath + dirShopsConverted;
+    }
+    
+    /**
+     * Get transaction log path
+     * @return
+     */
+    public static String getFileTransactionLog() {
+        return dirPath + fileTransactionLog;
+    }
+
+    /**
+     * Get shop create charge value, check ShopChargeCreate first
+     * @return
+     */
+    public static double getShopChargeCreateCost() {
+        return shopChargeCreateCost;
+    }
+
+    /**
+     * Get shop move charge value, check ShopChargeMove first
+     * @return
+     */
+    public static double getShopChargeMoveCost() {
+        return shopChargeMoveCost;
+    }
+
+    /**
+     * Get if charge for shop create
+     * @return
+     */
+    public static boolean getShopChargeCreate() {
+        return shopChargeCreate;
+    }
+
+    /**
+     * Get if charge for shop move
+     * @return
+     */
+    public static boolean getShopChargeMove() {
+        return shopChargeMove;
+    }
+
+    /**
+     * Get if notify shop owners on transactions
+     * @return
+     */
+    public static boolean getShopTransactionNotice() {
+        return shopTransactionNotice;
+    }
+
+    /**
+     * Get transaction notice timer in seconds
+     * @return
+     */
+    public static int getShopTransactionNoticeTimer() {
+        return shopTransactionNoticeTimer;
+    }
+
+    /**
+     * Get shop transaction maximum size
+     * @return
+     */
+    public static int getShopTransactionMaxSize() {
+        return shopTransactionMaxSize;
+    }
+
+    /**
+     * Set shop charge cost
+     * @param cost
+     */
+    public static void setShopChargeCreateCost(double cost) {
+        shopChargeCreateCost = cost;
+    }
+
+    /**
+     * Set shop move cost
+     * @param cost
+     */
+    public static void setShopChargeMoveCost(double cost) {
+        shopChargeMoveCost = cost;
+    }
+    
+    /**
+     * Set if shop charges for create
+     * @param charge
+     */
+    public static void setShopChargeCreate(boolean charge) {
+        shopChargeCreate = charge;
+    }
+    
+    /**
+     * Set if shop charges for move
+     * @param charge
+     */
+    public static void setShopChargeMove(boolean charge) {
+        shopChargeMove = charge;
+    }
+    
+    /**
+     * Set if server notifies shop owners of transactions
+     * @param notify
+     */
+    public static void setShopTransactionNotice(boolean notify) {
+        shopTransactionNotice = notify;
+    }
+    
+    /**
+     * Set notification interval in seconds
+     * @param interval
+     */
+    public static void setShopTransactionNoticeTimer(int interval) {
+        shopTransactionNoticeTimer = interval;
+    }
+    
+    /**
+     * Set shop maximum transaction size
+     * Requires plugin to be reloaded to take effect!
+     * @param size
+     */
+    public static void setShopTransactionMaxSize(int size) {
+        shopTransactionMaxSize = size;
+    }
+    
+    /**
+     * Get maximum find distance in blocks, 0 is disabled, negative is unlimited
+     * @return
+     */
+    public static int getFindMaxDistance() {
+        return findMaxDistance;
+    }
+    
+    /**
+     * Set maximum find distance in blocks, 0 is disabled, negative is unlimited
+     * @param distance
+     */
+    public static void setFindMaxDistance(int distance) {
+        findMaxDistance = distance;
+    }
+    
+    /**
+     * Get maximum number of lines per page on chat
+     * @return
+     */
+    public static int getChatMaxLines() {
+        return chatMaxLines;
+    }
+    
+    /**
+     * Set maximum number of lines per page on chat
+     * @param lines
+     */
+    public static void setChatMaxLines(int lines) {
+        chatMaxLines = lines;
+    }
+    
+    /**
+     * Get server log transactions setting
+     * @return
+     */
+    public static boolean getSrvLogTransactions() {
+        return srvLogTransactions;
+    }
+    
+    /**
+     * Get server debug setting
+     * @return
+     */
+    public static boolean getSrvDebug() {
+        return srvDebug;
+    }
+    
+    /**
+     * Get server UUID
+     * @return
+     */
+    public static UUID getSrvUuid() {
+        return srvUuid;
+    }
+    
+    /**
+     * Get server report setting
+     * @return
+     */
+    public static boolean getSrvReport() {
+        return srvReport;
+    }
+    
+    /**
+     * Set if server logs transactions
+     * @param log
+     */
+    public static void setSrvLogTransactions(boolean log) {
+        srvLogTransactions = log;
+    }
+    
+    /**
+     * Set if server provides debug output to the logger (console)
+     * @param debug
+     */
+    public static void setSrvDebug(boolean debug) {
+        srvDebug = debug;
+    }
+    
+    @Deprecated
+    public static void setSrvUuid(UUID uuid) {
+        // do nothing, intentionally unimplemented as is read-only parameter!
+    }
+    
+    /**
+     * Set if server sends anonymous reports to the developers
+     * @param report
+     */
+    public static void setSrvReport(boolean report) {
+        srvReport = report;
+    }
+    
+    /**
+     * Get reporting thread destination url
+     * @return
+     */
+    public static String getSrvReportUrl() {
+        return srvReportUrl;
+    }
+    
+    /**
+     * Set reporting thread destination url (including http://)
+     * @param url
+     */
+    public static void setSrvReportUrl(String url) {
+        srvReportUrl = url;
+    }
+    
+    /**
+     * Get reporting thread interval
+     * @return
+     */
+    public static int getSrvReportInterval() {
+        return srvReportInterval;
+    }
+    
+    /**
+     * Set reporting thread interval
+     * @param interval
+     */
+    public static void setSrvReportInterval(int interval) {
+        srvReportInterval = interval;
+    }
+    
+    /**
+     * Get global shop UUID
+     * @param worldName World name
+     * @return Shop Unique ID
+     */
+    public static UUID getGlobalShopUuid(String worldName) {
+        return globalShops.get(worldName);
+    }
+    
+    /**
+     * Add world shop
+     * @param worldName World name
+     * @param uuid Shop Unique ID
+     */
+    public static void globalShopsAdd(String worldName, UUID uuid) {
+        globalShops.put(worldName, uuid);
+    }
+    
+    /**
+     * Remove world shop
+     * @param worldName World name
+     */
+    public static void globalShopsRemove(String worldName) {
+        globalShops.remove(worldName);
+    }
+    
+    /**
+     * Does Global Shops contain a world?
+     */
+    public static boolean globalShopsContainsKey(String worldName) {
+        return globalShops.containsKey(worldName);
+    }
+    
+    /**
+     * Get global shops setting
+     * @return
+     */
+    public static boolean getGlobalShopsEnabled() {
+        return globalShopsEnabled;
+    }
+    
+    /**
+     * Set global shops setting
+     * @param enabled
+     */
+    public static void setGlobalShopsEnabled(boolean enabled) {
+        globalShopsEnabled = enabled;
+    }
+    
+    /**
+     * Get maximum number of shops per player
+     * @return
+     */
+    public static int getPlayerMaxShops() {
+        return playerMaxShops;
+    }
+    
+    /**
+     * Set maximum number of shops per player
+     * @param shops
+     */
+    public static void setPlayerMaxShops(int shops) {
+        playerMaxShops = shops;
+    }
+    
+    /**
+     * Get maximum item damage (percent)
+     * @return
+     */
+    public static int getItemMaxDamage() {
+        return itemMaxDamage;
+    }
+    
+    /**
+     * Set maximum item damage (percent)
+     * @param damage
+     */
+    public static void setItemMaxDamage(int damage) {
+        if(damage >= 0 && damage <= 100) {
+            itemMaxDamage = damage;
+        } else if(damage < 0) {
+            itemMaxDamage = 0;
+        } else if(damage > 100) {
+            itemMaxDamage = 100;
+        }
+    }
+    
+    /**
+     * Get UUID minimum length
+     * @return
+     */
+    public static int getUuidMinLength() {
+        return uuidMinLength;
+    }
+    
+    /**
+     * Increment UUID minimum length
+     */
+    public static void incrementUuidMinLength() {
+        uuidMinLength++;
+    }
+    
+    /**
+     * Decrement UUID minimum length
+     */
+    public static void decrementUuidMinLength() {
+        uuidMinLength--;
+    }
+    
+    /**
+     * Set UUID minimum length
+     * @param length
+     */
+    public static void setUuidMinLength(int length) {
+        uuidMinLength = length;
+    }
+    
+    /**
+     * Get UUID List
+     * @return
+     */
+    public static List<String> getUuidList() {
+        return uuidList;
+    }
+    
+    /**
+     * Get if UUID list contains an short UUID (string)
+     * @param uuid
+     * @return
+     */
+    public static boolean uuidListContains(String uuid) {
+        if(uuidList.contains(uuid)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Add short UUID to UUID List
+     * @param uuid
+     */
+    public static void addUuidList(String uuid) {
+        uuidList.add(uuid);
+    }
+    
+    /**
+     * Remove short UUID from UUID List
+     * @param uuid
+     */
+    public static void removeUuidList(String uuid) {
+        uuidList.remove(uuid);
+    }
+    
+    /**
+     * Empty UUID List
+     */
+    public static void clearUuidList() {
+        uuidList.clear();
     }
 }

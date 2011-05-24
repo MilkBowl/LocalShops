@@ -1,10 +1,12 @@
 package net.centerleft.localshops;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -28,15 +30,16 @@ public class Shop implements Comparator<Shop> {
     private double minBalance = 0;
     private ArrayBlockingQueue<Transaction> transactions;
     private boolean notification = true;
-    private HashMap<Location, String> signMap = null;
     private int locationLowX, locationHighX, locationLowY, locationHighY, locationLowZ, locationHighZ;
+    private Map<Location, String> signMap = Collections.synchronizedMap(new HashMap<Location, String>());
+    private boolean global = false;
     
     // Logging
     private static final Logger log = Logger.getLogger("Minecraft");    
 
     public Shop(UUID uuid) {
         this.uuid = uuid;
-        transactions = new ArrayBlockingQueue<Transaction>(Config.SHOP_TRANSACTION_MAX_SIZE);
+        transactions = new ArrayBlockingQueue<Transaction>(Config.getShopTransactionMaxSize());
     }
 
     public UUID getUuid() {
@@ -180,7 +183,7 @@ public class Shop implements Comparator<Shop> {
     
     public String getShortUuidString() {
         String sUuid = uuid.toString();
-        return sUuid.substring(sUuid.length() - Config.UUID_MIN_LENGTH);
+        return sUuid.substring(sUuid.length() - Config.getUuidMinLength());
     }
     
     /**
@@ -368,11 +371,20 @@ public class Shop implements Comparator<Shop> {
         return o1.getUuid().compareTo(o2.uuid);
     }
 
-    public void setSignMap(HashMap<Location, String> signList) {
-        this.signMap = signList;
+
+    public void setGlobal(boolean global) {
+        this.global = global;
     }
 
-    public HashMap<Location, String> getSignMap() {
+    public boolean isGlobal() {
+        return global;
+    }
+
+    public void setSignMap(Map<Location, String> signMap) {
+        this.signMap = signMap;
+    }
+
+    public Map<Location, String> getSignMap() {
         return signMap;
     }
     

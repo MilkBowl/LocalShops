@@ -17,19 +17,14 @@ import org.bukkit.entity.Player;
 public class NotificationThread extends Thread {
     
     private LocalShops plugin;
-    private boolean run = true;
     protected final Logger log = Logger.getLogger("Minecraft");
     
     public NotificationThread(LocalShops plugin) {
         this.plugin = plugin;
     }
-    
-    public void setRun(boolean run) {
-        this.run = run;
-    }
 
     public void run() {
-        log.info(String.format("[%s] Starting NotificationThread with Timer of %d seconds", plugin.getDescription().getName(), Config.SHOP_TRANSACTION_NOTICE_TIMER));
+        log.info(String.format("[%s] Starting NotificationThread with Timer of %d seconds", plugin.getDescription().getName(), Config.getShopTransactionNoticeTimer()));
         
         while(true) {
             List<Shop> shops = plugin.getShopManager().getAllShops();
@@ -158,8 +153,8 @@ public class NotificationThread extends Thread {
             }
             
             try {
-                for(int i = 0; i < Config.SHOP_TRANSACTION_NOTICE_TIMER; i++) {
-                    if(!run) {
+                for(int i = 0; i < Config.getShopTransactionNoticeTimer(); i++) {
+                    if(!Config.getShopTransactionNotice()) {
                         break;
                     }
                     Thread.sleep(1000);
@@ -169,7 +164,7 @@ public class NotificationThread extends Thread {
                 return;
             }
             
-            if(!run) {
+            if(!Config.getShopTransactionNotice()) {
                 break;
             }
         }

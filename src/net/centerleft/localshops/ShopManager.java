@@ -99,15 +99,15 @@ public class ShopManager {
     }
 
     public void addShop(Shop shop) {
-        if(Config.SRV_DEBUG) {
+        if(Config.getSrvDebug()) {
             log.info(String.format("[%s] Adding %s", plugin.pdfFile.getName(), shop.toString()));
         }
         String uuid = shop.getUuid().toString();
         while (true) {
-            if (Config.UUID_LIST.contains(uuid.substring(uuid.length() - Config.UUID_MIN_LENGTH))) {
+            if (Config.uuidListContains(uuid.substring(uuid.length() - Config.getUuidMinLength()))) {
                 calcShortUuidSize();
             } else {
-                Config.UUID_LIST.add(uuid.substring(uuid.length() - Config.UUID_MIN_LENGTH));
+                Config.addUuidList(uuid.substring(uuid.length() - Config.getUuidMinLength()));
                 break;
             }
         }
@@ -115,19 +115,19 @@ public class ShopManager {
     }
 
     private void calcShortUuidSize() {
-        if(Config.UUID_MIN_LENGTH < 36) {
-            Config.UUID_MIN_LENGTH++;
+        if(Config.getUuidMinLength() < 36) {
+            Config.incrementUuidMinLength();
         }
-        Config.UUID_LIST.clear();
+        Config.clearUuidList();
         Iterator<Shop> it = shops.values().iterator();
         while (it.hasNext()) {
             Shop cShop = it.next();
             String cUuid = cShop.getUuid().toString();
-            String sUuid = cUuid.substring(cUuid.length() - Config.UUID_MIN_LENGTH);
-            if (Config.UUID_LIST.contains(sUuid)) {
+            String sUuid = cUuid.substring(cUuid.length() - Config.getUuidMinLength());
+            if (Config.uuidListContains(sUuid)) {
                 calcShortUuidSize();
             } else {
-                Config.UUID_LIST.add(sUuid);
+                Config.addUuidList(sUuid);
             }
         }
     }
@@ -151,14 +151,14 @@ public class ShopManager {
     }
 
     public void loadShops(File shopsDir) {
-        if(Config.SRV_DEBUG) {
+        if(Config.getSrvDebug()) {
             log.info(String.format("[%s] %s.%s", plugin.pdfFile.getName(), "ShopData", "loadShops(File shopsDir)"));
         }
 
         File[] shopsList = shopsDir.listFiles();
         for (File file : shopsList) {
 
-            if(Config.SRV_DEBUG) {
+            if(Config.getSrvDebug()) {
                 log.info(String.format("[%s] Loading Shop file \"%s\".", plugin.pdfFile.getName(), file.toString()));
             }
             Shop shop = null;
@@ -178,10 +178,14 @@ public class ShopManager {
 
             // Check if not null, and add to world
             if (shop != null) {
-                if(Config.SRV_DEBUG) {
+                if(Config.getSrvDebug()) {
                     log.info(String.format("[%s] Loaded %s", plugin.pdfFile.getName(), shop.toString()));
                 }
-                plugin.getShopManager().addShop(shop);
+                if (shop.isGlobal()) {
+                    Config.globalShopsAdd(shop.getWorld(), shop.getUuid());
+                } else {
+                    plugin.getShopManager().addShop(shop);
+                }
             } else {
                 log.warning(String.format("[%s] Failed to load Shop file: \"%s\"", plugin.pdfFile.getName(), file.getName()));
             }
@@ -190,7 +194,7 @@ public class ShopManager {
     }
 
     public Shop convertShopOldFormat(File file) {
-        if(Config.SRV_DEBUG) {
+        if(Config.getSrvDebug()) {
             log.info(String.format("[%s] %s.%s", plugin.pdfFile.getName(), "ShopData", "loadShopOldFormat(File file)"));
         }
 
@@ -205,7 +209,7 @@ public class ShopManager {
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line = br.readLine();
             while (line != null) {
-                if(Config.SRV_DEBUG) {
+                if(Config.getSrvDebug()) {
                     log.info(String.format("[%s] %s", plugin.pdfFile.getName(), line));
                 }
 
@@ -350,7 +354,7 @@ public class ShopManager {
 
             br.close();
 
-            File dir = new File(Config.DIR_PATH + Config.DIR_SHOPS_CONVERTED);
+            File dir = new File(Config.getDirShopsConvertedPath());
             dir.mkdir();
             if (file.renameTo(new File(dir, file.getName()))) {
                 file.delete();
@@ -394,6 +398,10 @@ public class ShopManager {
     public Shop loadShop(File file) throws Exception {
         HashMap<Location, String> signMap = new HashMap<Location, String>(4);
 
+        Shop shop = null;
+        int[] locationA = null;
+        int[] locationB = null;
+
         SortedProperties props = new SortedProperties();
         try {
             props.load(new FileInputStream(file));
@@ -409,41 +417,45 @@ public class ShopManager {
         boolean unlimitedStock = Boolean.parseBoolean(props.getProperty("unlimited-stock", "false"));
         double minBalance = Double.parseDouble((props.getProperty("min-balance", "0.0")));
         boolean notification = Boolean.parseBoolean(props.getProperty("notification", "true"));
+        boolean global = Boolean.parseBoolean(props.getProperty("global", "false"));
 
-        // Location - locationB=-88, 50, -127
-        int[] locationA;
-        int[] locationB;
-        String world;
-        try {
-            locationA = convertStringArraytoIntArray(props.getProperty("locationA").split(", "));
-            locationB = convertStringArraytoIntArray(props.getProperty("locationB").split(", "));
-            world = props.getProperty("world", "world1");
-        } catch (Exception e) {
-            if(isolateBrokenShopFile(file)) {
-                log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.toString()));
-            } else {
-                log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Error moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.toString()));
+        if (!global) {
+            // Location - locationB=-88, 50, -127
+            try {
+                locationA = convertStringArraytoIntArray(props.getProperty("locationA").split(", "));
+                locationB = convertStringArraytoIntArray(props.getProperty("locationB").split(", "));
+
+            } catch (Exception e) {
+                if(isolateBrokenShopFile(file)) {
+                    log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.toString()));
+                } else {
+                    log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Error moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.toString()));
+                }
+                return null;
             }
-            return null;
         }
 
         // People
         String owner = props.getProperty("owner", "");
         String[] managers = props.getProperty("managers", "").replaceAll("[\\[\\]]", "").split(", ");
         String creator = props.getProperty("creator", "LocalShops");
+        String world = props.getProperty("world", "world1");
 
-        Shop shop = new Shop(uuid);
+        shop = new Shop(uuid);
         shop.setName(name);
         shop.setUnlimitedMoney(unlimitedMoney);
         shop.setUnlimitedStock(unlimitedStock);
-        shop.setLocationA(new ShopLocation(locationA));
-        shop.setLocationB(new ShopLocation(locationB));
-        shop.setWorld(world);
         shop.setOwner(owner);
         shop.setManagers(managers);
         shop.setCreator(creator);
         shop.setNotification(notification);
+        shop.setWorld(world);
+        if (!global) {
+            shop.setLocationA(new ShopLocation(locationA));
+            shop.setLocationB(new ShopLocation(locationB));
+        } else {
 
+        }
         // Make sure minimum balance isn't negative
         if (minBalance < 0) {
             shop.setMinBalance(0);
@@ -507,10 +519,10 @@ public class ShopManager {
             Location signLoc = iter.next();
             //Load the chunk so we don't try getting blocks that are non-existent
             signWorld.loadChunk(plugin.getServer().getWorld(world).getChunkAt(signLoc));
-            
+
             log.info("[LocalShops] - Got Chunk: " + signWorld.isChunkLoaded(signWorld.getChunkAt(signLoc)));
             //Check if the block is not a sign.
-            
+
             if ( signWorld.getBlockAt(signLoc).getType() != Material.WALL_SIGN && signWorld.getBlockAt(signLoc).getType() != Material.SIGN_POST ) {
                 iter.remove();
                 continue;
@@ -519,33 +531,34 @@ public class ShopManager {
                 if (!(shop.containsItem(item))) {
                     continue;
                 } else {
-                   //Get the lines for future use?
-                   String signLines[] = ((Sign) signLoc.getBlock().getState()).getLines();
-                   signLines[0] = item.name;
-                   signLines[1] = "Buy: ";
-                   signLines[2] = "Sell: ";
-                   signLines[3] = "";
-                   
-                   if (shop.getItem(item.name).getBuyPrice() == 0) {
-                       signLines[1] += "-";
-                   } else {
-                       signLines[1] += shop.getItem(item.name).getBuyPrice();
-                   }
-                   if (shop.getItem(item.name).getSellPrice() == 0) {
-                       signLines[2] += "-";
-                   } else {
-                       signLines[2] += shop.getItem(item.name).getSellPrice();
-                   }
-                   //Set the lines
-                   ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[0]);
-                   ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[1]);
-                   ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[2]);
-                   ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[3]);
+                    //Get the lines for future use?
+                    String signLines[] = ((Sign) signLoc.getBlock().getState()).getLines();
+                    signLines[0] = item.name;
+                    signLines[1] = "Buy: ";
+                    signLines[2] = "Sell: ";
+                    signLines[3] = "";
+
+                    if (shop.getItem(item.name).getBuyPrice() == 0) {
+                        signLines[1] += "-";
+                    } else {
+                        signLines[1] += shop.getItem(item.name).getBuyPrice();
+                    }
+                    if (shop.getItem(item.name).getSellPrice() == 0) {
+                        signLines[2] += "-";
+                    } else {
+                        signLines[2] += shop.getItem(item.name).getSellPrice();
+                    }
+                    //Set the lines
+                    ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[0]);
+                    ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[1]);
+                    ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[2]);
+                    ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[3]);
                 }
             }
         }
+
         //Set the sign mapping for the shop
-        shop.setSignMap(signMap);
+        shop.getSignMap().putAll(signMap);
 
         // Sanity Checks
         // Check that filename == UUID from file
@@ -563,7 +576,7 @@ public class ShopManager {
     }
 
     public boolean isolateBrokenShopFile(File file) {
-        File dir = new File(Config.DIR_PATH + Config.DIR_SHOPS_BROKEN);
+        File dir = new File(Config.getDirShopsBrokenPath());
         dir.mkdir();
         if (file.renameTo(new File(dir, file.getName()))) {
             file.delete();
@@ -598,10 +611,13 @@ public class ShopManager {
         props.setProperty("notification", String.valueOf(shop.getNotification()));
 
         // Location
-        props.setProperty("locationA", shop.getLocationA().toString());
-        props.setProperty("locationB", shop.getLocationB().toString());
+        if (!shop.isGlobal() ) {
+            props.setProperty("locationA", shop.getLocationA().toString());
+            props.setProperty("locationB", shop.getLocationB().toString());
+        }
+        
         props.setProperty("world", shop.getWorld());
-
+        
         // People
         props.setProperty("owner", shop.getOwner());
         props.setProperty("managers", Search.join(shop.getManagers(), ", "));
@@ -629,7 +645,7 @@ public class ShopManager {
             props.setProperty(String.format("sign:%d,%d,%d", x, y, z), shop.getSignMap().get(signLoc));
         }
 
-        String fileName = Config.DIR_PATH + Config.DIR_SHOPS_ACTIVE + shop.getUuid().toString() + ".shop";
+        String fileName = Config.getDirShopsActivePath() + shop.getUuid().toString() + ".shop";
         try {
             props.store(new FileOutputStream(fileName), "LocalShops Config Version 2.0");
         } catch (IOException e) {
@@ -641,12 +657,25 @@ public class ShopManager {
 
     public boolean deleteShop(Shop shop) {
         String shortUuid = shop.getShortUuidString();
+        
+        if (shop.isGlobal()) {
+            if (Config.globalShopsContainsKey(shop.getWorld())) {
+                /**
+                Config.GLOBAL_SHOPS.remove(shop.getWorld());
+                LocalShops.getProperties().removeKey(shop.getWorld() + "-shop-UUID");
+                LocalShops.getProperties().save();
+                */
+                return true;
+            } else {
+                return false;
+            }
+        }
 
         // remove string from uuid short list
-        Config.UUID_LIST.remove(shortUuid);
+        Config.removeUuidList(shortUuid);
 
         // delete the file from the directory
-        String filePath = Config.DIR_PATH + Config.DIR_SHOPS_ACTIVE + shop.getUuid() + ".shop";
+        String filePath = Config.getDirShopsActivePath() + shop.getUuid() + ".shop";
         File shopFile = new File(filePath);
         shopFile.delete();
 
@@ -668,10 +697,10 @@ public class ShopManager {
     }
 
     public boolean logTransaciton(String playerName, String shopName, String action, String itemName, int numberOfItems, int startNumberOfItems, int endNumberOfItems, double moneyTransfered, double startingbalance, double endingbalance) {
-        if (!Config.SRV_LOG_TRANSACTIONS)
+        if (!Config.getSrvLogTransactions())
             return false;
 
-        String filePath = Config.DIR_PATH + "transactions.log";
+        String filePath = Config.getFileTransactionLog();
 
         File logFile = new File(filePath);
         try {

@@ -62,7 +62,7 @@ public class PlayerData {
 
         size = "" + width1 + "x" + height + "x" + width2;
 
-        if (width1 > Config.SHOP_SIZE_MAX_WIDTH || width2 > Config.SHOP_SIZE_MAX_WIDTH || height > Config.SHOP_SIZE_MAX_HEIGHT) {
+        if (width1 > Config.getShopSizeMaxWidth() || width2 > Config.getShopSizeMaxWidth() || height > Config.getShopSizeMaxHeight()) {
             return false;
         } else {
             return true;

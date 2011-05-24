@@ -25,7 +25,7 @@ public class CommandShopList extends Command {
     }
 
     public boolean process() {
-        int idWidth = Config.UUID_MIN_LENGTH + 1;
+        int idWidth = Config.getUuidMinLength() + 1;
         if(idWidth < 4) {
             idWidth = 4;
         }
@@ -34,7 +34,7 @@ public class CommandShopList extends Command {
         boolean isPlayer = false;
 
         // list all
-        Pattern pattern = Pattern.compile("(?i)list\\s+all$");
+        Pattern pattern = Pattern.compile("(?i)list\\s+(.*)");
         Matcher matcher = pattern.matcher(command);
         if (matcher.find()) {
             showAll = true;

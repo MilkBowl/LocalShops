@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.UUID;
 
+import net.centerleft.localshops.Config;
 import net.centerleft.localshops.InventoryItem;
 import net.centerleft.localshops.LocalShops;
 import net.centerleft.localshops.PlayerData;
@@ -15,12 +16,12 @@ import org.bukkit.entity.Player;
 
 public class CommandShopDestroy extends Command {
 
-    public CommandShopDestroy(LocalShops plugin, String commandLabel, CommandSender sender, String command) {
-        super(plugin, commandLabel, sender, command);
+    public CommandShopDestroy(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
+        super(plugin, commandLabel, sender, command, isGlobal);
     }
 
-    public CommandShopDestroy(LocalShops plugin, String commandLabel, CommandSender sender, String[] command) {
-        super(plugin, commandLabel, sender, command);
+    public CommandShopDestroy(LocalShops plugin, String commandLabel, CommandSender sender, String[] command, boolean isGlobal) {
+        super(plugin, commandLabel, sender, command, isGlobal);
     }
 
     public boolean process() {
@@ -35,9 +36,9 @@ public class CommandShopDestroy extends Command {
 
         Player player = (Player) sender;
         String playerName = player.getName();
-
+        
         // get the shop the player is currently in
-        if (plugin.getPlayerData().get(playerName).shopList.size() == 1) {
+        if (plugin.getPlayerData().get(playerName).shopList.size() == 1 && !isGlobal) {
             UUID shopUuid = plugin.getPlayerData().get(playerName).shopList.get(0);
             Shop shop = plugin.getShopManager().getShop(shopUuid);
 
@@ -70,6 +71,20 @@ public class CommandShopDestroy extends Command {
                 sender.sendMessage("Could not return shop inventory!");
             }
 
+        } else if (isGlobal && Config.globalShopsContainsKey(player.getWorld().getName())) {
+            Shop shop = plugin.getShopManager().getShop(Config.getGlobalShopUuid(player.getWorld().getName()));
+
+            if (!shop.getOwner().equalsIgnoreCase(player.getName()) && !canUseCommand(CommandTypes.ADMIN) && !shop.getManagers().contains(player.getName())) {
+                player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or manager to destroy a global shop");
+                return false;
+            } else {
+                if (plugin.getShopManager().deleteShop(shop)) {
+                    player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " has been destroyed");
+                } else {
+                    player.sendMessage(LocalShops.CHAT_PREFIX + " Error while attempting to destroy shop: " +  ChatColor.WHITE + shop.getName());
+                }
+            }
+            
         } else {
             player.sendMessage(ChatColor.DARK_AQUA + "You must be inside a shop to use /" + commandLabel + " destroy");
         }

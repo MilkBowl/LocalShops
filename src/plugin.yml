@@ -10,4 +10,25 @@ commands:
     description: Command for managing shops 
     usage: |
            /<command> - displays command help
-    aliases: [shop, buy, sell]
+    aliases: [shop]
+  gshop:
+    description: Command for managing global shop
+    usage: |
+           /<command> - displays command help
+    aliases: [global]
+  buy:
+    description: Command for buying from a shop
+    usage: |
+           /<command> - displays command help
+  sell:
+    description: Command for selling to a shop
+    usage: |
+           /<command> - displays command help
+  gbuy:
+    description: Command for buying from the global shop
+    usage: |
+           /<command> - displays command help
+  gsell:
+    description: Command for selling to the global shop
+    usage: |
+           /<command> - displays command help

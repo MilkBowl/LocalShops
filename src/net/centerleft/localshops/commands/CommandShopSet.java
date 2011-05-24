@@ -1,15 +1,12 @@
 package net.centerleft.localshops.commands;
 
 import java.util.Iterator;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.centerleft.localshops.Config;
 import net.centerleft.localshops.InventoryItem;
 import net.centerleft.localshops.ItemInfo;
 import net.centerleft.localshops.LocalShops;
-import net.centerleft.localshops.PlayerData;
 import net.centerleft.localshops.Search;
 import net.centerleft.localshops.Shop;
 
@@ -19,12 +16,12 @@ import org.bukkit.entity.Player;
 
 public class CommandShopSet extends Command {
 
-    public CommandShopSet(LocalShops plugin, String commandLabel, CommandSender sender, String command) {
-        super(plugin, commandLabel, sender, command);
+    public CommandShopSet(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
+        super(plugin, commandLabel, sender, command, isGlobal);
     }
 
-    public CommandShopSet(LocalShops plugin, String commandLabel, CommandSender sender, String[] command) {
-        super(plugin, commandLabel, sender, command);
+    public CommandShopSet(LocalShops plugin, String commandLabel, CommandSender sender, String[] command, boolean isGlobal) {
+        super(plugin, commandLabel, sender, command, isGlobal);
     }
 
     public boolean process() {
@@ -55,13 +52,11 @@ public class CommandShopSet extends Command {
             return shopSetOwner();
         } else if (command.matches("(?i)set\\s+name.*")) {
             return shopSetName();
-        } else if (command.matches("(?i)set\\s+global.*")) {
-            return shopSetGlobal();
         } else {
             return shopSetHelp();
         }
     }
-    
+
     private boolean shopSetBuy() {
         Shop shop = null;
 
@@ -69,13 +64,9 @@ public class CommandShopSet extends Command {
         if (sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            PlayerData pData = plugin.getPlayerData().get(player.getName());
-
-            // Get Current Shop
-            UUID shopUuid = pData.getCurrentShop();
-            if (shopUuid != null) {
-                shop = plugin.getShopManager().getShop(shopUuid);
-            }
+            
+            shop = getCurrentShop(player);
+            
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
                 return true;
@@ -168,7 +159,7 @@ public class CommandShopSet extends Command {
         sender.sendMessage("   " + "/" + commandLabel + " set buy [item name] [price] <bundle size>");
         return true;
     }
-    
+
     private boolean shopSetBuy(Shop shop, ItemInfo item, double price) {
         if (item == null) {
             sender.sendMessage("Item was not found.");
@@ -197,7 +188,7 @@ public class CommandShopSet extends Command {
         sender.sendMessage(ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " now is purchased for "+ ChatColor.WHITE + plugin.getEconManager().format(price));
         return true;
     }
-    
+
     private boolean shopSetBuy(Shop shop, ItemInfo item, double price, int size) {
         if (item == null) {
             sender.sendMessage("Item was not found.");
@@ -231,7 +222,7 @@ public class CommandShopSet extends Command {
         sender.sendMessage(ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " now is purchased for "+ ChatColor.WHITE + plugin.getEconManager().format(price) + ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + "Bundle: " + size + ChatColor.DARK_AQUA + "]");
         return true;
     }
-    
+
     private boolean shopSetSell() {
         Shop shop = null;
 
@@ -239,13 +230,8 @@ public class CommandShopSet extends Command {
         if (sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            PlayerData pData = plugin.getPlayerData().get(player.getName());
-
-            // Get Current Shop
-            UUID shopUuid = pData.getCurrentShop();
-            if (shopUuid != null) {
-                shop = plugin.getShopManager().getShop(shopUuid);
-            }
+            
+            shop = getCurrentShop(player);
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
                 return true;
@@ -339,7 +325,7 @@ public class CommandShopSet extends Command {
         sender.sendMessage("   " + "/" + commandLabel + " set sell [item name] [price] <bundle size>");
         return true;
     }
-    
+
     private boolean shopSetSell(Shop shop, ItemInfo item, double price, int size) {
         if (item == null) {
             sender.sendMessage("Item was not found.");
@@ -374,7 +360,7 @@ public class CommandShopSet extends Command {
 
         return true;
     }
-    
+
     private boolean shopSetSell(Shop shop, ItemInfo item, double price) {
         if (item == null) {
             sender.sendMessage("Item was not found.");
@@ -404,7 +390,7 @@ public class CommandShopSet extends Command {
 
         return true;
     }
-    
+
     private boolean shopSetMax() {
         Shop shop = null;
 
@@ -412,13 +398,8 @@ public class CommandShopSet extends Command {
         if (sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            PlayerData pData = plugin.getPlayerData().get(player.getName());
-
-            // Get Current Shop
-            UUID shopUuid = pData.getCurrentShop();
-            if (shopUuid != null) {
-                shop = plugin.getShopManager().getShop(shopUuid);
-            }
+            
+            shop = getCurrentShop(player);
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
                 return true;
@@ -474,7 +455,7 @@ public class CommandShopSet extends Command {
         sender.sendMessage("   " + "/" + commandLabel + " set max [item name] [max number]");
         return true;
     }
-    
+
     private boolean shopSetMax(Shop shop, ItemInfo item, int max) {
         if (item == null) {
             sender.sendMessage("Item was not found.");
@@ -505,7 +486,7 @@ public class CommandShopSet extends Command {
 
         return true;
     }
-    
+
     private boolean shopSetUnlimited() {
         Shop shop = null;
 
@@ -513,13 +494,8 @@ public class CommandShopSet extends Command {
         if (sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            PlayerData pData = plugin.getPlayerData().get(player.getName());
-
-            // Get Current Shop
-            UUID shopUuid = pData.getCurrentShop();
-            if (shopUuid != null) {
-                shop = plugin.getShopManager().getShop(shopUuid);
-            }
+            
+            shop = getCurrentShop(player);
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
                 return true;
@@ -574,7 +550,7 @@ public class CommandShopSet extends Command {
         sender.sendMessage("   " + "/" + commandLabel + " set unlimited stock");
         return true;
     }
-    
+
     private boolean shopSetManager() {
         Shop shop = null;
 
@@ -582,13 +558,8 @@ public class CommandShopSet extends Command {
         if (sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            PlayerData pData = plugin.getPlayerData().get(player.getName());
-
-            // Get Current Shop
-            UUID shopUuid = pData.getCurrentShop();
-            if (shopUuid != null) {
-                shop = plugin.getShopManager().getShop(shopUuid);
-            }
+            
+            shop = getCurrentShop(player);
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
                 return true;
@@ -634,26 +605,21 @@ public class CommandShopSet extends Command {
         sender.sendMessage("   " + "/" + commandLabel + " set manager +[playername] -[playername2]");
         return true;
     }
-    
+
     private boolean shopSetNotification() {
         Shop shop = null;
-        
+
         // Get current shop
         if(sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            PlayerData pData = plugin.getPlayerData().get(player.getName());
             
-            // Get current shop
-            UUID shopUuid = pData.getCurrentShop();
-            if(shopUuid != null) {
-                shop = plugin.getShopManager().getShop(shopUuid);
-            }
+            shop = getCurrentShop(player);
             if(shop == null) {
                 sender.sendMessage("You are not in a shop!");
                 return true;
             }
-            
+
             // Check if Player can Modify
             if (!shop.getOwner().equalsIgnoreCase(player.getName())) {
                 sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You must be the shop owner to set this.");
@@ -667,15 +633,15 @@ public class CommandShopSet extends Command {
 
         // set notification
         shop.setNotification(!shop.getNotification());
-        
+
         // Save Shop
         plugin.getShopManager().saveShop(shop);
-        
+
         // Output
         sender.sendMessage(String.format(ChatColor.DARK_AQUA + "Notices for " + ChatColor.WHITE + "%s" + ChatColor.DARK_AQUA + " are now " + ChatColor.WHITE + "%s", shop.getName(), shop.getNotification() ? "on" : "off"));
         return true;
     }
-    
+
     private boolean shopSetMinBalance() {
         Shop shop = null;
 
@@ -683,13 +649,8 @@ public class CommandShopSet extends Command {
         if (sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            PlayerData pData = plugin.getPlayerData().get(player.getName());
-
-            // Get Current Shop
-            UUID shopUuid = pData.getCurrentShop();
-            if (shopUuid != null) {
-                shop = plugin.getShopManager().getShop(shopUuid);
-            }
+            
+            shop = getCurrentShop(player);
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
                 return true;
@@ -722,7 +683,7 @@ public class CommandShopSet extends Command {
         sender.sendMessage(" " + "/" + commandLabel + " set minbalance [amount]");
         return true;
     }
-    
+
     private boolean shopSetOwner() {
         Shop shop = null;
         boolean reset = false;
@@ -731,13 +692,8 @@ public class CommandShopSet extends Command {
         if (sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            PlayerData pData = plugin.getPlayerData().get(player.getName());
-
-            // Get Current Shop
-            UUID shopUuid = pData.getCurrentShop();
-            if (shopUuid != null) {
-                shop = plugin.getShopManager().getShop(shopUuid);
-            }
+            
+            shop = getCurrentShop(player);
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
                 return true;
@@ -798,7 +754,7 @@ public class CommandShopSet extends Command {
         sender.sendMessage("   " + "/" + commandLabel + " set owner [player name]");
         return true;
     }
-    
+
     private boolean shopSetName() {
         Shop shop = null;
 
@@ -806,13 +762,8 @@ public class CommandShopSet extends Command {
         if(sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            PlayerData pData = plugin.getPlayerData().get(player.getName());
-
-            // Get Current Shop
-            UUID shopUuid = pData.getCurrentShop();
-            if(shopUuid != null) {
-                shop = plugin.getShopManager().getShop(shopUuid);
-            }
+            
+            shop = getCurrentShop(player);
             if(shop == null) {
                 sender.sendMessage("You are not in a shop!");
                 return true;                
@@ -842,56 +793,7 @@ public class CommandShopSet extends Command {
         sender.sendMessage("   " + "/" + commandLabel + " set name [shop name]");
         return true;
     }
-    
-    /**
-     * Sets a shop to be the current global shop
-     */
-    private boolean shopSetGlobal() {
-        Shop shop = null;
-        
-        //Exit if global shops are disabled.
-        if (!Config.GLOBAL_SHOP) {
-            sender.sendMessage("Globalshop is disable on the server");
-            return true;
-        }
-        // Get current shop
-        if (sender instanceof Player) {
-            // Get player & data
-            Player player = (Player) sender;
-            PlayerData pData = plugin.getPlayerData().get(player.getName());
 
-            // Get Current Shop
-            UUID shopUuid = pData.getCurrentShop();
-            if (shopUuid != null) {
-                shop = plugin.getShopManager().getShop(shopUuid);
-            }
-            if (shop == null) {
-                sender.sendMessage("You are not in a shop!");
-                return true;
-            }
-
-            // Check Permissions
-            if (!canUseCommand(CommandTypes.ADMIN)) {
-                player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You must be a shop admin to do this.");
-                return true;
-            }            
-        } else {
-            sender.sendMessage("Console is not implemented yet.");
-            return true;
-        }
-        
-        // shop set global
-        Pattern pattern = Pattern.compile("(?i)set\\s+global");
-        Matcher matcher = pattern.matcher(command);
-        if (matcher.find()) {
-            Config.GLOBAL_SHOP_UUID = shop.getUuid();
-            sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "This shop is now the globalshop and can be access from anywhere.");
-            return true;
-        }
-        
-        return true;
-    }
-    
     private boolean shopSetHelp() {
         // Display list of set commands & return
         sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "The following set commands are available: ");
@@ -905,7 +807,6 @@ public class CommandShopSet extends Command {
         if (canUseCommand(CommandTypes.ADMIN)) {
             sender.sendMessage("   " + "/" + commandLabel + " set unlimited money");
             sender.sendMessage("   " + "/" + commandLabel + " set unlimited stock");
-            sender.sendMessage("   " + "/" + commandLabel + " set global");
         }
         return true;
     }
