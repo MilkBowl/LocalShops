@@ -18,30 +18,26 @@ public class ShopCommandExecutor implements CommandExecutor {
 
     private final LocalShops plugin;
     private final Logger log = Logger.getLogger("Minecraft");
-    private static Map<String, String> commandMap = new HashMap<String, String>();
+    private static Map<String, Object> subCommandMap = new HashMap<String, Object>();
     static {
-        commandMap.put("add", "CommandShopAdd");
-        commandMap.put("browse", "CommandShopBrowse");
-        commandMap.put("buy", "CommandShopBuy");
-        commandMap.put("create", "CommandShopCreate");
-        commandMap.put("debug", "CommandShopDebug");
-        commandMap.put("destroy", "CommandShopDestroy");
-        commandMap.put("find", "CommandShopFind");
-        commandMap.put("gbuy", "CommandShopBuy");
-        commandMap.put("gsell", "CommandShopSell");
-        commandMap.put("gshop", "CommandShopHelp");
-        commandMap.put("help", "CommandShopHelp");
-        commandMap.put("info", "CommandShopInfo");
-        commandMap.put("link", "CommandShopLink");
-        commandMap.put("list", "CommandShopList");
-        commandMap.put("move", "CommandShopMove");
-        commandMap.put("remove", "CommandShopRemove");
-        commandMap.put("search", "CommandShopSearch");
-        commandMap.put("select", "CommandShopSelect");
-        commandMap.put("sell", "CommandShopSell");
-        commandMap.put("set", "CommandShopSet");
-        commandMap.put("shop", "CommandShopHelp");
-        commandMap.put("version", "CommandShopVersion");
+        subCommandMap.put("add", new SubCommandInfo("CommandShopAdd", true, true));
+        subCommandMap.put("browse", new SubCommandInfo("CommandShopBrowse", true, true));
+        subCommandMap.put("buy", new SubCommandInfo("CommandShopBuy", true, true));
+        subCommandMap.put("create", new SubCommandInfo("CommandShopCreate", true, true));
+        subCommandMap.put("debug", new SubCommandInfo("CommandShopDebug", true, true));
+        subCommandMap.put("destroy", new SubCommandInfo("CommandShopDestroy", true, true));
+        subCommandMap.put("find", new SubCommandInfo("CommandShopFind", true, false));
+        subCommandMap.put("help", new SubCommandInfo("CommandShopHelp", true, true));
+        subCommandMap.put("info", new SubCommandInfo("CommandShopInfo", true, true));
+        subCommandMap.put("link", new SubCommandInfo("CommandShopLink", false, true));
+        subCommandMap.put("list", new SubCommandInfo("CommandShopList", true, false));
+        subCommandMap.put("move", new SubCommandInfo("CommandShopMove", true, false));
+        subCommandMap.put("remove", new SubCommandInfo("CommandShopRemove", true, true));
+        subCommandMap.put("search", new SubCommandInfo("CommandShopSearch", true, true));
+        subCommandMap.put("select", new SubCommandInfo("CommandShopSelect", true, false));
+        subCommandMap.put("sell", new SubCommandInfo("CommandShopSell", true, true));
+        subCommandMap.put("set", new SubCommandInfo("CommandShopSet", true, true));
+        subCommandMap.put("version", new SubCommandInfo("CommandShopVersion", true, true));
     }
     
     public ShopCommandExecutor(LocalShops plugin) {
