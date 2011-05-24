@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 import net.centerleft.localshops.commands.ShopCommandExecutor;
@@ -99,10 +98,13 @@ public class LocalShops extends JavaPlugin {
         foundWorlds = getServer().getWorlds();
         // read the shops into memory
         getShopManager().loadShops(shopsDir);
+        
+        /* deprecated?
         for (World world : foundWorlds) {
-            //setupGlobalShop(world.getName());
+            setupGlobalShop(world.getName());
         }
-
+         */
+        
         // update the console that we've started
         log.info(String.format("[%s] %s", pdfFile.getName(), "Loaded with " + getShopManager().getNumShops() + " shop(s)"));
         log.info(String.format("[%s] %s", pdfFile.getName(), "Version " + pdfFile.getVersion() + " is enabled: " + Config.getSrvUuid().toString()));

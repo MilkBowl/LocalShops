@@ -11,6 +11,7 @@ import org.bukkit.event.world.WorldLoadEvent;
  *
  */
 public class ShopsWorldListener extends WorldListener{
+    @SuppressWarnings("unused")
     private LocalShops plugin;
     
     ShopsWorldListener (LocalShops plugin) {

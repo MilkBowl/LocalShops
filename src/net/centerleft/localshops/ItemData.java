@@ -129,6 +129,7 @@ public class ItemData {
     }
 
     private class itemDataType {
+        @SuppressWarnings("unused")
         public boolean hasData = false;
         public int dataValue = 0;
 

@@ -1,7 +1,5 @@
 package net.centerleft.localshops;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.UUID;
 import java.util.logging.Logger;
 

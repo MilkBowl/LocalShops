@@ -3,7 +3,6 @@
  */
 package net.centerleft.localshops;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.bukkit.ChatColor;

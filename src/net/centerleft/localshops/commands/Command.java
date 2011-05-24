@@ -12,7 +12,6 @@ import net.centerleft.localshops.Search;
 import net.centerleft.localshops.Shop;
 import net.centerleft.localshops.ShopLocation;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
