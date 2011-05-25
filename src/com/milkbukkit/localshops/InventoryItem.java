@@ -8,6 +8,7 @@ public class InventoryItem {
     private int sellSize = 0;
     private double sellPrice = 0;
     private int stock;
+    private int baseStock = 0;
     private double dynBuyPrice;
     private double dynSellPrice;
     private boolean dynamic;
@@ -179,5 +180,22 @@ public class InventoryItem {
 
         return false;
     }
+    
+    public int getInitialStock() {
+        return this.baseStock;
+    }
 
+    public void setInitialStock(int initialStock) {
+        this.baseStock = initialStock;
+    }
+    
+    
+    /**
+     * gets the current stock change in comparison to the original stock
+     * 
+     * @return int stock - initial
+     */
+    public int getDeltaStock() {
+        return this.stock - this.baseStock;
+    }
 }
