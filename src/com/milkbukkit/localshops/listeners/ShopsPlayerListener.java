@@ -1,4 +1,4 @@
-package com.milkbukkit.localshops;
+package com.milkbukkit.localshops.listeners;
 
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -14,6 +14,10 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import com.milkbukkit.localshops.LocalShops;
+import com.milkbukkit.localshops.PlayerData;
+import com.milkbukkit.localshops.Shop;
 
 /**
  * Handle events for all Player related events

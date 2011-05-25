@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.milkbukkit.localshops;
+package com.milkbukkit.localshops.listeners;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -11,6 +11,12 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
+
+import com.milkbukkit.localshops.ItemInfo;
+import com.milkbukkit.localshops.LocalShops;
+import com.milkbukkit.localshops.Search;
+import com.milkbukkit.localshops.Shop;
+import com.milkbukkit.localshops.ShopSign;
 
 /**
  * @author sleaker

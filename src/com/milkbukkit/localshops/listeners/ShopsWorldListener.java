@@ -1,12 +1,16 @@
 /**
  * 
  */
-package com.milkbukkit.localshops;
+package com.milkbukkit.localshops.listeners;
 
 import java.util.Iterator;
 
 import org.bukkit.event.world.WorldListener;
 import org.bukkit.event.world.WorldLoadEvent;
+
+import com.milkbukkit.localshops.LocalShops;
+import com.milkbukkit.localshops.Shop;
+import com.milkbukkit.localshops.ShopSign;
 
 /**
  * @author sleaker

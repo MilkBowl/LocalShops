@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.milkbukkit.localshops;
+package com.milkbukkit.localshops.listeners;
 
 import java.util.Iterator;
 
@@ -10,6 +10,10 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityListener;
+
+import com.milkbukkit.localshops.LocalShops;
+import com.milkbukkit.localshops.Shop;
+import com.milkbukkit.localshops.ShopSign;
 
 /**
  * @author sleaker
