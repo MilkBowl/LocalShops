@@ -29,7 +29,6 @@ public class ThreadManager {
     public void dynamicStop() {
         if(dt != null && dt.isAlive()) {
             try {
-                dt.setRun(false);
                 dt.join(2000);
             } catch(InterruptedException e) {
                 // ruh roh

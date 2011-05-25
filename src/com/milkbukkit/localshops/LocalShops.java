@@ -34,6 +34,7 @@ public class LocalShops extends JavaPlugin {
     public ShopsBlockListener blockListener = new ShopsBlockListener(this);
     public ShopsEntityListener entityListener = new ShopsEntityListener(this);
     private ShopManager shopManager = new ShopManager(this);
+    private DynamicManager dynamicManager = new DynamicManager(this);
     public PluginDescriptionFile pdfFile = null;
     public ThreadManager threadManager = new ThreadManager(this);
     private EconomyManager econManager = null;
@@ -194,5 +195,9 @@ public class LocalShops extends JavaPlugin {
     
     public ThreadManager getThreadManager() {
         return threadManager;
+    }
+
+    public DynamicManager getDynamicManager() {
+        return dynamicManager;
     }
 }
