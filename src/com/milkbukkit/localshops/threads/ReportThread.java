@@ -14,10 +14,15 @@ import com.milkbukkit.localshops.Config;
 
 public class ReportThread extends Thread {
     protected final Logger log = Logger.getLogger("Minecraft");
+    private boolean run = true;
     private JavaPlugin plugin = null;
 
     public ReportThread(JavaPlugin plugin) {
         this.plugin = plugin;
+    }
+    
+    public void setRun(boolean run) {
+        this.run = run;
     }
 
     public void run() {
@@ -68,7 +73,7 @@ public class ReportThread extends Thread {
 
                 // Sleep for 6 hours...
                 for (int i = 0; i < Config.getSrvReportInterval(); i++) {
-                    if (!Config.getSrvReport()) {
+                    if (!Config.getSrvReport() || !run) {
                         if (Config.getSrvDebug()) {
                             log.info(String.format("[%s] Graceful quit of ReportThread", pluginName));
                         }

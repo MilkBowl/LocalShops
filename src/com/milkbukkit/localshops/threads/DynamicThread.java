@@ -25,7 +25,6 @@ public class DynamicThread extends Thread {
     private int dynamicChance = 0;              // Chance for an item to actually change price.
     private int maxPriceChange = 0;             // Max price change that can occur. Minimum is 0.
     private int minPriceChange = 0;             // Min price change that can occur. Minimum is 0;
-    private boolean isRunning = false;
     private static Random randNum = new Random();
     
     private Collection<Shop> shops;
@@ -47,24 +46,13 @@ public class DynamicThread extends Thread {
         this.run = run;
     }
 
-    /**
-     * Checks whether the thread is running.
-     * 
-     * @return Boolean isRunning
-     */
-    public boolean isRunning() {
-        return isRunning;
-    }
-
     public void run() {
-        isRunning = true;
         while (run) {
             // Do our Sleep stuff!
 
             for (int i = 0; i < dynamicInterval; i++) {
                 try {
                     if (!run) {
-                        isRunning = false;
                         return;
                     }
                     Thread.sleep(1000);
@@ -121,7 +109,6 @@ public class DynamicThread extends Thread {
             }
 
         }
-        isRunning = false;
     }
 
     /*

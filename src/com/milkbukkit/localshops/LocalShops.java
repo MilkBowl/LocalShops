@@ -40,7 +40,6 @@ public class LocalShops extends JavaPlugin {
     public ThreadManager threadManager = new ThreadManager(this);
     private EconomyManager econManager = null;
     private PermissionManager permManager = null;
-    public boolean dynamicScheduled = false;
 
     // Logging
     private final Logger log = Logger.getLogger("Minecraft");
@@ -102,10 +101,8 @@ public class LocalShops extends JavaPlugin {
         // Make sure our global shop definitions are valid in case someone monkeyed with the config
         Config.verifyGlobalShops(getShopManager());
         
-        // Check if we should run the scheduler
-        if (dynamicScheduled) {
-            threadManager.dynamicStart();
-        }
+        // Check if we should run the scheduler - no toggle option
+        threadManager.dynamicStart();
             
         // update the console that we've started
         log.info(String.format("[%s] %s", pdfFile.getName(), "Loaded with " + getShopManager().getNumShops() + " shop(s)"));
@@ -204,24 +201,4 @@ public class LocalShops extends JavaPlugin {
     public ThreadManager getThreadManager() {
         return threadManager;
     }
-    
-    /**
-     * Checks if the task is set to be scheduled
-     * Does not check if it is already running or not.
-     * 
-     * @return dynamicScheduled 
-     */
-    public boolean isDynamicScheduled() {
-        return dynamicScheduled;
-    }
-    
-    /**
-     * Tags the scheduler as enabled or disabled.
-     * 
-     * @param dynamicScheduled variable to determine if scheduler is set to run
-     */
-    public void setDynamicScheduler(boolean dynamicScheduled) {
-        this.dynamicScheduled = dynamicScheduled;
-    }
-    
 }

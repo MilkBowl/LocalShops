@@ -2,7 +2,6 @@ package com.milkbukkit.localshops.threads;
 
 import java.util.logging.Logger;
 
-import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.LocalShops;
 
 public class ThreadManager {
@@ -29,8 +28,8 @@ public class ThreadManager {
     
     public void dynamicStop() {
         if(dt != null && dt.isAlive()) {
-            dt.setRun(false);
             try {
+                dt.setRun(false);
                 dt.join(2000);
             } catch(InterruptedException e) {
                 // ruh roh
@@ -48,8 +47,8 @@ public class ThreadManager {
     
     public void notificationStop() {
         if(nt != null && nt.isAlive()) {
-            Config.setShopTransactionNotice(false);
             try {
+                nt.setRun(false);
                 nt.join(2000);
             } catch(InterruptedException e) {
                 // ruh roh
@@ -67,8 +66,8 @@ public class ThreadManager {
     
     public void reportStop() {
         if(rt != null && rt.isAlive()) {
-            Config.setSrvReport(false);
             try {
+                rt.setRun(false);
                 rt.join(2000);
             } catch(InterruptedException e) {
                 // ruh roh

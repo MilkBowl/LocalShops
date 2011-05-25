@@ -18,10 +18,15 @@ import com.milkbukkit.localshops.Transaction;
 public class NotificationThread extends Thread {
     
     private LocalShops plugin;
+    private boolean run = true;
     protected final Logger log = Logger.getLogger("Minecraft");
     
     public NotificationThread(LocalShops plugin) {
         this.plugin = plugin;
+    }
+    
+    public void setRun(boolean run) {
+        this.run = run;
     }
 
     public void run() {
@@ -155,7 +160,7 @@ public class NotificationThread extends Thread {
             
             try {
                 for(int i = 0; i < Config.getShopTransactionNoticeTimer(); i++) {
-                    if(!Config.getShopTransactionNotice()) {
+                    if(!Config.getShopTransactionNotice() || !run) {
                         break;
                     }
                     Thread.sleep(1000);
@@ -165,7 +170,7 @@ public class NotificationThread extends Thread {
                 return;
             }
             
-            if(!Config.getShopTransactionNotice()) {
+            if(!Config.getShopTransactionNotice() || !run) {
                 break;
             }
         }

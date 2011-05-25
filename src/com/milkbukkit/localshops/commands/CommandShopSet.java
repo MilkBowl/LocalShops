@@ -882,11 +882,6 @@ public class CommandShopSet extends Command {
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             shop.setDynamicPrices(!shop.isDynamicPrices());
-            //Turn on the scheduler if we enabled dynamic pricing
-            if(shop.isDynamicPrices()) {
-                plugin.dynamicScheduled = true;
-                plugin.getThreadManager().dynamicStart();
-            }
             sender.sendMessage(ChatColor.DARK_AQUA + "Dynamic pricing for " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " was set to " + ChatColor.WHITE + shop.isDynamicPrices());
             plugin.getShopManager().saveShop(shop);
             return true;
