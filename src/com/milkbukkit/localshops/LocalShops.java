@@ -46,9 +46,6 @@ public class LocalShops extends JavaPlugin {
 
     // Constants
     public static final String CHAT_PREFIX = ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] ";
-    static File shopsDir;
-    static File folderDir;
-    static List<World> foundWorlds;
 
     private static ItemData itemList = new ItemData();
     private Map<String, PlayerData> playerData; // synchronized player hash
@@ -89,12 +86,11 @@ public class LocalShops extends JavaPlugin {
         getCommand("gsell").setExecutor(cmdExec);
 
         // setup the file IO
-        folderDir = new File(Config.getDirPath());
+        File folderDir = new File(Config.getDirPath());
         folderDir.mkdir();
-        shopsDir = new File(Config.getDirShopsActivePath());
+        File shopsDir = new File(Config.getDirShopsActivePath());
         shopsDir.mkdir();
 
-        foundWorlds = getServer().getWorlds();
         // read the shops into memory
         getShopManager().loadShops(shopsDir);
         
