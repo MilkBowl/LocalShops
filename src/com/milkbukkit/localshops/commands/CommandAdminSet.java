@@ -42,6 +42,7 @@ public class CommandAdminSet extends Command {
         Matcher matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
+            sender.sendMessage(ChatColor.BLUE + "charge-for-shop:" + ChatColor.WHITE + " [true/false] Charge for shop creation toggle.");
             sender.sendMessage(key + "=" + Config.getShopChargeCreate());
             return true;
         }
@@ -69,6 +70,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
+            sender.sendMessage(ChatColor.BLUE + "global-shop:" + ChatColor.WHITE + " [true/false] Global Shop toggle.");
             sender.sendMessage(key + "=" + Config.getGlobalShopsEnabled());
             return true;
         }
@@ -96,6 +98,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
+            sender.sendMessage(ChatColor.BLUE + "shop-width:" + ChatColor.WHITE + " [number] Default shop width.");
             sender.sendMessage(key + "=" + Config.getShopSizeDefWidth());
             return true;
         }
@@ -123,6 +126,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
+            sender.sendMessage(ChatColor.BLUE + "report-stats:" + ChatColor.WHITE + " [number] Allows anonymous usage statistics.");
             sender.sendMessage(key + "=" + Config.getSrvReport());
             return true;
         }
@@ -150,6 +154,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
+            sender.sendMessage(ChatColor.BLUE + "max-height:" + ChatColor.WHITE + " [number] Maximum height of a shop.");
             sender.sendMessage(key + "=" + Config.getShopSizeMaxHeight());
             return true;
         }
@@ -177,6 +182,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
+            sender.sendMessage(ChatColor.BLUE + "max-width:" + ChatColor.WHITE + " [number] Maximum width of a shop.");
             sender.sendMessage(key + "=" + Config.getShopSizeMaxWidth());
             return true;
         }
@@ -204,6 +210,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
+            sender.sendMessage(ChatColor.BLUE + "shops-transaction-max-size:" + ChatColor.WHITE + " [number] Maximum transactions to store in memory used by notifications.");
             sender.sendMessage(key + "=" + Config.getShopTransactionMaxSize());
             return true;
         }
@@ -231,6 +238,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
+            sender.sendMessage(ChatColor.BLUE + "shops-cost:" + ChatColor.WHITE + " [decimal] Cost of creating a shop.");
             sender.sendMessage(key + "=" + Config.getShopChargeCreateCost());
             return true;
         }
@@ -258,6 +266,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
+            sender.sendMessage(ChatColor.BLUE + "find-max-distance:" + ChatColor.WHITE + " [number] Maximum distance between player and shop for /shop find command.");
             sender.sendMessage(key + "=" + Config.getFindMaxDistance());
             return true;
         }
@@ -285,6 +294,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
+            sender.sendMessage(ChatColor.BLUE + "shops-per-player:" + ChatColor.WHITE + " [number] Maximum number of shops a player can own.");
             sender.sendMessage(key + "=" + Config.getPlayerMaxShops());
             return true;
         }
@@ -312,6 +322,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
+            sender.sendMessage(ChatColor.BLUE + "shop-height:" + ChatColor.WHITE + " [number] Default height of shops.");
             sender.sendMessage(key + "=" + Config.getShopSizeDefHeight());
             return true;
         }
@@ -339,6 +350,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
+            sender.sendMessage(ChatColor.BLUE + "debug:" + ChatColor.WHITE + " [true/false] Debugging mode, may degrade performance or be annoying.");
             sender.sendMessage(key + "=" + Config.getSrvDebug());
             return true;
         }
@@ -366,6 +378,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
+            sender.sendMessage(ChatColor.BLUE + "max-damage:" + ChatColor.WHITE + " [number] Number between 0 and 100, percent of damage an item is allowed to have, not remaining durablity.");
             sender.sendMessage(key + "=" + Config.getItemMaxDamage());
             return true;
         }
@@ -393,6 +406,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
+            sender.sendMessage(ChatColor.BLUE + "move-cost:" + ChatColor.WHITE + " [decimal] Cost for moving a shop.");
             sender.sendMessage(key + "=" + Config.getShopChargeMoveCost());
             return true;
         }
@@ -420,6 +434,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
+            sender.sendMessage(ChatColor.BLUE + "shop-notification-timer:" + ChatColor.WHITE + " [number] Interval between transaction notifications.");
             sender.sendMessage(key + "=" + Config.getShopTransactionNoticeTimer());
             return true;
         }
@@ -447,6 +462,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
+            sender.sendMessage(ChatColor.BLUE + "shop-transaction-notice:" + ChatColor.WHITE + " [true/false] Notification of transactions to shop owners.");
             sender.sendMessage(key + "=" + Config.getShopTransactionNotice());
             return true;
         }
@@ -474,6 +490,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
+            sender.sendMessage(ChatColor.BLUE + "chat-max-lines:" + ChatColor.WHITE + " [number] Number of lines displayed in paginated output.");
             sender.sendMessage(key + "=" + Config.getChatMaxLines());
             return true;
         }
@@ -501,6 +518,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
+            sender.sendMessage(ChatColor.BLUE + "log-transactions:" + ChatColor.WHITE + " [true/false] Transaction logging to transactions.log file.");
             sender.sendMessage(key + "=" + Config.getSrvLogTransactions());
             return true;
         }
