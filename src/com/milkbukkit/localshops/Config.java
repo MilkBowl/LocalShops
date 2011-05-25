@@ -57,10 +57,10 @@ public class Config {
     private static int srvReportInterval = 21600;
     
     //Dynamic Shop Price Change variables
-    private static int dynamicInterval = 60;
+    private static int dynamicInterval = 900;
     private static int maxPriceChange = 50;
-    private static int minPriceChange = 0;
-    private static int dynamicChance = 0;
+    private static int minPriceChange = 1;
+    private static int dynamicChance = 50;
     
     // Global Shops
     private static Map<String, UUID> globalShops = Collections.synchronizedMap(new HashMap<String, UUID>(2));
