@@ -47,4 +47,11 @@ public class ItemInfo {
     public ItemStack toStack() {
         return new ItemStack (typeId, 1, subTypeId);
     }
+    
+    public boolean equals(ItemInfo item){
+        if (this.typeId == item.typeId && this.subTypeId == item.subTypeId)
+            return true;
+        
+        return false;
+    }
 }
