@@ -39,8 +39,8 @@ public class DynamicThread extends Thread {
              
         this.dynamicInterval = Config.getDynamicInterval();
         this.dynamicChance = Config.getDynamicChance();
-        this.maxPriceChange = Config.getMaxPriceChange();
-        this.minPriceChange = Config.getMinPriceChange();
+        this.maxPriceChange = Config.getDynamicMaxPriceChange();
+        this.minPriceChange = Config.getDynamicMinPriceChange();
     }
 
     public void setRun(boolean run) {
