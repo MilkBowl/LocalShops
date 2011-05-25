@@ -32,7 +32,8 @@ public class CommandShopDestroy extends Command {
         }
 
         /*
-         * Available formats: /lshop destroy
+         * Available formats: /shop destroy; /shop delete; /shop del
+         * 
          */
 
         Player player = (Player) sender;

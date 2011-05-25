@@ -25,6 +25,8 @@ public class ShopCommandExecutor implements CommandExecutor {
         commandTypeMap.put("buy", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopBuy.class, true, true, false));
         commandTypeMap.put("create", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopCreate.class, true, true, true));
         commandTypeMap.put("debug", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopDebug.class, true, true, false));
+        commandTypeMap.put("del", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopDestroy.class, true, true, true));
+        commandTypeMap.put("delete", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopDestroy.class, true, true, true));
         commandTypeMap.put("destroy", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopDestroy.class, true, true, true));
         commandTypeMap.put("find", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopFind.class, true, false, false));
         commandTypeMap.put("help", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopHelp.class, true, true, false));
