@@ -57,11 +57,14 @@ public class Config {
     private static int srvReportInterval = 21600;
     
     // Dynamic Shop Price Change variables
+    private static int globalBaseStock = 0;
+    /*
+     * TODO: implement event system/vars
     private static int dynamicInterval = 900;
     private static int dynamicMaxPriceChange = 50;
     private static int dynamicMinPriceChange = 1;
     private static int dynamicChance = 50;
-    
+    */
     // Global Shops
     private static Map<String, UUID> globalShops = Collections.synchronizedMap(new HashMap<String, UUID>(2));
     private static boolean globalShopsEnabled = false;
@@ -90,11 +93,14 @@ public class Config {
         properties.setProperty("shop-transaction-max-size", String.valueOf(shopTransactionMaxSize));
         properties.setProperty("shops-per-player", String.valueOf(playerMaxShops));
         
+        properties.setProperty("global-base-stock", String.valueOf(globalBaseStock));
+        /*
+         * Disabled - for future use with event system
         properties.setProperty("dynamic-interval", String.valueOf(dynamicInterval));
         properties.setProperty("dynamic-max-price-change", String.valueOf(dynamicMaxPriceChange));
         properties.setProperty("dynamic-min-price-change", String.valueOf(dynamicMinPriceChange));
         properties.setProperty("dynamic-chance", String.valueOf(dynamicChance));
-        
+        */
         properties.setProperty("max-damage", String.valueOf(itemMaxDamage));
         
         properties.setProperty("log-transactions", String.valueOf(srvLogTransactions));
@@ -151,10 +157,14 @@ public class Config {
         shopTransactionNoticeTimer = Integer.parseInt(properties.getProperty("shop-notification-timer", String.valueOf(shopTransactionNoticeTimer)));
         shopTransactionMaxSize = Integer.parseInt(properties.getProperty("shop-transaction-max-size", String.valueOf(shopTransactionMaxSize)));
 
+        globalBaseStock = Integer.parseInt(properties.getProperty("global-base-stock", String.valueOf(globalBaseStock)));
+        /*
+         * Disabled - save for future use with event system
         dynamicInterval = Integer.parseInt(properties.getProperty("dynamic-interval", String.valueOf(dynamicInterval)));
         dynamicMaxPriceChange = Integer.parseInt(properties.getProperty("dynamic-max-price-change", String.valueOf(dynamicMaxPriceChange)));
         dynamicMinPriceChange = Integer.parseInt(properties.getProperty("dynamic-min-price-change", String.valueOf(dynamicMinPriceChange)));
         dynamicChance = Integer.parseInt(properties.getProperty("dynamic-chance", String.valueOf(dynamicChance)));
+        */
         
         playerMaxShops = Integer.parseInt(properties.getProperty("shops-per-player", String.valueOf(playerMaxShops)));
         
@@ -699,6 +709,8 @@ public class Config {
         uuidList.clear();
     }
     
+    /*
+     * TODO: event system
     public static int getDynamicInterval() {
         return dynamicInterval;
     }
@@ -730,7 +742,16 @@ public class Config {
     public static void setDynamicChance(int dynamicChance) {
         Config.dynamicChance = dynamicChance;
     }
+    */
     
+    public static int getGlobalBaseStock() {
+        return globalBaseStock;
+    }
+
+    public static void setGlobalBaseStock(int globalBaseStock) {
+        Config.globalBaseStock = globalBaseStock;
+    }
+
     public static void verifyGlobalShops(ShopManager shopManager) {
         Iterator<String> iter = globalShops.keySet().iterator();
         while (iter.hasNext())
