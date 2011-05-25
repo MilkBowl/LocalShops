@@ -46,8 +46,8 @@ public class CommandShopLink extends Command {
             Pattern pattern = Pattern.compile("(?i)link\\s+([A-Za-z0-9\\-]+)\\s+(\\w+)$");
             Matcher matcher = pattern.matcher(command);
             if (matcher.find()) {
-                String worldName = matcher.group(1);
-                String key = matcher.group(0);
+                String key = matcher.group(1);
+                String worldName = matcher.group(2);
                 shop = plugin.getShopManager().getShop(key);
                 if (shop == null) {
                     sender.sendMessage("Could not find a shop that matches id: " + key);
@@ -73,7 +73,7 @@ public class CommandShopLink extends Command {
             pattern = Pattern.compile("(?i)link\\s+(.+)");
             matcher = pattern.matcher(command);
             if (matcher.find()) {
-                String worldName = matcher.group(0);
+                String worldName = matcher.group(1);
                 shop = getCurrentShop(player);
                 if (shop == null) {
                     sender.sendMessage("No global shop on this world to link!");
