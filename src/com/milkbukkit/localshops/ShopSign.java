@@ -31,6 +31,7 @@ public class ShopSign {
             this.id = id;
         }
         
+        @SuppressWarnings("unused")
         public int getId () {
             return id;
         }
