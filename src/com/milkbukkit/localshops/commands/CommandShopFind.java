@@ -1,14 +1,13 @@
 package com.milkbukkit.localshops.commands;
 
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.UUID;
-import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -23,6 +22,7 @@ import com.milkbukkit.localshops.Search;
 import com.milkbukkit.localshops.Shop;
 import com.milkbukkit.localshops.ShopLocation;
 import com.milkbukkit.localshops.comparator.EntryValueComparator;
+import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class CommandShopFind extends Command {
 
@@ -129,7 +129,7 @@ public class CommandShopFind extends Command {
             }
 
             // Determine distance, if too far away ignore
-            double distance = calculateDistance(playerLoc, shop.getLocationCenter());
+            double distance = GenericFunctions.calculateDistance(playerLoc.getX(), playerLoc.getY(), playerLoc.getZ(), shop.getLocationCenter().getX(), shop.getLocationCenter().getY(), shop.getLocationCenter().getZ());
             if (Config.getFindMaxDistance() > 0 && distance > Config.getFindMaxDistance()) {
                 continue;
             }

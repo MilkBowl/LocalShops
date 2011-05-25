@@ -333,21 +333,6 @@ public abstract class Command {
         }
         return true;
     }
-
-    protected double calculateDistance(ShopLocation from, ShopLocation to) {        
-        double x1 = from.getX();
-        double x2 = to.getX();
-
-        double y1 = from.getY();
-        double y2 = to.getY();
-
-        double z1 = from.getZ();
-        double z2 = to.getZ();
-
-        double distance = Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2) + Math.pow((z1 - z2), 2));
-
-        return distance;
-    }
     
     protected Shop getCurrentShop (Player player) {
         Shop shop = null;
