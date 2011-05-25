@@ -150,9 +150,10 @@ public class Config {
         shopTransactionNotice = Boolean.parseBoolean(properties.getProperty("shop-transaction-notice", String.valueOf(shopTransactionNotice)));
         shopTransactionNoticeTimer = Integer.parseInt(properties.getProperty("shop-notification-timer", String.valueOf(shopTransactionNoticeTimer)));
         shopTransactionMaxSize = Integer.parseInt(properties.getProperty("shop-transaction-max-size", String.valueOf(shopTransactionMaxSize)));
+
         dynamicInterval = Integer.parseInt(properties.getProperty("dynamic-interval", String.valueOf(dynamicInterval)));
-        dynamicMaxPriceChange = Integer.parseInt(properties.getProperty("max-price-change", String.valueOf(dynamicMaxPriceChange)));
-        dynamicMinPriceChange = Integer.parseInt(properties.getProperty("min-price-change", String.valueOf(dynamicMinPriceChange)));
+        dynamicMaxPriceChange = Integer.parseInt(properties.getProperty("dynamic-max-price-change", String.valueOf(dynamicMaxPriceChange)));
+        dynamicMinPriceChange = Integer.parseInt(properties.getProperty("dynamic-min-price-change", String.valueOf(dynamicMinPriceChange)));
         dynamicChance = Integer.parseInt(properties.getProperty("dynamic-chance", String.valueOf(dynamicChance)));
         
         playerMaxShops = Integer.parseInt(properties.getProperty("shops-per-player", String.valueOf(playerMaxShops)));
