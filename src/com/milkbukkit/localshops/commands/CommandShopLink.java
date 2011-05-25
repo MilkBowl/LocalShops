@@ -43,7 +43,7 @@ public class CommandShopLink extends Command {
             // Get player
             Player player = (Player) sender;
 
-            Pattern pattern = Pattern.compile("(?i)link\\s+([A-Za-z0-9\\-]+)\\s+(\\w+)$");
+            Pattern pattern = Pattern.compile("(?i)\\w+\\s+([A-Za-z0-9\\-]+)\\s+(\\w+)$");
             Matcher matcher = pattern.matcher(command);
             if (matcher.find()) {
                 String key = matcher.group(1);
@@ -70,7 +70,7 @@ public class CommandShopLink extends Command {
             }
 
             matcher.reset();
-            pattern = Pattern.compile("(?i)link\\s+(.+)");
+            pattern = Pattern.compile("(?i)\\w+\\s+(.+)");
             matcher = pattern.matcher(command);
             if (matcher.find()) {
                 String worldName = matcher.group(1);

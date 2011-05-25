@@ -21,6 +21,7 @@ public class ShopCommandExecutor implements CommandExecutor {
     static {
         commandTypeMap.put("admin", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandAdminSet.class, false, false, false));
         commandTypeMap.put("add", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopAdd.class, true, true, false));
+        commandTypeMap.put("addloc", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopLink.class, false, true, false));
         commandTypeMap.put("browse", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopBrowse.class, true, true, false));
         commandTypeMap.put("buy", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopBuy.class, true, true, false));
         commandTypeMap.put("create", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopCreate.class, true, true, true));
@@ -35,6 +36,7 @@ public class ShopCommandExecutor implements CommandExecutor {
         commandTypeMap.put("list", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopList.class, true, true, false));
         commandTypeMap.put("move", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopMove.class, true, false, true));
         commandTypeMap.put("remove", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopRemove.class, true, true, false));
+        commandTypeMap.put("removeloc", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopUnlink.class, false, true, false));
         commandTypeMap.put("search", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopSearch.class, true, true, false));
         commandTypeMap.put("select", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopSelect.class, true, false, false));
         commandTypeMap.put("sell", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopSell.class, true, true, false));

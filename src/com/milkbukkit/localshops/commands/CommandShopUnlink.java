@@ -38,7 +38,7 @@ public class CommandShopUnlink extends Command {
                 sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You don't have permission to use this command");
                 return true;
             }
-            Pattern pattern = Pattern.compile("(?i)link\\s+(.*)");
+            Pattern pattern = Pattern.compile("(?i)\\w+\\s+(.*)$");
             Matcher matcher = pattern.matcher(command);
             if (matcher.find()) {
                 String worldName = matcher.group(0);
