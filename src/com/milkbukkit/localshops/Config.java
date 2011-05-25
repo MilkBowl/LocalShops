@@ -58,6 +58,7 @@ public class Config {
     
     // Dynamic Shop Price Change variables
     private static int globalBaseStock = 0;
+    private static int globalVolatility = 50;
     /*
      * TODO: implement event system/vars
     private static int dynamicInterval = 900;
@@ -94,6 +95,7 @@ public class Config {
         properties.setProperty("shops-per-player", String.valueOf(playerMaxShops));
         
         properties.setProperty("global-base-stock", String.valueOf(globalBaseStock));
+        properties.setProperty("global-volatility", String.valueOf(globalVolatility));
         /*
          * Disabled - for future use with event system
         properties.setProperty("dynamic-interval", String.valueOf(dynamicInterval));
@@ -158,6 +160,7 @@ public class Config {
         shopTransactionMaxSize = Integer.parseInt(properties.getProperty("shop-transaction-max-size", String.valueOf(shopTransactionMaxSize)));
 
         globalBaseStock = Integer.parseInt(properties.getProperty("global-base-stock", String.valueOf(globalBaseStock)));
+        globalVolatility = Integer.parseInt(properties.getProperty("global-volatility", String.valueOf(globalVolatility)));
         /*
          * Disabled - save for future use with event system
         dynamicInterval = Integer.parseInt(properties.getProperty("dynamic-interval", String.valueOf(dynamicInterval)));
@@ -762,5 +765,13 @@ public class Config {
             }
             
         }
+    }
+
+    public static void setGlobalVolatility(int globalVolatility) {
+        Config.globalVolatility = globalVolatility;
+    }
+
+    public static int getGlobalVolatility() {
+        return globalVolatility;
     }
 }
