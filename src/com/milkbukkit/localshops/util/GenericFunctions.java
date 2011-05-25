@@ -117,4 +117,19 @@ public class GenericFunctions {
         
         return Math.pow(sum/(list.size()-1), .5);
     }
+    
+    /**
+     * Calculate sum of a list
+     * @param list
+     * @return
+     */
+    public static int getSum(List<Integer> list) {
+        int sum = 0;
+        
+        for(int i : list) {
+            sum += i;
+        }
+        
+        return sum;
+    }
 }
