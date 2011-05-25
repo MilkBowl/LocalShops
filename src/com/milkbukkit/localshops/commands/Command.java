@@ -17,7 +17,6 @@ import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.PlayerData;
 import com.milkbukkit.localshops.Search;
 import com.milkbukkit.localshops.Shop;
-import com.milkbukkit.localshops.ShopLocation;
 
 public abstract class Command {
 
