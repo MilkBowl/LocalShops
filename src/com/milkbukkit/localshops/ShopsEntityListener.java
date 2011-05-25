@@ -36,18 +36,18 @@ public class ShopsEntityListener extends EntityListener {
             if (block.getType() != Material.WALL_SIGN && block.getType() != Material.SIGN_POST ) {
                 continue;
             }
-
+            
             //Search for shop at block location
             Shop shop = plugin.getShopManager().getShop(blockLoc);
             //If no shop found at the location skip to the next block
             if (shop == null) {
                 continue;
             } else {
-                Iterator<Location> iter = shop.getSignMap().keySet().iterator();
+                Iterator<String> iter = shop.getSignMap().keySet().iterator();
                 while (iter.hasNext()) {
-                    Location signLoc = iter.next();
-                    if ( signLoc.getBlockX() == blockLoc.getBlockX() && signLoc.getBlockY() == blockLoc.getBlockY() && signLoc.getBlockZ() == blockLoc.getBlockZ()) {
-                        //Remove the object from the map and Only 1 match possible per block so Break loop if we found one.
+                    ShopSign sign = shop.getSignMap().get(iter.next());
+                    if ( sign.getLoc() == block.getLocation() ) {
+                        //Remove the object from the map - Only 1 match per loop possible
                         iter.remove();
                         break;
                     }

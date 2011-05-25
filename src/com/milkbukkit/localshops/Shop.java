@@ -12,7 +12,8 @@ import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.logging.Logger;
 
-import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 
 public class Shop implements Comparator<Shop> {
     // Attributes
@@ -32,7 +33,7 @@ public class Shop implements Comparator<Shop> {
     private ArrayBlockingQueue<Transaction> transactions;
     private boolean notification = true;
     private int locationLowX, locationHighX, locationLowY, locationHighY, locationLowZ, locationHighZ;
-    private Map<Location, String> signMap = Collections.synchronizedMap(new HashMap<Location, String>());
+    private Map<String, ShopSign> signMap = Collections.synchronizedMap(new HashMap<String, ShopSign>());
     private boolean global = false;
     
     // Logging
@@ -460,11 +461,11 @@ public class Shop implements Comparator<Shop> {
         return global;
     }
 
-    public void setSignMap(Map<Location, String> signMap) {
+    public void setSignMap(Map<String, ShopSign> signMap) {
         this.signMap = signMap;
     }
 
-    public Map<Location, String> getSignMap() {
+    public Map<String, ShopSign> getSignMap() {
         return signMap;
     }
     
@@ -518,5 +519,34 @@ public class Shop implements Comparator<Shop> {
             locationLowZ = locationA.getZ();            
         }
     }
+    
+    public void updateSign(ShopSign sign) {
+        
+        //Get the lines for future use?
+        String signLines[] = {sign.getItemName(), "Buy: ", "Sell: ", ""};
 
+        if (this.getItem(sign.getItemName()).getBuyPrice() == 0) {
+            signLines[1] += "-";
+        } else {
+            signLines[1] += this.getItem(sign.getItemName()).getBuyPrice();
+        }
+        if (this.getItem(sign.getItemName()).getSellPrice() == 0) {
+            signLines[2] += "-";
+        } else {
+            signLines[2] += this.getItem(sign.getItemName()).getSellPrice();
+        }
+        //Set the lines
+        ((Sign) sign.getLoc().getBlock().getState()).setLine(0, signLines[0]);
+        ((Sign) sign.getLoc().getBlock().getState()).setLine(0, signLines[1]);
+        ((Sign) sign.getLoc().getBlock().getState()).setLine(0, signLines[2]);
+        ((Sign) sign.getLoc().getBlock().getState()).setLine(0, signLines[3]);
+    }
+    
+    public void updateSign(Block block) {
+        
+    }
+    
+    public void updateSign(String itemName) {  
+        
+    }
 }

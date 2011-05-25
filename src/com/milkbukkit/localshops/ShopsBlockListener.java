@@ -3,10 +3,7 @@
  */
 package com.milkbukkit.localshops;
 
-import java.util.Iterator;
-
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -34,7 +31,7 @@ public class ShopsBlockListener extends BlockListener {
         
         shop = plugin.getShopManager().getShop(event.getBlock().getLocation());
 
-        //Return if we still don't have a shop.
+        //Return if we aren't in a shop
         if (shop == null) {
             return;
         }
@@ -60,7 +57,8 @@ public class ShopsBlockListener extends BlockListener {
                     line3 += shop.getItem(line1).getSellPrice();
                 }
                 //Add the sign to the Shop signlist and save the shop
-                shop.getSignMap().put(new Location(event.getBlock().getWorld(), block.getX(), block.getY(), block.getZ()), item.name);
+                ShopSign sign = new ShopSign(block, item.name);
+                shop.getSignMap().put(sign.hashString(), sign);
                 plugin.getShopManager().saveShop(shop);
 
                 //Write back the lines for the sign
@@ -129,14 +127,9 @@ public class ShopsBlockListener extends BlockListener {
             event.setCancelled(true);
             return;
         } else {
-            Location blockLoc = block.getLocation();
-            Iterator<Location> iter = shop.getSignMap().keySet().iterator();
-            while (iter.hasNext()) {
-                Location signLoc = iter.next();
-                if ( signLoc.getBlockX() == blockLoc.getBlockX() && signLoc.getBlockY() == blockLoc.getBlockY() && signLoc.getBlockZ() == blockLoc.getBlockZ()) {
-                    iter.remove();
-                    return;
-                }
+            String xyz = block.getWorld().getName() + block.getX() + block.getY() + block.getZ();
+            if (shop.getSignMap().containsKey(xyz)) {
+                shop.getSignMap().remove(xyz);
             }
         }
 

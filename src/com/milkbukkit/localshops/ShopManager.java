@@ -19,9 +19,6 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Sign;
 
 public class ShopManager {
     private LocalShops plugin = null;
@@ -49,14 +46,14 @@ public class ShopManager {
 
         return null;
     }
-    
+
     public Shop getShop(Location loc) {
         return getShop(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
-    
+
     public Shop getShop(String world, int x, int y, int z) {
         for(Shop shop : shops.values()) {
-            if(!shop.getWorld().equals(world)) {
+            if (shop.isGlobal() || !shop.getWorld().equals(world)) {
                 continue;
             }
             
@@ -383,7 +380,7 @@ public class ShopManager {
         }
         return null;
     }
-    
+
     public static int[] convertStringArraytoIntArray(String[] sarray) {
         if (sarray != null) {
             int intArray[] = new int[sarray.length];
@@ -396,7 +393,7 @@ public class ShopManager {
     }
 
     public Shop loadShop(File file) throws Exception {
-        HashMap<Location, String> signMap = new HashMap<Location, String>(4);
+        HashMap<String, ShopSign> signMap = new HashMap<String, ShopSign>(4);
 
         Shop shop = null;
         int[] locationA = null;
@@ -496,63 +493,53 @@ public class ShopManager {
                     }
                     return null;
                 }
-            } else if (key.matches("sign:\\d+,\\d+,\\d+")) {
+            } else if (key.matches("\\d+$")) {
 
-                String[] k = key.split(":");
-                k = k[1].split(",");
+                String values = props.getProperty(key);
 
-                int x = Integer.parseInt(k[0]);
-                int y = Integer.parseInt(k[1]);
-                int z = Integer.parseInt(k[2]);
+                String[] v = values.split(":");
+                String[] v2 = v[1].split(",");
 
-                String itemName = props.getProperty(key);
+                String signWorld = v[0];
+                int x = Integer.parseInt(v2[0]);
+                int y = Integer.parseInt(v2[1]);
+                int z = Integer.parseInt(v2[2]);
+                String itemName = v2[3];
 
-                signMap.put( new Location (plugin.getServer().getWorld(world), x, y, z), itemName );
+                if (plugin.getServer().getWorld(signWorld) != null) {
+                    ShopSign sign = new ShopSign(plugin.getServer().getWorld(signWorld), x, y, z, itemName);
+                    signMap.put(sign.hashString(), sign);
+                } else {
+                    ShopSign sign = new ShopSign(signWorld, x, y, z, itemName);
+                    signMap.put(sign.hashString(), sign);
+                }
             }
         }
 
         //After loading sign data, verify they exist in the world
-        Iterator<Location> iter = signMap.keySet().iterator();
+        Iterator<String> iter = signMap.keySet().iterator();
         while (iter.hasNext() ) {
-            World signWorld = plugin.getServer().getWorld(world);
-            log.info("[LocalShops] - Iterating through map");
-            Location signLoc = iter.next();
+            String signKey = iter.next();
+
+            //Skip signs that can't be verified yet.
+            if (signMap.get(signKey).getWorld() == null)
+                continue;
+
+            ShopSign sign = signMap.get(signKey);
             //Load the chunk so we don't try getting blocks that are non-existent
-            signWorld.loadChunk(plugin.getServer().getWorld(world).getChunkAt(signLoc));
+            sign.getWorld().loadChunk(sign.getWorld().getChunkAt(sign.getLoc()));
 
-            log.info("[LocalShops] - Got Chunk: " + signWorld.isChunkLoaded(signWorld.getChunkAt(signLoc)));
             //Check if the block is not a sign.
-
-            if ( signWorld.getBlockAt(signLoc).getType() != Material.WALL_SIGN && signWorld.getBlockAt(signLoc).getType() != Material.SIGN_POST ) {
+            if ( !sign.isValid() ) {
                 iter.remove();
                 continue;
             } else {
-                ItemInfo item = Search.itemByName(signMap.get(signLoc));
+                ItemInfo item = Search.itemByName(sign.getItemName());
                 if (!(shop.containsItem(item))) {
+                    iter.remove();
                     continue;
                 } else {
-                    //Get the lines for future use?
-                    String signLines[] = ((Sign) signLoc.getBlock().getState()).getLines();
-                    signLines[0] = item.name;
-                    signLines[1] = "Buy: ";
-                    signLines[2] = "Sell: ";
-                    signLines[3] = "";
-
-                    if (shop.getItem(item.name).getBuyPrice() == 0) {
-                        signLines[1] += "-";
-                    } else {
-                        signLines[1] += shop.getItem(item.name).getBuyPrice();
-                    }
-                    if (shop.getItem(item.name).getSellPrice() == 0) {
-                        signLines[2] += "-";
-                    } else {
-                        signLines[2] += shop.getItem(item.name).getSellPrice();
-                    }
-                    //Set the lines
-                    ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[0]);
-                    ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[1]);
-                    ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[2]);
-                    ((Sign) signLoc.getBlock().getState()).setLine(0, signLines[3]);
+                    shop.updateSign(sign);
                 }
             }
         }
@@ -617,9 +604,9 @@ public class ShopManager {
         } else {
             props.setProperty("global", "true");
         }
-        
+
         props.setProperty("world", shop.getWorld());
-        
+
         // People
         props.setProperty("owner", shop.getOwner());
         props.setProperty("managers", Search.join(shop.getManagers(), ", "));
@@ -639,13 +626,11 @@ public class ShopManager {
         }
 
         //Sign Data
-        for (Location signLoc : shop.getSignMap().keySet()) {
-            int x = signLoc.getBlockX();
-            int y = signLoc.getBlockY();
-            int z = signLoc.getBlockZ();
-
-            props.setProperty(String.format("sign:%d,%d,%d", x, y, z), shop.getSignMap().get(signLoc));
+        for (String signId : shop.getSignMap().keySet()) {
+            ShopSign sign = shop.getSignMap().get(signId);
+            props.setProperty(signId, String.format("%s:%d,%d,%d,%s", sign.getWorldName(), sign.getX(), sign.getY(), sign.getZ(), sign.getItemName()));
         }
+
 
         String fileName = Config.getDirShopsActivePath() + shop.getUuid().toString() + ".shop";
         try {
@@ -659,14 +644,14 @@ public class ShopManager {
 
     public boolean deleteShop(Shop shop) {
         String shortUuid = shop.getShortUuidString();
-        
+
         if (shop.isGlobal()) {
             if (Config.globalShopsContainsKey(shop.getWorld())) {
                 /**
                 Config.GLOBAL_SHOPS.remove(shop.getWorld());
                 LocalShops.getProperties().removeKey(shop.getWorld() + "-shop-UUID");
                 LocalShops.getProperties().save();
-                */
+                 */
                 return true;
             } else {
                 return false;
