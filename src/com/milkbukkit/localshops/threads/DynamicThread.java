@@ -1,6 +1,5 @@
 package com.milkbukkit.localshops.threads;
 
-import java.util.Collection;
 import java.util.Random;
 import java.util.logging.Logger;
 
