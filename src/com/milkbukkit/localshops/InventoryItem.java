@@ -181,21 +181,12 @@ public class InventoryItem {
         return false;
     }
     
-    public int getInitialStock() {
+    public int getBaseStock() {
         return this.baseStock;
     }
 
-    public void setInitialStock(int initialStock) {
-        this.baseStock = initialStock;
+    public void setBaseStock(int baseStock) {
+        this.baseStock = baseStock;
     }
     
-    
-    /**
-     * gets the current stock change in comparison to the original stock
-     * 
-     * @return int stock - initial
-     */
-    public int getDeltaStock() {
-        return this.stock - this.baseStock;
-    }
 }
