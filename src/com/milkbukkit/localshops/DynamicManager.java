@@ -21,17 +21,6 @@ public class DynamicManager {
 
     public static Map<ItemInfo, Double> getPriceAdjMap() {
         return priceAdjMap;
-    }
-    
-    public void updateMap() {
-        for (ItemInfo item : priceAdjMap.keySet()) {
-            for (Shop shop : plugin.getShopManager().getAllShops() ) {
-                if (shop.containsItem(item)) {
-                  //TODO: run Util code to update the item price adjustments
-                }
-            }
-        }
-    }
-    
+    } 
 
 }
