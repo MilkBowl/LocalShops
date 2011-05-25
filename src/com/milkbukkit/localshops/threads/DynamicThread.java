@@ -13,7 +13,8 @@ public class DynamicThread extends Thread {
     private LocalShops plugin = null;
 
 
-    public DynamicThread(LocalShops plugin) {
+    public DynamicThread(ThreadGroup tgroup, String tname, LocalShops plugin) {
+        super(tgroup, tname);
         this.plugin = plugin;
     }
 

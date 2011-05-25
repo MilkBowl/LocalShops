@@ -8,7 +8,7 @@ public class ThreadManager {
     LocalShops plugin = null;
     
     // Threads
-    DynamicThread dt = null;
+    SchedulerThread st = null;
     NotificationThread nt = null;
     ReportThread rt = null;
     
@@ -19,20 +19,21 @@ public class ThreadManager {
         this.plugin = plugin;
     }
     
-    public void dynamicStart() {
-        if (dt == null || !dt.isAlive()) {
-            dt = new DynamicThread(plugin);
-            dt.start();
+    public void schedulerStart() {
+        if (st == null || !st.isAlive()) {
+            st = new SchedulerThread(plugin);
+            st.start();
         }
     }
     
-    public void dynamicStop() {
-        if(dt != null && dt.isAlive()) {
+    public void schedulerStop() {
+        if(st != null && st.isAlive()) {
             try {
-                dt.join(2000);
+                st.setRun(false);
+                st.join(2000);
             } catch(InterruptedException e) {
                 // ruh roh
-                log.warning(String.format("[%s] %s", plugin.getDescription().getName(), "DynamicThread did not exit"));
+                log.warning(String.format("[%s] %s", plugin.getDescription().getName(), "NotificationThread did not exit"));
             }
         }
     }

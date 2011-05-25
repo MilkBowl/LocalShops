@@ -95,9 +95,6 @@ public class LocalShops extends JavaPlugin {
         
         // Make sure our global shop definitions are valid in case someone monkeyed with the config
         Config.verifyGlobalShops(getShopManager());
-        
-        // Check if we should run the scheduler - no toggle option
-        threadManager.dynamicStart();
             
         // update the console that we've started
         log.info(String.format("[%s] %s", pdfFile.getName(), "Loaded with " + getShopManager().getNumShops() + " shop(s)"));
@@ -117,6 +114,10 @@ public class LocalShops extends JavaPlugin {
         if (Config.getShopTransactionNotice()) {
             threadManager.notificationStart();
         }
+        
+        // Start Scheduler thread
+        threadManager.schedulerStart();
+        
         
         setEconManager(new EconomyManager(this));
         if(!getEconManager().loadEconomies()) {
@@ -143,8 +144,8 @@ public class LocalShops extends JavaPlugin {
         // Stop Reporting thread
         threadManager.reportStop();
         
-         // Stop Dynamic thread
-        threadManager.dynamicStop();
+         // Stop Scheduler thread
+        threadManager.schedulerStop();
         
         // Stop Notification thread
         threadManager.notificationStop();
