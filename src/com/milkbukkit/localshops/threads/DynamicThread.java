@@ -18,7 +18,7 @@ import com.milkbukkit.localshops.Shop;
  * @params plugin
  * 
  */
-public class SchedulerThread extends Thread {
+public class DynamicThread extends Thread {
     
     private boolean run = true;
     private int dynamicInterval = 0;            // Interval default is 900.  Minimum is 300.
@@ -33,7 +33,7 @@ public class SchedulerThread extends Thread {
     // Logging
     private static final Logger log = Logger.getLogger("Minecraft");
 
-    public SchedulerThread(LocalShops plugin) {
+    public DynamicThread(LocalShops plugin) {
         
         shops = plugin.getShopManager().getAllShops();
              

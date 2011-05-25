@@ -22,7 +22,7 @@ import com.milkbukkit.localshops.modules.economy.EconomyManager;
 import com.milkbukkit.localshops.modules.permission.PermissionManager;
 import com.milkbukkit.localshops.threads.NotificationThread;
 import com.milkbukkit.localshops.threads.ReportThread;
-import com.milkbukkit.localshops.threads.SchedulerThread;
+import com.milkbukkit.localshops.threads.DynamicThread;
 
 /**
  * Local Shops Plugin
@@ -36,7 +36,7 @@ public class LocalShops extends JavaPlugin {
     public ShopsEntityListener entityListener = new ShopsEntityListener(this);
     private ShopManager shopManager = new ShopManager(this);
     public PluginDescriptionFile pdfFile = null;
-    public SchedulerThread shopSchedulerThread = null;
+    public DynamicThread shopSchedulerThread = null;
     protected ReportThread reportThread = null;
     protected NotificationThread notificationThread = null;
     private EconomyManager econManager = null;
@@ -251,7 +251,7 @@ public class LocalShops extends JavaPlugin {
     public void enableShedule() {
         //Check to make sure we don't already have a scheduler running.
         if ( dynamicScheduled && shopSchedulerThread == null) {
-            shopSchedulerThread = new SchedulerThread(this);
+            shopSchedulerThread = new DynamicThread(this);
             shopSchedulerThread.start();
         } 
 
