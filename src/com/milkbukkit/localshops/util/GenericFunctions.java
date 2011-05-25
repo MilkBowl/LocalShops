@@ -132,4 +132,14 @@ public class GenericFunctions {
         
         return sum;
     }
+    
+    /**
+     * Calculate adjustment based on volatility
+     * @param int deltaStock
+     * @param int volatility
+     * @return % adjustment as double
+     */
+    public double getAdjustment(int deltaStock, int volatility) {
+        return (Math.pow((1 + volatility/10000), -deltaStock));
+    }
 }
