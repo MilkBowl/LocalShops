@@ -21,13 +21,17 @@ public class ShopsWorldListener extends WorldListener {
     }
     
     public void onWorldLoad (WorldLoadEvent event) {
+        //Loop through all shops
         for (Shop shop : plugin.getShopManager().getAllShops()) {
+            //If the event world is different than the shop world skip
             if (shop.getWorld() != event.getWorld().getName())
                 continue;
+            //Get an iterator from the shops signMap and loop through
             Iterator<String> iter = shop.getSignMap().keySet().iterator();
             while (iter.hasNext()) {
                 String signId = iter.next();
                 ShopSign sign = shop.getSignMap().get(signId);
+                //If event world and signWorld are the same, set the signworld and validate the sign.
                 if (sign.getWorld() == null && sign.getWorldName() == event.getWorld().getName())
                 {
                     sign.setWorld(event.getWorld());
