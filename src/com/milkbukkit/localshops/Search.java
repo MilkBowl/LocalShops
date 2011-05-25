@@ -212,7 +212,7 @@ public class Search {
         items.add(new ItemInfo("Gray Dye", new String[][] { { "dye", "gra" }, { "dye", "grey" }, { "pain", "grey" }, { "pain", "grey" } }, 351, (short) 8, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Pink Dye", new String[][] { { "dye", "pin" }, { "pain", "pin" } }, 351, (short) 9, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Lime Dye", new String[][] { { "dye", "lim" }, { "pain", "lim" }, { "dye", "lig", "gree" }, { "pain", "lig", "gree" } }, 351, (short) 10, new int[]{ 64, 64, 64 } ));
-        items.add(new ItemInfo("Dangelion Yellow", new String[][] { { "dye", "yel" }, { "pet", "dan" }, { "pet", "yel" } }, 351, (short) 11, new int[]{ 64, 64, 64 } ));
+        items.add(new ItemInfo("Dandelion Yellow", new String[][] { { "dye", "yel" }, { "yel", "dan" }, { "pet", "dan" }, { "pet", "yel" } }, 351, (short) 11, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Light Blue Dye", new String[][] { { "dye", "lig", "blu" }, { "pain", "lig", "blu" } }, 351, (short) 12, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Magenta Dye", new String[][] { { "dye", "mag" }, { "pain", "mag" } }, 351, (short) 13, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Orange Dye", new String[][] { { "dye", "ora" }, { "pain", "ora" } }, 351, (short) 14, new int[]{ 64, 64, 64 } ));
