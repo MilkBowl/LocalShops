@@ -107,6 +107,9 @@ public class ShopSign {
     }
 
     public boolean isValid() {
+        if (world == null) 
+            return true;
+        
         world.loadChunk(world.getChunkAt(getLoc()));
         if (world.getBlockAt(getLoc()).getType() == Material.WALL_SIGN || world.getBlockAt(getLoc()).getType() == Material.SIGN_POST )
             return true;
