@@ -26,6 +26,7 @@ public class Shop implements Comparator<Shop> {
     private ArrayList<String> managers = new ArrayList<String>();
     private boolean unlimitedMoney = false;
     private boolean unlimitedStock = false;
+    private boolean dynamicPrices = false;
     private HashMap<String, InventoryItem> inventory = new HashMap<String, InventoryItem>();
     private double minBalance = 0;
     private ArrayBlockingQueue<Transaction> transactions;
@@ -46,18 +47,38 @@ public class Shop implements Comparator<Shop> {
         return uuid;
     }
 
+    /**
+     * Sets the World the shop is located in
+     * 
+     * @param String world of the shop
+     */
     public void setWorld(String name) {
         world = name;
     }
 
+    /**
+     * Returns the name of the world the shop is located in
+     * 
+     * @return String world of the shop
+     */
     public String getWorld() {
         return world;
     }
 
+    /**
+     * Sets the name of the shop
+     * 
+     * @param String name of the shop
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Gets the name of the Shop
+     * 
+     * @return String name of the shop
+     */
     public String getName() {
         return name;
     }
@@ -164,7 +185,11 @@ public class Shop implements Comparator<Shop> {
     public void setUnlimitedMoney(boolean b) {
         unlimitedMoney = b;
     }
-
+    
+	public void setDynamicPrices(boolean dynamicPrices) {
+		this.dynamicPrices = dynamicPrices;
+	}
+	
     public InventoryItem getItem(String item) {
         return inventory.get(item);
     }
@@ -271,6 +296,15 @@ public class Shop implements Comparator<Shop> {
         return unlimitedMoney;
     }
 
+	/**
+	 * True if the shop is set to dynamic
+	 * 
+	 * @return Boolean dynamicPrices 
+	 */
+	public boolean isDynamicPrices() {
+		return dynamicPrices;
+	}
+	
     public boolean addStock(String itemName, int amount) {
         if (!inventory.containsKey(itemName)) {
             return false;
@@ -301,7 +335,41 @@ public class Shop implements Comparator<Shop> {
     public void setItemSellAmount(String itemName, int sellSize) {
         inventory.get(itemName).setSellSize(sellSize);
     }    
+    
+    /**
+     * Sets an item as dynamically adjustable
+     * 
+     * @param String itemName to set
+     */
+    public void setItemDynamic(String itemName) {
+    	inventory.get(itemName).setDynamic(!inventory.get(itemName).isDynamic());
+	}
 
+    /**
+     * Checks if an item is set to dynamic pricing or not
+     * 
+     * @param String itemName to check
+     * @return Boolean dynamic
+     */
+    public boolean isItemDynamic(String itemName) {
+    	return inventory.get(itemName).isDynamic();
+    }
+    
+    
+    /**
+     * Checks the number of dynamic items the shop contains.
+     * 
+     * @return int num of dynamic items
+     */
+    public int numDynamicItems() {
+        int num = 0;
+        for (InventoryItem item : this.getItems() ) {
+            if (item.isDynamic())
+                num++;
+        }
+        return num;   
+    }
+    
     public void removeItem(String itemName) {
         inventory.remove(itemName);
     }

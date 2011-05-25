@@ -53,6 +53,8 @@ public class CommandShopSet extends Command {
             return shopSetOwner();
         } else if (command.matches("(?i)set\\s+name.*")) {
             return shopSetName();
+        } else if (command.matches("(?i)set\\s+dynamic.*")) {
+            return shopSetDynamic();
         } else {
             return shopSetHelp();
         }
@@ -794,7 +796,111 @@ public class CommandShopSet extends Command {
         sender.sendMessage("   " + "/" + commandLabel + " set name [shop name]");
         return true;
     }
+ private boolean shopSetDynamic(Shop shop, ItemInfo item) {
+        if (item == null) {
+            sender.sendMessage("Item was not found.");
+            return true;
+        }
 
+        // Check if Shop has item
+        if (!shop.containsItem(item)) {
+            // nicely message user
+            sender.sendMessage(String.format("This shop does not carry %s!", item.name));
+            return true;
+        }
+
+        //Set new value
+        shop.setItemDynamic(item.name);
+
+        // Save Shop
+        plugin.getShopManager().saveShop(shop);
+
+        // Send Result
+        sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "Dynamic pricing for " + ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " is now " + shop.isItemDynamic(item.name));
+
+        return true;    
+    }
+    
+    private boolean shopSetDynamic() {
+        log.info("shopSetDynamic");
+        Shop shop = null;
+
+        // Get current shop
+        if (sender instanceof Player) {
+            // Get player & data
+            Player player = (Player) sender;
+            shop = getCurrentShop(player);
+            if (shop == null) {
+                sender.sendMessage("You are not in a shop!");
+                return false;
+            }
+
+            // Check Permissions
+            if (!canUseCommand(CommandTypes.ADMIN)) {
+                player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You do not have permission to set dynamic shops.");
+                return false;
+            }            
+        } else {
+            sender.sendMessage("Console is not implemented yet.");
+            return false;
+        }
+
+        // Command matching
+
+
+        //shop set dynamic int
+        Pattern pattern = Pattern.compile("(?i)set\\s+dynamic\\s+(\\d+)$");
+        Matcher matcher = pattern.matcher(command);
+        if (matcher.find()) {
+            int id = Integer.parseInt(matcher.group(1));
+            ItemInfo item = Search.itemById(id);
+            return shopSetDynamic(shop, item);
+        }
+        // set dynamic int:int
+        matcher.reset();
+        pattern = Pattern.compile("(?i)set\\s+dynamic\\s+(\\d+):(\\d+)");
+        matcher = pattern.matcher(command);
+        if (matcher.find()) {
+            int id = Integer.parseInt(matcher.group(1));
+            short type = Short.parseShort(matcher.group(2));
+            ItemInfo item = Search.itemById(id, type);
+            return shopSetDynamic(shop, item);
+        }
+        matcher.reset();
+        //shop set dynamic (char)
+        pattern = Pattern.compile("(?i)set\\s+dynamic\\s+(.*)");
+        matcher = pattern.matcher(command);
+        if (matcher.find()) {
+            String name = matcher.group(1);
+            ItemInfo item = Search.itemByName(name);
+            return shopSetDynamic(shop, item);
+        }
+        
+        // shop set dynamic
+        matcher.reset();
+        pattern = Pattern.compile("(?i)set\\s+dynamic");
+        matcher = pattern.matcher(command);
+        if (matcher.find()) {
+            shop.setDynamicPrices(!shop.isDynamicPrices());
+            //Turn on the scheduler if we enabled dynamic pricing
+            if ( plugin.shopSchedulerThread == null && shop.isDynamicPrices()) {
+                plugin.dynamicScheduled = true;
+                plugin.enableShedule();
+            }
+            sender.sendMessage(ChatColor.DARK_AQUA + "Dynamic pricing for " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " was set to " + ChatColor.WHITE + shop.isDynamicPrices());
+            plugin.getShopManager().saveShop(shop);
+            return true;
+        }
+
+
+        // show set dynamic usage
+        sender.sendMessage("   " + "/" + commandLabel + " set dynamic");
+        sender.sendMessage("   " + "/" + commandLabel + " set dynamic item");
+        sender.sendMessage("   " + "/" + commandLabel + " set dynamic id");
+        sender.sendMessage("   " + "/" + commandLabel + " set dynamic id:id");
+        return true;
+    }
+    
     private boolean shopSetHelp() {
         // Display list of set commands & return
         sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "The following set commands are available: ");
@@ -808,6 +914,7 @@ public class CommandShopSet extends Command {
         if (canUseCommand(CommandTypes.ADMIN)) {
             sender.sendMessage("   " + "/" + commandLabel + " set unlimited money");
             sender.sendMessage("   " + "/" + commandLabel + " set unlimited stock");
+            sender.sendMessage("   " + "/" + commandLabel + " set dynamic <id>");
         }
         return true;
     }
