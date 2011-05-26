@@ -2,6 +2,10 @@ package com.milkbukkit.localshops;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.bukkit.inventory.ItemStack;
 
 public class Search { 
     
@@ -277,6 +281,38 @@ public class Search {
                 return item;
             }
         }
+        return null;
+    }
+    
+    public static ItemInfo itemByString(String string) {
+
+        // int
+        Pattern pattern = Pattern.compile("(?i)^(\\d+)$");
+        Matcher matcher = pattern.matcher(string);
+        if (matcher.find()) {
+            int id = Integer.parseInt(matcher.group(1));
+            return itemById(id);
+        }
+
+        // int:int
+        matcher.reset();
+        pattern = Pattern.compile("(?i)^(\\d+):(\\d+)$");
+        matcher = pattern.matcher(string);
+        if (matcher.find()) {
+            int id = Integer.parseInt(matcher.group(1));
+            short type = Short.parseShort(matcher.group(2));
+            return itemById(id, type);
+        }
+
+        // name
+        matcher.reset();
+        pattern = Pattern.compile("(?i)^(.*)$");
+        matcher = pattern.matcher(string);
+        if (matcher.find()) {
+            String name = matcher.group(1);
+            return itemByName(name);
+        }
+        
         return null;
     }
     
