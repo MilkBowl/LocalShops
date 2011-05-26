@@ -415,7 +415,7 @@ public class ShopManager {
         double minBalance = Double.parseDouble((props.getProperty("min-balance", "0.0")));
         boolean notification = Boolean.parseBoolean(props.getProperty("notification", "true"));
         boolean global = Boolean.parseBoolean(props.getProperty("global", "false"));
-
+        
         if (!global) {
             // Location - locationB=-88, 50, -127
             try {
@@ -451,8 +451,9 @@ public class ShopManager {
             shop.setLocationA(new ShopLocation(locationA));
             shop.setLocationB(new ShopLocation(locationB));
         } else {
-
+            shop.setGlobal(true);
         }
+        
         // Make sure minimum balance isn't negative
         if (minBalance < 0) {
             shop.setMinBalance(0);
@@ -598,7 +599,7 @@ public class ShopManager {
         props.setProperty("notification", String.valueOf(shop.getNotification()));
 
         // Location
-        if (!shop.isGlobal() ) {
+        if (!shop.isGlobal()) {
             props.setProperty("locationA", shop.getLocationA().toString());
             props.setProperty("locationB", shop.getLocationB().toString());
         } else {
