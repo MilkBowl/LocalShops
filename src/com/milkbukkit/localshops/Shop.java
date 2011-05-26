@@ -522,25 +522,27 @@ public class Shop implements Comparator<Shop> {
     }
     
     public void updateSign(ShopSign sign) {
-        
-        //Get the lines for future use?
-        String signLines[] = {sign.getItemName(), "Buy: ", "Sell: ", ""};
+
+        String line1 = sign.getItemName();
+        String line2 = "Buy: ";
+        String line3 = "Sell: ";
+        String line4 = "";
 
         if (this.getItem(sign.getItemName()).getBuyPrice() == 0) {
-            signLines[1] += "-";
+            line2 += "-";
         } else {
-            signLines[1] += this.getItem(sign.getItemName()).getBuyPrice();
+            line2 += this.getItem(sign.getItemName()).getBuyPrice();
         }
         if (this.getItem(sign.getItemName()).getSellPrice() == 0) {
-            signLines[2] += "-";
+            line3 += "-";
         } else {
-            signLines[2] += this.getItem(sign.getItemName()).getSellPrice();
+            line3 += this.getItem(sign.getItemName()).getSellPrice();
         }
         //Set the lines
-        ((Sign) sign.getLoc().getBlock().getState()).setLine(0, signLines[0]);
-        ((Sign) sign.getLoc().getBlock().getState()).setLine(0, signLines[1]);
-        ((Sign) sign.getLoc().getBlock().getState()).setLine(0, signLines[2]);
-        ((Sign) sign.getLoc().getBlock().getState()).setLine(0, signLines[3]);
+        ((Sign) sign.getLoc().getBlock().getState()).setLine(0, line1);
+        ((Sign) sign.getLoc().getBlock().getState()).setLine(1, line2);
+        ((Sign) sign.getLoc().getBlock().getState()).setLine(2, line3);
+        ((Sign) sign.getLoc().getBlock().getState()).setLine(3, line4);
         
         sign.getLoc().getBlock().getState().update();
     }

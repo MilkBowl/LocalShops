@@ -1,6 +1,7 @@
 package com.milkbukkit.localshops.threads;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class DynamicThread extends Thread {
     }
 
     public void run() {
-        Map<ItemInfo, List<Integer>> itemStockMap = new HashMap<ItemInfo, List<Integer>>();
+        Map<ItemInfo, List<Integer>> itemStockMap = Collections.synchronizedMap(new HashMap<ItemInfo, List<Integer>>());
         
         //Dump all the shop stock data into the map.
         for ( Shop shop : plugin.getShopManager().getAllShops() ) {
