@@ -34,7 +34,7 @@ public class ShopsBlockListener extends BlockListener {
     public void onSignChange(SignChangeEvent event) {
         Shop shop = null;
         Block block = event.getBlock();
-        
+
         shop = plugin.getShopManager().getShop(event.getBlock().getLocation());
 
         //Return if we aren't in a shop
@@ -42,36 +42,40 @@ public class ShopsBlockListener extends BlockListener {
             return;
         }
 
-        //Regex the 1st line to check for an item.
         String line1 = event.getLine(0);
         String line2 = "Buy: ";
         String line3 = "Sell: ";
-        String line4 = "";
+        String line4 = "Stock: ";
 
         ItemInfo item = Search.itemByName(line1);
         if ( item != null ) {
-            line1 = item.name;
             if (shop.containsItem(item)) {
-                if (shop.getItem(line1).getBuyPrice() == 0) {
+                
+                if (shop.getItem(item).getBuyPrice() == 0) 
                     line2 += "-";
-                } else {
-                    line2 += shop.getItem(line1).getBuyPrice();
-                }
-                if (shop.getItem(line1).getSellPrice() == 0) {
+                else 
+                    line2 += shop.getItem(item).getBuyPrice();
+                
+                if (shop.getItem(item).getSellPrice() == 0) 
                     line3 += "-";
-                } else {
-                    line3 += shop.getItem(line1).getSellPrice();
-                }
+                else 
+                    line3 += shop.getItem(item).getSellPrice();
+                
+                if (!shop.isUnlimitedStock())
+                    line4 += shop.getItem(item).getStock();
+                else
+                    line4 += "-";
+                
                 //Add the sign to the Shop signlist and save the shop
                 ShopSign sign = new ShopSign(block, item.name);
                 shop.getSignMap().put(sign.hashString(), sign);
                 plugin.getShopManager().saveShop(shop);
 
                 //Write back the lines for the sign
-                event.setLine(0, line1);
                 event.setLine(1, line2);
                 event.setLine(2, line3);
                 event.setLine(3, line4);
+                
             } else {
                 return;
             }

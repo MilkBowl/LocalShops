@@ -196,6 +196,10 @@ public class Shop implements Comparator<Shop> {
         return inventory.get(item);
     }
     
+    public InventoryItem getItem(ItemInfo item) {
+        return inventory.get(item.name);
+    }
+    
     public boolean containsItem(ItemInfo item) {
         Iterator<InventoryItem> it = inventory.values().iterator();
         while(it.hasNext()) {
@@ -526,18 +530,23 @@ public class Shop implements Comparator<Shop> {
         String line1 = sign.getItemName();
         String line2 = "Buy: ";
         String line3 = "Sell: ";
-        String line4 = "";
+        String line4 = "Stock:" ;
 
-        if (this.getItem(sign.getItemName()).getBuyPrice() == 0) {
+        if (this.getItem(sign.getItemName()).getBuyPrice() == 0) 
             line2 += "-";
-        } else {
-            line2 += this.getItem(sign.getItemName()).getBuyPrice();
-        }
-        if (this.getItem(sign.getItemName()).getSellPrice() == 0) {
+        else 
+            line2 += this.getItem(sign.getItemName()).getBuyPrice() + " - [" + this.getItem(sign.getItemName()).getBuySize() + "]";
+        
+        if (this.getItem(sign.getItemName()).getSellPrice() == 0) 
             line3 += "-";
-        } else {
-            line3 += this.getItem(sign.getItemName()).getSellPrice();
-        }
+        else 
+            line3 += this.getItem(sign.getItemName()).getSellPrice() + " - [" + this.getItem(sign.getItemName()).getSellSize() + "]";
+        
+        if (!this.unlimitedStock)
+            line4 += this.getItem(sign.getItemName()).getStock();
+        else
+            line4 += "-";
+        
         //Set the lines
         ((Sign) sign.getLoc().getBlock().getState()).setLine(0, line1);
         ((Sign) sign.getLoc().getBlock().getState()).setLine(1, line2);
