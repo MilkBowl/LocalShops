@@ -449,6 +449,12 @@ public class Shop implements Comparator<Shop> {
             ItemInfo info = item.getInfo();
             log.info(String.format("   %6d:%-2d %-6.2f %-3d %-6.2f %-3d %-3d %-3d", info.typeId, info.subTypeId, item.getBuyPrice(), item.getBuySize(), item.getSellPrice(), item.getSellSize(), item.getStock(), item.getMaxStock()));
         }
+        
+        // Signs
+        log.info("Shop Signs");
+        for(ShopSign sign : signMap.values()) {
+            log.info(String.format("   %s", sign.toString()));
+        }
     }
     
     @Override
