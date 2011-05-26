@@ -132,23 +132,11 @@ public class ShopsPlayerListener extends PlayerListener {
             plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
         }
 
-        int x, y, z;
-        Location xyz = event.getTo();
-        x = xyz.getBlockX();
-        y = xyz.getBlockY();
-        z = xyz.getBlockZ();
-
-        checkPlayerPosition(player, x, y, z);
+        checkPlayerPosition(player, event.getTo());
     }
 
     public void checkPlayerPosition(Player player) {
-        int x, y, z;
-        Location xyz = player.getLocation();
-        x = xyz.getBlockX();
-        y = xyz.getBlockY();
-        z = xyz.getBlockZ();
-
-        checkPlayerPosition(player, x, y, z);
+        checkPlayerPosition(player, player.getLocation());
     }
 
     public void checkPlayerPosition(Player player, int[] xyz) {
@@ -179,6 +167,10 @@ public class ShopsPlayerListener extends PlayerListener {
             pData.shopList.add(shop.getUuid());
             notifyPlayerEnterShop(player, shop.getUuid());
         }
+    }
+    
+    public void checkPlayerPosition(Player player, Location loc) {
+        checkPlayerPosition(player, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
 
     private void notifyPlayerLeftShop(Player player, UUID shopUuid) {
