@@ -453,7 +453,7 @@ public class Shop implements Comparator<Shop> {
         
         // Signs
         log.info("Shop Signs");
-        for(ShopSign sign : signMap.values()) {
+        for(ShopSign sign : signSet) {
             log.info(String.format("   %s", sign.toString()));
         }
     }
