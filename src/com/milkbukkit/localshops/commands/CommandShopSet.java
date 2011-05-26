@@ -198,8 +198,15 @@ public class CommandShopSet extends Command {
     }
 
     private boolean shopSetBuy(Shop shop, ItemInfo item, double price, int size) {
+        // Check for valid item
         if (item == null) {
             sender.sendMessage("Item was not found.");
+            return true;
+        }
+        
+        // Check for valid size
+        if(size < 1) {
+            sender.sendMessage("Bundles must be at least 1!");
             return true;
         }
 
@@ -338,8 +345,15 @@ public class CommandShopSet extends Command {
     }
 
     private boolean shopSetSell(Shop shop, ItemInfo item, double price, int size) {
+        // Check for valid item
         if (item == null) {
             sender.sendMessage("Item was not found.");
+            return true;
+        }
+        
+        // Check for valid size
+        if(size < 1) {
+            sender.sendMessage("Bundles must be at least 1!");
             return true;
         }
 

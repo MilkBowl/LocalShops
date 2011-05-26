@@ -245,7 +245,7 @@ public class Shop implements Comparator<Shop> {
     public boolean addItem(int itemNumber, short itemData, double buyPrice, int buyStackSize, double sellPrice, int sellStackSize, int stock, int maxStock) {
         // TODO add maxStock to item object
         ItemInfo item = Search.itemById(itemNumber, itemData);
-        if(item == null) {
+        if(item == null || sellStackSize < 1 || buyStackSize < 1) {
             return false;
         }
         

@@ -3,9 +3,9 @@ package com.milkbukkit.localshops;
 public class InventoryItem {
 
     private ItemInfo info;
-    private int buySize = 0;
+    private int buySize = 1;
     private double buyPrice = 0;
-    private int sellSize = 0;
+    private int sellSize = 1;
     private double sellPrice = 0;
     private int stock;
     private int baseStock = 0;
@@ -49,12 +49,20 @@ public class InventoryItem {
     }
 
     public void setSell(double sellPrice, int sellSize) {
+        if(sellSize < 1) {
+            sellSize = 1;
+        }
+        
         this.sellPrice = sellPrice;
         this.sellSize = sellSize;
 
     }
 
     public void setBuy(double buyPrice, int buySize) {
+        if(buySize < 1) {
+            buySize = 1;
+        }
+        
         this.buyPrice = buyPrice;
         this.buySize = buySize;
     }
@@ -95,6 +103,10 @@ public class InventoryItem {
     }
 
     public void setSellSize(int size) {
+        if(size < 1) {
+            size = 1;
+        }
+        
         sellSize = size;
     }
 
@@ -103,6 +115,10 @@ public class InventoryItem {
     }
 
     public void setBuySize(int size) {
+        if(size < 1) {
+            size = 1;
+        }
+        
         buySize = size;
     }
 
