@@ -9,7 +9,6 @@ public class SchedulerThread extends Thread {
     private int interval = 5;
     private boolean run = true;
     private static final int TICKS_PER_SECOND = 20;
-    private ThreadGroup dynamicThreadGroup = new ThreadGroup("dynamic");
     
     private LocalShops plugin = null;
     
@@ -22,6 +21,9 @@ public class SchedulerThread extends Thread {
     }
     
     public void run() {
+        // Initial Actions
+        // Start Dynamic Thread to base shop values
+        plugin.getThreadManager().dynamicStart();
         while(true) {
             if(!run) {
                 break;
@@ -31,13 +33,7 @@ public class SchedulerThread extends Thread {
             
             // Launch Dynamic Thread (5pm)
             if(worldTime >= 9000 && worldTime < (9000 + (interval * TICKS_PER_SECOND))) {
-                if(dynamicThreadGroup.activeCount() == 0) {
-                    log.info(String.format("[%s] Launching Dynamic Thread", plugin.getDescription().getName()));
-                    DynamicThread dt = new DynamicThread(dynamicThreadGroup, "dynamic", plugin);
-                    dt.start();
-                } else {
-                    log.info(String.format("[%s] Dynamic Thread already running", plugin.getDescription().getName()));
-                }
+                plugin.getThreadManager().dynamicStart();
             }
          
             for(int i = 0; i < interval; i++) {
