@@ -122,7 +122,7 @@ public class CommandShopMove extends Command {
                 }
 
                 // update the shop
-                thisShop.setWorld(player.getWorld().getName());
+                thisShop.setWorldName(player.getWorld().getName());
                 thisShop.setLocations(new ShopLocation(xyzA), new ShopLocation(xyzB));
                 log.info(thisShop.getUuid().toString());
                 //plugin.getShopManager().deleteShop(thisShop);

@@ -54,7 +54,7 @@ public class ShopManager {
 
     public Shop getShop(String world, int x, int y, int z) {
         for(Shop shop : shops.values()) {
-            if (shop.isGlobal() || !shop.getWorld().equals(world)) {
+            if (shop.isGlobal() || !shop.getWorldName().equals(world)) {
                 continue;
             }
 
@@ -180,7 +180,7 @@ public class ShopManager {
                     log.info(String.format("[%s] Loaded %s", plugin.pdfFile.getName(), shop.toString()));
                 }
                 if (shop.isGlobal()) {
-                    Config.globalShopsAdd(shop.getWorld(), shop.getUuid());
+                    Config.globalShopsAdd(shop.getWorldName(), shop.getUuid());
                 } 
                 plugin.getShopManager().addShop(shop);
             } else {
@@ -226,7 +226,7 @@ public class ShopManager {
                 }
 
                 if (cols[0].equalsIgnoreCase("world")) { // World
-                    shop.setWorld(cols[1]);
+                    shop.setWorldName(cols[1]);
                 } else if (cols[0].equalsIgnoreCase("owner")) { // Owner
                     shop.setOwner(cols[1]);
                 } else if (cols[0].equalsIgnoreCase("managers")) { // Managers
@@ -446,7 +446,7 @@ public class ShopManager {
         shop.setManagers(managers);
         shop.setCreator(creator);
         shop.setNotification(notification);
-        shop.setWorld(world);
+        shop.setWorldName(world);
         if (!global) {
             shop.setLocationA(new ShopLocation(locationA));
             shop.setLocationB(new ShopLocation(locationB));
@@ -600,7 +600,7 @@ public class ShopManager {
             props.setProperty("global", "true");
         }
 
-        props.setProperty("world", shop.getWorld());
+        props.setProperty("world", shop.getWorldName());
 
         // People
         props.setProperty("owner", shop.getOwner());
@@ -641,7 +641,7 @@ public class ShopManager {
         String shortUuid = shop.getShortUuidString();
 
         if (shop.isGlobal()) {
-            if (Config.globalShopsContainsKey(shop.getWorld())) {
+            if (Config.globalShopsContainsKey(shop.getWorldName())) {
                 /**
                 Config.GLOBAL_SHOPS.remove(shop.getWorld());
                 LocalShops.getProperties().removeKey(shop.getWorld() + "-shop-UUID");

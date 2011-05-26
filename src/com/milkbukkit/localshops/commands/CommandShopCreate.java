@@ -135,7 +135,7 @@ public class CommandShopCreate extends Command {
         shop.setCreator(creator);
         shop.setOwner(creator);
         shop.setName(name);
-        shop.setWorld(world);
+        shop.setWorldName(world);
         if ( !isGlobal) {
             shop.setLocations(new ShopLocation(xyzA), new ShopLocation(xyzB));
 

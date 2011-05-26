@@ -20,7 +20,7 @@ import org.bukkit.block.Sign;
 public class Shop implements Comparator<Shop> {
     // Attributes
     private UUID uuid = null;
-    private String world = null;
+    private String worldName = null;
     private String name = null;
     private ShopLocation locationA = null;
     private ShopLocation locationB = null;
@@ -55,8 +55,8 @@ public class Shop implements Comparator<Shop> {
      * 
      * @param String world of the shop
      */
-    public void setWorld(String name) {
-        world = name;
+    public void setWorldName(String worldName) {
+        this.worldName = worldName;
     }
 
     /**
@@ -64,8 +64,8 @@ public class Shop implements Comparator<Shop> {
      * 
      * @return String world of the shop
      */
-    public String getWorld() {
-        return world;
+    public String getWorldName() {
+        return worldName;
     }
 
     /**
@@ -411,7 +411,7 @@ public class Shop implements Comparator<Shop> {
 
     public String toString() {
         if(global) {
-            return String.format("Shop \"%s\" in world \"%s\" %d items - %s", this.name, world, inventory.size(), uuid.toString());
+            return String.format("Shop \"%s\" in world \"%s\" %d items - %s", this.name, worldName, inventory.size(), uuid.toString());
         } else {
             String locA = "";
             String locB = "";
@@ -438,7 +438,7 @@ public class Shop implements Comparator<Shop> {
         log.info(String.format("   %-16s %s", "Unlimited Stock:", unlimitedStock ? "Yes" : "No"));        
         log.info(String.format("   %-16s %s", "Location A:", locationA.toString()));
         log.info(String.format("   %-16s %s", "Location B:", locationB.toString()));
-        log.info(String.format("   %-16s %s", "World:", world));
+        log.info(String.format("   %-16s %s", "World:", worldName));
         
         // Items
         log.info("Shop Inventory");
@@ -481,7 +481,7 @@ public class Shop implements Comparator<Shop> {
     }
     
     public boolean containsPoint(String worldName, int x, int y, int z) {
-        if(!worldName.equals(world)) {
+        if(!worldName.equals(worldName)) {
             return false;
         }
         
