@@ -40,7 +40,7 @@ public class ShopsBlockListener extends BlockListener {
             return;
         }
 
-        ItemInfo item = Search.itemByName(event.getLine(0));
+        ItemInfo item = Search.itemByString(event.getLine(0));
 
         if (item != null) {
 
