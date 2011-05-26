@@ -42,12 +42,13 @@ public class ShopsBlockListener extends BlockListener {
             return;
         }
 
-        String line1 = event.getLine(0);
+
+        ItemInfo item = Search.itemByName(event.getLine(0));
+        
+        String line1 = item.name;
         String line2 = "Buy: ";
         String line3 = "Sell: ";
         String line4 = "Stock: ";
-
-        ItemInfo item = Search.itemByName(line1);
         if ( item != null ) {
             if (shop.containsItem(item)) {
                 
@@ -72,6 +73,7 @@ public class ShopsBlockListener extends BlockListener {
                 plugin.getShopManager().saveShop(shop);
 
                 //Write back the lines for the sign
+                event.setLine(0, line1);
                 event.setLine(1, line2);
                 event.setLine(2, line3);
                 event.setLine(3, line4);
