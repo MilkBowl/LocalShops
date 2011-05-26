@@ -32,7 +32,7 @@ public class CommandShopCreate extends Command {
         String world = null;
         int[] xyzA = new int[3];
         int[] xyzB = new int[3];
-        
+
         Player player = null;
 
         // Get current shop
@@ -122,14 +122,14 @@ public class CommandShopCreate extends Command {
             }
         }
 
-        if (name == null) {
-            matcher.reset();
-            Pattern.compile("(?i)create\\s+(.*)");
-            matcher = pattern.matcher(command);
-            if (matcher.find()) {
-                name = matcher.group(1);
-            }
+
+        matcher.reset();
+        pattern = Pattern.compile("(?i)create\\s+(.*)");
+        matcher = pattern.matcher(command);
+        if (matcher.find()) {
+            name = matcher.group(1);
         }
+
 
         Shop shop = new Shop(UUID.randomUUID());
         shop.setCreator(creator);
