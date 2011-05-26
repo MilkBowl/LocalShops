@@ -135,7 +135,6 @@ public class CommandShopFind extends Command {
                 continue;
             }
 
-
             // Check shop has item & is either buying or selling it
             if (!shop.containsItem(found)) {
                 continue;
@@ -162,14 +161,14 @@ public class CommandShopFind extends Command {
                 InventoryItem item = shop.getItem(found.name);
 
                 String sellPrice;
-                if (item.getBuyPrice() <= 0 || item.getBuySize() <= 0 || item.getStock() == 0) {
+                if (item.getBuyPrice() <= 0 || item.getBuySize() <= 0 || (item.getStock() == 0 && !shop.isUnlimitedStock())) {
                     sellPrice = "--";
                 } else {
                     sellPrice = String.format("%.2f", (item.getBuyPrice() / item.getBuySize()));
                 }
 
                 String buyPrice;
-                if (item.getSellPrice() <= 0 || item.getSellSize() <= 0 || item.getStock() > item.getMaxStock()) {
+                if (item.getSellPrice() <= 0 || item.getSellSize() <= 0 || (item.getStock() > item.getMaxStock() && !shop.isUnlimitedStock() )) {
                     buyPrice = "--";
                 } else {
                     buyPrice = String.format("%.2f", (item.getSellPrice() / item.getSellSize()));
