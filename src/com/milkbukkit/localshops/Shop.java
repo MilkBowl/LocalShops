@@ -531,12 +531,12 @@ public class Shop implements Comparator<Shop> {
         String line3 = "Sell: ";
         String line4 = "Stock:" ;
 
-        if (this.getItem(sign.getItemName()).getBuyPrice() == 0) 
+        if (this.getItem(sign.getItemName()).getBuyPrice() == 0 || (this.getItem(sign.getItemName()).getStock() == 0 && !this.unlimitedStock)) 
             line2 += "-";
         else 
             line2 += this.getItem(sign.getItemName()).getBuyPrice() + " - [" + this.getItem(sign.getItemName()).getBuySize() + "]";
         
-        if (this.getItem(sign.getItemName()).getSellPrice() == 0) 
+        if (this.getItem(sign.getItemName()).getSellPrice() == 0 || (this.getItem(sign.getItemName()).getStock() >= this.getItem(sign.getItemName()).maxStock && !this.unlimitedStock)) 
             line3 += "-";
         else 
             line3 += this.getItem(sign.getItemName()).getSellPrice() + " - [" + this.getItem(sign.getItemName()).getSellSize() + "]";
@@ -569,5 +569,6 @@ public class Shop implements Comparator<Shop> {
                 updateSign(signMap.get(key));
         }
     }
+    
     
 }
