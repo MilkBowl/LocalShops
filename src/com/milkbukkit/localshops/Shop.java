@@ -476,7 +476,7 @@ public class Shop implements Comparator<Shop> {
         this.signSet = signSet;
     }
 
-    public Set<ShopSign> getSignMap() {
+    public Set<ShopSign> getSignSet() {
         return signSet;
     }
     
