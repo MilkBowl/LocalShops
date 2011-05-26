@@ -112,7 +112,7 @@ public class Config {
         
         properties.setProperty("find-max-distance", String.valueOf(findMaxDistance));
         
-        properties.setProperty("global-shop", String.valueOf(globalShopsEnabled));
+        properties.setProperty("global-shops", String.valueOf(globalShopsEnabled));
         
         properties.setProperty("chat-max-lines", String.valueOf(chatMaxLines));
         
@@ -184,7 +184,7 @@ public class Config {
         
         findMaxDistance = Integer.parseInt(properties.getProperty("find-max-distance", String.valueOf(findMaxDistance)));
         
-        globalShopsEnabled = Boolean.parseBoolean(properties.getProperty("global-shop", String.valueOf(globalShopsEnabled)));
+        globalShopsEnabled = Boolean.parseBoolean(properties.getProperty("global-shops", String.valueOf(globalShopsEnabled)));
         
         chatMaxLines = Integer.parseInt(properties.getProperty("chat-max-lines", String.valueOf(chatMaxLines)));
         
