@@ -154,7 +154,11 @@ public class CommandShopFind extends Command {
 
         if (entries.size() > 0) {
             int count = 0;
-            sender.sendMessage(ChatColor.DARK_AQUA + "Showing " + ChatColor.WHITE + "4" + ChatColor.DARK_AQUA + " of " + ChatColor.WHITE + foundShops.size() + ChatColor.DARK_AQUA + " shop(s) having " + ChatColor.WHITE + found.name);
+            int numToShow = foundShops.size();
+            if ( numToShow > 4 ) {
+                numToShow = 4;
+            } 
+            sender.sendMessage(ChatColor.DARK_AQUA + "Showing " + ChatColor.WHITE + foundShops.size() + ChatColor.DARK_AQUA + " of " + ChatColor.WHITE + numToShow + ChatColor.DARK_AQUA + " shops having " + ChatColor.WHITE + found.name);
             for (Entry<UUID, Double> entry : entries) {
                 UUID uuid = entry.getKey();
                 double distance = entry.getValue();
