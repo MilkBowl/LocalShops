@@ -541,6 +541,8 @@ public class Shop implements Comparator<Shop> {
         ((Sign) sign.getLoc().getBlock().getState()).setLine(0, signLines[1]);
         ((Sign) sign.getLoc().getBlock().getState()).setLine(0, signLines[2]);
         ((Sign) sign.getLoc().getBlock().getState()).setLine(0, signLines[3]);
+        
+        sign.getLoc().getBlock().getState().update();
     }
     
     public void updateSign(Location loc) {
