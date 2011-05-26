@@ -9,8 +9,6 @@ public class InventoryItem {
     private double sellPrice = 0;
     private int stock;
     private int baseStock = 0;
-    private double dynBuyPrice;
-    private double dynSellPrice;
     private boolean dynamic;
     public int maxStock;
 
@@ -22,8 +20,6 @@ public class InventoryItem {
         sellPrice = 0;
         stock = 0;
         maxStock = 0;
-        dynBuyPrice = buyPrice;
-        dynSellPrice = sellPrice;
         dynamic = false;
     }
 
@@ -34,8 +30,6 @@ public class InventoryItem {
         sellSize = 1;
         sellPrice = 0;
         stock = 0;
-        dynBuyPrice = buyPrice;
-        dynSellPrice = sellPrice;
         dynamic = false;
     }
     
@@ -47,8 +41,7 @@ public class InventoryItem {
         this.sellPrice = sellPrice;
         this.stock = stock;
         this.maxStock = maxStock;
-        this.dynBuyPrice = buyPrice;
-        this.dynSellPrice = sellPrice;
+
     }
 
     public ItemInfo getInfo() {
@@ -91,14 +84,12 @@ public class InventoryItem {
 
     public void setSellPrice(double price) {
         sellPrice = price;
-        //Make sure to reset the dynamic price on the item if the price is changed
-        dynSellPrice = price;
     }
 
     public double getSellPrice() {
-        //for dynamic items use the current dynamic price
+        //for dynamic items use the currently adjusted price
         if (dynamic)
-            return dynSellPrice;
+            return sellPrice * DynamicManager.getPriceAdjMap().get(info);
 
         return sellPrice;
     }
@@ -121,32 +112,14 @@ public class InventoryItem {
 
     public void setBuyPrice(double price) {
         buyPrice = price;
-        //Make sure to reset the dynamic price on the item if the price is changed
-        dynBuyPrice = price;
     }
 
     public double getBuyPrice() {
         //for dynamic items use the current dynamic price
         if (dynamic)
-            return dynBuyPrice;
+            return buyPrice * DynamicManager.getPriceAdjMap().get(info);
 
         return buyPrice;
-    }
-
-    public double getDynBuyPrice() {
-        return dynBuyPrice;
-    }
-
-    public void setDynBuyPrice(double dynBuyPrice) {
-        this.dynBuyPrice = dynBuyPrice;
-    }
-
-    public double getDynSellPrice() {
-        return dynSellPrice;
-    }
-
-    public void setDynSellPrice(double dynSellPrice) {
-        this.dynSellPrice = dynSellPrice;
     }
 
     public boolean isDynamic() {
@@ -154,31 +127,12 @@ public class InventoryItem {
     }
 
     /**
-     * Sets the item as dynamic or not
-     * Resets the dynamic prices when dynamic-ness is toggled
+     * Toggles the item as dynamic or not
      * 
      * @param Boolean dynamic
      */
     public void setDynamic(boolean dynamic) {
         this.dynamic = dynamic;
-        //Reset dynamic prices to base prices when dynamic is enabled
-        if (dynamic) {
-            this.dynBuyPrice = this.buyPrice;
-            this.dynSellPrice = this.sellPrice;
-        }
-    }
-
-    /**
-     * Checks if dynBuyPrice is non-zero and equal to buyPrice
-     * 
-     * @return True if dynBuyPrice non-zero and equal
-     * 
-     */
-    public boolean isNormalized() {
-        if (this.dynBuyPrice == this.buyPrice && this.dynBuyPrice != 0)
-            return true;
-
-        return false;
     }
     
     public int getBaseStock() {
