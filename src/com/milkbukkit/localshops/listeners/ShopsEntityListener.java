@@ -47,15 +47,15 @@ public class ShopsEntityListener extends EntityListener {
             if (shop == null) {
                 continue;
             } else {
-                Iterator<String> iter = shop.getSignMap().keySet().iterator();
+                Iterator<ShopSign> iter = shop.getSignSet().iterator();
                 while (iter.hasNext()) {
-                    ShopSign sign = shop.getSignMap().get(iter.next());
-                    if ( sign.getLoc() == block.getLocation() ) {
+                    ShopSign sign = iter.next();
+                    if (sign.getLoc().equals(block.getLocation())) {
                         //Remove the object from the map - Only 1 match per loop possible
                         iter.remove();
                         break;
                     }
-                }
+                } 
             }
         }
     }

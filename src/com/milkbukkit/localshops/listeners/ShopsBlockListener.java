@@ -68,7 +68,7 @@ public class ShopsBlockListener extends BlockListener {
 
                 // Add the sign to the Shop signlist and save the shop
                 ShopSign sign = new ShopSign(block, item.name);
-                shop.getSignMap().put(sign.hashString(), sign);
+                shop.getSignSet().add(sign);
                 plugin.getShopManager().saveShop(shop);
 
                 // Write back the lines for the sign
@@ -88,6 +88,10 @@ public class ShopsBlockListener extends BlockListener {
     }
 
     public void onBlockPlace(BlockPlaceEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+        
         Block block = event.getBlock();
 
         // If not a sign ignore event.
@@ -114,6 +118,10 @@ public class ShopsBlockListener extends BlockListener {
     }
 
     public void onBlockBreak(BlockBreakEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+        
         Block block = event.getBlock();
 
         // If not a sign ignore event.
@@ -137,9 +145,10 @@ public class ShopsBlockListener extends BlockListener {
             event.setCancelled(true);
             return;
         } else {
-            String xyz = block.getWorld().getName() + block.getX() + block.getY() + block.getZ();
-            if (shop.getSignMap().containsKey(xyz)) {
-                shop.getSignMap().remove(xyz);
+            for (ShopSign sign : shop.getSignSet()) {
+                if (sign.getLoc().equals(event.getBlock().getLocation())) {
+                    shop.getSignSet().remove(sign);
+                }
             }
         }
 
