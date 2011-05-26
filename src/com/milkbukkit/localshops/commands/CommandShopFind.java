@@ -29,7 +29,7 @@ public class CommandShopFind extends Command {
     public CommandShopFind(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command);
     }
-    
+
     public CommandShopFind(LocalShops plugin, String commandLabel, CommandSender sender, String[] command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command);
     }
@@ -39,7 +39,7 @@ public class CommandShopFind extends Command {
             sender.sendMessage(String.format("[%s] Shop finding has been disabled on this server.", plugin.getDescription().getName()));
             return true;
         }
-        
+
         if (!(sender instanceof Player)) {
             sender.sendMessage("Console is not implemented");
         }
@@ -124,15 +124,17 @@ public class CommandShopFind extends Command {
         List<Shop> shops = plugin.getShopManager().getAllShops();
         for (Shop shop : shops) {
             // Check that its the current world
-            if (!playerWorld.equals(shop.getWorld())) {
+            if (!playerWorld.equals(shop.getWorld()) || shop.isGlobal()) {
                 continue;
             }
 
             // Determine distance, if too far away ignore
+
             double distance = GenericFunctions.calculateDistance(playerLoc.getX(), playerLoc.getY(), playerLoc.getZ(), shop.getLocationCenter().getX(), shop.getLocationCenter().getY(), shop.getLocationCenter().getZ());
             if (Config.getFindMaxDistance() > 0 && distance > Config.getFindMaxDistance()) {
                 continue;
             }
+
 
             // Check shop has item & is either buying or selling it
             if (!shop.containsItem(found)) {
@@ -145,7 +147,7 @@ public class CommandShopFind extends Command {
         if (Config.getGlobalShopsEnabled() && Config.globalShopsContainsKey(playerWorld)) {
             foundShops.put(Config.getGlobalShopUuid(playerWorld), 0D);
         }
-        
+
         @SuppressWarnings("unchecked")
         SortedSet<Entry<UUID, Double>> entries = new TreeSet<Entry<UUID, Double>>(new EntryValueComparator());
         entries.addAll(foundShops.entrySet());
