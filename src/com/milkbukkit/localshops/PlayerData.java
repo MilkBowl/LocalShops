@@ -21,7 +21,6 @@ public class PlayerData {
     private boolean isSelecting = false;
     private int xyzA[] = null;
     private int xyzB[] = null;
-    protected String size = "";
     
     // Logging
     private static final Logger log = Logger.getLogger("Minecraft");    
@@ -46,28 +45,6 @@ public class PlayerData {
 
     public void setPositionB(int[] xyz) {
         xyzB = xyz.clone();
-    }
-
-    public String getSizeString() {
-        return size;
-    }
-
-    public boolean checkSize() {
-        if (xyzA == null || xyzB == null) {
-            return false;
-        }
-
-        double width1 = Math.abs(xyzA[0] - xyzB[0]) + 1;
-        double height = Math.abs(xyzA[1] - xyzB[1]) + 1;
-        double width2 = Math.abs(xyzA[2] - xyzB[2]) + 1;
-
-        size = "" + width1 + "x" + height + "x" + width2;
-
-        if (width1 > Config.getShopSizeMaxWidth() || width2 > Config.getShopSizeMaxWidth() || height > Config.getShopSizeMaxHeight()) {
-            return false;
-        } else {
-            return true;
-        }
     }
 
     public boolean addPlayerToShop(Shop shop) {

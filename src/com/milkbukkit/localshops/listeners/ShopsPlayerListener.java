@@ -15,9 +15,11 @@ import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.PlayerData;
 import com.milkbukkit.localshops.Shop;
+import com.milkbukkit.localshops.util.GenericFunctions;
 
 /**
  * Handle events for all Player related events
@@ -58,8 +60,9 @@ public class ShopsPlayerListener extends PlayerListener {
             if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
                 int[] xyz = { x, y, z };
                 pData.setPositionA(xyz);
-                if(pData.checkSize()) {
-                    player.sendMessage(ChatColor.DARK_AQUA + "First Position " + ChatColor.LIGHT_PURPLE + x + " " + y + " " + z + ChatColor.DARK_AQUA + " size " + ChatColor.LIGHT_PURPLE + plugin.getPlayerData().get(playerName).getSizeString());
+                String size = GenericFunctions.calculateCuboidSize(pData.getPositionA(), pData.getPositionB(), Config.getShopSizeMaxWidth(), Config.getShopSizeMaxHeight());
+                if(size != null) {
+                    player.sendMessage(ChatColor.DARK_AQUA + "First Position " + ChatColor.LIGHT_PURPLE + x + " " + y + " " + z + ChatColor.DARK_AQUA + " size " + ChatColor.LIGHT_PURPLE + size);
                 } else {
                     player.sendMessage(ChatColor.DARK_AQUA + "First Position " + ChatColor.LIGHT_PURPLE + x + " " + y + " " + z);
                 }
@@ -72,8 +75,9 @@ public class ShopsPlayerListener extends PlayerListener {
             } else if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 int[] xyz = { x, y, z };
                 pData.setPositionB(xyz);
-                if(pData.checkSize()) {
-                    player.sendMessage(ChatColor.DARK_AQUA + "Second Position " + ChatColor.LIGHT_PURPLE + x + " " + y + " " + z + ChatColor.DARK_AQUA + " size " + ChatColor.LIGHT_PURPLE + plugin.getPlayerData().get(playerName).getSizeString());
+                String size = GenericFunctions.calculateCuboidSize(pData.getPositionA(), pData.getPositionB(), Config.getShopSizeMaxWidth(), Config.getShopSizeMaxHeight());
+                if(size != null) {
+                    player.sendMessage(ChatColor.DARK_AQUA + "Second Position " + ChatColor.LIGHT_PURPLE + x + " " + y + " " + z + ChatColor.DARK_AQUA + " size " + ChatColor.LIGHT_PURPLE + size);
                 } else {
                     player.sendMessage(ChatColor.DARK_AQUA + "Second Position " + ChatColor.LIGHT_PURPLE + x + " " + y + " " + z);
                 }

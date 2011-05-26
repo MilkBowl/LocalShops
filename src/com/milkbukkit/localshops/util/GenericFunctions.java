@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.milkbukkit.localshops.Config;
+
 public class GenericFunctions {
     /**
      * Calculates distance between two cartesian points
@@ -141,5 +143,32 @@ public class GenericFunctions {
      */
     public static double getAdjustment(int deltaStock, int volatility) {
         return (Math.pow((1 + volatility/10000), -deltaStock));
+    }
+    
+    /**
+     * Calculates size of a cuboid, returns null if larger than provided max width and height,
+     * otherwise returns a readable string of the region size.
+     * @param xyzA Coordinates (3 elements)
+     * @param xyzB Coordinates (3 elements)
+     * @param maxWidth Maximum overall width
+     * @param maxHeight Maximum overall height
+     * @return
+     */
+    public static String calculateCuboidSize(int[] xyzA, int[] xyzB, int maxWidth, int maxHeight) {
+        if (xyzA == null || xyzB == null) {
+            return null;
+        }
+
+        double width1 = Math.abs(xyzA[0] - xyzB[0]) + 1;
+        double height = Math.abs(xyzA[1] - xyzB[1]) + 1;
+        double width2 = Math.abs(xyzA[2] - xyzB[2]) + 1;
+
+        String size = "" + width1 + "x" + height + "x" + width2;
+
+        if (width1 > maxWidth || width2 > maxWidth || height > maxHeight) {
+            return null;
+        } else {
+            return size;
+        }
     }
 }

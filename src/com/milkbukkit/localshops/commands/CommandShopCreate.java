@@ -15,6 +15,7 @@ import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.PlayerData;
 import com.milkbukkit.localshops.Shop;
 import com.milkbukkit.localshops.ShopLocation;
+import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class CommandShopCreate extends Command {
 
@@ -50,7 +51,7 @@ public class CommandShopCreate extends Command {
 
             // If player is select, use their selection
             if (pData.isSelecting()) {
-                if (!pData.checkSize()) {
+                if (GenericFunctions.calculateCuboidSize(pData.getPositionA(), pData.getPositionB(), Config.getShopSizeMaxWidth(), Config.getShopSizeMaxHeight()) == null) {
                     String size = Config.getShopSizeMaxWidth() + "x" + Config.getShopSizeMaxHeight() + "x" + Config.getShopSizeMaxWidth();
                     player.sendMessage(ChatColor.DARK_AQUA + "Problem with selection. Max size is " + ChatColor.WHITE + size);
                     return false;

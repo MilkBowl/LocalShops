@@ -14,6 +14,7 @@ import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.PlayerData;
 import com.milkbukkit.localshops.Shop;
 import com.milkbukkit.localshops.ShopLocation;
+import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class CommandShopMove extends Command {
 
@@ -71,7 +72,8 @@ public class CommandShopMove extends Command {
             if (plugin.getPlayerData().containsKey(player.getName()) && plugin.getPlayerData().get(player.getName()).isSelecting()) {
 
                 // Check if size is ok
-                if (!plugin.getPlayerData().get(player.getName()).checkSize()) {
+                PlayerData pData = plugin.getPlayerData().get(player.getName());
+                if (GenericFunctions.calculateCuboidSize(pData.getPositionA(), pData.getPositionB(), Config.getShopSizeMaxWidth(), Config.getShopSizeMaxHeight()) == null) {
                     String size = Config.getShopSizeMaxWidth() + "x" + Config.getShopSizeDefHeight() + "x" + Config.getShopSizeMaxWidth();
                     player.sendMessage(ChatColor.DARK_AQUA + "Problem with selection. Max size is " + ChatColor.WHITE + size);
                     return false;
