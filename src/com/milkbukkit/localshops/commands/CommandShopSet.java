@@ -67,9 +67,9 @@ public class CommandShopSet extends Command {
         if (sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            
+
             shop = getCurrentShop(player);
-            
+
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
                 return true;
@@ -188,7 +188,11 @@ public class CommandShopSet extends Command {
         plugin.getShopManager().saveShop(shop);
 
         // Send Result
-        sender.sendMessage(ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " now is purchased for "+ ChatColor.WHITE + plugin.getEconManager().format(price));
+        sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is now buying " + ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + plugin.getEconManager().format(price));
+        
+        //update any sign in this shop with that value.
+        shop.updateSigns(item.name);
+        
         return true;
     }
 
@@ -222,7 +226,11 @@ public class CommandShopSet extends Command {
         plugin.getShopManager().saveShop(shop);
 
         // Send Result
-        sender.sendMessage(ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " now is purchased for "+ ChatColor.WHITE + plugin.getEconManager().format(price) + ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + "Bundle: " + size + ChatColor.DARK_AQUA + "]");
+        sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is now buying "+ item.name + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + plugin.getEconManager().format(price) + ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + "Bundle: " + size + ChatColor.DARK_AQUA + "]");
+        
+        //update any sign in this shop with that value.
+        shop.updateSigns(item.name);
+        
         return true;
     }
 
@@ -233,7 +241,7 @@ public class CommandShopSet extends Command {
         if (sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            
+
             shop = getCurrentShop(player);
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
@@ -272,7 +280,6 @@ public class CommandShopSet extends Command {
             int id = Integer.parseInt(matcher.group(1));
             short type = Short.parseShort(matcher.group(2));
             ItemInfo item = Search.itemById(id, type);
-            log.info(matcher.group(3));
             double price = Double.parseDouble(matcher.group(3));
             int size = Integer.parseInt(matcher.group(8));
             return shopSetSell(shop, item, price, size);
@@ -359,8 +366,10 @@ public class CommandShopSet extends Command {
         plugin.getShopManager().saveShop(shop);
 
         // Send Result
-        sender.sendMessage(ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " now sells for "+ ChatColor.WHITE + plugin.getEconManager().format(price) + ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + "Bundle: " + size + ChatColor.DARK_AQUA + "]");
-
+        sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is now selling "+ item.name + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + plugin.getEconManager().format(price) + ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + "Bundle: " + size + ChatColor.DARK_AQUA + "]");
+        
+        //update any sign in this shop with that value.
+        shop.updateSigns(item.name);
         return true;
     }
 
@@ -390,7 +399,9 @@ public class CommandShopSet extends Command {
 
         // Send Result
         sender.sendMessage(ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " now sells for "+ ChatColor.WHITE + plugin.getEconManager().format(price));
-
+        
+        //update any sign in this shop with that value.
+        shop.updateSigns(item.name);
         return true;
     }
 
@@ -401,7 +412,7 @@ public class CommandShopSet extends Command {
         if (sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            
+
             shop = getCurrentShop(player);
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
@@ -497,7 +508,7 @@ public class CommandShopSet extends Command {
         if (sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            
+
             shop = getCurrentShop(player);
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
@@ -561,7 +572,7 @@ public class CommandShopSet extends Command {
         if (sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            
+
             shop = getCurrentShop(player);
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
@@ -616,7 +627,7 @@ public class CommandShopSet extends Command {
         if(sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            
+
             shop = getCurrentShop(player);
             if(shop == null) {
                 sender.sendMessage("You are not in a shop!");
@@ -652,7 +663,7 @@ public class CommandShopSet extends Command {
         if (sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            
+
             shop = getCurrentShop(player);
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
@@ -695,7 +706,7 @@ public class CommandShopSet extends Command {
         if (sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            
+
             shop = getCurrentShop(player);
             if (shop == null) {
                 sender.sendMessage("You are not in a shop!");
@@ -765,7 +776,7 @@ public class CommandShopSet extends Command {
         if(sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            
+
             shop = getCurrentShop(player);
             if(shop == null) {
                 sender.sendMessage("You are not in a shop!");
@@ -796,7 +807,7 @@ public class CommandShopSet extends Command {
         sender.sendMessage("   " + "/" + commandLabel + " set name [shop name]");
         return true;
     }
- private boolean shopSetDynamic(Shop shop, ItemInfo item) {
+    private boolean shopSetDynamic(Shop shop, ItemInfo item) {
         if (item == null) {
             sender.sendMessage("Item was not found.");
             return true;
@@ -817,10 +828,12 @@ public class CommandShopSet extends Command {
 
         // Send Result
         sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "Dynamic pricing for " + ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " is now " + shop.isItemDynamic(item.name));
-
+        
+        //update any sign in this shop with that value.
+        shop.updateSigns(item.name);
         return true;    
     }
-    
+
     private boolean shopSetDynamic() {
         log.info("shopSetDynamic");
         Shop shop = null;
@@ -875,7 +888,7 @@ public class CommandShopSet extends Command {
             ItemInfo item = Search.itemByName(name);
             return shopSetDynamic(shop, item);
         }
-        
+
         // shop set dynamic
         matcher.reset();
         pattern = Pattern.compile("(?i)set\\s+dynamic");
@@ -895,7 +908,7 @@ public class CommandShopSet extends Command {
         sender.sendMessage("   " + "/" + commandLabel + " set dynamic id:id");
         return true;
     }
-    
+
     private boolean shopSetHelp() {
         // Display list of set commands & return
         sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "The following set commands are available: ");

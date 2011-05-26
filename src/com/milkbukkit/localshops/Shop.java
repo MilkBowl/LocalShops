@@ -12,6 +12,7 @@ import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.logging.Logger;
 
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
@@ -542,11 +543,19 @@ public class Shop implements Comparator<Shop> {
         ((Sign) sign.getLoc().getBlock().getState()).setLine(0, signLines[3]);
     }
     
-    public void updateSign(Block block) {
-        
+    public void updateSign(Location loc) {
+        updateSign(signMap.get(ShopSign.hashString(loc)));
     }
     
-    public void updateSign(String itemName) {  
-        
+    public void updateSign(Block block) {
+        updateSign(block.getLocation());
     }
+    
+    public void updateSigns(String itemName) {  
+        for (String key : signMap.keySet()) {
+            if (signMap.get(key).getItemName() == itemName)
+                updateSign(signMap.get(key));
+        }
+    }
+    
 }

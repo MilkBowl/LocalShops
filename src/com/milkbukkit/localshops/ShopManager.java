@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
 import org.bukkit.Location;
@@ -747,4 +748,19 @@ public class ShopManager {
 
         return true;
     }
+
+    /**
+     * @return null
+     */
+    public Callable<Object> updateSigns() {
+        for (UUID key : shops.keySet()) {
+            Shop shop = shops.get(key);
+            if (shop.isDynamicPrices())
+                for (String signKey : shop.getSignMap().keySet())
+                    shop.updateSign(shop.getSignMap().get(signKey));
+        }
+        return null;
+    }
+
+
 }

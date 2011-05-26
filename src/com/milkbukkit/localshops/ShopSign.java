@@ -88,7 +88,7 @@ public class ShopSign {
         return string.toString();
     }
 
-    public String hashString(String worldName, int x, int y, int z) {
+    public static String hashString(String worldName, int x, int y, int z) {
         StringBuilder string = new StringBuilder();
         string.append(worldName.hashCode());
         string.append(x);
@@ -98,12 +98,12 @@ public class ShopSign {
         return string.toString();
     }
 
-    public String hashString(Location loc) {
+    public static String hashString(Location loc) {
         return hashString(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
 
     public String hashString() {
-        return hashString(signWorld, this.x, this.y, this.z);
+        return hashString(this.signWorld, this.x, this.y, this.z);
     }
 
     public boolean isValid() {
@@ -154,5 +154,12 @@ public class ShopSign {
     
     public SignTypes getType() {
         return type;
+    }
+    
+    public boolean equals (ShopSign sign) {
+        if (this.hashString() == sign.hashString())
+            return true;
+        
+        return false;
     }
 }

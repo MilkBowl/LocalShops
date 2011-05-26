@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
+
 import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.DynamicManager;
 import com.milkbukkit.localshops.InventoryItem;
@@ -51,7 +53,8 @@ public class DynamicThread extends Thread {
             int deltaStock = GenericFunctions.getSum(stockList) - Config.getGlobalBaseStock();
             DynamicManager.getPriceAdjMap().put(item, GenericFunctions.getAdjustment(Config.getGlobalVolatility(), deltaStock)); 
         }
-           
+        
+        Bukkit.getServer().getScheduler().callSyncMethod(plugin, plugin.getShopManager().updateSigns());
     }
 
 }
