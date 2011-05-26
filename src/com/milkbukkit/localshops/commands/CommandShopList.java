@@ -18,11 +18,11 @@ import com.milkbukkit.localshops.comparator.ShopSortByName;
 public class CommandShopList extends Command {
 
     public CommandShopList(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
-        super(plugin, commandLabel, sender, command);
+        super(plugin, commandLabel, sender, command, isGlobal);
     }
     
     public CommandShopList(LocalShops plugin, String commandLabel, CommandSender sender, String[] command, boolean isGlobal) {
-        super(plugin, commandLabel, sender, command);
+        super(plugin, commandLabel, sender, command, isGlobal);
     }
 
     public boolean process() {
