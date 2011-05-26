@@ -32,11 +32,11 @@ public class SchedulerThread extends Thread {
             // Launch Dynamic Thread (5pm)
             if(worldTime >= 9000 && worldTime < (9000 + (interval * TICKS_PER_SECOND))) {
                 if(dynamicThreadGroup.activeCount() == 0) {
-                    log.info("Launch Dynamic Thread");
+                    log.info(String.format("[%s] Launching Dynamic Thread", plugin.getDescription().getName()));
                     DynamicThread dt = new DynamicThread(dynamicThreadGroup, "dynamic", plugin);
                     dt.start();
                 } else {
-                    log.info("Dynamic Thread already running!");
+                    log.info(String.format("[%s] Dynamic Thread already running", plugin.getDescription().getName()));
                 }
             }
          
