@@ -204,8 +204,7 @@ public class Shop implements Comparator<Shop> {
         Iterator<InventoryItem> it = inventory.values().iterator();
         while(it.hasNext()) {
             InventoryItem invItem = it.next();
-            ItemInfo invItemInfo = invItem.getInfo();
-            if(invItemInfo.typeId == item.typeId && invItemInfo.subTypeId == item.subTypeId) {
+            if(invItem.getInfo() == item) {
                 return true;
             }
         }
