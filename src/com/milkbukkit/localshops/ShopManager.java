@@ -495,8 +495,8 @@ public class ShopManager {
                     return null;
                 }
             } else if (key.matches("sign\\d+$")) {
-
-                String values = props.getProperty(key);
+                
+                String values = props.getProperty(key.substring(4));
 
                 String[] v = values.split(":");
                 String[] v2 = v[1].split(",");
