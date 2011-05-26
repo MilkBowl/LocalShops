@@ -12,6 +12,9 @@ public class ThreadManager {
     NotificationThread nt = null;
     ReportThread rt = null;
     
+    // Thread Groups
+    private ThreadGroup dynamicThreadGroup = new ThreadGroup("dynamic");
+    
     // Logging
     private final Logger log = Logger.getLogger("Minecraft");
     
@@ -74,5 +77,19 @@ public class ThreadManager {
                 log.warning(String.format("[%s] %s", plugin.getDescription().getName(), "ReportThread did not exit"));
             }
         }
+    }
+    
+    public void dynamicStart() {
+        if(dynamicThreadGroup.activeCount() == 0) {
+            log.info(String.format("[%s] Launching Dynamic Thread", plugin.getDescription().getName()));
+            DynamicThread dt = new DynamicThread(dynamicThreadGroup, "dynamic", plugin);
+            dt.start();
+        } else {
+            log.info(String.format("[%s] Dynamic Thread already running", plugin.getDescription().getName()));
+        }
+    }
+    
+    public void dynamicStop() {
+        // does nothing, there is no need to stop the Dynamic Thread since the thread quits on its own
     }
 }
