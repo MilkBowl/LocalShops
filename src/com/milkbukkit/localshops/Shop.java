@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.logging.Logger;
@@ -34,7 +35,7 @@ public class Shop implements Comparator<Shop> {
     private ArrayBlockingQueue<Transaction> transactions;
     private boolean notification = true;
     private int locationLowX, locationHighX, locationLowY, locationHighY, locationLowZ, locationHighZ;
-    private Map<String, ShopSign> signMap = Collections.synchronizedMap(new HashMap<String, ShopSign>());
+    private Set<ShopSign> signSet = Collections.synchronizedSet(new HashSet<ShopSign>());
     private boolean global = false;
     
     // Logging
@@ -471,12 +472,12 @@ public class Shop implements Comparator<Shop> {
         return global;
     }
 
-    public void setSignMap(Map<String, ShopSign> signMap) {
-        this.signMap = signMap;
+    public void setSignSet(Set<ShopSign> signSet) {
+        this.signSet = signSet;
     }
 
-    public Map<String, ShopSign> getSignMap() {
-        return signMap;
+    public Set<ShopSign> getSignMap() {
+        return signSet;
     }
     
     public boolean containsPoint(String worldName, int x, int y, int z) {
@@ -562,7 +563,12 @@ public class Shop implements Comparator<Shop> {
     }
     
     public void updateSign(Location loc) {
-        updateSign(signMap.get(ShopSign.hashString(loc)));
+        for (ShopSign sign : signSet) {
+            if (sign.getLoc().equals(loc)) {
+                updateSign(sign);
+                break;
+            }   
+        }
     }
     
     public void updateSign(Block block) {
@@ -570,9 +576,9 @@ public class Shop implements Comparator<Shop> {
     }
     
     public void updateSigns(String itemName) {  
-        for (String key : signMap.keySet()) {
-            if (signMap.get(key).getItemName() == itemName)
-                updateSign(signMap.get(key));
+        for (ShopSign sign : signSet) {
+            if (sign.getItemName() == itemName)
+                updateSign(sign);
         }
     }
     
