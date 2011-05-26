@@ -1,5 +1,6 @@
 package com.milkbukkit.localshops.threads;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -40,8 +41,11 @@ public class DynamicThread extends Thread {
             for ( InventoryItem item : shop.getItems() ) {
                 if (itemStockMap.containsKey(item.getInfo()))
                     itemStockMap.get(item.getInfo()).add(item.getStock());
-                else
-                    itemStockMap.put(item.getInfo(), Arrays.asList(item.getStock()));     
+                else {
+                    List<Integer> intList = new ArrayList<Integer>();
+                    intList.add(item.getStock());
+                    itemStockMap.put(item.getInfo(), intList);
+                }
             }
         }
         for(ItemInfo item : itemStockMap.keySet()) {
