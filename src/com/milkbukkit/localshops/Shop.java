@@ -563,7 +563,7 @@ public class Shop implements Comparator<Shop> {
     }
     
     public void updateSign(Location loc) {
-        for (ShopSign sign : signSet) {
+        for (ShopSign sign : this.signSet) {
             if (sign.getLoc().equals(loc)) {
                 updateSign(sign);
                 break;
@@ -576,11 +576,15 @@ public class Shop implements Comparator<Shop> {
     }
     
     public void updateSigns(String itemName) {  
-        for (ShopSign sign : signSet) {
-            if (sign.getItemName() == itemName)
+        for (ShopSign sign : this.signSet) {
+            if (sign.getItemName().equalsIgnoreCase(itemName))
                 updateSign(sign);
         }
     }
     
-    
+    public void updateSigns(Set<ShopSign> signSet) {
+        for (ShopSign sign : signSet) 
+            updateSign(sign);
+    }
+        
 }

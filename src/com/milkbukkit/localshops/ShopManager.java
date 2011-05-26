@@ -57,7 +57,7 @@ public class ShopManager {
             if (shop.isGlobal() || !shop.getWorld().equals(world)) {
                 continue;
             }
-            
+
             ShopLocation[] sLocs = shop.getLocations();
             if(sLocs.length != 2) {
                 continue;
@@ -393,7 +393,7 @@ public class ShopManager {
     }
 
     public Shop loadShop(File file) throws Exception {
-        HashMap<String, ShopSign> signMap = new HashMap<String, ShopSign>(4);
+        List<ShopSign> signList = new ArrayList<ShopSign>(4);
 
         Shop shop = null;
         int[] locationA = null;
@@ -415,7 +415,7 @@ public class ShopManager {
         double minBalance = Double.parseDouble((props.getProperty("min-balance", "0.0")));
         boolean notification = Boolean.parseBoolean(props.getProperty("notification", "true"));
         boolean global = Boolean.parseBoolean(props.getProperty("global", "false"));
-        
+
         if (!global) {
             // Location - locationB=-88, 50, -127
             try {
@@ -453,7 +453,7 @@ public class ShopManager {
         } else {
             shop.setGlobal(true);
         }
-        
+
         // Make sure minimum balance isn't negative
         if (minBalance < 0) {
             shop.setMinBalance(0);
@@ -495,7 +495,7 @@ public class ShopManager {
                     return null;
                 }
             } else if (key.matches("sign\\d+$")) {
-                
+
                 String values = props.getProperty(key);
 
                 String[] v = values.split(":");
@@ -506,48 +506,42 @@ public class ShopManager {
                 int y = Integer.parseInt(v2[1]);
                 int z = Integer.parseInt(v2[2]);
                 String itemName = v2[3];
-
                 if (plugin.getServer().getWorld(signWorld) != null) {
-                    ShopSign sign = new ShopSign(plugin.getServer().getWorld(signWorld), x, y, z, itemName);
-                    signMap.put(sign.hashString(), sign);
+                    signList.add(new ShopSign(plugin.getServer().getWorld(signWorld), x, y, z, itemName));
                 } else {
-                    ShopSign sign = new ShopSign(signWorld, x, y, z, itemName);
-                    signMap.put(sign.hashString(), sign);
+                    signList.add(new ShopSign(signWorld, x, y, z, itemName));
                 }
             }
         }
 
         //After loading sign data, verify they exist in the world
-        Iterator<String> iter = signMap.keySet().iterator();
-        while (iter.hasNext() ) {
-            String signKey = iter.next();
-
-            //Skip signs that can't be verified yet.
-            if (signMap.get(signKey).getWorld() == null)
+        for (ShopSign sign : signList) {
+            //Add signs that can't be verified yet.
+            if (sign.getWorld() == null) {
+                shop.getSignSet().add(sign);
                 continue;
-
-            ShopSign sign = signMap.get(signKey);
+            }
             //Load the chunk so we don't try getting blocks that are non-existent
             sign.getWorld().loadChunk(sign.getWorld().getChunkAt(sign.getLoc()));
 
             //Check if the block is not a sign.
             if ( !sign.isValid() ) {
-                iter.remove();
                 continue;
             } else {
                 ItemInfo item = Search.itemByName(sign.getItemName());
+                //if We can't find the item in the shop ignore the sign
                 if (!(shop.containsItem(item))) {
-                    iter.remove();
                     continue;
                 } else {
+                    shop.getSignSet().add(sign);
                     shop.updateSign(sign);
                 }
             }
         }
-
-        //Set the sign mapping for the shop
-        shop.getSignMap().putAll(signMap);
-
+        
+        for ( ShopSign sign : shop.getSignSet() ) {
+            log.info("[LocalShops] - Sign Loaded: " + sign.toString());
+        }
         // Sanity Checks
         // Check that filename == UUID from file
         if(!file.getName().equalsIgnoreCase(String.format("%s.shop", shop.getUuid().toString()))) {
@@ -626,12 +620,12 @@ public class ShopManager {
             props.setProperty(String.format("%d:%d", info.typeId, info.subTypeId), String.format("%f:%d,%f:%d,%d:%d", buyPrice, buySize, sellPrice, sellSize, stock, maxStock));
         }
 
-        //Sign Data
-        for (String signId : shop.getSignMap().keySet()) {
-            ShopSign sign = shop.getSignMap().get(signId);
-            props.setProperty("sign"+signId, String.format("%s:%d,%d,%d,%s", sign.getWorldName(), sign.getX(), sign.getY(), sign.getZ(), sign.getItemName()));
+        //Sign Data saving
+        Iterator<ShopSign> iter = shop.getSignSet().iterator();
+        for (int index = 1; iter.hasNext(); index++ ) {
+            ShopSign sign = iter.next();
+            props.setProperty("sign"+index, String.format("%s:%d,%d,%d,%s", sign.getWorldName(), sign.getX(), sign.getY(), sign.getZ(), sign.getItemName()));
         }
-
 
         String fileName = Config.getDirShopsActivePath() + shop.getUuid().toString() + ".shop";
         try {
@@ -756,8 +750,8 @@ public class ShopManager {
         for (UUID key : shops.keySet()) {
             Shop shop = shops.get(key);
             if (shop.isDynamicPrices())
-                for (String signKey : shop.getSignMap().keySet())
-                    shop.updateSign(shop.getSignMap().get(signKey));
+                for (ShopSign sign : shop.getSignSet())
+                    shop.updateSign(sign);
         }
         return null;
     }

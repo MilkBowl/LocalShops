@@ -3,7 +3,9 @@
  */
 package com.milkbukkit.localshops.listeners;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.bukkit.event.world.WorldListener;
 import org.bukkit.event.world.WorldLoadEvent;
@@ -31,20 +33,24 @@ public class ShopsWorldListener extends WorldListener {
             if (shop.getWorld() != event.getWorld().getName())
                 continue;
             //Get an iterator from the shops signMap and loop through
-            Iterator<String> iter = shop.getSignMap().keySet().iterator();
+            Set<ShopSign> addSet = new HashSet<ShopSign>();
+            Iterator<ShopSign> iter = shop.getSignSet().iterator();
             while (iter.hasNext()) {
-                String signId = iter.next();
-                ShopSign sign = shop.getSignMap().get(signId);
+                ShopSign sign = iter.next();
                 //If event world and signWorld are the same, set the signworld and validate the sign.
                 if (sign.getWorld() == null && sign.getWorldName() == event.getWorld().getName())
                 {
                     sign.setWorld(event.getWorld());
-                    if (sign.isValid()) 
-                        shop.updateSign(sign);
+                    if (sign.isValid()) {
+                        addSet.add(sign);
+                        iter.remove();
+                    }
                     else
                         iter.remove();
                 }
             }
+            shop.updateSigns(addSet);
+            shop.getSignSet().addAll(addSet);
             
         }
         
