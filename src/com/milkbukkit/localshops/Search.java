@@ -71,7 +71,7 @@ public class Search {
         items.add(new ItemInfo("Double Sandstone Slab", new String[][] { { "doub", "slab", "sand", "sto" }, { "doub", "step", "sand", "sto" } }, 44, (short) 1, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Double Wooden Slab", new String[][] { { "doub", "slab", "woo" }, { "doub", "step", "woo" } }, 44, (short) 2, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Double Cobblestone Slab", new String[][] { { "doub", "slab", "cob", "sto" }, { "doub", "slab", "cob" }, { "doub", "step", "cob" } }, 44, (short) 3, new int[]{ 64, 64, 64 } ));
-        items.add(new ItemInfo("Stone Slab", new String[][] { { "slab" }, { "slab", "sto" }, { "step", "sto" } }, 44, (short) 0, new int[]{ 64, 64, 64 } ));
+        items.add(new ItemInfo("Stone Slab", new String[][] { { "slab", "sto"}, { "slab" }, { "step", "ston" } }, 44, (short) 0, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Sandstone Slab", new String[][] { { "slab", "sand", "sto" }, { "step", "sand", "sto" } }, 44, (short) 1, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Wooden Slab", new String[][] { { "slab", "woo" }, { "step", "woo" } }, 44, (short) 2, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Cobblestone Slab", new String[][] { { "slab", "cob", "sto" }, { "slab", "cob" } }, 44, (short) 3, new int[]{ 64, 64, 64 } ));
