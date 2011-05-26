@@ -494,7 +494,7 @@ public class ShopManager {
                     }
                     return null;
                 }
-            } else if (key.matches("\\d+$")) {
+            } else if (key.matches("sign\\d+$")) {
 
                 String values = props.getProperty(key);
 
@@ -629,7 +629,7 @@ public class ShopManager {
         //Sign Data
         for (String signId : shop.getSignMap().keySet()) {
             ShopSign sign = shop.getSignMap().get(signId);
-            props.setProperty(signId, String.format("%s:%d,%d,%d,%s", sign.getWorldName(), sign.getX(), sign.getY(), sign.getZ(), sign.getItemName()));
+            props.setProperty("sign"+signId, String.format("%s:%d,%d,%d,%s", sign.getWorldName(), sign.getX(), sign.getY(), sign.getZ(), sign.getItemName()));
         }
 
 
