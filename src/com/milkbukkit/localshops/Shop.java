@@ -534,12 +534,12 @@ public class Shop implements Comparator<Shop> {
         if (this.getItem(sign.getItemName()).getBuyPrice() == 0 || (this.getItem(sign.getItemName()).getStock() == 0 && !this.unlimitedStock)) 
             line2 += "-";
         else 
-            line2 += this.getItem(sign.getItemName()).getBuyPrice() + " - [" + this.getItem(sign.getItemName()).getBuySize() + "]";
+            line2 += this.getItem(sign.getItemName()).getBuyPrice();
         
         if (this.getItem(sign.getItemName()).getSellPrice() == 0 || (this.getItem(sign.getItemName()).getStock() >= this.getItem(sign.getItemName()).maxStock && !this.unlimitedStock)) 
             line3 += "-";
         else 
-            line3 += this.getItem(sign.getItemName()).getSellPrice() + " - [" + this.getItem(sign.getItemName()).getSellSize() + "]";
+            line3 += this.getItem(sign.getItemName()).getSellPrice();
         
         if (!this.unlimitedStock)
             line4 += this.getItem(sign.getItemName()).getStock();
