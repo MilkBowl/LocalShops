@@ -90,10 +90,15 @@ public class ShopManager {
         UUID uuid = worldShops.get(worldName);
         Shop shop = shops.get(uuid);
         if(shop instanceof GlobalShop) {
+            log.info("Return GS");
             return (GlobalShop) shop;
         } else {
             return null;
         }
+    }
+    
+    public void removeGlobalShopByWorld(String worldName) {
+        worldShops.remove(worldName);
     }
     
     public GlobalShop getGlobalShop(World world) {
@@ -197,7 +202,7 @@ public class ShopManager {
         }
     }
 
-    public List<Shop> getAllLocalShops() {
+    public List<Shop> getAllShops() {
         return new ArrayList<Shop>(shops.values());
     }
 
@@ -500,7 +505,9 @@ public class ShopManager {
             // Add worlds
             String worlds = props.getProperty("worlds");
             for(String world : worlds.split(",")) {
-                gShop.addWorld(world);
+                if (!world.equals("")) {
+                    gShop.addWorld(world);
+                }
             }
             
             shop = gShop;
@@ -740,6 +747,13 @@ public class ShopManager {
 
         // remove shop from data structure
         shops.remove(shop.getUuid());
+        
+        // if global, remove from map
+        if(shop instanceof GlobalShop) {
+            for(String w : ((GlobalShop) shop).getWorlds()) {
+                worldShops.remove(w);
+            }
+        }
 
         // remove string from uuid short list
         Config.removeUuidList(shortUuid);
@@ -750,6 +764,10 @@ public class ShopManager {
         shopFile.delete();
 
         return true;
+    }
+    
+    public void mapWorldShop(String world, GlobalShop shop) {
+        worldShops.put(world, shop.getUuid());
     }
 
     public boolean logItems(String playerName, String shopName, String action, String itemName, int numberOfItems, int startNumberOfItems, int endNumberOfItems) {

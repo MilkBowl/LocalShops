@@ -15,6 +15,7 @@ import com.milkbukkit.localshops.comparator.ShopSortByName;
 import com.milkbukkit.localshops.objects.GlobalShop;
 import com.milkbukkit.localshops.objects.LocalShop;
 import com.milkbukkit.localshops.objects.Shop;
+import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class CommandShopList extends Command {
 
@@ -52,7 +53,7 @@ public class CommandShopList extends Command {
             sender.sendMessage(String.format("%-"+idWidth+"s  %-25s %s", "Id", "Name", "Owner"));
         }
         
-        List<Shop> shops = plugin.getShopManager().getAllLocalShops();
+        List<Shop> shops = plugin.getShopManager().getAllShops();
         Collections.sort(shops, new ShopSortByName());
         
         if(isGlobal && !canUseCommand(CommandTypes.ADMIN)) {
@@ -77,9 +78,25 @@ public class CommandShopList extends Command {
             }
             
             if(isPlayer) {
-                sender.sendMessage(String.format("%-"+idWidth+"s  %s", shop.getShortUuidString(), shop.getName()));
+                if(shop instanceof GlobalShop) {
+                    if(((GlobalShop) shop).getWorlds().size() == 0) {
+                        sender.sendMessage(String.format("%-"+idWidth+"s  %s *", shop.getShortUuidString(), shop.getName()));
+                    } else {
+                        sender.sendMessage(String.format("%-"+idWidth+"s  %s", shop.getShortUuidString(), shop.getName()));
+                    }
+                } else {
+                    sender.sendMessage(String.format("%-" + idWidth + "s  %s", shop.getShortUuidString(), shop.getName()));
+                }
             } else {
-                sender.sendMessage(String.format("%-"+idWidth+"s  %-25s %s", shop.getShortUuidString(), shop.getName(), shop.getOwner()));
+                if(shop instanceof GlobalShop) {
+                    if(((GlobalShop) shop).getWorlds().size() == 0) {
+                        sender.sendMessage(String.format("%-"+idWidth+"s  %-25s %s *", shop.getShortUuidString(), shop.getName(), shop.getOwner()));
+                    } else {
+                        sender.sendMessage(String.format("%-"+idWidth+"s  %-25s %s", shop.getShortUuidString(), shop.getName(), shop.getOwner()));
+                    }
+                } else {
+                    sender.sendMessage(String.format("%-"+idWidth+"s  %-25s %s", shop.getShortUuidString(), shop.getName(), shop.getOwner()));
+                }
             }
         }
         return true;

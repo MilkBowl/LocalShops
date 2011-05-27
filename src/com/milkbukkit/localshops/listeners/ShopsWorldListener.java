@@ -30,7 +30,7 @@ public class ShopsWorldListener extends WorldListener {
     
     public void onWorldLoad (WorldLoadEvent event) {
         //Loop through all shops
-        for (Shop shop : plugin.getShopManager().getAllLocalShops()) {
+        for (Shop shop : plugin.getShopManager().getAllShops()) {
             //If the event world is different than the shop world skip
             String worldName = event.getWorld().getName();
             if(shop instanceof GlobalShop) {

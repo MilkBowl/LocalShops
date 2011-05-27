@@ -51,7 +51,7 @@ public class CommandShopUnlink extends Command {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " unlink [worldname] " + ChatColor.DARK_AQUA + "- Unlink a global shop from a specific world.");
         }
             
-        GlobalShop shop = plugin.getShopManager().getGlobalShop(worldName);
+        GlobalShop shop = plugin.getShopManager().getGlobalShopByWorld(worldName);
         // Check if null
         if (shop == null) {
             sender.sendMessage("No global shop on " + worldName + " to unlink!");
@@ -60,6 +60,7 @@ public class CommandShopUnlink extends Command {
         
         // Validate Worlds size on Shop
         shop.removeWorld(worldName);
+        plugin.getShopManager().removeGlobalShopByWorld(worldName);
         sender.sendMessage(ChatColor.DARK_AQUA + "Unlinked " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " from " + ChatColor.WHITE + worldName);
         return true;
     }

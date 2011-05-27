@@ -38,7 +38,7 @@ public class DynamicThread extends Thread {
         Map<ItemInfo, List<Integer>> itemStockMap = Collections.synchronizedMap(new HashMap<ItemInfo, List<Integer>>());
         
         //Dump all the shop stock data into the map.
-        for ( Shop shop : plugin.getShopManager().getAllLocalShops() ) {
+        for ( Shop shop : plugin.getShopManager().getAllShops() ) {
             for ( InventoryItem item : shop.getItems() ) {
                 if (itemStockMap.containsKey(item.getInfo()))
                     itemStockMap.get(item.getInfo()).add(item.getStock());

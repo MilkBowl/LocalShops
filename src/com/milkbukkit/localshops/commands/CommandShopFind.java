@@ -123,7 +123,7 @@ public class CommandShopFind extends Command {
         ShopLocation playerLoc = new ShopLocation(player.getLocation());
 
         TreeMap<UUID, Double> foundShops = new TreeMap<UUID, Double>();
-        List<Shop> shops = plugin.getShopManager().getAllLocalShops();
+        List<Shop> shops = plugin.getShopManager().getAllShops();
         for (Shop shop : shops) {
             double distance = 0;
             

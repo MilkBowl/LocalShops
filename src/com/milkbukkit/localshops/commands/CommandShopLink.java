@@ -87,6 +87,7 @@ public class CommandShopLink extends Command {
         }
 
         shop.addWorld(worldName);
+        plugin.getShopManager().mapWorldShop(worldName, shop);
         sender.sendMessage("Added " + shop.getName() + " as a global shop for " + worldName);
         return true;
     }
