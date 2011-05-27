@@ -30,7 +30,7 @@ public class ShopsWorldListener extends WorldListener {
         //Loop through all shops
         for (Shop shop : plugin.getShopManager().getAllShops()) {
             //If the event world is different than the shop world skip
-            if (shop.getWorldName() != event.getWorld().getName())
+            if (shop.getWorld() != event.getWorld().getName())
                 continue;
             //Get an iterator from the shops signMap and loop through
             Set<ShopSign> addSet = new HashSet<ShopSign>();

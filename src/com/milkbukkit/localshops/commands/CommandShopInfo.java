@@ -85,7 +85,7 @@ public class CommandShopInfo extends Command {
             sender.sendMessage(String.format("  Full Id: %s", shop.getUuid().toString()));
         }
 
-        sender.sendMessage(String.format("  Located at %s x %s in \"%s\"", shop.getLocationA().toString(), shop.getLocationB().toString(), shop.getWorldName()));
+        sender.sendMessage(String.format("  Located at %s x %s in \"%s\"", shop.getLocationA().toString(), shop.getLocationB().toString(), shop.getWorld()));
 
         // Calculate values
         int sellCount = 0;

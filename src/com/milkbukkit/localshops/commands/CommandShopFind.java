@@ -124,7 +124,7 @@ public class CommandShopFind extends Command {
         List<Shop> shops = plugin.getShopManager().getAllShops();
         for (Shop shop : shops) {
             // Check that its the current world
-            if (!playerWorld.equals(shop.getWorldName()) || shop.isGlobal()) {
+            if (!playerWorld.equals(shop.getWorld()) || shop.isGlobal()) {
                 continue;
             }
 

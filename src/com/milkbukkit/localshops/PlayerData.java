@@ -50,7 +50,7 @@ public class PlayerData {
     public boolean addPlayerToShop(Shop shop) {
         String playerWorld = plugin.getServer().getPlayer(playerName).getWorld().getName();
 
-        if (!playerIsInShop(shop) && shop.getWorldName().equalsIgnoreCase(playerWorld)) {
+        if (!playerIsInShop(shop) && shop.getWorld().equalsIgnoreCase(playerWorld)) {
             shopList.add(shop.getUuid());
             return true;
         } else {
@@ -62,7 +62,7 @@ public class PlayerData {
         String playerWorld = plugin.getServer().getPlayer(playerName).getWorld().getName();
 
         if (shopList.contains(shop.getUuid())) {
-            if (shop.getWorldName().equalsIgnoreCase(playerWorld)) {
+            if (shop.getWorld().equalsIgnoreCase(playerWorld)) {
                 return true;
             }
         }
