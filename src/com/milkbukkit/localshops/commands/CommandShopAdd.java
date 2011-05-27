@@ -300,7 +300,8 @@ public class CommandShopAdd extends Command {
 
         // Add item to shop if needed
         if (!shop.containsItem(item)) {
-            shop.addItem(item.typeId, item.subTypeId, 0, 1, 0, 1, 0, 0);
+          //Autoset item as dynamic if adding to a dynamic shop
+          shop.addItem(item.typeId, item.subTypeId, 0, 1, 0, 1, 0, 0, shop.isDynamicPrices());     
         }
 
         // Check stock settings, add stock if necessary
