@@ -759,8 +759,8 @@ public class Config {
         Iterator<String> iter = globalShops.keySet().iterator();
         while (iter.hasNext())
         {
-            iter.next();
-            if (shopManager.getShop(globalShops.get(iter)) == null) {
+            String worldName = iter.next();
+            if (shopManager.getShop(globalShops.get(worldName)) == null) {
                 iter.remove();
             }
             
