@@ -7,10 +7,10 @@ import java.util.regex.Pattern;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.PlayerData;
-import com.milkbukkit.localshops.Shop;
+import com.milkbukkit.localshops.objects.GlobalShop;
+import com.milkbukkit.localshops.objects.Shop;
 
 public class CommandShopDebug extends Command {
 
@@ -25,7 +25,7 @@ public class CommandShopDebug extends Command {
 
     public boolean process() {
         if (isGlobal) {
-            Shop shop = null;
+            GlobalShop shop = null;
             String worldName = null;
             
             Pattern pattern = Pattern.compile("(?i)debug\\s+(.*)$");
@@ -43,7 +43,7 @@ public class CommandShopDebug extends Command {
                 sender.sendMessage("Could not find a world!");
             }
             
-            shop = plugin.getShopManager().getGlobalShop(worldName);
+            shop = plugin.getShopManager().getGlobalShopByWorld(worldName);
             if(shop == null) {
                 sender.sendMessage("Could not find the global shop for world \""+worldName+"\"!");
                 return true;
@@ -81,7 +81,7 @@ public class CommandShopDebug extends Command {
             Matcher matcher = pattern.matcher(command);
             if (matcher.find()) {
                 String input = matcher.group(1);
-                shop = plugin.getShopManager().getLocalShop(input);
+                shop = plugin.getShopManager().getShop(input);
                 if (shop == null) {
                     sender.sendMessage("Could not find shop with ID " + input);
                     return false;

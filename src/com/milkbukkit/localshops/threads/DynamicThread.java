@@ -14,7 +14,7 @@ import com.milkbukkit.localshops.DynamicManager;
 import com.milkbukkit.localshops.InventoryItem;
 import com.milkbukkit.localshops.ItemInfo;
 import com.milkbukkit.localshops.LocalShops;
-import com.milkbukkit.localshops.Shop;
+import com.milkbukkit.localshops.objects.Shop;
 import com.milkbukkit.localshops.util.GenericFunctions;
 
 /*

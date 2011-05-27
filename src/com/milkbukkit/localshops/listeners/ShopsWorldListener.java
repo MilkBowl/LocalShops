@@ -11,8 +11,10 @@ import org.bukkit.event.world.WorldListener;
 import org.bukkit.event.world.WorldLoadEvent;
 
 import com.milkbukkit.localshops.LocalShops;
-import com.milkbukkit.localshops.Shop;
 import com.milkbukkit.localshops.ShopSign;
+import com.milkbukkit.localshops.objects.GlobalShop;
+import com.milkbukkit.localshops.objects.LocalShop;
+import com.milkbukkit.localshops.objects.Shop;
 
 /**
  * @author sleaker
@@ -30,8 +32,19 @@ public class ShopsWorldListener extends WorldListener {
         //Loop through all shops
         for (Shop shop : plugin.getShopManager().getAllLocalShops()) {
             //If the event world is different than the shop world skip
-            if (shop.getWorld() != event.getWorld().getName())
-                continue;
+            String worldName = event.getWorld().getName();
+            if(shop instanceof GlobalShop) {
+                GlobalShop gShop = (GlobalShop) shop;
+                if(!gShop.containsWorld(worldName)) {
+                    continue;
+                }
+            } else if(shop instanceof LocalShop) {
+                LocalShop lShop = (LocalShop) shop;
+                if(!lShop.getWorld().equals(worldName)) {
+                    continue;
+                }
+            }
+            
             //Get an iterator from the shops signMap and loop through
             Set<ShopSign> addSet = new HashSet<ShopSign>();
             Iterator<ShopSign> iter = shop.getSignSet().iterator();

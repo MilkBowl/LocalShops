@@ -14,7 +14,7 @@ import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.ItemInfo;
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.PlayerData;
-import com.milkbukkit.localshops.Shop;
+import com.milkbukkit.localshops.objects.Shop;
 import com.milkbukkit.localshops.util.GenericFunctions;
 
 public abstract class Command {
@@ -338,7 +338,7 @@ public abstract class Command {
         PlayerData pData = plugin.getPlayerData().get(player.getName());
         // Get Current Shop
         if (isGlobal) {
-            shop = plugin.getShopManager().getGlobalShop(player.getWorld().getName());
+            shop = plugin.getShopManager().getGlobalShop(player.getWorld());
         } else if (!isGlobal) {
             shopUuid = pData.getCurrentShop();
             if (shopUuid != null) {

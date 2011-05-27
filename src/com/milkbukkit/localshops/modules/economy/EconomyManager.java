@@ -7,8 +7,8 @@ import java.util.logging.Logger;
 
 import org.bukkit.plugin.Plugin;
 
-import com.milkbukkit.localshops.Shop;
 import com.milkbukkit.localshops.modules.economy.plugins.*;
+import com.milkbukkit.localshops.objects.Shop;
 
 public class EconomyManager {
     

@@ -15,8 +15,8 @@ import com.milkbukkit.localshops.ItemInfo;
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.PlayerData;
 import com.milkbukkit.localshops.Search;
-import com.milkbukkit.localshops.Shop;
 import com.milkbukkit.localshops.Transaction;
+import com.milkbukkit.localshops.objects.Shop;
 
 public class CommandShopSell extends Command {
 

@@ -4,7 +4,6 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -13,8 +12,10 @@ import org.bukkit.entity.Player;
 import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.PlayerData;
-import com.milkbukkit.localshops.Shop;
-import com.milkbukkit.localshops.ShopLocation;
+import com.milkbukkit.localshops.objects.GlobalShop;
+import com.milkbukkit.localshops.objects.LocalShop;
+import com.milkbukkit.localshops.objects.Shop;
+import com.milkbukkit.localshops.objects.ShopLocation;
 import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class CommandShopCreate extends Command {
@@ -91,7 +92,7 @@ public class CommandShopCreate extends Command {
                 sender.sendMessage("A shop already exists here!");
                 return false;
             }
-            if (isGlobal && plugin.getShopManager().getGlobalShop(world) != null) {
+            if (isGlobal && plugin.getShopManager().getGlobalShopByWorld(world) != null) {
                 sender.sendMessage(world + " already has a global shop. Remove it before creating a new one!");
                 return false;
             }
@@ -129,25 +130,30 @@ public class CommandShopCreate extends Command {
         if (matcher.find()) {
             name = matcher.group(1);
         }
-
-
-        Shop shop = new Shop(UUID.randomUUID());
-        shop.setCreator(creator);
-        shop.setOwner(creator);
-        shop.setName(name);
+        
+        Shop shop = null;
         
         if(isGlobal) {
-            shop.setUnlimitedMoney(true);
-            shop.setUnlimitedStock(true);
-            shop.setGlobal(true);
-            shop.getWorldsSet().add(world);
-            plugin.getShopManager().addGlobalShop(shop);
-            log.info(String.format("[%s] Created Global: %s", plugin.pdfFile.getName(), shop.toString()));
+            GlobalShop gShop = new GlobalShop(UUID.randomUUID());
+            gShop.setCreator(creator);
+            gShop.setOwner(creator);
+            gShop.setName(name);
+            gShop.setUnlimitedMoney(true);
+            gShop.setUnlimitedStock(true);
+            gShop.addWorld(world);
+            plugin.getShopManager().addShop(gShop);
+            shop = gShop;
+            log.info(String.format("[%s] Created Global: %s", plugin.pdfFile.getName(), gShop.toString()));
         } else {
-            shop.setWorld(world);
-            shop.setLocations(new ShopLocation(xyzA), new ShopLocation(xyzB));
-            plugin.getShopManager().addLocalShop(shop);
-            log.info(String.format("[%s] Created Local: %s", plugin.pdfFile.getName(), shop.toString()));
+            LocalShop lShop = new LocalShop(UUID.randomUUID());
+            lShop.setCreator(creator);
+            lShop.setOwner(creator);
+            lShop.setName(name);
+            lShop.setWorld(world);
+            lShop.setLocations(new ShopLocation(xyzA), new ShopLocation(xyzB));
+            plugin.getShopManager().addShop(lShop);
+            shop = lShop;
+            log.info(String.format("[%s] Created Local: %s", plugin.pdfFile.getName(), lShop.toString()));
             for (Player p : plugin.getServer().getOnlinePlayers()) {
                 plugin.playerListener.checkPlayerPosition(p);
             }
@@ -159,7 +165,6 @@ public class CommandShopCreate extends Command {
         }
 
         // write the file
-
         if (plugin.getShopManager().saveShop(shop)) {
             sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " was created successfully.");
             return true;

@@ -12,9 +12,9 @@ import org.bukkit.plugin.PluginManager;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
-import com.milkbukkit.localshops.Shop;
 import com.milkbukkit.localshops.modules.economy.Economy;
 import com.milkbukkit.localshops.modules.economy.EconomyResponse;
+import com.milkbukkit.localshops.objects.Shop;
 
 public class Economy_Essentials implements Economy {
     private String name = "Essentials Economy";

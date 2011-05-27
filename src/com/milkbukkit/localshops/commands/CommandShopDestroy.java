@@ -4,16 +4,15 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.UUID;
 
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.InventoryItem;
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.PlayerData;
-import com.milkbukkit.localshops.Shop;
+import com.milkbukkit.localshops.objects.GlobalShop;
+import com.milkbukkit.localshops.objects.Shop;
 
 public class CommandShopDestroy extends Command {
 
@@ -74,7 +73,7 @@ public class CommandShopDestroy extends Command {
             }
 
         } else if (isGlobal) {
-            Shop shop = plugin.getShopManager().getGlobalShop(player.getWorld().getName());
+            GlobalShop shop = plugin.getShopManager().getGlobalShop(player.getWorld());
             
             // Check if shop exists
             if(shop == null) {

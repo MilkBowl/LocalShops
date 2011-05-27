@@ -1,4 +1,4 @@
-package com.milkbukkit.localshops;
+package com.milkbukkit.localshops.objects;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,32 +17,31 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
-import com.milkbukkit.localshops.util.GenericFunctions;
+import com.milkbukkit.localshops.Config;
+import com.milkbukkit.localshops.InventoryItem;
+import com.milkbukkit.localshops.ItemInfo;
+import com.milkbukkit.localshops.Search;
+import com.milkbukkit.localshops.ShopSign;
+import com.milkbukkit.localshops.Transaction;
 
-public class Shop implements Comparator<Shop> {
+public abstract class Shop implements Comparator<Shop> {
     // Attributes
-    private UUID uuid = null;
-    private String world = null;
-    private String name = null;
-    private ShopLocation locationA = null;
-    private ShopLocation locationB = null;
-    private String owner = null;
-    private String creator = null;
-    private ArrayList<String> managers = new ArrayList<String>();
-    private boolean unlimitedMoney = false;
-    private boolean unlimitedStock = false;
-    private boolean dynamicPrices = false;
-    private HashMap<String, InventoryItem> inventory = new HashMap<String, InventoryItem>();
-    private double minBalance = 0;
-    private ArrayBlockingQueue<Transaction> transactions;
-    private boolean notification = true;
-    private int locationLowX, locationHighX, locationLowY, locationHighY, locationLowZ, locationHighZ;
-    private Set<ShopSign> signSet = Collections.synchronizedSet(new HashSet<ShopSign>());
-    private boolean global = false;
-    private Set<String> globalWorlds = Collections.synchronizedSet(new HashSet<String>());
+    protected UUID uuid = null;
+    protected String name = null;
+    protected String owner = null;
+    protected String creator = null;
+    protected ArrayList<String> managers = new ArrayList<String>();
+    protected boolean unlimitedMoney = false;
+    protected boolean unlimitedStock = false;
+    protected boolean dynamicPrices = false;
+    protected HashMap<String, InventoryItem> inventory = new HashMap<String, InventoryItem>();
+    protected double minBalance = 0;
+    protected ArrayBlockingQueue<Transaction> transactions;
+    protected boolean notification = true;
+    protected Set<ShopSign> signSet = Collections.synchronizedSet(new HashSet<ShopSign>());
 
     // Logging
-    private static final Logger log = Logger.getLogger("Minecraft");    
+    protected static final Logger log = Logger.getLogger("Minecraft");
 
     public Shop(UUID uuid) {
         this.uuid = uuid;
@@ -51,24 +50,6 @@ public class Shop implements Comparator<Shop> {
 
     public UUID getUuid() {
         return uuid;
-    }
-
-    /**
-     * Sets the World the shop is located in
-     * 
-     * @param String world of the shop
-     */
-    public void setWorld(String name) {
-        world = name;
-    }
-
-    /**
-     * Returns the name of the world the shop is located in
-     * 
-     * @return String world of the shop
-     */
-    public String getWorld() {
-        return world;
     }
 
     /**
@@ -87,85 +68,6 @@ public class Shop implements Comparator<Shop> {
      */
     public String getName() {
         return name;
-    }
-
-    public void setLocations(ShopLocation locationA, ShopLocation locationB) {
-        this.locationA = locationA;
-        this.locationB = locationB;
-
-        organizeLocation();
-    }
-
-    public void setLocationA(ShopLocation locationA) {
-        this.locationA = locationA;
-        organizeLocation();
-    }
-
-    public void setLocationA(int x, int y, int z) {
-        locationA = new ShopLocation(x, y, z);
-        organizeLocation();
-    }
-
-    public void setLocationB(ShopLocation locationB) {
-        this.locationB = locationB;
-        organizeLocation();
-    }
-
-    public void setLocationB(int x, int y, int z) {
-        locationB = new ShopLocation(x, y, z);
-        organizeLocation();
-    }
-
-    public ShopLocation[] getLocations() {
-        return new ShopLocation[] { locationA, locationB };
-    }
-
-    public ShopLocation getLocationA() {
-        return locationA;
-    }
-
-    public ShopLocation getLocationB() {
-        return locationB;
-    }
-
-    public ShopLocation getLocationCenter() {
-        int[] xyz = new int[3];
-        int[] xyzA = locationA.toArray();
-        int[] xyzB = locationA.toArray();
-
-        for (int i = 0; i < 3; i++) {
-            if (xyzA[i] < xyzB[i]) {
-                xyz[i] = xyzA[i] + (Math.abs(xyzA[i] - xyzB[i])) / 2;
-            } else {
-                xyz[i] = xyzA[i] - (Math.abs(xyzA[i] - xyzB[i])) / 2;
-            }
-        }
-
-        return new ShopLocation(xyz);
-    }
-
-    public int getLocationLowX() {
-        return locationLowX;
-    }
-
-    public int getLocationLowY() {
-        return locationLowY;
-    }
-
-    public int getLocationLowZ() {
-        return locationLowZ;
-    }
-
-    public int getLocationHighX() {
-        return locationHighX;
-    }
-
-    public int getLocationHighY() {
-        return locationHighY;
-    }
-
-    public int getLocationHighZ() {
-        return locationHighZ;
     }
 
     public void setOwner(String owner) {
@@ -426,75 +328,13 @@ public class Shop implements Comparator<Shop> {
     public void clearTransactions() {
         transactions.clear();
     }
-
-    public String toString() {
-        if(global) {
-            return String.format("Shop \"%s\" in world \"%s\" %d items - %s", this.name, world, inventory.size(), uuid.toString());
-        } else {
-            String locA = "";
-            String locB = "";
-            if(locA != null) {
-                locA = locationA.toString();
-            }
-            if(locB != null) {
-                locB = locationB.toString();
-            }
-            return String.format("Shop \"%s\" at [%s], [%s] %d items - %s", this.name, locA, locB, inventory.size(), uuid.toString());
-        }
-    }
-
-    public void log() {
-        // Details
-        log.info("Shop Information");
-        log.info(String.format("   %-16s %s", "UUID:", uuid.toString()));
-        log.info(String.format("   %-16s %s", "Type:", global ? "Global" : "Local"));
-        log.info(String.format("   %-16s %s", "Name:", name));
-        log.info(String.format("   %-16s %s", "Creator:", creator));
-        log.info(String.format("   %-16s %s", "Owner:", owner));
-        log.info(String.format("   %-16s %s", "Managers:", GenericFunctions.join(managers, ",")));
-        log.info(String.format("   %-16s %.2f", "Minimum Balance:", minBalance));
-        log.info(String.format("   %-16s %s", "Unlimited Money:", unlimitedMoney ? "Yes" : "No"));
-        log.info(String.format("   %-16s %s", "Unlimited Stock:", unlimitedStock ? "Yes" : "No"));
-        if(global) {
-            log.info(String.format("   %-16s %s", "Worlds:", GenericFunctions.join(globalWorlds, ", ")));
-        } else {
-            log.info(String.format("   %-16s %s", "Location A:", locationA.toString()));
-            log.info(String.format("   %-16s %s", "Location B:", locationB.toString()));
-            log.info(String.format("   %-16s %s", "World:", world));            
-        }
-
-        // Items
-        log.info("Shop Inventory");
-        log.info("   BP=Buy Price, BS=Buy Size, SP=Sell Price, SS=Sell Size, ST=Stock, MX=Max Stock");
-        log.info(String.format("   %-9s %-6s %-3s %-6s %-3s %-3s %-3s", "Id", "BP", "BS", "SP", "SS", "ST", "MX"));        
-        Iterator<InventoryItem> it = inventory.values().iterator();
-        while(it.hasNext()) {
-            InventoryItem item = it.next();
-            ItemInfo info = item.getInfo();
-            log.info(String.format("   %6d:%-2d %-6.2f %-3d %-6.2f %-3d %-3d %-3d", info.typeId, info.subTypeId, item.getBuyPrice(), item.getBuySize(), item.getSellPrice(), item.getSellSize(), item.getStock(), item.getMaxStock()));
-        }
-
-        // Signs
-        if (!global) {
-            log.info("Shop Signs");
-            for (ShopSign sign : signSet) {
-                log.info(String.format("   %s", sign.toString()));
-            }
-        }
-    }
+    
+    public abstract String toString();
+    public abstract void log();
 
     @Override
     public int compare(Shop o1, Shop o2) {
         return o1.getUuid().compareTo(o2.uuid);
-    }
-
-
-    public void setGlobal(boolean global) {
-        this.global = global;
-    }
-
-    public boolean isGlobal() {
-        return global;
     }
 
     public void setSignSet(Set<ShopSign> signSet) {
@@ -503,65 +343,6 @@ public class Shop implements Comparator<Shop> {
 
     public Set<ShopSign> getSignSet() {
         return signSet;
-    }
-    
-    public Set<String> getWorldsSet() {
-        if (global) {
-            return globalWorlds;
-        } else {
-            return null;
-        }
-    }
-
-    public boolean containsPoint(String worldName, int x, int y, int z) {
-        if(!worldName.equals(world)) {
-            return false;
-        }
-
-        if (x >= locationLowX &&
-                x <= locationHighX &&
-                y >= locationLowY &&
-                y <= locationHighY &&
-                z >= locationLowZ &&
-                z <= locationHighZ) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    //private int locationLowX, locationHighX, locationLowY, locationHighY, locationLowZ, locationHighZ;
-    private void organizeLocation() {
-        if(locationA == null || locationB == null) {
-            return;
-        }
-
-        // X
-        if(locationA.getX() > locationB.getX()) {
-            locationHighX = locationA.getX();
-            locationLowX = locationB.getX();
-        } else {
-            locationHighX = locationB.getX();
-            locationLowX = locationA.getX();            
-        }
-
-        // Y
-        if(locationA.getY() > locationB.getY()) {
-            locationHighY = locationA.getY();
-            locationLowY = locationB.getY();
-        } else {
-            locationHighY = locationB.getY();
-            locationLowY = locationA.getY();            
-        }
-
-        // Z
-        if(locationA.getZ() > locationB.getZ()) {
-            locationHighZ = locationA.getZ();
-            locationLowZ = locationB.getZ();
-        } else {
-            locationHighZ = locationB.getZ();
-            locationLowZ = locationA.getZ();            
-        }
     }
 
     public void updateSign(ShopSign sign) {
@@ -630,7 +411,4 @@ public class Shop implements Comparator<Shop> {
         for (ShopSign sign : signSet) 
             updateSign(sign);
     }
-
-
-
 }

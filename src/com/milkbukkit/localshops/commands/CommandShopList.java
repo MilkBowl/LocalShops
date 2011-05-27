@@ -6,14 +6,15 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.LocalShops;
-import com.milkbukkit.localshops.Shop;
 import com.milkbukkit.localshops.comparator.ShopSortByName;
+import com.milkbukkit.localshops.objects.GlobalShop;
+import com.milkbukkit.localshops.objects.LocalShop;
+import com.milkbukkit.localshops.objects.Shop;
 
 public class CommandShopList extends Command {
 
@@ -54,15 +55,25 @@ public class CommandShopList extends Command {
         List<Shop> shops = plugin.getShopManager().getAllLocalShops();
         Collections.sort(shops, new ShopSortByName());
         
+        if(isGlobal && !canUseCommand(CommandTypes.ADMIN)) {
+            // send nice message
+        }
+        
         Iterator<Shop> it = shops.iterator();
         while(it.hasNext()) {
             Shop shop = it.next();
-            if(!showAll && isPlayer && !isShopController(shop)) {
-                if (!shop.isGlobal())
+            if (isGlobal) {
+                if(!(shop instanceof GlobalShop)) {
                     continue;
-            } else if (isGlobal) {
-                if(!shop.isGlobal())
+                }
+            } else {
+                if(!(shop instanceof LocalShop)) {
                     continue;
+                }
+                
+                if (!showAll && isPlayer && !isShopController(shop)) {
+                    continue;
+                }
             }
             
             if(isPlayer) {

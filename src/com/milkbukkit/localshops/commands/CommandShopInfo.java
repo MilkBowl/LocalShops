@@ -10,7 +10,8 @@ import org.bukkit.entity.Player;
 
 import com.milkbukkit.localshops.InventoryItem;
 import com.milkbukkit.localshops.LocalShops;
-import com.milkbukkit.localshops.Shop;
+import com.milkbukkit.localshops.objects.LocalShop;
+import com.milkbukkit.localshops.objects.Shop;
 import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class CommandShopInfo extends Command {
@@ -48,7 +49,7 @@ public class CommandShopInfo extends Command {
             matcher = pattern.matcher(command);
             if (matcher.find()) {
                 String input = matcher.group(1);
-                shop = plugin.getShopManager().getLocalShop(input);
+                shop = plugin.getShopManager().getShop(input);
                 if (shop == null) {
                     sender.sendMessage("Could not find shop with ID " + input);
                     return false;
@@ -84,7 +85,10 @@ public class CommandShopInfo extends Command {
             sender.sendMessage(String.format("  Full Id: %s", shop.getUuid().toString()));
         }
 
-        sender.sendMessage(String.format("  Located at %s x %s in \"%s\"", shop.getLocationA().toString(), shop.getLocationB().toString(), shop.getWorld()));
+        if(shop instanceof LocalShop) {
+            LocalShop lShop = (LocalShop) shop;
+            sender.sendMessage(String.format("  Located at %s x %s in \"%s\"", lShop.getLocationA().toString(), lShop.getLocationB().toString(), lShop.getWorld()));
+        }
 
         // Calculate values
         int sellCount = 0;

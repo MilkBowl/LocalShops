@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-
 import org.bukkit.entity.Player;
 
 import com.milkbukkit.localshops.modules.economy.EconomyResponse;
+import com.milkbukkit.localshops.objects.GlobalShop;
+import com.milkbukkit.localshops.objects.LocalShop;
+import com.milkbukkit.localshops.objects.Shop;
 
 public class PlayerData {
     // Objects
@@ -50,9 +52,13 @@ public class PlayerData {
     public boolean addPlayerToShop(Shop shop) {
         String playerWorld = plugin.getServer().getPlayer(playerName).getWorld().getName();
 
-        if (!playerIsInShop(shop) && shop.getWorld().equalsIgnoreCase(playerWorld)) {
-            shopList.add(shop.getUuid());
-            return true;
+        if (shop instanceof LocalShop) {
+            if (!playerIsInShop(shop) && ((LocalShop) shop).getWorld().equalsIgnoreCase(playerWorld)) {
+                shopList.add(shop.getUuid());
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
@@ -61,9 +67,14 @@ public class PlayerData {
     public boolean playerIsInShop(Shop shop) {
         String playerWorld = plugin.getServer().getPlayer(playerName).getWorld().getName();
 
-        if (shopList.contains(shop.getUuid())) {
-            if (shop.getWorld().equalsIgnoreCase(playerWorld)) {
-                return true;
+        if (shop instanceof GlobalShop) {
+            if (((GlobalShop) shop).containsWorld(playerWorld))
+                ;
+        } else if (shop instanceof LocalShop) {
+            if (shopList.contains(shop.getUuid())) {
+                if (((LocalShop) shop).getWorld().equalsIgnoreCase(playerWorld)) {
+                    return true;
+                }
             }
         }
         return false;

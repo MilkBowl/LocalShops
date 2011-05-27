@@ -12,11 +12,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
@@ -24,12 +22,16 @@ import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import com.milkbukkit.localshops.objects.GlobalShop;
+import com.milkbukkit.localshops.objects.LocalShop;
+import com.milkbukkit.localshops.objects.Shop;
+import com.milkbukkit.localshops.objects.ShopLocation;
 import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class ShopManager {
     private LocalShops plugin = null;
-    private Map<UUID, Shop> localShops = Collections.synchronizedMap(new HashMap<UUID, Shop>());
-    private Set<Shop> globalShops = Collections.synchronizedSet(new HashSet<Shop>());
+    private Map<UUID, Shop> shops = Collections.synchronizedMap(new HashMap<UUID, Shop>());
+    private Map<String, UUID> worldShops = Collections.synchronizedMap(new HashMap<String, UUID>());
 
     // Logging
     private final Logger log = Logger.getLogger("Minecraft");
@@ -39,11 +41,11 @@ public class ShopManager {
     }
 
     public Shop getLocalShop(UUID uuid) {
-        return localShops.get(uuid);
+        return shops.get(uuid);
     }
 
-    public Shop getLocalShop(String partialUuid) {       
-        Iterator<Shop> it = localShops.values().iterator();
+    public Shop getShop(String partialUuid) {       
+        Iterator<Shop> it = shops.values().iterator();
         while (it.hasNext()) {
             Shop cShop = it.next();
             if(cShop.getUuid().toString().matches(".*"+partialUuid.toLowerCase()+"$")) {
@@ -54,45 +56,67 @@ public class ShopManager {
         return null;
     }
     
-    public Shop getGlobalShop(String worldName) {
-        for(Shop shop : globalShops) {
-            if(shop.isGlobal() && shop.getWorldsSet().contains(worldName)) {
-                return shop;
+    public LocalShop getLocalShop(String partialUuid) {       
+        Iterator<Shop> it = shops.values().iterator();
+        while (it.hasNext()) {
+            Shop cShop = it.next();
+            if (cShop instanceof LocalShop) {
+                LocalShop lShop = (LocalShop) cShop;
+                if (cShop.getUuid().toString().matches(".*" + partialUuid.toLowerCase() + "$")) {
+                    return lShop;
+                }
             }
         }
+
         return null;
     }
     
-    public Shop getGlobalShop(World world) {
-        return getGlobalShop(world.getName());
-    }
-    
-    public Shop getGlobalShopFromShortUuid(String uuid) {
-        for(Shop shop : globalShops) {
-            if(shop.isGlobal() && shop.getUuid().toString().endsWith(uuid)) {
-                return shop;
+    public GlobalShop getGlobalShop(String partialUuid) {       
+        Iterator<Shop> it = shops.values().iterator();
+        while (it.hasNext()) {
+            Shop cShop = it.next();
+            if (cShop instanceof GlobalShop) {
+                GlobalShop gShop = (GlobalShop) cShop;
+                if (cShop.getUuid().toString().matches(".*" + partialUuid.toLowerCase() + "$")) {
+                    return gShop;
+                }
             }
         }
+
         return null;
+    }
+    
+    public GlobalShop getGlobalShopByWorld(String worldName) {
+        UUID uuid = worldShops.get(worldName);
+        Shop shop = shops.get(uuid);
+        if(shop instanceof GlobalShop) {
+            return (GlobalShop) shop;
+        } else {
+            return null;
+        }
+    }
+    
+    public GlobalShop getGlobalShop(World world) {
+        return getGlobalShopByWorld(world.getName());
     }
 
-    public Shop getLocalShop(Location loc) {
+    public LocalShop getLocalShop(Location loc) {
         return getLocalShop(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
 
-    public Shop getLocalShop(String world, int x, int y, int z) {
-        for(Shop shop : localShops.values()) {
-            if (shop.isGlobal() || !shop.getWorld().equals(world)) {
-                continue;
-            }
+    public LocalShop getLocalShop(String world, int x, int y, int z) {
+        for(Shop shop : shops.values()) {
+            if(shop instanceof LocalShop) {
+                LocalShop lShop = (LocalShop) shop;
+                
+                ShopLocation[] sLocs = lShop.getLocations();
+                if(sLocs.length != 2) {
+                    continue;
+                }
 
-            ShopLocation[] sLocs = shop.getLocations();
-            if(sLocs.length != 2) {
-                continue;
-            }
-
-            if(shop.containsPoint(world, x, y, z)) {
-                return shop;
+                if(lShop.containsPoint(world, x, y, z)) {
+                    return lShop;
+                }
             }
         }
         return null;
@@ -109,13 +133,15 @@ public class ShopManager {
         }
 
         // Need to test every position to account for variable shop sizes
-
         for (int x = xyzA[0]; x <= xyzB[0]; x++) {
             for (int z = xyzA[2]; z <= xyzB[2]; z++) {
                 for (int y = xyzA[1]; y <= xyzB[1]; y++) {
-                    for(Shop shop : localShops.values()) {
-                        if(shop.containsPoint(worldName, x, y, z)) {
-                            return false;
+                    for(Shop shop : shops.values()) {
+                        if(shop instanceof LocalShop) {
+                            LocalShop lShop = (LocalShop) shop;
+                            if(lShop.containsPoint(worldName, x, y, z)) {
+                                return false;
+                            }
                         }
                     }
                 }
@@ -124,7 +150,7 @@ public class ShopManager {
         return true;
     }
 
-    public void addLocalShop(Shop shop) {
+    public void addShop(Shop shop) {
         if(Config.getSrvDebug()) {
             log.info(String.format("[%s] Adding %s", plugin.pdfFile.getName(), shop.toString()));
         }
@@ -137,16 +163,20 @@ public class ShopManager {
                 break;
             }
         }
-        localShops.put(shop.getUuid(), shop);
-    }
-    
-    public void addGlobalShop(Shop shop) {
-        if(!shop.isGlobal()) {
-            log.warning(String.format("[%s] Attempt to add a local shop as a global shop occurred!  Ignored request.", plugin.getDescription().getName()));
-            return;
-        }
         
-        globalShops.add(shop);
+        if(shop instanceof GlobalShop) {
+            GlobalShop gShop = (GlobalShop) shop;
+            for(String world : gShop.getWorlds()) {
+                if (worldShops.containsKey(world)) {
+                    // Warning
+                    log.warning(String.format("[%s] Warning, Global Shop already exists for World \"%s\"!", plugin.getDescription().getName(), world));
+                } else {
+                    // Add to map
+                    worldShops.put(world, gShop.getUuid());
+                }
+            }
+        }
+        shops.put(shop.getUuid(), shop);
     }
 
     private void calcShortUuidSize() {
@@ -154,7 +184,7 @@ public class ShopManager {
             Config.incrementUuidMinLength();
         }
         Config.clearUuidList();
-        Iterator<Shop> it = localShops.values().iterator();
+        Iterator<Shop> it = shops.values().iterator();
         while (it.hasNext()) {
             Shop cShop = it.next();
             String cUuid = cShop.getUuid().toString();
@@ -168,22 +198,16 @@ public class ShopManager {
     }
 
     public List<Shop> getAllLocalShops() {
-        return new ArrayList<Shop>(localShops.values());
+        return new ArrayList<Shop>(shops.values());
     }
 
     public int getNumShops() {
-        return localShops.size() + globalShops.size();
+        return shops.size();
     }
 
     public int numOwnedShops(String playerName) {
         int numShops = 0;
-        for (Shop shop : localShops.values()) {
-            if (shop.getOwner().equalsIgnoreCase(playerName)) {
-                numShops++;
-            }
-        }
-
-        for (Shop shop : globalShops) {
+        for (Shop shop : shops.values()) {
             if (shop.getOwner().equalsIgnoreCase(playerName)) {
                 numShops++;
             }
@@ -222,11 +246,7 @@ public class ShopManager {
                 if(Config.getSrvDebug()) {
                     log.info(String.format("[%s] Loaded %s", plugin.pdfFile.getName(), shop.toString()));
                 }
-                if (shop.isGlobal()) {
-                    globalShops.add(shop);
-                } else {
-                    plugin.getShopManager().addLocalShop(shop);
-                }
+                plugin.getShopManager().addShop(shop);
             } else {
                 log.warning(String.format("[%s] Failed to load Shop file: \"%s\"", plugin.pdfFile.getName(), file.getName()));
             }
@@ -241,7 +261,7 @@ public class ShopManager {
 
         try {
             // Create new empty shop (this format has no UUID, so generate one)
-            Shop shop = new Shop(UUID.randomUUID());
+            LocalShop shop = new LocalShop(UUID.randomUUID());
 
             // Retrieve Shop Name (from filename)
             shop.setName(file.getName().split("\\.")[0]);
@@ -466,31 +486,41 @@ public class ShopManager {
         String[] managers = props.getProperty("managers", "").replaceAll("[\\[\\]]", "").split(", ");
         String creator = props.getProperty("creator", "LocalShops");
 
-        shop = new Shop(uuid);
-        shop.setName(name);
-        shop.setUnlimitedMoney(unlimitedMoney);
-        shop.setUnlimitedStock(unlimitedStock);
-        shop.setOwner(owner);
-        shop.setManagers(managers);
-        shop.setCreator(creator);
-        shop.setNotification(notification);
-        shop.setDynamicPrices(dynamic);
-        
-        if (global) {
+        if(global) {
+            GlobalShop gShop = new GlobalShop(uuid);
+            gShop.setName(name);
+            gShop.setUnlimitedMoney(unlimitedMoney);
+            gShop.setUnlimitedStock(unlimitedStock);
+            gShop.setOwner(owner);
+            gShop.setManagers(managers);
+            gShop.setCreator(creator);
+            gShop.setNotification(notification);
+            gShop.setDynamicPrices(dynamic);
+            
+            // Add worlds
             String worlds = props.getProperty("worlds");
-            shop.setGlobal(true);
             for(String world : worlds.split(",")) {
-                shop.getWorldsSet().add(world);
+                gShop.addWorld(world);
             }
+            
+            shop = gShop;
         } else {
-            // Location - locationB=-88, 50, -127
+            LocalShop lShop = new LocalShop(uuid);
+            lShop.setName(name);
+            lShop.setUnlimitedMoney(unlimitedMoney);
+            lShop.setUnlimitedStock(unlimitedStock);
+            lShop.setOwner(owner);
+            lShop.setManagers(managers);
+            lShop.setCreator(creator);
+            lShop.setNotification(notification);
+            lShop.setDynamicPrices(dynamic);
             try {
                 locationA = convertStringArraytoIntArray(props.getProperty("locationA").split(", "));
                 locationB = convertStringArraytoIntArray(props.getProperty("locationB").split(", "));
                 String world = props.getProperty("world", "world1");
-                shop.setWorld(world);
-                shop.setLocationA(new ShopLocation(locationA));
-                shop.setLocationB(new ShopLocation(locationB));
+                lShop.setWorld(world);
+                lShop.setLocationA(new ShopLocation(locationA));
+                lShop.setLocationB(new ShopLocation(locationB));
             } catch (Exception e) {
                 if (isolateBrokenShopFile(file)) {
                     log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.toString()));
@@ -499,6 +529,8 @@ public class ShopManager {
                 }
                 return null;
             }
+            
+            shop = lShop;
         }
 
         // Make sure minimum balance isn't negative
@@ -632,12 +664,7 @@ public class ShopManager {
         log.info(String.format("[%s] %s", plugin.pdfFile.getName(), "Saving All Shops"));
         
         // Local Shops
-        for(Shop shop : localShops.values()) {
-            saveShop(shop);
-        }
-        
-        // Global Shops
-        for(Shop shop : globalShops) {
+        for(Shop shop : shops.values()) {
             saveShop(shop);
         }
         return true;
@@ -659,13 +686,17 @@ public class ShopManager {
         props.setProperty("dynamic-prices", String.valueOf(shop.isDynamicPrices()));
 
         // Location
-        if (!shop.isGlobal()) {
-            props.setProperty("locationA", shop.getLocationA().toString());
-            props.setProperty("locationB", shop.getLocationB().toString());
-            props.setProperty("world", shop.getWorld());
-        } else {
+        if(shop instanceof GlobalShop) {
+            GlobalShop gShop = (GlobalShop) shop;
             props.setProperty("global", "true");
-            props.setProperty("worlds", GenericFunctions.join(shop.getWorldsSet(), ","));
+            props.setProperty("worlds", GenericFunctions.join(gShop.getWorlds(), ","));
+        } else if(shop instanceof LocalShop) {
+            LocalShop lShop = (LocalShop) shop;
+            props.setProperty("locationA", lShop.getLocationA().toString());
+            props.setProperty("locationB", lShop.getLocationB().toString());
+            props.setProperty("world", lShop.getWorld());
+        } else {
+            // Unknown shop type!
         }
 
         // People
@@ -708,11 +739,7 @@ public class ShopManager {
         String shortUuid = shop.getShortUuidString();
 
         // remove shop from data structure
-        if (shop.isGlobal()) {
-            globalShops.remove(shop);
-        } else {
-            localShops.remove(shop.getUuid());
-        }
+        shops.remove(shop.getUuid());
 
         // remove string from uuid short list
         Config.removeUuidList(shortUuid);
@@ -805,8 +832,8 @@ public class ShopManager {
      * @return null
      */
     public Callable<Object> updateSigns() {
-        for (UUID key : localShops.keySet()) {
-            Shop shop = localShops.get(key);
+        for (UUID key : shops.keySet()) {
+            Shop shop = shops.get(key);
             if (shop.isDynamicPrices())
                 for (ShopSign sign : shop.getSignSet())
                     shop.updateSign(sign);

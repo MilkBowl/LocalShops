@@ -2,7 +2,7 @@ package com.milkbukkit.localshops.comparator;
 
 import java.util.Comparator;
 
-import com.milkbukkit.localshops.Shop;
+import com.milkbukkit.localshops.objects.Shop;
 
 
 public class ShopSortByOwner implements Comparator<Shop> {

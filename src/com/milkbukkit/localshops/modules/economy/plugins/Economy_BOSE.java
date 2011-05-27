@@ -9,9 +9,9 @@ import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-import com.milkbukkit.localshops.Shop;
 import com.milkbukkit.localshops.modules.economy.Economy;
 import com.milkbukkit.localshops.modules.economy.EconomyResponse;
+import com.milkbukkit.localshops.objects.Shop;
 
 import cosine.boseconomy.BOSEconomy;
 

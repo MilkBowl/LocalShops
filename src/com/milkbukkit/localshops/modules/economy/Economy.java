@@ -2,7 +2,7 @@ package com.milkbukkit.localshops.modules.economy;
 
 import java.util.logging.Logger;
 
-import com.milkbukkit.localshops.Shop;
+import com.milkbukkit.localshops.objects.Shop;
 
 
 public interface Economy {

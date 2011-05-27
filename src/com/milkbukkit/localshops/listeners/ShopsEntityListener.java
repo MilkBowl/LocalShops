@@ -12,8 +12,8 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityListener;
 
 import com.milkbukkit.localshops.LocalShops;
-import com.milkbukkit.localshops.Shop;
 import com.milkbukkit.localshops.ShopSign;
+import com.milkbukkit.localshops.objects.Shop;
 
 /**
  * @author sleaker

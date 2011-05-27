@@ -3,7 +3,6 @@ package com.milkbukkit.localshops.commands;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -12,8 +11,8 @@ import org.bukkit.entity.Player;
 import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.PlayerData;
-import com.milkbukkit.localshops.Shop;
-import com.milkbukkit.localshops.ShopLocation;
+import com.milkbukkit.localshops.objects.LocalShop;
+import com.milkbukkit.localshops.objects.ShopLocation;
 import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class CommandShopMove extends Command {
@@ -27,15 +26,20 @@ public class CommandShopMove extends Command {
     }
 
     public boolean process() {
+        
+        if(isGlobal) {
+            sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You cannot move a global shop!");
+            return true;
+        }
 
         if(!canUseCommand(CommandTypes.MOVE)) {
             sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You don't have permission to use this command");
-            return false;
+            return true;
         }
 
         if(!(sender instanceof Player)) {
             sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "Console is not implemented yet.");
-            return false;
+            return true;
         }
 
         Pattern pattern = Pattern.compile("(?i)move\\s+(.*)");
@@ -45,10 +49,9 @@ public class CommandShopMove extends Command {
 
             Player player = (Player) sender;
             Location location = player.getLocation();
-            Shop thisShop = null;
 
             // check to see if that shop exists
-            thisShop = plugin.getShopManager().getLocalShop(id);
+            LocalShop thisShop = plugin.getShopManager().getLocalShop(id);
             if(thisShop == null) {
                 sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "Could not find shop: " + ChatColor.WHITE + id);
                 return false;
@@ -125,8 +128,6 @@ public class CommandShopMove extends Command {
                 thisShop.setWorld(player.getWorld().getName());
                 thisShop.setLocations(new ShopLocation(xyzA), new ShopLocation(xyzB));
                 log.info(thisShop.getUuid().toString());
-                //plugin.getShopManager().deleteShop(thisShop);
-                //plugin.getShopManager().addShop(thisShop);
 
                 plugin.getPlayerData().put(player.getName(), new PlayerData(plugin, player.getName()));
 

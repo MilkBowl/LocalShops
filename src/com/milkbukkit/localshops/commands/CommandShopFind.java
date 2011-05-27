@@ -19,9 +19,11 @@ import com.milkbukkit.localshops.InventoryItem;
 import com.milkbukkit.localshops.ItemInfo;
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.Search;
-import com.milkbukkit.localshops.Shop;
-import com.milkbukkit.localshops.ShopLocation;
 import com.milkbukkit.localshops.comparator.EntryValueComparator;
+import com.milkbukkit.localshops.objects.GlobalShop;
+import com.milkbukkit.localshops.objects.LocalShop;
+import com.milkbukkit.localshops.objects.Shop;
+import com.milkbukkit.localshops.objects.ShopLocation;
 import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class CommandShopFind extends Command {
@@ -123,14 +125,30 @@ public class CommandShopFind extends Command {
         TreeMap<UUID, Double> foundShops = new TreeMap<UUID, Double>();
         List<Shop> shops = plugin.getShopManager().getAllLocalShops();
         for (Shop shop : shops) {
-            // Check that its the current world
-            if (!playerWorld.equals(shop.getWorld()) || shop.isGlobal()) {
-                continue;
+            double distance = 0;
+            
+            // Check if global or local
+            if(shop instanceof LocalShop) {
+                LocalShop lShop = (LocalShop) shop;
+                
+                // Check that its the current world
+                if (!playerWorld.equals(lShop.getWorld())) {
+                    continue;
+                }
+                
+                distance = GenericFunctions.calculateDistance(playerLoc.getX(), playerLoc.getY(), playerLoc.getZ(), lShop.getLocationCenter().getX(), lShop.getLocationCenter().getY(), lShop.getLocationCenter().getZ());
+            } else if(shop instanceof GlobalShop) {
+                GlobalShop gShop = (GlobalShop) shop;
+                
+                // Check that its the current world
+                if (!gShop.containsWorld(playerWorld)) {
+                    continue;
+                }
+                
+                distance = 0;
             }
 
-            // Determine distance, if too far away ignore
-
-            double distance = GenericFunctions.calculateDistance(playerLoc.getX(), playerLoc.getY(), playerLoc.getZ(), shop.getLocationCenter().getX(), shop.getLocationCenter().getY(), shop.getLocationCenter().getZ());
+            // Determine if distance is too far away && ignore
             if (Config.getFindMaxDistance() > 0 && distance > Config.getFindMaxDistance()) {
                 continue;
             }

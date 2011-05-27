@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import com.milkbukkit.localshops.ItemInfo;
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.Search;
-import com.milkbukkit.localshops.Shop;
+import com.milkbukkit.localshops.objects.Shop;
 
 public class CommandShopRemove extends Command {
 

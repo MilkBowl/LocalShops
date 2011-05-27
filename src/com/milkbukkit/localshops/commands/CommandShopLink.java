@@ -6,15 +6,13 @@ package com.milkbukkit.localshops.commands;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 import org.bukkit.ChatColor;
-import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.LocalShops;
-import com.milkbukkit.localshops.Shop;
+import com.milkbukkit.localshops.objects.GlobalShop;
+import com.milkbukkit.localshops.objects.Shop;
 
 /**
  * @author sleaker
@@ -32,7 +30,7 @@ public class CommandShopLink extends Command {
 
     public boolean process() {
         String worldName = null;
-        Shop shop = null;
+        GlobalShop shop = null;
 
         // Check Permissions
         if (!canUseCommand(CommandTypes.ADMIN)) {
@@ -46,7 +44,7 @@ public class CommandShopLink extends Command {
         if (matcher.find()) {
             String key = matcher.group(1);
             worldName = matcher.group(2);
-            shop = plugin.getShopManager().getGlobalShopFromShortUuid(key);
+            shop = plugin.getShopManager().getGlobalShop(key);
             if (shop == null) {
                 sender.sendMessage("Could not find a global shop that matches id: " + key);
                 return true;
@@ -58,8 +56,15 @@ public class CommandShopLink extends Command {
             matcher = pattern.matcher(command);
             if (matcher.find()) {
                 worldName = matcher.group(1);
-                shop = getCurrentShop(player);
-                if (shop == null) {
+                Shop s = getCurrentShop(player);
+                if (s == null) {
+                    sender.sendMessage("A global shop does not exist for your world, you must create one first before you can link!");
+                    return true;
+                }
+                
+                if(s instanceof GlobalShop) {
+                    shop = (GlobalShop) s;
+                } else {
                     sender.sendMessage("A global shop does not exist for your world, you must create one first before you can link!");
                     return true;
                 }
@@ -75,20 +80,15 @@ public class CommandShopLink extends Command {
             return true;
         }
         
-        if (shop.isGlobal()) {
-            Shop wShop = plugin.getShopManager().getGlobalShop(worldName);
-            if (wShop != null) {
-                sender.sendMessage(worldName + " already has a global shop with id: " + wShop.getShortUuidString());
-                return true;
-            }
-            
-            shop.getWorldsSet().add(worldName);
-            sender.sendMessage("Added " + shop.getName() + " as a global shop for " + worldName);
-            return true;
-        } else {
-            sender.sendMessage("Shop with id " + shop.getShortUuidString() + " is a local shop. Unable to link to a world");
+        Shop wShop = plugin.getShopManager().getGlobalShopByWorld(worldName);
+        if (wShop != null) {
+            sender.sendMessage(worldName + " already has a global shop with id: " + wShop.getShortUuidString());
             return true;
         }
+
+        shop.addWorld(worldName);
+        sender.sendMessage("Added " + shop.getName() + " as a global shop for " + worldName);
+        return true;
     }
 
 }

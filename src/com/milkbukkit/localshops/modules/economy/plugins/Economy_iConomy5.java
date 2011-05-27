@@ -12,9 +12,9 @@ import org.bukkit.plugin.PluginManager;
 import com.iConomy.iConomy;
 import com.iConomy.system.Account;
 import com.iConomy.system.Holdings;
-import com.milkbukkit.localshops.Shop;
 import com.milkbukkit.localshops.modules.economy.Economy;
 import com.milkbukkit.localshops.modules.economy.EconomyResponse;
+import com.milkbukkit.localshops.objects.Shop;
 
 public class Economy_iConomy5 implements Economy {
     private String name = "iConomy 5";
