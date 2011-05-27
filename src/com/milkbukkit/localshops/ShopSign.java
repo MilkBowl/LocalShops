@@ -20,7 +20,7 @@ public class ShopSign {
     private String signWorld = null;
     private String item;
     private SignTypes type = SignTypes.INFO;
-    private static enum SignTypes {
+    public static enum SignTypes {
         INFO(0),
         BUY(1),
         SELL(2);
@@ -31,7 +31,6 @@ public class ShopSign {
             this.id = id;
         }
         
-        @SuppressWarnings("unused")
         public int getId () {
             return id;
         }

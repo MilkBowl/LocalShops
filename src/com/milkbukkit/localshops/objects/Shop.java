@@ -346,43 +346,13 @@ public abstract class Shop implements Comparator<Shop> {
     }
 
     public void updateSign(ShopSign sign) {
-
-        //TODO: Make method for dealing with sign line logic that returns an array of strings.
-        String line1 = sign.getItemName();
-        String line2 = "Buy: ";
-        String line3 = "Sell: ";
-        String line4 = "Stock: " ;
-
-        //If shop no longer carries this item - otherwise update it
-        if(this.getItem(sign.getItemName()) == null) {
-            line1 = "";
-            line2 = "";
-            line3 = "";
-            line4 = "";
-            this.signSet.remove(sign);
-        } else {
-            if (this.getItem(sign.getItemName()).getBuyPrice() == 0 || (this.getItem(sign.getItemName()).getStock() == 0 && !this.unlimitedStock)) 
-                line2 += "-";
-            else 
-                line2 += this.getItem(sign.getItemName()).getBuyPrice();
-
-            if (this.getItem(sign.getItemName()).getSellPrice() == 0 ) 
-                line3 += "-";
-            else if (this.getItem(sign.getItemName()).getStock() >= this.getItem(sign.getItemName()).maxStock && !this.unlimitedStock)
-                line3 += "Overflow";
-            else 
-                line3 += this.getItem(sign.getItemName()).getSellPrice();
-
-            if (!this.unlimitedStock)
-                line4 += this.getItem(sign.getItemName()).getStock();
-            else
-                line4 += "-";
-        }
+        String[] signLines = getSignLines(sign);
+      
         //Set the lines
-        ((Sign) sign.getLoc().getBlock().getState()).setLine(0, line1);
-        ((Sign) sign.getLoc().getBlock().getState()).setLine(1, line2);
-        ((Sign) sign.getLoc().getBlock().getState()).setLine(2, line3);
-        ((Sign) sign.getLoc().getBlock().getState()).setLine(3, line4);
+        ((Sign) sign.getLoc().getBlock().getState()).setLine(0, signLines[0]);
+        ((Sign) sign.getLoc().getBlock().getState()).setLine(1, signLines[1]);
+        ((Sign) sign.getLoc().getBlock().getState()).setLine(2, signLines[2]);
+        ((Sign) sign.getLoc().getBlock().getState()).setLine(3, signLines[3]);
 
         sign.getLoc().getBlock().getState().update();
     }
@@ -410,5 +380,65 @@ public abstract class Shop implements Comparator<Shop> {
     public void updateSigns(Set<ShopSign> signSet) {
         for (ShopSign sign : signSet) 
             updateSign(sign);
+    }
+    
+    
+    public String[] getSignLines(ShopSign sign) {
+        //create our string array and set the 1st element to our item name
+        String[] signLines = {sign.getItemName(), "", "", ""};
+
+        //If shop no longer carries this item - otherwise update it
+        if(this.getItem(sign.getItemName()) == null) {
+            signLines[0] = "";
+            signLines[1] = "";
+            signLines[2] = "";
+            signLines[3] = "";
+            this.signSet.remove(sign);
+        } else if (sign.getType() == ShopSign.SignTypes.INFO ){
+            if (this.getItem(sign.getItemName()).getBuyPrice() == 0 ) 
+                signLines[1] = "Buy: -";
+            else if (this.getItem(sign.getItemName()).getStock() == 0 && !this.unlimitedStock)
+                signLines[1] = "Understock";
+            else 
+                signLines[1] = "Buy: " + this.getItem(sign.getItemName()).getBuyPrice();
+            
+            if (this.getItem(sign.getItemName()).getSellPrice() == 0 ) 
+                signLines[2] = "Sell: -";
+            else if (this.getItem(sign.getItemName()).maxStock > 0 && this.getItem(sign.getItemName()).getStock() >= this.getItem(sign.getItemName()).maxStock && !this.unlimitedStock)
+                signLines[2] = "Overstock";
+            else 
+                signLines[2] = "Sell: " + this.getItem(sign.getItemName()).getSellPrice();
+
+            if (!this.unlimitedStock)
+                signLines[3] = "Stock: " + this.getItem(sign.getItemName()).getStock();
+            else
+                signLines[3] = "Unlimited";
+        } else if (sign.getType() == ShopSign.SignTypes.BUY ) {
+            if (this.getItem(sign.getItemName()).getBuyPrice() == 0 ) 
+                signLines[1] = "Not Selling";
+            else if (this.getItem(sign.getItemName()).getStock() == 0 && !this.unlimitedStock) 
+                signLines[1] = "Understock";
+            else  {
+                signLines[1] = "Buy: " + this.getItem(sign.getItemName()).getBuyPrice();
+                signLines[2] = "R-Click to Buy";
+            }
+            if (!this.unlimitedStock)
+                signLines[3] = "Stock: " + this.getItem(sign.getItemName()).getStock();
+            else
+                signLines[3] = "Unlimited";         
+        } else if (sign.getType() == ShopSign.SignTypes.SELL ) {
+            if (this.getItem(sign.getItemName()).getSellPrice() == 0 ) 
+                signLines[1] = "Not Buying";
+            else if (this.getItem(sign.getItemName()).maxStock > 0 && this.getItem(sign.getItemName()).getStock() >= this.getItem(sign.getItemName()).maxStock && !this.unlimitedStock)
+                signLines[1] = "Overstock";
+            else {
+                signLines[1] = "Sell: " + this.getItem(sign.getItemName()).getSellPrice();
+                signLines[2] = "R-Click to Sell";
+            }
+            
+        }
+        
+        return signLines;
+        
     }
 }
