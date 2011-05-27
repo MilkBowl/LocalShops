@@ -42,7 +42,7 @@ public class CommandShopDestroy extends Command {
         // get the shop the player is currently in
         if (plugin.getPlayerData().get(playerName).shopList.size() == 1 && !isGlobal) {
             UUID shopUuid = plugin.getPlayerData().get(playerName).shopList.get(0);
-            Shop shop = plugin.getShopManager().getShop(shopUuid);
+            Shop shop = plugin.getShopManager().getLocalShop(shopUuid);
 
             if (!shop.getOwner().equalsIgnoreCase(player.getName()) && !canUseCommand(CommandTypes.ADMIN)) {
                 player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner to destroy it.");
@@ -73,23 +73,27 @@ public class CommandShopDestroy extends Command {
                 sender.sendMessage("Could not return shop inventory!");
             }
 
-        } else if (isGlobal && Config.globalShopsContainsKey(player.getWorld().getName())) {
-            Shop shop = plugin.getShopManager().getShop(Config.getGlobalShopUuid(player.getWorld().getName()));
+        } else if (isGlobal) {
+            Shop shop = plugin.getShopManager().getGlobalShop(player.getWorld().getName());
+            
+            // Check if shop exists
+            if(shop == null) {
+                player.sendMessage(ChatColor.DARK_AQUA + "You must be inside a shop to use /" + commandLabel + " destroy");
+                return true;
+            }
 
+            // Check if permissions
             if (!shop.getOwner().equalsIgnoreCase(player.getName()) && !canUseCommand(CommandTypes.ADMIN) && !shop.getManagers().contains(player.getName())) {
                 player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or manager to destroy a global shop");
                 return false;
-            } else {
-                if (plugin.getShopManager().deleteShop(shop)) {
-                    Config.globalShopsRemove(player.getWorld().getName());
-                    player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " has been destroyed");
-                } else {
-                    player.sendMessage(LocalShops.CHAT_PREFIX + " Error while attempting to destroy shop: " +  ChatColor.WHITE + shop.getName());
-                }
             }
             
-        } else {
-            player.sendMessage(ChatColor.DARK_AQUA + "You must be inside a shop to use /" + commandLabel + " destroy");
+            // Delete Shop
+            if (plugin.getShopManager().deleteShop(shop)) {
+                player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " has been destroyed");
+            } else {
+                player.sendMessage(LocalShops.CHAT_PREFIX + " Error while attempting to destroy shop: " + ChatColor.WHITE + shop.getName());
+            }
         }
 
         return true;

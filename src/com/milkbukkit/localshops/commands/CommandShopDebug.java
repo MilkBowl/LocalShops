@@ -32,14 +32,6 @@ public class CommandShopDebug extends Command {
             Matcher matcher = pattern.matcher(command);
             if (matcher.find()) {
                 worldName = matcher.group(1);
-                UUID shopUuid = Config.getGlobalShopUuid(worldName);
-                if(shopUuid != null) {
-                    shop = plugin.getShopManager().getShop(shopUuid);
-                }
-                
-                if(shop == null) {
-                    sender.sendMessage("Could not find the global shop for world \""+worldName+"\"!");
-                }
             } else if(sender instanceof Player) {
                 Player player = (Player) sender;
                 worldName = player.getWorld().getName();
@@ -51,11 +43,7 @@ public class CommandShopDebug extends Command {
                 sender.sendMessage("Could not find a world!");
             }
             
-            UUID shopUuid = Config.getGlobalShopUuid(worldName);
-            if(shopUuid != null) {
-                shop = plugin.getShopManager().getShop(shopUuid);
-            }
-            
+            shop = plugin.getShopManager().getGlobalShop(worldName);
             if(shop == null) {
                 sender.sendMessage("Could not find the global shop for world \""+worldName+"\"!");
                 return true;
@@ -77,7 +65,7 @@ public class CommandShopDebug extends Command {
                     // Get Current Shop
                     UUID shopUuid = pData.getCurrentShop();
                     if (shopUuid != null) {
-                        shop = plugin.getShopManager().getShop(shopUuid);
+                        shop = plugin.getShopManager().getLocalShop(shopUuid);
                     }
                     if (shop == null) {
                         sender.sendMessage("You are not in a shop!");
@@ -93,7 +81,7 @@ public class CommandShopDebug extends Command {
             Matcher matcher = pattern.matcher(command);
             if (matcher.find()) {
                 String input = matcher.group(1);
-                shop = plugin.getShopManager().getShop(input);
+                shop = plugin.getShopManager().getLocalShop(input);
                 if (shop == null) {
                     sender.sendMessage("Could not find shop with ID " + input);
                     return false;

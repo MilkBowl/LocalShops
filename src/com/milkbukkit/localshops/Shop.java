@@ -39,6 +39,7 @@ public class Shop implements Comparator<Shop> {
     private int locationLowX, locationHighX, locationLowY, locationHighY, locationLowZ, locationHighZ;
     private Set<ShopSign> signSet = Collections.synchronizedSet(new HashSet<ShopSign>());
     private boolean global = false;
+    private Set<String> globalWorlds = Collections.synchronizedSet(new HashSet<String>());
 
     // Logging
     private static final Logger log = Logger.getLogger("Minecraft");    
@@ -446,6 +447,7 @@ public class Shop implements Comparator<Shop> {
         // Details
         log.info("Shop Information");
         log.info(String.format("   %-16s %s", "UUID:", uuid.toString()));
+        log.info(String.format("   %-16s %s", "Type:", global ? "Global" : "Local"));
         log.info(String.format("   %-16s %s", "Name:", name));
         log.info(String.format("   %-16s %s", "Creator:", creator));
         log.info(String.format("   %-16s %s", "Owner:", owner));
@@ -453,11 +455,13 @@ public class Shop implements Comparator<Shop> {
         log.info(String.format("   %-16s %.2f", "Minimum Balance:", minBalance));
         log.info(String.format("   %-16s %s", "Unlimited Money:", unlimitedMoney ? "Yes" : "No"));
         log.info(String.format("   %-16s %s", "Unlimited Stock:", unlimitedStock ? "Yes" : "No"));
-        if(!global) {
+        if(global) {
+            log.info(String.format("   %-16s %s", "Worlds:", GenericFunctions.join(globalWorlds, ", ")));
+        } else {
             log.info(String.format("   %-16s %s", "Location A:", locationA.toString()));
             log.info(String.format("   %-16s %s", "Location B:", locationB.toString()));
+            log.info(String.format("   %-16s %s", "World:", world));            
         }
-        log.info(String.format("   %-16s %s", "World:", world));
 
         // Items
         log.info("Shop Inventory");
@@ -471,9 +475,11 @@ public class Shop implements Comparator<Shop> {
         }
 
         // Signs
-        log.info("Shop Signs");
-        for(ShopSign sign : signSet) {
-            log.info(String.format("   %s", sign.toString()));
+        if (!global) {
+            log.info("Shop Signs");
+            for (ShopSign sign : signSet) {
+                log.info(String.format("   %s", sign.toString()));
+            }
         }
     }
 
@@ -497,6 +503,14 @@ public class Shop implements Comparator<Shop> {
 
     public Set<ShopSign> getSignSet() {
         return signSet;
+    }
+    
+    public Set<String> getWorldsSet() {
+        if (global) {
+            return globalWorlds;
+        } else {
+            return null;
+        }
     }
 
     public boolean containsPoint(String worldName, int x, int y, int z) {

@@ -121,7 +121,7 @@ public class CommandShopFind extends Command {
         ShopLocation playerLoc = new ShopLocation(player.getLocation());
 
         TreeMap<UUID, Double> foundShops = new TreeMap<UUID, Double>();
-        List<Shop> shops = plugin.getShopManager().getAllShops();
+        List<Shop> shops = plugin.getShopManager().getAllLocalShops();
         for (Shop shop : shops) {
             // Check that its the current world
             if (!playerWorld.equals(shop.getWorld()) || shop.isGlobal()) {
@@ -143,9 +143,6 @@ public class CommandShopFind extends Command {
             // This shop is valid, add to list
             foundShops.put(shop.getUuid(), distance);
         }
-        if (Config.getGlobalShopsEnabled() && Config.globalShopsContainsKey(playerWorld)) {
-            foundShops.put(Config.getGlobalShopUuid(playerWorld), 0D);
-        }
 
         @SuppressWarnings("unchecked")
         SortedSet<Entry<UUID, Double>> entries = new TreeSet<Entry<UUID, Double>>(new EntryValueComparator());
@@ -157,7 +154,7 @@ public class CommandShopFind extends Command {
             for (Entry<UUID, Double> entry : entries) {
                 UUID uuid = entry.getKey();
                 double distance = entry.getValue();
-                Shop shop = plugin.getShopManager().getShop(uuid);
+                Shop shop = plugin.getShopManager().getLocalShop(uuid);
                 InventoryItem item = shop.getItem(found.name);
 
                 String sellPrice;

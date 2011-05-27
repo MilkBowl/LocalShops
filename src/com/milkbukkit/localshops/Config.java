@@ -69,7 +69,6 @@ public class Config {
     */
     
     // Global Shops
-    private static Map<String, UUID> globalShops = Collections.synchronizedMap(new HashMap<String, UUID>(2));
     private static boolean globalShopsEnabled = false;
     
     // Player Settings
@@ -117,14 +116,6 @@ public class Config {
         properties.setProperty("global-shops", String.valueOf(globalShopsEnabled));
         
         properties.setProperty("chat-max-lines", String.valueOf(chatMaxLines));
-        
-        Iterator<String> it = globalShops.keySet().iterator();
-        while(it.hasNext()) {
-            String key = it.next();
-            UUID value = globalShops.get(key);
-            
-            properties.setProperty(String.format("%s-shop-UUID", key), value.toString());
-        }
         
         try {
             properties.store(new FileOutputStream(Config.dirPath + "localshops.properties"), null);
@@ -189,26 +180,6 @@ public class Config {
         globalShopsEnabled = Boolean.parseBoolean(properties.getProperty("global-shops", String.valueOf(globalShopsEnabled)));
         
         chatMaxLines = Integer.parseInt(properties.getProperty("chat-max-lines", String.valueOf(chatMaxLines)));
-        
-        Pattern pattern = Pattern.compile("(?i)(.*)-shop-UUID$");
-        Iterator<Object> it = properties.keySet().iterator();
-        while(it.hasNext()) {
-            Object o = it.next();
-            if(o instanceof String) {
-                String key = (String) o;
-                Matcher matcher = pattern.matcher(key);
-                if(matcher.find()) {
-                    // This is a global shop key
-                    String world = matcher.group(1);
-                    UUID uuid = UUID.fromString(properties.getProperty(key));
-                    
-                    globalShops.put(world, uuid);
-                }
-            } else {
-                // gtfo
-                continue;
-            }
-        }
         
         if(save) {
             save();
@@ -554,39 +525,6 @@ public class Config {
     }
     
     /**
-     * Get global shop UUID
-     * @param worldName World name
-     * @return Shop Unique ID
-     */
-    public static UUID getGlobalShopUuid(String worldName) {
-        return globalShops.get(worldName);
-    }
-    
-    /**
-     * Add world shop
-     * @param worldName World name
-     * @param uuid Shop Unique ID
-     */
-    public static void globalShopsAdd(String worldName, UUID uuid) {
-        globalShops.put(worldName, uuid);
-    }
-    
-    /**
-     * Remove world shop
-     * @param worldName World name
-     */
-    public static void globalShopsRemove(String worldName) {
-        globalShops.remove(worldName);
-    }
-    
-    /**
-     * Does Global Shops contain a world?
-     */
-    public static boolean globalShopsContainsKey(String worldName) {
-        return globalShops.containsKey(worldName);
-    }
-    
-    /**
      * Get global shops setting
      * @return
      */
@@ -755,18 +693,6 @@ public class Config {
 
     public static void setGlobalBaseStock(int globalBaseStock) {
         Config.globalBaseStock = globalBaseStock;
-    }
-
-    public static void verifyGlobalShops(ShopManager shopManager) {
-        Iterator<String> iter = globalShops.keySet().iterator();
-        while (iter.hasNext())
-        {
-            String worldName = iter.next();
-            if (shopManager.getShop(globalShops.get(worldName)) == null) {
-                iter.remove();
-            }
-            
-        }
     }
 
     public static void setGlobalVolatility(int globalVolatility) {

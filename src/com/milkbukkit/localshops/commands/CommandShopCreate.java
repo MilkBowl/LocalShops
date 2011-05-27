@@ -91,7 +91,7 @@ public class CommandShopCreate extends Command {
                 sender.sendMessage("A shop already exists here!");
                 return false;
             }
-            if (isGlobal && Config.globalShopsContainsKey(world)) {
+            if (isGlobal && plugin.getShopManager().getGlobalShop(world) != null) {
                 sender.sendMessage(world + " already has a global shop. Remove it before creating a new one!");
                 return false;
             }
@@ -135,20 +135,22 @@ public class CommandShopCreate extends Command {
         shop.setCreator(creator);
         shop.setOwner(creator);
         shop.setName(name);
-        shop.setWorld(world);
-        if ( !isGlobal) {
-            shop.setLocations(new ShopLocation(xyzA), new ShopLocation(xyzB));
-
-            log.info(String.format("[%s] Created: %s", plugin.pdfFile.getName(), shop.toString()));
-        } else {
+        
+        if(isGlobal) {
             shop.setUnlimitedMoney(true);
             shop.setUnlimitedStock(true);
             shop.setGlobal(true);
-            Config.globalShopsAdd(world, shop.getUuid());
-        }
-        plugin.getShopManager().addShop(shop);
-        for (Player p : plugin.getServer().getOnlinePlayers()) {
-            plugin.playerListener.checkPlayerPosition(p);
+            shop.getWorldsSet().add(world);
+            plugin.getShopManager().addGlobalShop(shop);
+            log.info(String.format("[%s] Created Global: %s", plugin.pdfFile.getName(), shop.toString()));
+        } else {
+            shop.setWorld(world);
+            shop.setLocations(new ShopLocation(xyzA), new ShopLocation(xyzB));
+            plugin.getShopManager().addLocalShop(shop);
+            log.info(String.format("[%s] Created Local: %s", plugin.pdfFile.getName(), shop.toString()));
+            for (Player p : plugin.getServer().getOnlinePlayers()) {
+                plugin.playerListener.checkPlayerPosition(p);
+            }
         }
 
         // Disable selecting for player (if player)

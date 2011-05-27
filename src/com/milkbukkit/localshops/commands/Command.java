@@ -332,19 +332,20 @@ public abstract class Command {
         return true;
     }
     
-    protected Shop getCurrentShop (Player player) {
+    protected Shop getCurrentShop(Player player) {
         Shop shop = null;
         UUID shopUuid = null;
         PlayerData pData = plugin.getPlayerData().get(player.getName());
         // Get Current Shop
-        if (isGlobal && Config.globalShopsContainsKey(player.getWorld().getName())) 
-            shopUuid = Config.getGlobalShopUuid(player.getWorld().getName());
-        else if (!isGlobal)
+        if (isGlobal) {
+            shop = plugin.getShopManager().getGlobalShop(player.getWorld().getName());
+        } else if (!isGlobal) {
             shopUuid = pData.getCurrentShop();
-        
-        if (shopUuid != null) 
-            shop = plugin.getShopManager().getShop(shopUuid);
-        
+            if (shopUuid != null) {
+                shop = plugin.getShopManager().getLocalShop(shopUuid);
+            }
+        }
+
         return shop;
     }
 }

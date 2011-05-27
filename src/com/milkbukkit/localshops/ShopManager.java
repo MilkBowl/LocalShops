@@ -12,20 +12,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 
 import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class ShopManager {
     private LocalShops plugin = null;
-    private Map<UUID, Shop> shops = Collections.synchronizedMap(new HashMap<UUID, Shop>());
+    private Map<UUID, Shop> localShops = Collections.synchronizedMap(new HashMap<UUID, Shop>());
+    private Set<Shop> globalShops = Collections.synchronizedSet(new HashSet<Shop>());
 
     // Logging
     private final Logger log = Logger.getLogger("Minecraft");
@@ -34,12 +38,12 @@ public class ShopManager {
         this.plugin = plugin;
     }
 
-    public Shop getShop(UUID uuid) {
-        return shops.get(uuid);
+    public Shop getLocalShop(UUID uuid) {
+        return localShops.get(uuid);
     }
 
-    public Shop getShop(String partialUuid) {       
-        Iterator<Shop> it = shops.values().iterator();
+    public Shop getLocalShop(String partialUuid) {       
+        Iterator<Shop> it = localShops.values().iterator();
         while (it.hasNext()) {
             Shop cShop = it.next();
             if(cShop.getUuid().toString().matches(".*"+partialUuid.toLowerCase()+"$")) {
@@ -49,13 +53,35 @@ public class ShopManager {
 
         return null;
     }
-
-    public Shop getShop(Location loc) {
-        return getShop(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+    
+    public Shop getGlobalShop(String worldName) {
+        for(Shop shop : globalShops) {
+            if(shop.isGlobal() && shop.getWorldsSet().contains(worldName)) {
+                return shop;
+            }
+        }
+        return null;
+    }
+    
+    public Shop getGlobalShop(World world) {
+        return getGlobalShop(world.getName());
+    }
+    
+    public Shop getGlobalShopFromShortUuid(String uuid) {
+        for(Shop shop : globalShops) {
+            if(shop.isGlobal() && shop.getUuid().toString().endsWith(uuid)) {
+                return shop;
+            }
+        }
+        return null;
     }
 
-    public Shop getShop(String world, int x, int y, int z) {
-        for(Shop shop : shops.values()) {
+    public Shop getLocalShop(Location loc) {
+        return getLocalShop(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+    }
+
+    public Shop getLocalShop(String world, int x, int y, int z) {
+        for(Shop shop : localShops.values()) {
             if (shop.isGlobal() || !shop.getWorld().equals(world)) {
                 continue;
             }
@@ -87,7 +113,7 @@ public class ShopManager {
         for (int x = xyzA[0]; x <= xyzB[0]; x++) {
             for (int z = xyzA[2]; z <= xyzB[2]; z++) {
                 for (int y = xyzA[1]; y <= xyzB[1]; y++) {
-                    for(Shop shop : shops.values()) {
+                    for(Shop shop : localShops.values()) {
                         if(shop.containsPoint(worldName, x, y, z)) {
                             return false;
                         }
@@ -98,7 +124,7 @@ public class ShopManager {
         return true;
     }
 
-    public void addShop(Shop shop) {
+    public void addLocalShop(Shop shop) {
         if(Config.getSrvDebug()) {
             log.info(String.format("[%s] Adding %s", plugin.pdfFile.getName(), shop.toString()));
         }
@@ -111,7 +137,16 @@ public class ShopManager {
                 break;
             }
         }
-        shops.put(shop.getUuid(), shop);
+        localShops.put(shop.getUuid(), shop);
+    }
+    
+    public void addGlobalShop(Shop shop) {
+        if(!shop.isGlobal()) {
+            log.warning(String.format("[%s] Attempt to add a local shop as a global shop occurred!  Ignored request.", plugin.getDescription().getName()));
+            return;
+        }
+        
+        globalShops.add(shop);
     }
 
     private void calcShortUuidSize() {
@@ -119,7 +154,7 @@ public class ShopManager {
             Config.incrementUuidMinLength();
         }
         Config.clearUuidList();
-        Iterator<Shop> it = shops.values().iterator();
+        Iterator<Shop> it = localShops.values().iterator();
         while (it.hasNext()) {
             Shop cShop = it.next();
             String cUuid = cShop.getUuid().toString();
@@ -132,18 +167,24 @@ public class ShopManager {
         }
     }
 
-    public List<Shop> getAllShops() {
-        return new ArrayList<Shop>(shops.values());
+    public List<Shop> getAllLocalShops() {
+        return new ArrayList<Shop>(localShops.values());
     }
 
     public int getNumShops() {
-        return shops.size();
+        return localShops.size() + globalShops.size();
     }
 
     public int numOwnedShops(String playerName) {
         int numShops = 0;
-        for ( Shop shop : shops.values() ) {
-            if (shop.getOwner().equals(playerName) ) {
+        for (Shop shop : localShops.values()) {
+            if (shop.getOwner().equalsIgnoreCase(playerName)) {
+                numShops++;
+            }
+        }
+
+        for (Shop shop : globalShops) {
+            if (shop.getOwner().equalsIgnoreCase(playerName)) {
                 numShops++;
             }
         }
@@ -182,9 +223,10 @@ public class ShopManager {
                     log.info(String.format("[%s] Loaded %s", plugin.pdfFile.getName(), shop.toString()));
                 }
                 if (shop.isGlobal()) {
-                    Config.globalShopsAdd(shop.getWorld(), shop.getUuid());
-                } 
-                plugin.getShopManager().addShop(shop);
+                    globalShops.add(shop);
+                } else {
+                    plugin.getShopManager().addLocalShop(shop);
+                }
             } else {
                 log.warning(String.format("[%s] Failed to load Shop file: \"%s\"", plugin.pdfFile.getName(), file.getName()));
             }
@@ -419,27 +461,10 @@ public class ShopManager {
         boolean global = Boolean.parseBoolean(props.getProperty("global", "false"));
         boolean dynamic = Boolean.parseBoolean(props.getProperty("dynamic-prices", "false"));
 
-        if (!global) {
-            // Location - locationB=-88, 50, -127
-            try {
-                locationA = convertStringArraytoIntArray(props.getProperty("locationA").split(", "));
-                locationB = convertStringArraytoIntArray(props.getProperty("locationB").split(", "));
-
-            } catch (Exception e) {
-                if(isolateBrokenShopFile(file)) {
-                    log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.toString()));
-                } else {
-                    log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Error moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.toString()));
-                }
-                return null;
-            }
-        }
-
         // People
         String owner = props.getProperty("owner", "");
         String[] managers = props.getProperty("managers", "").replaceAll("[\\[\\]]", "").split(", ");
         String creator = props.getProperty("creator", "LocalShops");
-        String world = props.getProperty("world", "world1");
 
         shop = new Shop(uuid);
         shop.setName(name);
@@ -449,13 +474,31 @@ public class ShopManager {
         shop.setManagers(managers);
         shop.setCreator(creator);
         shop.setNotification(notification);
-        shop.setWorld(world);
         shop.setDynamicPrices(dynamic);
-        if (!global) {
-            shop.setLocationA(new ShopLocation(locationA));
-            shop.setLocationB(new ShopLocation(locationB));
-        } else {
+        
+        if (global) {
+            String worlds = props.getProperty("worlds");
             shop.setGlobal(true);
+            for(String world : worlds.split(",")) {
+                shop.getWorldsSet().add(world);
+            }
+        } else {
+            // Location - locationB=-88, 50, -127
+            try {
+                locationA = convertStringArraytoIntArray(props.getProperty("locationA").split(", "));
+                locationB = convertStringArraytoIntArray(props.getProperty("locationB").split(", "));
+                String world = props.getProperty("world", "world1");
+                shop.setWorld(world);
+                shop.setLocationA(new ShopLocation(locationA));
+                shop.setLocationB(new ShopLocation(locationB));
+            } catch (Exception e) {
+                if (isolateBrokenShopFile(file)) {
+                    log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.toString()));
+                } else {
+                    log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Error moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.toString()));
+                }
+                return null;
+            }
         }
 
         // Make sure minimum balance isn't negative
@@ -587,9 +630,14 @@ public class ShopManager {
 
     public boolean saveAllShops() {
         log.info(String.format("[%s] %s", plugin.pdfFile.getName(), "Saving All Shops"));
-        Iterator<Shop> it = shops.values().iterator();
-        while(it.hasNext()) {
-            Shop shop = it.next();
+        
+        // Local Shops
+        for(Shop shop : localShops.values()) {
+            saveShop(shop);
+        }
+        
+        // Global Shops
+        for(Shop shop : globalShops) {
             saveShop(shop);
         }
         return true;
@@ -614,11 +662,11 @@ public class ShopManager {
         if (!shop.isGlobal()) {
             props.setProperty("locationA", shop.getLocationA().toString());
             props.setProperty("locationB", shop.getLocationB().toString());
+            props.setProperty("world", shop.getWorld());
         } else {
             props.setProperty("global", "true");
+            props.setProperty("worlds", GenericFunctions.join(shop.getWorldsSet(), ","));
         }
-
-        props.setProperty("world", shop.getWorld());
 
         // People
         props.setProperty("owner", shop.getOwner());
@@ -659,17 +707,11 @@ public class ShopManager {
     public boolean deleteShop(Shop shop) {
         String shortUuid = shop.getShortUuidString();
 
+        // remove shop from data structure
         if (shop.isGlobal()) {
-            if (Config.globalShopsContainsKey(shop.getWorld())) {
-                /**
-                Config.GLOBAL_SHOPS.remove(shop.getWorld());
-                LocalShops.getProperties().removeKey(shop.getWorld() + "-shop-UUID");
-                LocalShops.getProperties().save();
-                 */
-                return true;
-            } else {
-                return false;
-            }
+            globalShops.remove(shop);
+        } else {
+            localShops.remove(shop.getUuid());
         }
 
         // remove string from uuid short list
@@ -679,9 +721,6 @@ public class ShopManager {
         String filePath = Config.getDirShopsActivePath() + shop.getUuid() + ".shop";
         File shopFile = new File(filePath);
         shopFile.delete();
-
-        // remove shop from data structure
-        shops.remove(shop.getUuid());
 
         return true;
     }
@@ -766,8 +805,8 @@ public class ShopManager {
      * @return null
      */
     public Callable<Object> updateSigns() {
-        for (UUID key : shops.keySet()) {
-            Shop shop = shops.get(key);
+        for (UUID key : localShops.keySet()) {
+            Shop shop = localShops.get(key);
             if (shop.isDynamicPrices())
                 for (ShopSign sign : shop.getSignSet())
                     shop.updateSign(sign);

@@ -42,7 +42,7 @@ public class ShopsEntityListener extends EntityListener {
             }
             
             //Search for shop at block location
-            Shop shop = plugin.getShopManager().getShop(blockLoc);
+            Shop shop = plugin.getShopManager().getLocalShop(blockLoc);
             //If no shop found at the location skip to the next block
             if (shop == null) {
                 continue;

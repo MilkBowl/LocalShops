@@ -155,7 +155,7 @@ public class ShopsPlayerListener extends PlayerListener {
     public void checkPlayerPosition(Player player, int x, int y, int z) {
         PlayerData pData = plugin.getPlayerData().get(player.getName());
         
-        Shop shop = plugin.getShopManager().getShop(player.getWorld().getName(), x, y, z);
+        Shop shop = plugin.getShopManager().getLocalShop(player.getWorld().getName(), x, y, z);
         
         if(shop == null) {
             // not in a shop...
@@ -179,13 +179,13 @@ public class ShopsPlayerListener extends PlayerListener {
 
     private void notifyPlayerLeftShop(Player player, UUID shopUuid) {
         // TODO Add formatting
-        Shop shop = plugin.getShopManager().getShop(shopUuid);
+        Shop shop = plugin.getShopManager().getLocalShop(shopUuid);
         player.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] You have left the shop " + ChatColor.WHITE + shop.getName());
     }
 
     private void notifyPlayerEnterShop(Player player, UUID shopUuid) {
         // TODO Add formatting
-        Shop shop = plugin.getShopManager().getShop(shopUuid);
+        Shop shop = plugin.getShopManager().getLocalShop(shopUuid);
         player.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA
                 + "] You have entered the shop " + ChatColor.WHITE + shop.getName());
 

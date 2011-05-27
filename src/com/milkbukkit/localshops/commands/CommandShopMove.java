@@ -48,7 +48,7 @@ public class CommandShopMove extends Command {
             Shop thisShop = null;
 
             // check to see if that shop exists
-            thisShop = plugin.getShopManager().getShop(id);
+            thisShop = plugin.getShopManager().getLocalShop(id);
             if(thisShop == null) {
                 sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "Could not find shop: " + ChatColor.WHITE + id);
                 return false;

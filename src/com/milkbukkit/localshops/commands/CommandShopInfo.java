@@ -48,7 +48,7 @@ public class CommandShopInfo extends Command {
             matcher = pattern.matcher(command);
             if (matcher.find()) {
                 String input = matcher.group(1);
-                shop = plugin.getShopManager().getShop(input);
+                shop = plugin.getShopManager().getLocalShop(input);
                 if (shop == null) {
                     sender.sendMessage("Could not find shop with ID " + input);
                     return false;

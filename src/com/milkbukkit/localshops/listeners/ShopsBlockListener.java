@@ -33,7 +33,7 @@ public class ShopsBlockListener extends BlockListener {
         Shop shop = null;
         Block block = event.getBlock();
 
-        shop = plugin.getShopManager().getShop(event.getBlock().getLocation());
+        shop = plugin.getShopManager().getLocalShop(event.getBlock().getLocation());
 
         // Return if we aren't in a shop
         if (shop == null) {
@@ -106,7 +106,7 @@ public class ShopsBlockListener extends BlockListener {
         Player player = event.getPlayer();
 
         // Find the current shop.
-        shop = plugin.getShopManager().getShop(block.getLocation());
+        shop = plugin.getShopManager().getLocalShop(block.getLocation());
 
         // If we weren't in a shop then exit event
         if (shop == null) {
@@ -136,7 +136,7 @@ public class ShopsBlockListener extends BlockListener {
         Player player = event.getPlayer();
 
         // Find the current shop.
-        shop = plugin.getShopManager().getShop(block.getLocation());
+        shop = plugin.getShopManager().getLocalShop(block.getLocation());
 
         // If we weren't in a shop then exit
         if (shop == null) {
