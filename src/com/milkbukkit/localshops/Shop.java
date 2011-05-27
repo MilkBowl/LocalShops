@@ -435,9 +435,11 @@ public class Shop implements Comparator<Shop> {
         log.info(String.format("   %-16s %s", "Managers:", Search.join(managers, ",")));
         log.info(String.format("   %-16s %.2f", "Minimum Balance:", minBalance));
         log.info(String.format("   %-16s %s", "Unlimited Money:", unlimitedMoney ? "Yes" : "No"));
-        log.info(String.format("   %-16s %s", "Unlimited Stock:", unlimitedStock ? "Yes" : "No"));        
-        log.info(String.format("   %-16s %s", "Location A:", locationA.toString()));
-        log.info(String.format("   %-16s %s", "Location B:", locationB.toString()));
+        log.info(String.format("   %-16s %s", "Unlimited Stock:", unlimitedStock ? "Yes" : "No"));
+        if(!global) {
+            log.info(String.format("   %-16s %s", "Location A:", locationA.toString()));
+            log.info(String.format("   %-16s %s", "Location B:", locationB.toString()));
+        }
         log.info(String.format("   %-16s %s", "World:", world));
         
         // Items
