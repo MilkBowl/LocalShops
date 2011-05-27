@@ -1,11 +1,11 @@
 package com.milkbukkit.localshops.threads;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 
@@ -26,7 +26,8 @@ import com.milkbukkit.localshops.util.GenericFunctions;
  */
 public class DynamicThread extends Thread {
     private LocalShops plugin = null;
-
+    
+    protected static final Logger log = Logger.getLogger("Minecraft");
 
     public DynamicThread(ThreadGroup tgroup, String tname, LocalShops plugin) {
         super(tgroup, tname);
@@ -56,7 +57,9 @@ public class DynamicThread extends Thread {
             
             //Get the overall stock change for a given item and then calculate the adjustment given the volatility
             int deltaStock = GenericFunctions.getSum(stockList) - Config.getGlobalBaseStock();
-            DynamicManager.getPriceAdjMap().put(item, GenericFunctions.getAdjustment(Config.getGlobalVolatility(), deltaStock)); 
+            double priceAdj = GenericFunctions.getAdjustment(Config.getGlobalVolatility(), deltaStock);
+            DynamicManager.getPriceAdjMap().put(item, priceAdj);
+            
         }
         
         Bukkit.getServer().getScheduler().callSyncMethod(plugin, plugin.getShopManager().updateSigns());

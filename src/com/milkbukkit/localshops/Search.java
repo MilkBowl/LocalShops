@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.bukkit.inventory.ItemStack;
-
 public class Search { 
     
     private static ArrayList<ItemInfo> items = new ArrayList<ItemInfo>();

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.milkbukkit.localshops.Config;
-
 public class GenericFunctions {
     /**
      * Calculates distance between two cartesian points
@@ -21,7 +19,7 @@ public class GenericFunctions {
         double distance = Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2) + Math.pow((z1 - z2), 2));
         return distance;
     }
-    
+
     /**
      * Finds and reduces outliers to the maximum of 2 standard deviations from the population
      * @param list
@@ -30,10 +28,10 @@ public class GenericFunctions {
     public static List<Integer> limitOutliers(List<Integer> list) {
         double mean = getMean(list);
         double stdDev = getStandardDeviation(list, mean);
-        
+
         int min = (int) Math.round(mean - (stdDev * 2));
         int max = (int) Math.round(mean + (stdDev * 2));
-        
+
         List<Integer> newList = new ArrayList<Integer>();
         for(int i : list) {
             if(i > max) {
@@ -41,13 +39,13 @@ public class GenericFunctions {
             } else if(i < min) {
                 i = min;
             }
-            
+
             newList.add(i);
         }
-        
+
         return newList;
     }
-    
+
     /**
      * Finds and removes outliers
      * @param list
@@ -56,22 +54,22 @@ public class GenericFunctions {
     public static List<Integer> removeOutliers(List<Integer> list) {
         double mean = getMean(list);
         double stdDev = getStandardDeviation(list, mean);
-        
+
         int min = (int) Math.round(mean - (stdDev * 2));
         int max = (int) Math.round(mean + (stdDev * 2));
-        
+
         List<Integer> newList = new ArrayList<Integer>();
         for(int i : list) {
             if(i > max || i < min) {
                 continue;
             }
-            
+
             newList.add(i);
         }
-        
+
         return newList;
     }
-    
+
     /**
      * Gets the median (middle) of a list of integers
      * @param list
@@ -79,17 +77,17 @@ public class GenericFunctions {
      */
     public static double getMedian(List<Integer> list) {
         Collections.sort(list);
-        
+
         if(list.size() % 2 == 1) {
             return list.get((list.size()+1)/2-1);
         } else {
             double lower = list.get(list.size()/2-1);
             double upper = list.get(list.size()/2);
-            
+
             return (lower + upper) / 2.0;
         }
     }
-    
+
     /**
      * Gets the mean (average) of a list of integers
      * @param list
@@ -100,10 +98,10 @@ public class GenericFunctions {
         for(Integer i : list) {
             sum += i;
         }
-        
+
         return sum / list.size();
     }
-    
+
     /**
      * Gets the standard deviation of a population (given then provided mean)
      * @param list
@@ -112,14 +110,14 @@ public class GenericFunctions {
      */
     public static double getStandardDeviation(List<Integer> list, double mean) {
         double sum = 0;
-        
+
         for(Integer i : list) {
             sum += Math.pow((i - mean), 2);
         }
-        
+
         return Math.pow(sum/(list.size()-1), .5);
     }
-    
+
     /**
      * Calculate sum of a list
      * @param list
@@ -127,24 +125,24 @@ public class GenericFunctions {
      */
     public static int getSum(List<Integer> list) {
         int sum = 0;
-        
+
         for(int i : list) {
             sum += i;
         }
-        
+
         return sum;
     }
-    
+
     /**
      * Calculate adjustment based on volatility
-     * @param int deltaStock
      * @param int volatility
+     * @param int deltaStock
      * @return % adjustment as double
      */
-    public static double getAdjustment(int deltaStock, int volatility) {
-        return (Math.pow((1 + volatility/10000), -deltaStock));
+    public static double getAdjustment(double volatility, int deltaStock) {
+        return (Math.pow((1.0 + (volatility/10000)), -deltaStock));
     }
-    
+
     /**
      * Calculates size of a cuboid, returns null if larger than provided max width and height,
      * otherwise returns a readable string of the region size.

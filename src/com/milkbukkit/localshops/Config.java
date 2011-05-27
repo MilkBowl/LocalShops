@@ -58,7 +58,7 @@ public class Config {
     
     // Dynamic Shop Price Change variables
     private static int globalBaseStock = 0;
-    private static double globalVolatility = 50.0;
+    private static double globalVolatility = 25.0;
     /*
      * TODO: implement event system/vars
     private static int dynamicInterval = 900;
