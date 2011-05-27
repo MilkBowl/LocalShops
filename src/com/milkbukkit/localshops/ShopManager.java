@@ -415,6 +415,7 @@ public class ShopManager {
         double minBalance = Double.parseDouble((props.getProperty("min-balance", "0.0")));
         boolean notification = Boolean.parseBoolean(props.getProperty("notification", "true"));
         boolean global = Boolean.parseBoolean(props.getProperty("global", "false"));
+        boolean dynamic = Boolean.parseBoolean(props.getProperty("dynamic-prices", "false"));
 
         if (!global) {
             // Location - locationB=-88, 50, -127
@@ -447,6 +448,7 @@ public class ShopManager {
         shop.setCreator(creator);
         shop.setNotification(notification);
         shop.setWorld(world);
+        shop.setDynamicPrices(dynamic);
         if (!global) {
             shop.setLocationA(new ShopLocation(locationA));
             shop.setLocationB(new ShopLocation(locationB));
@@ -591,7 +593,8 @@ public class ShopManager {
         props.setProperty("unlimited-stock", String.valueOf(shop.isUnlimitedStock()));
         props.setProperty("min-balance", String.valueOf(shop.getMinBalance()));
         props.setProperty("notification", String.valueOf(shop.getNotification()));
-
+        props.setProperty("dynamic-prices", String.valueOf(shop.isDynamicPrices()));
+        
         // Location
         if (!shop.isGlobal()) {
             props.setProperty("locationA", shop.getLocationA().toString());
