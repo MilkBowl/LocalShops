@@ -487,8 +487,21 @@ public class ShopManager {
                 String[] stock = v[2].split(":");
                 int currStock = Integer.parseInt(stock[0]);
                 int maxStock = Integer.parseInt(stock[1]);
+                boolean dynamicItem;
 
-                if(!shop.addItem(id, type, buyPrice, buyStackSize, sellPrice, sellStackSize, currStock, maxStock)) {                   
+                if (v.length > 3) {
+                    dynamicItem = (Integer.parseInt(v[3]) != 0);
+                    if (!shop.addItem(id, type, buyPrice, buyStackSize, sellPrice, sellStackSize, currStock, maxStock, dynamicItem)) {
+                        if(isolateBrokenShopFile(file)) {
+                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.toString(), id, type));
+                        } else {
+                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Error moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.toString(), id, type));
+                        }
+                        return null;
+                    }
+                }
+
+                else if(!shop.addItem(id, type, buyPrice, buyStackSize, sellPrice, sellStackSize, currStock, maxStock)) {                   
                     if(isolateBrokenShopFile(file)) {
                         log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.toString(), id, type));
                     } else {
@@ -540,7 +553,7 @@ public class ShopManager {
                 }
             }
         }
-        
+
         for ( ShopSign sign : shop.getSignSet() ) {
             log.info("[LocalShops] - Sign Loaded: " + sign.toString());
         }
@@ -594,7 +607,7 @@ public class ShopManager {
         props.setProperty("min-balance", String.valueOf(shop.getMinBalance()));
         props.setProperty("notification", String.valueOf(shop.getNotification()));
         props.setProperty("dynamic-prices", String.valueOf(shop.isDynamicPrices()));
-        
+
         // Location
         if (!shop.isGlobal()) {
             props.setProperty("locationA", shop.getLocationA().toString());
@@ -619,8 +632,9 @@ public class ShopManager {
             int sellSize = item.getSellSize();
             int stock = item.getStock();
             int maxStock = item.getMaxStock();
+            int dynamic = (item.isDynamic()? 1 : 0);
 
-            props.setProperty(String.format("%d:%d", info.typeId, info.subTypeId), String.format("%f:%d,%f:%d,%d:%d", buyPrice, buySize, sellPrice, sellSize, stock, maxStock));
+            props.setProperty(String.format("%d:%d", info.typeId, info.subTypeId), String.format("%f:%d,%f:%d,%d:%d,%d", buyPrice, buySize, sellPrice, sellSize, stock, maxStock, dynamic));
         }
 
         //Sign Data saving

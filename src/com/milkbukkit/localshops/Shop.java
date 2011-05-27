@@ -242,9 +242,20 @@ public class Shop implements Comparator<Shop> {
     public boolean getNotification() {
         return notification;
     }
+    /**
+     * @param id
+     * @param type
+     * @param buyPrice
+     * @param buyStackSize
+     * @param sellPrice
+     * @param sellStackSize
+     * @param currStock
+     * @param maxStock
+     * @param dynamicItem
+     * @return
+     */
+    public boolean addItem(int itemNumber, short itemData, double buyPrice, int buyStackSize, double sellPrice, int sellStackSize,  int stock, int maxStock, boolean dynamicItem) {
 
-    public boolean addItem(int itemNumber, short itemData, double buyPrice, int buyStackSize, double sellPrice, int sellStackSize, int stock, int maxStock) {
-        // TODO add maxStock to item object
         ItemInfo item = Search.itemById(itemNumber, itemData);
         if(item == null || sellStackSize < 1 || buyStackSize < 1) {
             return false;
@@ -256,7 +267,7 @@ public class Shop implements Comparator<Shop> {
         thisItem.setSell(sellPrice, sellStackSize);
 
         thisItem.setStock(stock);
-
+        thisItem.setDynamic(dynamicItem);
         thisItem.maxStock = maxStock;
 
         if (inventory.containsKey(item.name)) {
@@ -266,6 +277,10 @@ public class Shop implements Comparator<Shop> {
         inventory.put(item.name, thisItem);
 
         return true;
+    }
+
+    public boolean addItem(int itemNumber, short itemData, double buyPrice, int buyStackSize, double sellPrice, int sellStackSize, int stock, int maxStock) {
+        return addItem(itemNumber, itemData, buyPrice, buyStackSize, sellPrice, sellStackSize, stock, maxStock, false);
     }
 
     public void setManagers(String[] managers) {
@@ -540,7 +555,7 @@ public class Shop implements Comparator<Shop> {
         String line2 = "Buy: ";
         String line3 = "Sell: ";
         String line4 = "Stock: " ;
-        
+
         //If shop no longer carries this item - otherwise update it
         if(this.getItem(sign.getItemName()) == null) {
             line1 = "";
@@ -599,5 +614,7 @@ public class Shop implements Comparator<Shop> {
         for (ShopSign sign : signSet) 
             updateSign(sign);
     }
+
+
 
 }
