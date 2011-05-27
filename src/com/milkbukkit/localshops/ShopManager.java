@@ -21,6 +21,8 @@ import java.util.logging.Logger;
 
 import org.bukkit.Location;
 
+import com.milkbukkit.localshops.util.GenericFunctions;
+
 public class ShopManager {
     private LocalShops plugin = null;
     private Map<UUID, Shop> shops = Collections.synchronizedMap(new HashMap<UUID, Shop>());
@@ -620,7 +622,7 @@ public class ShopManager {
 
         // People
         props.setProperty("owner", shop.getOwner());
-        props.setProperty("managers", Search.join(shop.getManagers(), ", "));
+        props.setProperty("managers", GenericFunctions.join(shop.getManagers(), ", "));
         props.setProperty("creator", shop.getCreator());
 
         // Inventory

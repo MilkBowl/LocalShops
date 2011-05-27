@@ -1,9 +1,10 @@
 package com.milkbukkit.localshops;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class Search { 
     
@@ -235,40 +236,6 @@ public class Search {
         items.add(new ItemInfo("Green Music Disc", new String[][] { { "dis", "gre" }, { "rec", "gre" } }, 2257, (short) 0, new int[]{ 64, 64, 64 } ));
     }
     
-    public static String join(String[] array, String glue) {
-        String joined = null;
-        for (String element : array) {
-            if (joined == null) {
-                joined = element;
-            } else {
-                joined += glue + element;
-            }
-        }
-        
-        if(joined == null) {
-            return "";
-        } else {
-            return joined;
-        }
-    }    
-
-    public static String join(List<String> list, String glue) {
-        String joined = null;
-        for (String element : list) {
-            if (joined == null) {
-                joined = element;
-            } else {
-                joined += glue + element;
-            }
-        }
-        
-        if(joined == null) {
-            return "";
-        } else {
-            return joined;
-        }
-    }
-    
     public static ItemInfo itemById(int type) {
         return itemById(type, (short) 0);
     }
@@ -315,7 +282,7 @@ public class Search {
     }
     
     public static ItemInfo itemByName(ArrayList<String> search) {
-        String searchString = join(search, " ");
+        String searchString = GenericFunctions.join(search, " ");
         return itemByName(searchString);
     }
 

@@ -3,6 +3,7 @@ package com.milkbukkit.localshops.util;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class GenericFunctions {
     /**
@@ -167,6 +168,75 @@ public class GenericFunctions {
             return null;
         } else {
             return size;
+        }
+    }
+    
+    /**
+     * Joins elements of a String array with the glue between them into a String.
+     * @param array
+     * @param glue
+     * @return
+     */
+    public static String join(String[] array, String glue) {
+        String joined = null;
+        for (String element : array) {
+            if (joined == null) {
+                joined = element;
+            } else {
+                joined += glue + element;
+            }
+        }
+        
+        if(joined == null) {
+            return "";
+        } else {
+            return joined;
+        }
+    }    
+
+    /**
+     * Joins elements of a String array with the glue between them into a String.
+     * @param list
+     * @param glue
+     * @return
+     */
+    public static String join(List<String> list, String glue) {
+        String joined = null;
+        for (String element : list) {
+            if (joined == null) {
+                joined = element;
+            } else {
+                joined += glue + element;
+            }
+        }
+        
+        if(joined == null) {
+            return "";
+        } else {
+            return joined;
+        }
+    }
+    
+    /**
+     * Joins elements of a String array with the glue between them into a String.
+     * @param list
+     * @param glue
+     * @return
+     */
+    public static String join(Set<String> list, String glue) {
+        String joined = null;
+        for (String element : list) {
+            if (joined == null) {
+                joined = element;
+            } else {
+                joined += glue + element;
+            }
+        }
+        
+        if(joined == null) {
+            return "";
+        } else {
+            return joined;
         }
     }
 }

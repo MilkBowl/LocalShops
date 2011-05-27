@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,8 +14,8 @@ import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.ItemInfo;
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.PlayerData;
-import com.milkbukkit.localshops.Search;
 import com.milkbukkit.localshops.Shop;
+import com.milkbukkit.localshops.util.GenericFunctions;
 
 public abstract class Command {
 
@@ -85,11 +84,11 @@ public abstract class Command {
     }
 
     public Command(LocalShops plugin, String commandLabel, CommandSender sender, String[] args) {
-        this(plugin, commandLabel, sender, Search.join(args, " ").trim());
+        this(plugin, commandLabel, sender, GenericFunctions.join(args, " ").trim());
     }
 
     public Command(LocalShops plugin, String commandLabel, CommandSender sender, String[] args, boolean isGlobal) {
-        this(plugin, commandLabel, sender, Search.join(args, " ").trim(), isGlobal);
+        this(plugin, commandLabel, sender, GenericFunctions.join(args, " ").trim(), isGlobal);
     }
 
     public String getCommand() {

@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,6 +14,7 @@ import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.Search;
 import com.milkbukkit.localshops.Shop;
 import com.milkbukkit.localshops.ShopSign;
+import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class CommandShopSet extends Command {
 
@@ -633,7 +633,7 @@ public class CommandShopSet extends Command {
             // Save Shop
             plugin.getShopManager().saveShop(shop);
 
-            notifyPlayers(shop, new String[] { ChatColor.DARK_AQUA + "The shop managers have been updated. The current managers are:", Search.join(shop.getManagers(), ", ") } );
+            notifyPlayers(shop, new String[] { ChatColor.DARK_AQUA + "The shop managers have been updated. The current managers are:", GenericFunctions.join(shop.getManagers(), ", ") } );
             return true;            
         }
 

@@ -4,15 +4,14 @@ import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.milkbukkit.localshops.InventoryItem;
 import com.milkbukkit.localshops.LocalShops;
-import com.milkbukkit.localshops.Search;
 import com.milkbukkit.localshops.Shop;
+import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class CommandShopInfo extends Command {
 
@@ -78,7 +77,7 @@ public class CommandShopInfo extends Command {
             }            
         }
         if(managerCount > 0) {
-            sender.sendMessage(String.format("  Managed by %s", Search.join(shop.getManagers(), " ")));
+            sender.sendMessage(String.format("  Managed by %s", GenericFunctions.join(shop.getManagers(), " ")));
         }
 
         if(command.matches("info\\s+full")) {

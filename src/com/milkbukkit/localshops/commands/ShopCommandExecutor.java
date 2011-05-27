@@ -4,14 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.milkbukkit.localshops.LocalShops;
-import com.milkbukkit.localshops.Search;
+import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class ShopCommandExecutor implements CommandExecutor {
 
@@ -61,25 +60,25 @@ public class ShopCommandExecutor implements CommandExecutor {
 
         String cmdString = null;
         if(commandLabel.equalsIgnoreCase("lsadmin")) {
-            cmdString = Search.join(args, " ");
+            cmdString = GenericFunctions.join(args, " ");
             type = "admin";
         } else if (commandLabel.equalsIgnoreCase("buy")) {
-            cmdString = "buy " + Search.join(args, " ");
+            cmdString = "buy " + GenericFunctions.join(args, " ");
             type = "buy";
         } else if (commandLabel.equalsIgnoreCase("sell")) {
-            cmdString = "sell " + Search.join(args, " ");
+            cmdString = "sell " + GenericFunctions.join(args, " ");
             type = "sell";
         } else if (commandLabel.equalsIgnoreCase("gbuy")) {
-            cmdString = "buy " + Search.join(args, " ");
+            cmdString = "buy " + GenericFunctions.join(args, " ");
             type = "buy";
             global = true;
         } else if (commandLabel.equalsIgnoreCase("gsell")) {
-            cmdString = "sell" + Search.join(args, " ");
+            cmdString = "sell" + GenericFunctions.join(args, " ");
             type = "sell";
             global = true;
         } else {
             if (args.length > 0) {
-                cmdString = Search.join(args, " ");
+                cmdString = GenericFunctions.join(args, " ");
                 type = args[0].toLowerCase();
             } else if (command.getName().equalsIgnoreCase("gshop")){
                 return (new CommandShopHelp(plugin, commandLabel, sender, args, true)).process();
