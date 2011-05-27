@@ -160,7 +160,7 @@ public class Config {
         shopTransactionMaxSize = Integer.parseInt(properties.getProperty("shop-transaction-max-size", String.valueOf(shopTransactionMaxSize)));
 
         globalBaseStock = Integer.parseInt(properties.getProperty("global-base-stock", String.valueOf(globalBaseStock)));
-        globalVolatility = Integer.parseInt(properties.getProperty("global-volatility", String.valueOf(globalVolatility)));
+        globalVolatility = Double.parseDouble(properties.getProperty("global-volatility", String.valueOf(globalVolatility)));
         /*
          * Disabled - save for future use with event system
         dynamicInterval = Integer.parseInt(properties.getProperty("dynamic-interval", String.valueOf(dynamicInterval)));
