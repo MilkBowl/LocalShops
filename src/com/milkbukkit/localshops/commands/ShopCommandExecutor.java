@@ -93,20 +93,25 @@ public class ShopCommandExecutor implements CommandExecutor {
         }
 
         CommandTypeInfo cInfo = commandTypeMap.get(type);
-        com.milkbukkit.localshops.commands.Command cmd = cInfo.getCommandInstance(plugin, commandLabel, sender, cmdString, global);
-        if (cmd != null) {
-            boolean cVal = cmd.process();
-            if (cVal && cInfo.checkPlayerPositions) {
-                for (Player player : plugin.getServer().getOnlinePlayers()) {
-                    plugin.playerListener.checkPlayerPosition(player);
-                }
-            }
-
-            log.info(String.format("[%s] %s issued %s command: %s", plugin.getDescription().getName(), user, global ? "global" : "local", cmd.getCommand()));
-            
-            return cVal;
+        if (cInfo == null) {
+            commandTypeMap.get("help").getCommandInstance(plugin, commandLabel, sender, cmdString, global).process();
+            return true;
         } else {
-            return false;
+            com.milkbukkit.localshops.commands.Command cmd = cInfo.getCommandInstance(plugin, commandLabel, sender, cmdString, global);
+            if (cmd != null) {
+                boolean cVal = cmd.process();
+                if (cVal && cInfo.checkPlayerPositions) {
+                    for (Player player : plugin.getServer().getOnlinePlayers()) {
+                        plugin.playerListener.checkPlayerPosition(player);
+                    }
+                }
+
+                log.info(String.format("[%s] %s issued %s command: %s", plugin.getDescription().getName(), user, global ? "global" : "local", cmd.getCommand()));
+
+                return cVal;
+            } else {
+                return false;
+            }
         }
     }
 }
