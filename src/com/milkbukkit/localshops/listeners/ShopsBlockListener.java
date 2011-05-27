@@ -50,15 +50,18 @@ public class ShopsBlockListener extends BlockListener {
             String line4 = "Stock: ";
 
             if (shop.containsItem(item)) {
-
-                if (shop.getItem(item).getBuyPrice() == 0)
+                if (shop.getItem(item).getBuyPrice() == 0 ) 
                     line2 += "-";
-                else
+                else if (shop.getItem(item).getStock() == 0 && !shop.isUnlimitedStock())
+                    line2 += "Shortage";
+                else 
                     line2 += shop.getItem(item).getBuyPrice();
 
-                if (shop.getItem(item).getSellPrice() == 0)
+                if (shop.getItem(item).getSellPrice() == 0 ) 
                     line3 += "-";
-                else
+                else if (shop.getItem(item).getStock() >= shop.getItem(item).maxStock && !shop.isUnlimitedStock())
+                    line3 += "Overflow";
+                else 
                     line3 += shop.getItem(item).getSellPrice();
 
                 if (!shop.isUnlimitedStock())

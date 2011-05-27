@@ -37,7 +37,7 @@ public class Shop implements Comparator<Shop> {
     private int locationLowX, locationHighX, locationLowY, locationHighY, locationLowZ, locationHighZ;
     private Set<ShopSign> signSet = Collections.synchronizedSet(new HashSet<ShopSign>());
     private boolean global = false;
-    
+
     // Logging
     private static final Logger log = Logger.getLogger("Minecraft");    
 
@@ -89,7 +89,7 @@ public class Shop implements Comparator<Shop> {
     public void setLocations(ShopLocation locationA, ShopLocation locationB) {
         this.locationA = locationA;
         this.locationB = locationB;
-        
+
         organizeLocation();
     }
 
@@ -124,7 +124,7 @@ public class Shop implements Comparator<Shop> {
     public ShopLocation getLocationB() {
         return locationB;
     }
-    
+
     public ShopLocation getLocationCenter() {
         int[] xyz = new int[3];
         int[] xyzA = locationA.toArray();
@@ -140,27 +140,27 @@ public class Shop implements Comparator<Shop> {
 
         return new ShopLocation(xyz);
     }
-    
+
     public int getLocationLowX() {
         return locationLowX;
     }
-    
+
     public int getLocationLowY() {
         return locationLowY;
     }
-    
+
     public int getLocationLowZ() {
         return locationLowZ;
     }
-    
+
     public int getLocationHighX() {
         return locationHighX;
     }
-    
+
     public int getLocationHighY() {
         return locationHighY;
     }
-    
+
     public int getLocationHighZ() {
         return locationHighZ;
     }
@@ -188,19 +188,19 @@ public class Shop implements Comparator<Shop> {
     public void setUnlimitedMoney(boolean b) {
         unlimitedMoney = b;
     }
-    
-	public void setDynamicPrices(boolean dynamicPrices) {
-		this.dynamicPrices = dynamicPrices;
-	}
-	
+
+    public void setDynamicPrices(boolean dynamicPrices) {
+        this.dynamicPrices = dynamicPrices;
+    }
+
     public InventoryItem getItem(String item) {
         return inventory.get(item);
     }
-    
+
     public InventoryItem getItem(ItemInfo item) {
         return inventory.get(item.name);
     }
-    
+
     public boolean containsItem(ItemInfo item) {
         Iterator<InventoryItem> it = inventory.values().iterator();
         while(it.hasNext()) {
@@ -211,12 +211,12 @@ public class Shop implements Comparator<Shop> {
         }
         return false;
     }
-    
+
     public String getShortUuidString() {
         String sUuid = uuid.toString();
         return sUuid.substring(sUuid.length() - Config.getUuidMinLength());
     }
-    
+
     /**
      * Gets the minimum account balance this shop allows.
      * 
@@ -234,11 +234,11 @@ public class Shop implements Comparator<Shop> {
     public void setMinBalance(double newBalance) {
         this.minBalance = newBalance;
     }
-    
+
     public void setNotification(boolean setting) {
         this.notification = setting;
     }
-    
+
     public boolean getNotification() {
         return notification;
     }
@@ -249,7 +249,7 @@ public class Shop implements Comparator<Shop> {
         if(item == null || sellStackSize < 1 || buyStackSize < 1) {
             return false;
         }
-        
+
         InventoryItem thisItem = new InventoryItem(item);
 
         thisItem.setBuy(buyPrice, buyStackSize);
@@ -264,7 +264,7 @@ public class Shop implements Comparator<Shop> {
         }
 
         inventory.put(item.name, thisItem);
-        
+
         return true;
     }
 
@@ -281,7 +281,7 @@ public class Shop implements Comparator<Shop> {
     public void addManager(String manager) {
         managers.add(manager);
     }
-    
+
     public void removeManager(String manager) {
         managers.remove(manager);
     }
@@ -302,15 +302,15 @@ public class Shop implements Comparator<Shop> {
         return unlimitedMoney;
     }
 
-	/**
-	 * True if the shop is set to dynamic
-	 * 
-	 * @return Boolean dynamicPrices 
-	 */
-	public boolean isDynamicPrices() {
-		return dynamicPrices;
-	}
-	
+    /**
+     * True if the shop is set to dynamic
+     * 
+     * @return Boolean dynamicPrices 
+     */
+    public boolean isDynamicPrices() {
+        return dynamicPrices;
+    }
+
     public boolean addStock(String itemName, int amount) {
         if (!inventory.containsKey(itemName)) {
             return false;
@@ -337,19 +337,19 @@ public class Shop implements Comparator<Shop> {
     public void setItemSellPrice(String itemName, double price) {
         inventory.get(itemName).setSellPrice(price);
     }
-    
+
     public void setItemSellAmount(String itemName, int sellSize) {
         inventory.get(itemName).setSellSize(sellSize);
     }    
-    
+
     /**
      * Sets an item as dynamically adjustable
      * 
      * @param String itemName to set
      */
     public void setItemDynamic(String itemName) {
-    	inventory.get(itemName).setDynamic(!inventory.get(itemName).isDynamic());
-	}
+        inventory.get(itemName).setDynamic(!inventory.get(itemName).isDynamic());
+    }
 
     /**
      * Checks if an item is set to dynamic pricing or not
@@ -358,10 +358,10 @@ public class Shop implements Comparator<Shop> {
      * @return Boolean dynamic
      */
     public boolean isItemDynamic(String itemName) {
-    	return inventory.get(itemName).isDynamic();
+        return inventory.get(itemName).isDynamic();
     }
-    
-    
+
+
     /**
      * Checks the number of dynamic items the shop contains.
      * 
@@ -375,7 +375,7 @@ public class Shop implements Comparator<Shop> {
         }
         return num;   
     }
-    
+
     public void removeItem(String itemName) {
         inventory.remove(itemName);
     }
@@ -387,15 +387,15 @@ public class Shop implements Comparator<Shop> {
     public void setItemMaxStock(String itemName, int maxStock) {
         inventory.get(itemName).maxStock = maxStock;
     }
-    
+
     public Queue<Transaction> getTransactions() {
         return transactions;
     }
-    
+
     public void removeTransaction(Transaction trans) {
         transactions.remove(trans);
     }
-    
+
     public void addTransaction(Transaction trans) {
         if(transactions.remainingCapacity() >= 1) {
             transactions.add(trans);
@@ -404,7 +404,7 @@ public class Shop implements Comparator<Shop> {
             transactions.add(trans);
         }
     }
-    
+
     public void clearTransactions() {
         transactions.clear();
     }
@@ -424,7 +424,7 @@ public class Shop implements Comparator<Shop> {
             return String.format("Shop \"%s\" at [%s], [%s] %d items - %s", this.name, locA, locB, inventory.size(), uuid.toString());
         }
     }
-    
+
     public void log() {
         // Details
         log.info("Shop Information");
@@ -441,7 +441,7 @@ public class Shop implements Comparator<Shop> {
             log.info(String.format("   %-16s %s", "Location B:", locationB.toString()));
         }
         log.info(String.format("   %-16s %s", "World:", world));
-        
+
         // Items
         log.info("Shop Inventory");
         log.info("   BP=Buy Price, BS=Buy Size, SP=Sell Price, SS=Sell Size, ST=Stock, MX=Max Stock");
@@ -452,14 +452,14 @@ public class Shop implements Comparator<Shop> {
             ItemInfo info = item.getInfo();
             log.info(String.format("   %6d:%-2d %-6.2f %-3d %-6.2f %-3d %-3d %-3d", info.typeId, info.subTypeId, item.getBuyPrice(), item.getBuySize(), item.getSellPrice(), item.getSellSize(), item.getStock(), item.getMaxStock()));
         }
-        
+
         // Signs
         log.info("Shop Signs");
         for(ShopSign sign : signSet) {
             log.info(String.format("   %s", sign.toString()));
         }
     }
-    
+
     @Override
     public int compare(Shop o1, Shop o2) {
         return o1.getUuid().compareTo(o2.uuid);
@@ -481,12 +481,12 @@ public class Shop implements Comparator<Shop> {
     public Set<ShopSign> getSignSet() {
         return signSet;
     }
-    
+
     public boolean containsPoint(String worldName, int x, int y, int z) {
         if(!worldName.equals(world)) {
             return false;
         }
-        
+
         if (x >= locationLowX &&
                 x <= locationHighX &&
                 y >= locationLowY &&
@@ -498,13 +498,13 @@ public class Shop implements Comparator<Shop> {
             return false;
         }
     }
-    
+
     //private int locationLowX, locationHighX, locationLowY, locationHighY, locationLowZ, locationHighZ;
     private void organizeLocation() {
         if(locationA == null || locationB == null) {
             return;
         }
-        
+
         // X
         if(locationA.getX() > locationB.getX()) {
             locationHighX = locationA.getX();
@@ -513,7 +513,7 @@ public class Shop implements Comparator<Shop> {
             locationHighX = locationB.getX();
             locationLowX = locationA.getX();            
         }
-        
+
         // Y
         if(locationA.getY() > locationB.getY()) {
             locationHighY = locationA.getY();
@@ -522,7 +522,7 @@ public class Shop implements Comparator<Shop> {
             locationHighY = locationB.getY();
             locationLowY = locationA.getY();            
         }
-        
+
         // Z
         if(locationA.getZ() > locationB.getZ()) {
             locationHighZ = locationA.getZ();
@@ -532,38 +532,49 @@ public class Shop implements Comparator<Shop> {
             locationLowZ = locationA.getZ();            
         }
     }
-    
+
     public void updateSign(ShopSign sign) {
 
+        //TODO: Make method for dealing with sign line logic that returns an array of strings.
         String line1 = sign.getItemName();
         String line2 = "Buy: ";
         String line3 = "Sell: ";
-        String line4 = "Stock:" ;
+        String line4 = "Stock: " ;
+        
+        //If shop no longer carries this item - otherwise update it
+        if(this.getItem(sign.getItemName()) == null) {
+            line1 = "";
+            line2 = "";
+            line3 = "";
+            line4 = "";
+            this.signSet.remove(sign);
+        } else {
+            if (this.getItem(sign.getItemName()).getBuyPrice() == 0 || (this.getItem(sign.getItemName()).getStock() == 0 && !this.unlimitedStock)) 
+                line2 += "-";
+            else 
+                line2 += this.getItem(sign.getItemName()).getBuyPrice();
 
-        if (this.getItem(sign.getItemName()).getBuyPrice() == 0 || (this.getItem(sign.getItemName()).getStock() == 0 && !this.unlimitedStock)) 
-            line2 += "-";
-        else 
-            line2 += this.getItem(sign.getItemName()).getBuyPrice();
-        
-        if (this.getItem(sign.getItemName()).getSellPrice() == 0 || (this.getItem(sign.getItemName()).getStock() >= this.getItem(sign.getItemName()).maxStock && !this.unlimitedStock)) 
-            line3 += "-";
-        else 
-            line3 += this.getItem(sign.getItemName()).getSellPrice();
-        
-        if (!this.unlimitedStock)
-            line4 += this.getItem(sign.getItemName()).getStock();
-        else
-            line4 += "-";
-        
+            if (this.getItem(sign.getItemName()).getSellPrice() == 0 ) 
+                line3 += "-";
+            else if (this.getItem(sign.getItemName()).getStock() >= this.getItem(sign.getItemName()).maxStock && !this.unlimitedStock)
+                line3 += "Overflow";
+            else 
+                line3 += this.getItem(sign.getItemName()).getSellPrice();
+
+            if (!this.unlimitedStock)
+                line4 += this.getItem(sign.getItemName()).getStock();
+            else
+                line4 += "-";
+        }
         //Set the lines
         ((Sign) sign.getLoc().getBlock().getState()).setLine(0, line1);
         ((Sign) sign.getLoc().getBlock().getState()).setLine(1, line2);
         ((Sign) sign.getLoc().getBlock().getState()).setLine(2, line3);
         ((Sign) sign.getLoc().getBlock().getState()).setLine(3, line4);
-        
+
         sign.getLoc().getBlock().getState().update();
     }
-    
+
     public void updateSign(Location loc) {
         for (ShopSign sign : this.signSet) {
             if (sign.getLoc().equals(loc)) {
@@ -572,21 +583,21 @@ public class Shop implements Comparator<Shop> {
             }   
         }
     }
-    
+
     public void updateSign(Block block) {
         updateSign(block.getLocation());
     }
-    
+
     public void updateSigns(String itemName) {  
         for (ShopSign sign : this.signSet) {
             if (sign.getItemName().equalsIgnoreCase(itemName))
                 updateSign(sign);
         }
     }
-    
+
     public void updateSigns(Set<ShopSign> signSet) {
         for (ShopSign sign : signSet) 
             updateSign(sign);
     }
-        
+
 }

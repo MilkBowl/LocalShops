@@ -308,6 +308,7 @@ public class CommandShopAdd extends Command {
             sender.sendMessage(ChatColor.DARK_AQUA + "Succesfully added " + ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " to the shop.");
         } else {
             shop.addStock(item.name, amount);
+            shop.updateSigns(item.name);
             sender.sendMessage(ChatColor.DARK_AQUA + "Succesfully added " + ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " to the shop. Stock is now " + ChatColor.WHITE + shop.getItem(item.name).getStock());
         }
         
