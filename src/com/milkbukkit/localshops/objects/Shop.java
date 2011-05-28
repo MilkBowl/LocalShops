@@ -346,7 +346,7 @@ public abstract class Shop implements Comparator<Shop> {
     }
 
     public void updateSign(ShopSign sign) {
-        String[] signLines = getSignLines(sign);
+        String[] signLines = generateSignLines(sign);
       
         //Set the lines
         ((Sign) sign.getLoc().getBlock().getState()).setLine(0, signLines[0]);
@@ -383,7 +383,7 @@ public abstract class Shop implements Comparator<Shop> {
     }
     
     
-    public String[] getSignLines(ShopSign sign) {
+    public String[] generateSignLines(ShopSign sign) {
         //create our string array and set the 1st element to our item name
         String[] signLines = {sign.getItemName(), "", "", ""};
 
@@ -394,7 +394,7 @@ public abstract class Shop implements Comparator<Shop> {
             signLines[2] = "";
             signLines[3] = "";
             this.signSet.remove(sign);
-        } else if (sign.getType() == ShopSign.SignTypes.INFO ){
+        } else if (sign.getType() == ShopSign.SignType.INFO ){
             if (this.getItem(sign.getItemName()).getBuyPrice() == 0 ) 
                 signLines[1] = "Buy: -";
             else if (this.getItem(sign.getItemName()).getStock() == 0 && !this.unlimitedStock)
@@ -413,7 +413,7 @@ public abstract class Shop implements Comparator<Shop> {
                 signLines[3] = "Stock: " + this.getItem(sign.getItemName()).getStock();
             else
                 signLines[3] = "Unlimited";
-        } else if (sign.getType() == ShopSign.SignTypes.BUY ) {
+        } else if (sign.getType() == ShopSign.SignType.BUY ) {
             if (this.getItem(sign.getItemName()).getBuyPrice() == 0 ) 
                 signLines[1] = "Not Selling";
             else if (this.getItem(sign.getItemName()).getStock() == 0 && !this.unlimitedStock) 
@@ -426,7 +426,7 @@ public abstract class Shop implements Comparator<Shop> {
                 signLines[3] = "Stock: " + this.getItem(sign.getItemName()).getStock();
             else
                 signLines[3] = "Unlimited";         
-        } else if (sign.getType() == ShopSign.SignTypes.SELL ) {
+        } else if (sign.getType() == ShopSign.SignType.SELL ) {
             if (this.getItem(sign.getItemName()).getSellPrice() == 0 ) 
                 signLines[1] = "Not Buying";
             else if (this.getItem(sign.getItemName()).maxStock > 0 && this.getItem(sign.getItemName()).getStock() >= this.getItem(sign.getItemName()).maxStock && !this.unlimitedStock)
