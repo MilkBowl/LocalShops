@@ -15,7 +15,6 @@ import com.milkbukkit.localshops.comparator.ShopSortByName;
 import com.milkbukkit.localshops.objects.GlobalShop;
 import com.milkbukkit.localshops.objects.LocalShop;
 import com.milkbukkit.localshops.objects.Shop;
-import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class CommandShopList extends Command {
 

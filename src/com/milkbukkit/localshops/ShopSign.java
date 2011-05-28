@@ -3,6 +3,9 @@
  */
 package com.milkbukkit.localshops;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -19,15 +22,17 @@ public class ShopSign {
     private World world = null;
     private String signWorld = null;
     private String item;
-    private SignTypes type = SignTypes.INFO;
-    public static enum SignTypes {
+    private SignType type = SignType.INFO;
+    public static enum SignType {
         INFO(0),
         BUY(1),
         SELL(2);
         
-        int id = -1;
+        private final int id;
+        private static final Map<Integer, SignType> lookupType = new HashMap<Integer, SignType>(3);
+        private static final Map<SignType, Integer> lookupId = new HashMap<SignType, Integer>(3);
         
-        SignTypes(int id) {
+        SignType(int id) {
             this.id = id;
         }
         
@@ -35,16 +40,34 @@ public class ShopSign {
             return id;
         }
         
+        public static int getSignId(SignType type) {
+            return lookupId.get(type);
+        }
+        
+        public static SignType getSignType(final int id) {
+            return lookupType.get(id);
+        }
+        
+        static {
+            for (SignType signType : values()) {
+                lookupType.put(signType.getId(), signType);
+                lookupId.put(signType, signType.getId());
+            }
+        }
     }
 
-    public ShopSign (World world, int x, int y, int z, String itemName) {
+    public ShopSign(World world, int x, int y, int z, String itemName, int typeId) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.item = itemName;
         this.world = world;
         this.signWorld = world.getName();
-
+        this.type = SignType.getSignType(typeId);
+    }
+    
+    public ShopSign (World world, int x, int y, int z, String itemName) {
+        this(world, x, y, z, itemName, 0);
     }
 
     public ShopSign (World world, String string) {
@@ -55,22 +78,33 @@ public class ShopSign {
         this.item = split[3];
         this.world = world;
         this.signWorld = world.getName();
+        this.type = SignType.INFO;
     }
 
     public ShopSign (Block block, String itemName) {
         this(block.getWorld(), block.getX(), block.getY(), block.getZ(), itemName);
     }
-
-    public ShopSign (Location loc, String itemName) {
-        this(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), itemName);
+    
+    public ShopSign (Block block, String itemName, int typeId) {
+        this(block.getWorld(), block.getX(), block.getY(), block.getZ(), itemName, typeId);
     }
-
-    public ShopSign(String signWorld, int x, int y, int z, String itemName) {
+    
+    public ShopSign (Location loc, String itemName) {
+        this(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), itemName, 0);
+    }
+    
+    public ShopSign(String signWorld, int x, int y, int z, String itemName, int typeId) {
         this.signWorld = signWorld;
         this.x = x;
         this.y = y;
         this.z = z;
         this.item = itemName;
+        this.type = SignType.getSignType(typeId);
+    }
+
+    
+    public ShopSign(String signWorld, int x, int y, int z, String itemName) {
+        this(signWorld, x, y, z, itemName, 0);
     }
 
     public String toString() {
@@ -84,6 +118,8 @@ public class ShopSign {
         string.append(z);
         string.append(",");
         string.append(item);
+        string.append(",");
+        string.append(SignType.getSignId(type));
         return string.toString();
     }
 
@@ -133,7 +169,7 @@ public class ShopSign {
         return this.z;
     }
     
-    public SignTypes getType() {
+    public SignType getType() {
         return type;
     }
     

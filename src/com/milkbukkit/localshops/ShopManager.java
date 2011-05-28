@@ -605,10 +605,11 @@ public class ShopManager {
                 int y = Integer.parseInt(v2[1]);
                 int z = Integer.parseInt(v2[2]);
                 String itemName = v2[3];
+                int signId = Integer.parseInt(v2[4]);
                 if (plugin.getServer().getWorld(signWorld) != null) {
-                    signList.add(new ShopSign(plugin.getServer().getWorld(signWorld), x, y, z, itemName));
+                    signList.add(new ShopSign(plugin.getServer().getWorld(signWorld), x, y, z, itemName, signId));
                 } else {
-                    signList.add(new ShopSign(signWorld, x, y, z, itemName));
+                    signList.add(new ShopSign(signWorld, x, y, z, itemName, signId));
                 }
             }
         }
@@ -729,7 +730,7 @@ public class ShopManager {
         Iterator<ShopSign> iter = shop.getSignSet().iterator();
         for (int index = 1; iter.hasNext(); index++ ) {
             ShopSign sign = iter.next();
-            props.setProperty("sign"+index, String.format("%s:%d,%d,%d,%s", sign.getWorldName(), sign.getX(), sign.getY(), sign.getZ(), sign.getItemName()));
+            props.setProperty("sign"+index, String.format("%s:%d,%d,%d,%s,%d", sign.getWorldName(), sign.getX(), sign.getY(), sign.getZ(), sign.getItemName(), ShopSign.SignType.getSignId(sign.getType())));
         }
 
         String fileName = Config.getDirShopsActivePath() + shop.getUuid().toString() + ".shop";

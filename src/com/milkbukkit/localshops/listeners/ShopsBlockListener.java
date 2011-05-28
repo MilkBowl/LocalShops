@@ -39,46 +39,29 @@ public class ShopsBlockListener extends BlockListener {
         if (shop == null) {
             return;
         }
+        ShopSign sign = null;
+        String[] signLines = new String[4];
 
         ItemInfo item = Search.itemByString(event.getLine(0));
 
         if (item != null) {
-
-            String line1 = item.name;
-            String line2 = "Buy: ";
-            String line3 = "Sell: ";
-            String line4 = "Stock: ";
-
             if (shop.containsItem(item)) {
-                if (shop.getItem(item).getBuyPrice() == 0 ) 
-                    line2 += "-";
-                else if (shop.getItem(item).getStock() == 0 && !shop.isUnlimitedStock())
-                    line2 += "Shortage";
-                else 
-                    line2 += shop.getItem(item).getBuyPrice();
-
-                if (shop.getItem(item).getSellPrice() == 0 ) 
-                    line3 += "-";
-                else if (shop.getItem(item).getStock() >= shop.getItem(item).maxStock && !shop.isUnlimitedStock())
-                    line3 += "Overflow";
-                else 
-                    line3 += shop.getItem(item).getSellPrice();
-
-                if (!shop.isUnlimitedStock())
-                    line4 += shop.getItem(item).getStock();
-                else
-                    line4 += "-";
-
-                // Add the sign to the Shop signlist and save the shop
-                ShopSign sign = new ShopSign(block, item.name);
+                //Create the sign object to work with
+                if (event.getLine(1).equalsIgnoreCase("buy")) {
+                    sign = new ShopSign(block, item.name, 1);
+                } else if (event.getLine(1).equalsIgnoreCase("sell")) {
+                    sign = new ShopSign(block,item.name, 2);
+                } else {
+                    sign = new ShopSign(block, item.name, 0);        // Add the sign to the Shop signlist and save the shop
+                }
                 shop.getSignSet().add(sign);
                 plugin.getShopManager().saveShop(shop);
 
                 // Write back the lines for the sign
-                event.setLine(0, line1);
-                event.setLine(1, line2);
-                event.setLine(2, line3);
-                event.setLine(3, line4);
+                event.setLine(0, signLines[0]);
+                event.setLine(1, signLines[1]);
+                event.setLine(2, signLines[2]);
+                event.setLine(3, signLines[3]);
 
             } else {
                 return;
@@ -94,7 +77,7 @@ public class ShopsBlockListener extends BlockListener {
         if (event.isCancelled()) {
             return;
         }
-        
+
         Block block = event.getBlock();
 
         // If not a sign ignore event.
@@ -124,7 +107,7 @@ public class ShopsBlockListener extends BlockListener {
         if (event.isCancelled()) {
             return;
         }
-        
+
         Block block = event.getBlock();
 
         // If not a sign ignore event.
