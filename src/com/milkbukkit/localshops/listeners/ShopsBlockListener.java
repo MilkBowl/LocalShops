@@ -73,14 +73,8 @@ public class ShopsBlockListener extends BlockListener {
                 } catch (TypeNotFoundException e) {
                     log.warning(String.format("[%s] WARNING: TypeNotFoundException: %s", plugin.getDescription().getName(), e.getMessage()));
                 }
-            } else {
-                return;
             }
-
-        } else {
-            return;
         }
-
     }
 
     public void onBlockPlace(BlockPlaceEvent event) {
