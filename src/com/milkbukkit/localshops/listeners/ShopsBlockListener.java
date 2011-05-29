@@ -3,6 +3,7 @@
  */
 package com.milkbukkit.localshops.listeners;
 
+import java.util.Iterator;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
@@ -141,9 +142,11 @@ public class ShopsBlockListener extends BlockListener {
             event.setCancelled(true);
             return;
         } else {
-            for (ShopSign sign : shop.getSignSet()) {
+            Iterator<ShopSign> iter = shop.getSignSet().iterator();
+            while (iter.hasNext()) {
+                ShopSign sign = iter.next();
                 if (sign.getLoc().equals(event.getBlock().getLocation())) {
-                    shop.getSignSet().remove(sign);
+                    iter.remove();
                 }
             }
         }
