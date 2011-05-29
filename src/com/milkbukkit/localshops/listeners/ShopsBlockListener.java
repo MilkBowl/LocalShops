@@ -20,6 +20,7 @@ import com.milkbukkit.localshops.Search;
 import com.milkbukkit.localshops.ShopSign;
 import com.milkbukkit.localshops.exceptions.TypeNotFoundException;
 import com.milkbukkit.localshops.objects.Shop;
+import com.milkbukkit.localshops.util.GenericFunctions;
 
 /**
  * @author sleaker
@@ -46,10 +47,10 @@ public class ShopsBlockListener extends BlockListener {
             return;
         }
         ShopSign sign = null;
-        String[] signLines = new String[4];
+        String[] signLines = null;
 
         ItemInfo item = Search.itemByString(event.getLine(0));
-
+        
         if (item != null) {
             if (shop.containsItem(item)) {
                 // Create the sign object to work with
@@ -62,14 +63,20 @@ public class ShopsBlockListener extends BlockListener {
                         // Add the sign to the Shop signlist and save the shop
                         sign = new ShopSign(block, item.name, 0);
                     }
+                    
+                    // Set, save, get lines
                     shop.getSignSet().add(sign);
                     plugin.getShopManager().saveShop(shop);
-
+                    signLines = shop.generateSignLines(sign);
+                    
                     // Write back the lines for the sign
-                    event.setLine(0, signLines[0]);
-                    event.setLine(1, signLines[1]);
-                    event.setLine(2, signLines[2]);
-                    event.setLine(3, signLines[3]);
+                    if (signLines != null) {
+                        event.setLine(0, signLines[0]);
+                        event.setLine(1, signLines[1]);
+                        event.setLine(2, signLines[2]);
+                        event.setLine(3, signLines[3]);
+                    }
+                    
                 } catch (TypeNotFoundException e) {
                     log.warning(String.format("[%s] WARNING: TypeNotFoundException: %s", plugin.getDescription().getName(), e.getMessage()));
                 }
