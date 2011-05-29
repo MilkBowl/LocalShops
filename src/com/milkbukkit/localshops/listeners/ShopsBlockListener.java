@@ -52,24 +52,25 @@ public class ShopsBlockListener extends BlockListener {
 
         if (item != null) {
             if (shop.containsItem(item)) {
-                //Create the sign object to work with
+                // Create the sign object to work with
                 try {
-                if (event.getLine(1).equalsIgnoreCase("buy")) {
-                    sign = new ShopSign(block, item.name, 1);
-                } else if (event.getLine(1).equalsIgnoreCase("sell")) {
-                    sign = new ShopSign(block,item.name, 2);
-                } else {
-                    sign = new ShopSign(block, item.name, 0);        // Add the sign to the Shop signlist and save the shop
-                }
-                shop.getSignSet().add(sign);
-                plugin.getShopManager().saveShop(shop);
+                    if (event.getLine(1).equalsIgnoreCase("buy")) {
+                        sign = new ShopSign(block, item.name, 1);
+                    } else if (event.getLine(1).equalsIgnoreCase("sell")) {
+                        sign = new ShopSign(block, item.name, 2);
+                    } else {
+                        // Add the sign to the Shop signlist and save the shop
+                        sign = new ShopSign(block, item.name, 0);
+                    }
+                    shop.getSignSet().add(sign);
+                    plugin.getShopManager().saveShop(shop);
 
-                // Write back the lines for the sign
-                event.setLine(0, signLines[0]);
-                event.setLine(1, signLines[1]);
-                event.setLine(2, signLines[2]);
-                event.setLine(3, signLines[3]);
-                } catch(TypeNotFoundException e) {
+                    // Write back the lines for the sign
+                    event.setLine(0, signLines[0]);
+                    event.setLine(1, signLines[1]);
+                    event.setLine(2, signLines[2]);
+                    event.setLine(3, signLines[3]);
+                } catch (TypeNotFoundException e) {
                     log.warning(String.format("[%s] WARNING: TypeNotFoundException: %s", plugin.getDescription().getName(), e.getMessage()));
                 }
             } else {
