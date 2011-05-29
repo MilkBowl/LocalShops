@@ -728,7 +728,7 @@ public class ShopManager {
         Iterator<ShopSign> iter = shop.getSignSet().iterator();
         for (int index = 1; iter.hasNext(); index++ ) {
             ShopSign sign = iter.next();
-            props.setProperty("sign"+index, String.format("%s:%d,%d,%d,%s,%d", sign.getWorldName(), sign.getX(), sign.getY(), sign.getZ(), sign.getItemName(), ShopSign.SignType.getSignId(sign.getType())));
+            props.setProperty("sign"+index, String.format("%s:%d,%d,%d,%s,%d", sign.getWorldName(), sign.getX(), sign.getY(), sign.getZ(), sign.getItemName(), sign.getType().getId()));
         }
 
         String fileName = Config.getDirShopsActivePath() + shop.getUuid().toString() + ".shop";

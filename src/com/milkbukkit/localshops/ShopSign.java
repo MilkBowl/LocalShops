@@ -3,13 +3,12 @@
  */
 package com.milkbukkit.localshops;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+
+import com.milkbukkit.localshops.exceptions.TypeNotFoundException;
 
 /**
  * @author sleaker
@@ -22,15 +21,13 @@ public class ShopSign {
     private World world = null;
     private String signWorld = null;
     private String item;
-    private SignType type = SignType.INFO;
+    private SignType type = null;
     public static enum SignType {
         INFO(0),
         BUY(1),
         SELL(2);
         
         private final int id;
-        private static final Map<Integer, SignType> lookupType = new HashMap<Integer, SignType>(3);
-        private static final Map<SignType, Integer> lookupId = new HashMap<SignType, Integer>(3);
         
         SignType(int id) {
             this.id = id;
@@ -39,35 +36,29 @@ public class ShopSign {
         public int getId () {
             return id;
         }
-        
-        public static int getSignId(SignType type) {
-            return lookupId.get(type);
-        }
-        
-        public static SignType getSignType(final int id) {
-            return lookupType.get(id);
-        }
-        
-        static {
-            for (SignType signType : values()) {
-                lookupType.put(signType.getId(), signType);
-                lookupId.put(signType, signType.getId());
-            }
-        }
     }
 
-    public ShopSign(World world, int x, int y, int z, String itemName, int typeId) {
+    public ShopSign(World world, int x, int y, int z, String itemName, int typeId) throws TypeNotFoundException {
         this.x = x;
         this.y = y;
         this.z = z;
         this.item = itemName;
         this.world = world;
         this.signWorld = world.getName();
-        this.type = SignType.getSignType(typeId);
+        for(SignType t : SignType.values()) {
+            if(t.getId() == typeId) {
+                this.type = t;
+                break;
+            }
+        }
+        if(type == null) {
+            // ruh roh!
+            throw new TypeNotFoundException(String.format("Sign type %d not found.", typeId));
+        }
     }
     
-    public ShopSign (World world, int x, int y, int z, String itemName) {
-        this(world, x, y, z, itemName, 0);
+    public ShopSign (World world, int x, int y, int z, String itemName) throws TypeNotFoundException {
+        this(world, x, y, z, itemName, SignType.INFO.getId());
     }
 
     public ShopSign (World world, String string) {
@@ -81,30 +72,39 @@ public class ShopSign {
         this.type = SignType.INFO;
     }
 
-    public ShopSign (Block block, String itemName) {
+    public ShopSign (Block block, String itemName) throws TypeNotFoundException {
         this(block.getWorld(), block.getX(), block.getY(), block.getZ(), itemName);
     }
     
-    public ShopSign (Block block, String itemName, int typeId) {
+    public ShopSign (Block block, String itemName, int typeId) throws TypeNotFoundException {
         this(block.getWorld(), block.getX(), block.getY(), block.getZ(), itemName, typeId);
     }
     
-    public ShopSign (Location loc, String itemName) {
+    public ShopSign (Location loc, String itemName) throws TypeNotFoundException {
         this(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), itemName, 0);
     }
     
-    public ShopSign(String signWorld, int x, int y, int z, String itemName, int typeId) {
+    public ShopSign(String signWorld, int x, int y, int z, String itemName, int typeId) throws TypeNotFoundException {
         this.signWorld = signWorld;
         this.x = x;
         this.y = y;
         this.z = z;
         this.item = itemName;
-        this.type = SignType.getSignType(typeId);
+        for(SignType t : SignType.values()) {
+            if(t.getId() == typeId) {
+                this.type = t;
+                break;
+            }
+        }
+        if(type == null) {
+            // ruh roh!
+            throw new TypeNotFoundException(String.format("Sign type %d not found.", typeId));
+        }
     }
 
     
-    public ShopSign(String signWorld, int x, int y, int z, String itemName) {
-        this(signWorld, x, y, z, itemName, 0);
+    public ShopSign(String signWorld, int x, int y, int z, String itemName) throws TypeNotFoundException {
+        this(signWorld, x, y, z, itemName, SignType.INFO.getId());
     }
 
     public String toString() {
@@ -119,7 +119,7 @@ public class ShopSign {
         string.append(",");
         string.append(item);
         string.append(",");
-        string.append(SignType.getSignId(type));
+        string.append(type.getId());
         return string.toString();
     }
 

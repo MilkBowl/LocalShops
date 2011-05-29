@@ -3,6 +3,8 @@
  */
 package com.milkbukkit.localshops.listeners;
 
+import java.util.logging.Logger;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -16,6 +18,7 @@ import com.milkbukkit.localshops.ItemInfo;
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.Search;
 import com.milkbukkit.localshops.ShopSign;
+import com.milkbukkit.localshops.exceptions.TypeNotFoundException;
 import com.milkbukkit.localshops.objects.Shop;
 
 /**
@@ -24,6 +27,9 @@ import com.milkbukkit.localshops.objects.Shop;
  */
 public class ShopsBlockListener extends BlockListener {
     private LocalShops plugin;
+    
+    // Logging
+    private final Logger log = Logger.getLogger("Minecraft");
 
     public ShopsBlockListener(LocalShops plugin) {
         this.plugin = plugin;
@@ -47,6 +53,7 @@ public class ShopsBlockListener extends BlockListener {
         if (item != null) {
             if (shop.containsItem(item)) {
                 //Create the sign object to work with
+                try {
                 if (event.getLine(1).equalsIgnoreCase("buy")) {
                     sign = new ShopSign(block, item.name, 1);
                 } else if (event.getLine(1).equalsIgnoreCase("sell")) {
@@ -62,7 +69,9 @@ public class ShopsBlockListener extends BlockListener {
                 event.setLine(1, signLines[1]);
                 event.setLine(2, signLines[2]);
                 event.setLine(3, signLines[3]);
-
+                } catch(TypeNotFoundException e) {
+                    log.warning(String.format("[%s] WARNING: TypeNotFoundException: %s", plugin.getDescription().getName(), e.getMessage()));
+                }
             } else {
                 return;
             }
