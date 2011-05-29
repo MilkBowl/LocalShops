@@ -55,7 +55,7 @@ public class ShopManager {
 
         return null;
     }
-    
+
     public LocalShop getLocalShop(String partialUuid) {       
         Iterator<Shop> it = shops.values().iterator();
         while (it.hasNext()) {
@@ -70,7 +70,7 @@ public class ShopManager {
 
         return null;
     }
-    
+
     public GlobalShop getGlobalShop(String partialUuid) {       
         Iterator<Shop> it = shops.values().iterator();
         while (it.hasNext()) {
@@ -85,7 +85,7 @@ public class ShopManager {
 
         return null;
     }
-    
+
     public GlobalShop getGlobalShopByWorld(String worldName) {
         UUID uuid = worldShops.get(worldName);
         Shop shop = shops.get(uuid);
@@ -96,11 +96,11 @@ public class ShopManager {
             return null;
         }
     }
-    
+
     public void removeGlobalShopByWorld(String worldName) {
         worldShops.remove(worldName);
     }
-    
+
     public GlobalShop getGlobalShop(World world) {
         return getGlobalShopByWorld(world.getName());
     }
@@ -113,7 +113,7 @@ public class ShopManager {
         for(Shop shop : shops.values()) {
             if(shop instanceof LocalShop) {
                 LocalShop lShop = (LocalShop) shop;
-                
+
                 ShopLocation[] sLocs = lShop.getLocations();
                 if(sLocs.length != 2) {
                     continue;
@@ -168,7 +168,7 @@ public class ShopManager {
                 break;
             }
         }
-        
+
         if(shop instanceof GlobalShop) {
             GlobalShop gShop = (GlobalShop) shop;
             for(String world : gShop.getWorlds()) {
@@ -501,7 +501,7 @@ public class ShopManager {
             gShop.setCreator(creator);
             gShop.setNotification(notification);
             gShop.setDynamicPrices(dynamic);
-            
+
             // Add worlds
             String worlds = props.getProperty("worlds");
             for(String world : worlds.split(",")) {
@@ -509,7 +509,7 @@ public class ShopManager {
                     gShop.addWorld(world);
                 }
             }
-            
+
             shop = gShop;
         } else {
             LocalShop lShop = new LocalShop(uuid);
@@ -536,7 +536,7 @@ public class ShopManager {
                 }
                 return null;
             }
-            
+
             shop = lShop;
         }
 
@@ -573,8 +573,8 @@ public class ShopManager {
                 int maxStock = Integer.parseInt(stock[1]);
                 boolean dynamicItem;
 
-                if (v.length > 3) {
-                    dynamicItem = (Integer.parseInt(v[3]) != 0);
+                if (stock.length > 2) {
+                    dynamicItem = (Integer.parseInt(stock[2]) != 0);
                     if (!shop.addItem(id, type, buyPrice, buyStackSize, sellPrice, sellStackSize, currStock, maxStock, dynamicItem)) {
                         if(isolateBrokenShopFile(file)) {
                             log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.toString(), id, type));
@@ -583,9 +583,7 @@ public class ShopManager {
                         }
                         return null;
                     }
-                }
-
-                else if(!shop.addItem(id, type, buyPrice, buyStackSize, sellPrice, sellStackSize, currStock, maxStock)) {                   
+                } else if(!shop.addItem(id, type, buyPrice, buyStackSize, sellPrice, sellStackSize, currStock, maxStock)) {                   
                     if(isolateBrokenShopFile(file)) {
                         log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.toString(), id, type));
                     } else {
@@ -670,7 +668,7 @@ public class ShopManager {
 
     public boolean saveAllShops() {
         log.info(String.format("[%s] %s", plugin.pdfFile.getName(), "Saving All Shops"));
-        
+
         // Local Shops
         for(Shop shop : shops.values()) {
             saveShop(shop);
@@ -748,7 +746,7 @@ public class ShopManager {
 
         // remove shop from data structure
         shops.remove(shop.getUuid());
-        
+
         // if global, remove from map
         if(shop instanceof GlobalShop) {
             for(String w : ((GlobalShop) shop).getWorlds()) {
@@ -766,7 +764,7 @@ public class ShopManager {
 
         return true;
     }
-    
+
     public void mapWorldShop(String world, GlobalShop shop) {
         worldShops.put(world, shop.getUuid());
     }
