@@ -574,7 +574,7 @@ public class ShopManager {
                 boolean dynamicItem;
 
                 if (stock.length > 2) {
-                    dynamicItem = (Integer.parseInt(stock[2]) != 0);
+                    dynamicItem = (Integer.parseInt(stock[2]) == 1);
                     if (!shop.addItem(id, type, buyPrice, buyStackSize, sellPrice, sellStackSize, currStock, maxStock, dynamicItem)) {
                         if(isolateBrokenShopFile(file)) {
                             log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Moving to \"plugins/LocalShops/broken-shops/\"", plugin.pdfFile.getName(), file.toString(), id, type));
