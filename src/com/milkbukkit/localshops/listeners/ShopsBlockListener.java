@@ -20,7 +20,6 @@ import com.milkbukkit.localshops.Search;
 import com.milkbukkit.localshops.ShopSign;
 import com.milkbukkit.localshops.exceptions.TypeNotFoundException;
 import com.milkbukkit.localshops.objects.Shop;
-import com.milkbukkit.localshops.util.GenericFunctions;
 
 /**
  * @author sleaker
