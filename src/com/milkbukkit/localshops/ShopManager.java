@@ -157,7 +157,7 @@ public class ShopManager {
 
     public void addShop(Shop shop) {
         if(Config.getSrvDebug()) {
-            log.info(String.format("[%s] Adding %s", plugin.pdfFile.getName(), shop.toString()));
+            log.info(String.format("[%s] Adding %s", plugin.getDescription().getName(), shop.toString()));
         }
         String uuid = shop.getUuid().toString();
         while (true) {
@@ -222,14 +222,14 @@ public class ShopManager {
 
     public void loadShops(File shopsDir) {
         if(Config.getSrvDebug()) {
-            log.info(String.format("[%s] %s.%s", plugin.pdfFile.getName(), "ShopData", "loadShops(File shopsDir)"));
+            log.info(String.format("[%s] %s.%s", plugin.getDescription().getName(), "ShopData", "loadShops(File shopsDir)"));
         }
 
         File[] shopsList = shopsDir.listFiles();
         for (File file : shopsList) {
 
             if(Config.getSrvDebug()) {
-                log.info(String.format("[%s] Loading Shop file \"%s\".", plugin.pdfFile.getName(), file.toString()));
+                log.info(String.format("[%s] Loading Shop file \"%s\".", plugin.getDescription().getName(), file.toString()));
             }
             Shop shop = null;
 
@@ -239,7 +239,7 @@ public class ShopManager {
                     shop = loadShop(file);
                 } catch(Exception e) {
                     // log error
-                    log.info(String.format("[%s] Error loading Shop file \"%s\", ignored.", plugin.pdfFile.getName(), file.toString()));
+                    log.info(String.format("[%s] Error loading Shop file \"%s\", ignored.", plugin.getDescription().getName(), file.toString()));
                 }
             } else {
                 // Convert old format & delete the file...immediately save using the new format (will generate a new UUID for this shop)
@@ -249,11 +249,11 @@ public class ShopManager {
             // Check if not null, and add to world
             if (shop != null) {
                 if(Config.getSrvDebug()) {
-                    log.info(String.format("[%s] Loaded %s", plugin.pdfFile.getName(), shop.toString()));
+                    log.info(String.format("[%s] Loaded %s", plugin.getDescription().getName(), shop.toString()));
                 }
                 plugin.getShopManager().addShop(shop);
             } else {
-                log.warning(String.format("[%s] Failed to load Shop file: \"%s\"", plugin.pdfFile.getName(), file.getName()));
+                log.warning(String.format("[%s] Failed to load Shop file: \"%s\"", plugin.getDescription().getName(), file.getName()));
             }
         }
 
@@ -261,7 +261,7 @@ public class ShopManager {
 
     public Shop convertShopOldFormat(File file) {
         if(Config.getSrvDebug()) {
-            log.info(String.format("[%s] %s.%s", plugin.pdfFile.getName(), "ShopData", "loadShopOldFormat(File file)"));
+            log.info(String.format("[%s] %s.%s", plugin.getDescription().getName(), "ShopData", "loadShopOldFormat(File file)"));
         }
 
         try {
@@ -276,7 +276,7 @@ public class ShopManager {
             String line = br.readLine();
             while (line != null) {
                 if(Config.getSrvDebug()) {
-                    log.info(String.format("[%s] %s", plugin.pdfFile.getName(), line));
+                    log.info(String.format("[%s] %s", plugin.getDescription().getName(), line));
                 }
 
                 // Skip comment lines / metadata
@@ -315,9 +315,9 @@ public class ShopManager {
                         shop.setLocationA(loc);
                     } catch (NumberFormatException e) {
                         if(isolateBrokenShopFile(file)) {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString()));
+                            log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
                         } else {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString()));
+                            log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
                         }
                         return null;
                     }
@@ -333,9 +333,9 @@ public class ShopManager {
                         shop.setLocationB(loc);
                     } catch (NumberFormatException e) {
                         if(isolateBrokenShopFile(file)) {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString()));
+                            log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
                         } else {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString()));
+                            log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
                         }
                         return null;
                     }
@@ -349,9 +349,9 @@ public class ShopManager {
                     String[] itemInfo = cols[0].split(":");
                     if (itemInfo.length < 2) {
                         if(isolateBrokenShopFile(file)) {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString()));
+                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
                         } else {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString()));
+                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
                         }
                         return null;
                     }
@@ -361,9 +361,9 @@ public class ShopManager {
                     String[] dataCols = cols[1].split(",");
                     if (dataCols.length < 3) {
                         if(isolateBrokenShopFile(file)) {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString()));
+                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
                         } else {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString()));
+                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
                         }
                         return null;
                     }
@@ -371,9 +371,9 @@ public class ShopManager {
                     String[] buyInfo = dataCols[0].split(":");
                     if (buyInfo.length < 2) {
                         if(isolateBrokenShopFile(file)) {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString()));
+                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
                         } else {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString()));
+                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
                         }
                         return null;
                     }
@@ -383,9 +383,9 @@ public class ShopManager {
                     String[] sellInfo = dataCols[1].split(":");
                     if (sellInfo.length < 2) {
                         if(isolateBrokenShopFile(file)) {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString()));
+                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
                         } else {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString()));
+                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
                         }
                         return null;
                     }
@@ -395,9 +395,9 @@ public class ShopManager {
                     String[] stockInfo = dataCols[2].split(":");
                     if (stockInfo.length < 2) {
                         if(isolateBrokenShopFile(file)) {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString()));
+                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
                         } else {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString()));
+                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
                         }
                         return null;
                     }
@@ -406,14 +406,14 @@ public class ShopManager {
 
                     if(!shop.addItem(itemId, damageMod, buyPrice, buySize, sellPrice, sellSize, stock, maxStock)) {
                         if(isolateBrokenShopFile(file)) {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString(), itemId, damageMod));
+                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString(), itemId, damageMod));
                         } else {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString(), itemId, damageMod));
+                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString(), itemId, damageMod));
                         }
                         return null;
                     }
                 } else { // Not defined
-                    log.info(String.format("[%s] Shop File \"%s\" has undefined data, ignoring.", plugin.pdfFile.getName(), file.toString()));
+                    log.info(String.format("[%s] Shop File \"%s\" has undefined data, ignoring.", plugin.getDescription().getName(), file.toString()));
                 }
                 line = br.readLine();
             }
@@ -431,9 +431,9 @@ public class ShopManager {
 
         } catch (IOException e) {
             if(isolateBrokenShopFile(file)) {
-                log.warning(String.format("[%s] Shop File \"%s\" Exception: %s, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString(), e.toString()));
+                log.warning(String.format("[%s] Shop File \"%s\" Exception: %s, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString(), e.toString()));
             } else {
-                log.warning(String.format("[%s] Shop File \"%s\" Exception: %s, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString(), e.toString()));
+                log.warning(String.format("[%s] Shop File \"%s\" Exception: %s, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString(), e.toString()));
             }
             return null;
         }
@@ -472,7 +472,7 @@ public class ShopManager {
         try {
             props.load(new FileInputStream(file));
         } catch(IOException e) {
-            log.warning(String.format("[%s] %s", plugin.pdfFile.getName(), "IOException: " + e.getMessage()));
+            log.warning(String.format("[%s] %s", plugin.getDescription().getName(), "IOException: " + e.getMessage()));
             return null;
         }
 
@@ -530,9 +530,9 @@ public class ShopManager {
                 lShop.setLocationB(new ShopLocation(locationB));
             } catch (Exception e) {
                 if (isolateBrokenShopFile(file)) {
-                    log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString()));
+                    log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
                 } else {
-                    log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString()));
+                    log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
                 }
                 return null;
             }
@@ -577,17 +577,17 @@ public class ShopManager {
                     dynamicItem = (Integer.parseInt(stock[2]) == 1);
                     if (!shop.addItem(id, type, buyPrice, buyStackSize, sellPrice, sellStackSize, currStock, maxStock, dynamicItem)) {
                         if(isolateBrokenShopFile(file)) {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString(), id, type));
+                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString(), id, type));
                         } else {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString(), id, type));
+                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString(), id, type));
                         }
                         return null;
                     }
                 } else if(!shop.addItem(id, type, buyPrice, buyStackSize, sellPrice, sellStackSize, currStock, maxStock)) {                   
                     if(isolateBrokenShopFile(file)) {
-                        log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString(), id, type));
+                        log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString(), id, type));
                     } else {
-                        log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.toString(), id, type));
+                        log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString(), id, type));
                     }
                     return null;
                 }
@@ -646,9 +646,9 @@ public class ShopManager {
             shop = null;
 
             if(isolateBrokenShopFile(file)) {
-                log.warning(String.format("[%s] Shop file %s has bad data!  Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.getName()));
+                log.warning(String.format("[%s] Shop file %s has bad data!  Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.getName()));
             } else {
-                log.warning(String.format("[%s] Shop file %s has bad data!  Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.pdfFile.getName(), file.getName()));
+                log.warning(String.format("[%s] Shop file %s has bad data!  Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.getName()));
             }
         }
 
@@ -667,7 +667,7 @@ public class ShopManager {
     }
 
     public boolean saveAllShops() {
-        log.info(String.format("[%s] %s", plugin.pdfFile.getName(), "Saving All Shops"));
+        log.info(String.format("[%s] %s", plugin.getDescription().getName(), "Saving All Shops"));
 
         // Local Shops
         for(Shop shop : shops.values()) {
@@ -838,7 +838,7 @@ public class ShopManager {
             logFileOut.close();
 
         } catch (IOException e1) {
-            System.out.println(plugin.pdfFile.getName() + ": Error - Could not write to file " + logFile.getName());
+            System.out.println(plugin.getDescription().getName() + ": Error - Could not write to file " + logFile.getName());
             return false;
         }
 

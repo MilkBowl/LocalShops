@@ -11,7 +11,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -33,9 +32,10 @@ public class LocalShops extends JavaPlugin {
     public ShopsPlayerListener playerListener = new ShopsPlayerListener(this);
     public ShopsBlockListener blockListener = new ShopsBlockListener(this);
     public ShopsEntityListener entityListener = new ShopsEntityListener(this);
+    
+    // Managers
     private ShopManager shopManager = new ShopManager(this);
     private DynamicManager dynamicManager = new DynamicManager(this);
-    public PluginDescriptionFile pdfFile = null;
     public ThreadManager threadManager = new ThreadManager(this);
     private EconomyManager econManager = null;
     private PermissionManager permManager = null;
@@ -46,6 +46,7 @@ public class LocalShops extends JavaPlugin {
     // Constants
     public static final String CHAT_PREFIX = ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] ";
 
+    
     private static ItemData itemList = new ItemData();
     private Map<String, PlayerData> playerData; // synchronized player hash
     
@@ -54,7 +55,6 @@ public class LocalShops extends JavaPlugin {
     }
 
     public void onEnable() {
-        pdfFile = getDescription();
         setPlayerData(Collections.synchronizedMap(new HashMap<String, PlayerData>()));
 
         // add all the online users to the data trees
@@ -94,8 +94,8 @@ public class LocalShops extends JavaPlugin {
         getShopManager().loadShops(shopsDir);
             
         // update the console that we've started
-        log.info(String.format("[%s] %s", pdfFile.getName(), "Loaded with " + getShopManager().getNumShops() + " shop(s)"));
-        log.info(String.format("[%s] %s", pdfFile.getName(), "Version " + pdfFile.getVersion() + " is enabled: " + Config.getSrvUuid().toString()));
+        log.info(String.format("[%s] %s", getDescription().getName(), "Loaded with " + getShopManager().getNumShops() + " shop(s)"));
+        log.info(String.format("[%s] %s", getDescription().getName(), "Version " + getDescription().getVersion() + " is enabled: " + Config.getSrvUuid().toString()));
 
         // check which shops players are inside
         for (Player player : this.getServer().getOnlinePlayers()) {
@@ -119,14 +119,14 @@ public class LocalShops extends JavaPlugin {
         setEconManager(new EconomyManager(this));
         if(!getEconManager().loadEconomies()) {
             // No valid economies, display error message and disables
-            log.warning(String.format("[%s] FATAL: No economic plugins found, please refer to the documentation.", pdfFile.getName()));
+            log.warning(String.format("[%s] FATAL: No economic plugins found, please refer to the documentation.", getDescription().getName()));
             getPluginLoader().disablePlugin(this);
         }
         
         setPermManager(new PermissionManager(this));
         if(!getPermManager().load()) {
             // no valid permissions, display error message and disables
-            log.warning(String.format("[%s] FATAL: No permission plugins found, please refer to the documentation.", pdfFile.getName()));
+            log.warning(String.format("[%s] FATAL: No permission plugins found, please refer to the documentation.", getDescription().getName()));
             getPluginLoader().disablePlugin(this);
         }
     }
@@ -148,7 +148,7 @@ public class LocalShops extends JavaPlugin {
         threadManager.notificationStop();
         
         // update the console that we've stopped
-        log.info(String.format("[%s] %s", pdfFile.getName(), "Version " + pdfFile.getVersion() + " is disabled!"));
+        log.info(String.format("[%s] %s", getDescription().getName(), "Version " + getDescription().getVersion() + " is disabled!"));
     }
 
     public void setShopData(ShopManager shopData) {

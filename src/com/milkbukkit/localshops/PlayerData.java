@@ -115,7 +115,7 @@ public class PlayerData {
             // Return money to shop owner
             EconomyResponse returnResp = plugin.getEconManager().depositPlayer(playerFrom, cost);
             if(!returnResp.transactionSuccess()) {
-                log.warning(String.format("[%s] ERROR:  Payment failed and could not return funds to original state!  %s may need %s!", plugin.pdfFile.getName(), playerName, plugin.getEconManager().format(cost)));
+                log.warning(String.format("[%s] ERROR:  Payment failed and could not return funds to original state!  %s may need %s!", plugin.getDescription().getName(), playerName, plugin.getEconManager().format(cost)));
             }
             return false;
         }

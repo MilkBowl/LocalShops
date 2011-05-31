@@ -27,7 +27,7 @@ public class CommandAdminSet extends Command {
             return true;
         }
 
-        log.info(String.format("[%s] Command issued: %s", plugin.pdfFile.getName(), command));
+        log.info(String.format("[%s] Command issued: %s", plugin.getDescription().getName(), command));
 
         // Parse Arguments
 

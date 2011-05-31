@@ -147,7 +147,7 @@ public class ShopsPlayerListener extends PlayerListener {
         if (xyz.length == 3) {
             checkPlayerPosition(player, xyz[0], xyz[1], xyz[2]);
         } else {
-            log.info(String.format("[%s] Bad Position", plugin.pdfFile.getName()));
+            log.info(String.format("[%s] Bad Position", plugin.getDescription().getName()));
         }
 
     }

@@ -143,7 +143,7 @@ public class CommandShopCreate extends Command {
             gShop.addWorld(world);
             plugin.getShopManager().addShop(gShop);
             shop = gShop;
-            log.info(String.format("[%s] Created Global: %s", plugin.pdfFile.getName(), gShop.toString()));
+            log.info(String.format("[%s] Created Global: %s", plugin.getDescription().getName(), gShop.toString()));
         } else {
             LocalShop lShop = new LocalShop(UUID.randomUUID());
             lShop.setCreator(creator);
@@ -153,7 +153,7 @@ public class CommandShopCreate extends Command {
             lShop.setLocations(new ShopLocation(xyzA), new ShopLocation(xyzB));
             plugin.getShopManager().addShop(lShop);
             shop = lShop;
-            log.info(String.format("[%s] Created Local: %s", plugin.pdfFile.getName(), lShop.toString()));
+            log.info(String.format("[%s] Created Local: %s", plugin.getDescription().getName(), lShop.toString()));
             for (Player p : plugin.getServer().getOnlinePlayers()) {
                 plugin.playerListener.checkPlayerPosition(p);
             }
