@@ -3,6 +3,7 @@ package com.milkbukkit.localshops;
 import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -57,7 +58,7 @@ public class LocalShops extends JavaPlugin {
 
     public void onEnable() {
         setPlayerData(Collections.synchronizedMap(new HashMap<String, PlayerData>()));
-        resManager = new ResourceManager(getDescription());
+        resManager = new ResourceManager(getDescription(), new Locale("pirate"));
 
         // add all the online users to the data trees
         for (Player player : this.getServer().getOnlinePlayers()) {

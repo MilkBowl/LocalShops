@@ -20,7 +20,7 @@ public class ResourceManager {
     
     // Objects
     private PluginDescriptionFile pdf;
-    private ResourceBundle RES_BUNDLE = ResourceBundle.getBundle("com.milkbukkit.localshops.resources.StringLabel", new Locale("pirate"));
+    private ResourceBundle RES_BUNDLE;
     
     // Color Map
     private static final Map<String, ChatColor> COLOR_MAP = new HashMap<String, ChatColor>();
@@ -43,8 +43,13 @@ public class ResourceManager {
         COLOR_MAP.put("%YELLOW%", ChatColor.YELLOW);
     }
     
-    public ResourceManager(PluginDescriptionFile p) {
+    public ResourceManager(PluginDescriptionFile p, Locale l) {
         pdf = p;
+        if(l == null) {
+            ResourceBundle.getBundle("com.milkbukkit.localshops.resources.StringLabel");
+        } else {
+            ResourceBundle.getBundle("com.milkbukkit.localshops.resources.StringLabel", l);
+        }
     }
     
     // Get String
