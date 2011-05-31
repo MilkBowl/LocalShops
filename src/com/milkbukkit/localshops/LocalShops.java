@@ -39,6 +39,7 @@ public class LocalShops extends JavaPlugin {
     public ThreadManager threadManager = new ThreadManager(this);
     private EconomyManager econManager = null;
     private PermissionManager permManager = null;
+    private ResourceManager resManager = null;
 
     // Logging
     private final Logger log = Logger.getLogger("Minecraft");
@@ -56,6 +57,7 @@ public class LocalShops extends JavaPlugin {
 
     public void onEnable() {
         setPlayerData(Collections.synchronizedMap(new HashMap<String, PlayerData>()));
+        resManager = new ResourceManager(getDescription());
 
         // add all the online users to the data trees
         for (Player player : this.getServer().getOnlinePlayers()) {
@@ -94,8 +96,8 @@ public class LocalShops extends JavaPlugin {
         getShopManager().loadShops(shopsDir);
             
         // update the console that we've started
-        log.info(String.format("[%s] %s", getDescription().getName(), "Loaded with " + getShopManager().getNumShops() + " shop(s)"));
-        log.info(String.format("[%s] %s", getDescription().getName(), "Version " + getDescription().getVersion() + " is enabled: " + Config.getSrvUuid().toString()));
+        log.info(resManager.getString(ResourceManager.LOAD, new String[] { "%NUM_SHOPS%" }, new Object[] { getShopManager().getNumShops() }));
+        log.info(resManager.getString(ResourceManager.ENABLE, new String[] { "%UUID%" }, new Object[] { Config.getSrvUuid().toString() }));
 
         // check which shops players are inside
         for (Player player : this.getServer().getOnlinePlayers()) {
@@ -119,14 +121,14 @@ public class LocalShops extends JavaPlugin {
         setEconManager(new EconomyManager(this));
         if(!getEconManager().loadEconomies()) {
             // No valid economies, display error message and disables
-            log.warning(String.format("[%s] FATAL: No economic plugins found, please refer to the documentation.", getDescription().getName()));
+            log.warning(resManager.getString(ResourceManager.ECONOMY_NOT_FOUND, new String[] { }, new Object[] { }));
             getPluginLoader().disablePlugin(this);
         }
         
         setPermManager(new PermissionManager(this));
         if(!getPermManager().load()) {
             // no valid permissions, display error message and disables
-            log.warning(String.format("[%s] FATAL: No permission plugins found, please refer to the documentation.", getDescription().getName()));
+            log.warning(resManager.getString(ResourceManager.PERMISSION_NOT_FOUND, new String[] { }, new Object[] { }));
             getPluginLoader().disablePlugin(this);
         }
     }
@@ -148,7 +150,7 @@ public class LocalShops extends JavaPlugin {
         threadManager.notificationStop();
         
         // update the console that we've stopped
-        log.info(String.format("[%s] %s", getDescription().getName(), "Version " + getDescription().getVersion() + " is disabled!"));
+        log.warning(resManager.getString(ResourceManager.DISABLE, new String[] { }, new Object[] { }));
     }
 
     public void setShopData(ShopManager shopData) {
