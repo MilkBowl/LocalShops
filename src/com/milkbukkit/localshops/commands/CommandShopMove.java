@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.PlayerData;
+import com.milkbukkit.localshops.ResourceManager;
 import com.milkbukkit.localshops.objects.LocalShop;
 import com.milkbukkit.localshops.objects.ShopLocation;
 import com.milkbukkit.localshops.util.GenericFunctions;
@@ -33,7 +34,7 @@ public class CommandShopMove extends Command {
         }
 
         if(!canUseCommand(CommandTypes.MOVE)) {
-            sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You don't have permission to use this command");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
             return true;
         }
 

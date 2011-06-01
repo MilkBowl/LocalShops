@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.PlayerData;
+import com.milkbukkit.localshops.ResourceManager;
 import com.milkbukkit.localshops.objects.GlobalShop;
 import com.milkbukkit.localshops.objects.LocalShop;
 import com.milkbukkit.localshops.objects.Shop;
@@ -106,7 +107,7 @@ public class CommandShopCreate extends Command {
             }
 
         } else {
-            sender.sendMessage("Console is not implemented yet.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
             return false;
         }
 

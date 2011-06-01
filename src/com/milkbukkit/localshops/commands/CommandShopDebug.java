@@ -68,7 +68,7 @@ public class CommandShopDebug extends Command {
                         shop = plugin.getShopManager().getLocalShop(shopUuid);
                     }
                     if (shop == null) {
-                        sender.sendMessage("You are not in a shop!");
+                        sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
                         return false;
                     }
                 }

@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import com.milkbukkit.localshops.InventoryItem;
 import com.milkbukkit.localshops.ItemInfo;
 import com.milkbukkit.localshops.LocalShops;
+import com.milkbukkit.localshops.ResourceManager;
 import com.milkbukkit.localshops.Search;
 import com.milkbukkit.localshops.ShopSign;
 import com.milkbukkit.localshops.objects.Shop;
@@ -29,7 +30,7 @@ public class CommandShopSet extends Command {
     public boolean process() {
         // Check Permissions
         if (!canUseCommand(CommandTypes.SET)) {
-            sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You don't have permission to use this command");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
             return true;
         }
 
@@ -72,18 +73,18 @@ public class CommandShopSet extends Command {
             shop = getCurrentShop(player);
 
             if (shop == null) {
-                sender.sendMessage("You are not in a shop!");
+                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
                 return true;
             }
 
             // Check if Player can Modify
             if (!isShopController(shop)) {
-                player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to set this.");
-                player.sendMessage(ChatColor.DARK_AQUA + "The current shop owner is " + ChatColor.WHITE + shop.getOwner());
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_MUST_BE_SHOP_OWNER));
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
                 return true;
             }
         } else {
-            sender.sendMessage("Console is not implemented yet.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
             return true;
         }
 
@@ -252,18 +253,18 @@ public class CommandShopSet extends Command {
 
             shop = getCurrentShop(player);
             if (shop == null) {
-                sender.sendMessage("You are not in a shop!");
+                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
                 return true;
             }
 
             // Check if Player can Modify
             if (!isShopController(shop)) {
-                player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to set this.");
-                player.sendMessage(ChatColor.DARK_AQUA + "The current shop owner is " + ChatColor.WHITE + shop.getOwner());
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_MUST_BE_SHOP_OWNER));
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
                 return true;
             }
         } else {
-            sender.sendMessage("Console is not implemented yet.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
             return true;
         }
 
@@ -430,18 +431,18 @@ public class CommandShopSet extends Command {
 
             shop = getCurrentShop(player);
             if (shop == null) {
-                sender.sendMessage("You are not in a shop!");
+                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
                 return true;
             }
 
             // Check if Player can Modify
             if (!isShopController(shop)) {
-                player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to set this.");
-                player.sendMessage(ChatColor.DARK_AQUA + "The current shop owner is " + ChatColor.WHITE + shop.getOwner());
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_MUST_BE_SHOP_OWNER));
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
                 return true;
             }
         } else {
-            sender.sendMessage("Console is not implemented yet.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
             return true;
         }
 
@@ -529,7 +530,7 @@ public class CommandShopSet extends Command {
 
             shop = getCurrentShop(player);
             if (shop == null) {
-                sender.sendMessage("You are not in a shop!");
+                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
                 return true;
             }
 
@@ -539,7 +540,7 @@ public class CommandShopSet extends Command {
                 return true;
             }            
         } else {
-            sender.sendMessage("Console is not implemented yet.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
             return true;
         }
 
@@ -597,18 +598,18 @@ public class CommandShopSet extends Command {
 
             shop = getCurrentShop(player);
             if (shop == null) {
-                sender.sendMessage("You are not in a shop!");
+                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
                 return true;
             }
 
             // Check if Player can Modify
             if (!shop.getOwner().equalsIgnoreCase(player.getName())) {
                 player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner to set this.");
-                player.sendMessage(ChatColor.DARK_AQUA + "The current shop owner is " + ChatColor.WHITE + shop.getOwner());
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
                 return true;
             }
         } else {
-            sender.sendMessage("Console is not implemented yet.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
             return true;
         }
 
@@ -652,7 +653,7 @@ public class CommandShopSet extends Command {
 
             shop = getCurrentShop(player);
             if(shop == null) {
-                sender.sendMessage("You are not in a shop!");
+                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
                 return true;
             }
 
@@ -663,7 +664,7 @@ public class CommandShopSet extends Command {
                 return true;
             }
         } else {
-            sender.sendMessage("Console is not implemented yet.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
             return true;
         }
 
@@ -688,7 +689,7 @@ public class CommandShopSet extends Command {
 
             shop = getCurrentShop(player);
             if (shop == null) {
-                sender.sendMessage("You are not in a shop!");
+                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
                 return true;
             }
 
@@ -699,7 +700,7 @@ public class CommandShopSet extends Command {
                 return true;
             }
         } else {
-            sender.sendMessage("Console is not implemented yet.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
             return true;
         }
 
@@ -731,7 +732,7 @@ public class CommandShopSet extends Command {
 
             shop = getCurrentShop(player);
             if (shop == null) {
-                sender.sendMessage("You are not in a shop!");
+                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
                 return true;
             }
 
@@ -743,7 +744,7 @@ public class CommandShopSet extends Command {
             }
 
             if (!canUseCommand(CommandTypes.SET_OWNER) && !canUseCommand(CommandTypes.ADMIN)) {
-                sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You don't have permission to use this command");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
                 return true;
             }
 
@@ -752,7 +753,7 @@ public class CommandShopSet extends Command {
                 reset = true;
             }
         } else {
-            sender.sendMessage("Console is not implemented yet.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
             return true;
         }
 
@@ -801,7 +802,7 @@ public class CommandShopSet extends Command {
 
             shop = getCurrentShop(player);
             if(shop == null) {
-                sender.sendMessage("You are not in a shop!");
+                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
                 return true;                
             }
 
@@ -812,7 +813,7 @@ public class CommandShopSet extends Command {
                 return true;
             }
         } else {
-            sender.sendMessage("Console is not implemented yet.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
             return true;            
         }
 
@@ -866,7 +867,7 @@ public class CommandShopSet extends Command {
             Player player = (Player) sender;
             shop = getCurrentShop(player);
             if (shop == null) {
-                sender.sendMessage("You are not in a shop!");
+                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
                 return false;
             }
 
@@ -876,7 +877,7 @@ public class CommandShopSet extends Command {
                 return false;
             }            
         } else {
-            sender.sendMessage("Console is not implemented yet.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
             return false;
         }
 

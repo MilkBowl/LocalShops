@@ -3,7 +3,6 @@ package com.milkbukkit.localshops.commands;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,6 +13,7 @@ import com.milkbukkit.localshops.InventoryItem;
 import com.milkbukkit.localshops.ItemInfo;
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.PlayerData;
+import com.milkbukkit.localshops.ResourceManager;
 import com.milkbukkit.localshops.Search;
 import com.milkbukkit.localshops.Transaction;
 import com.milkbukkit.localshops.objects.Shop;
@@ -38,13 +38,13 @@ public class CommandShopSell extends Command {
             
             shop = getCurrentShop(player);
             if (shop == null || (isGlobal && !Config.getGlobalShopsEnabled())) {
-                sender.sendMessage("You are not in a shop!");
+                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
                 return true;
             }
 
             // Check Permissions
             if (!canUseCommand(CommandTypes.SELL)) {
-                sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You don't have permission to use this command");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
                 return true;
             }
 
@@ -70,7 +70,7 @@ public class CommandShopSell extends Command {
                     item = Search.itemById(itemStack.getTypeId(), itemStack.getDurability());
                 }
                 if(item == null) {
-                    sender.sendMessage("Could not find an item.");
+                    sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
                     return true;
                 }
                 return shopSell(shop, item, amount);
@@ -98,13 +98,13 @@ public class CommandShopSell extends Command {
                     item = Search.itemById(itemStack.getTypeId(), itemStack.getDurability());
                 }
                 if(item == null) {
-                    sender.sendMessage("Could not find an item.");
+                    sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
                     return true;
                 }
                 return shopSell(shop, item, amount);
             }
         } else {
-            sender.sendMessage("Console is not implemented yet.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
             return true;
         }
 
@@ -117,7 +117,7 @@ public class CommandShopSell extends Command {
             int id = Integer.parseInt(matcher.group(1));
             ItemInfo item = Search.itemById(id);
             if(item == null) {
-                sender.sendMessage("Could not find an item.");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopSell(shop, item, 0);
@@ -132,7 +132,7 @@ public class CommandShopSell extends Command {
             int count = Integer.parseInt(matcher.group(2));
             ItemInfo item = Search.itemById(id);
             if(item == null) {
-                sender.sendMessage("Could not find an item.");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopSell(shop, item, count);
@@ -147,7 +147,7 @@ public class CommandShopSell extends Command {
             int count = Integer.parseInt(matcher.group(2));
             ItemInfo item = Search.itemById(id);
             if(item == null) {
-                sender.sendMessage("Could not find an item.");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopSell(shop, item, count);
@@ -162,7 +162,7 @@ public class CommandShopSell extends Command {
             short type = Short.parseShort(matcher.group(2));
             ItemInfo item = Search.itemById(id, type);
             if(item == null) {
-                sender.sendMessage("Could not find an item.");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopSell(shop, item, 0);
@@ -178,7 +178,7 @@ public class CommandShopSell extends Command {
             ItemInfo item = Search.itemById(id, type);
             int count = Integer.parseInt(matcher.group(3));
             if(item == null) {
-                sender.sendMessage("Could not find an item.");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopSell(shop, item, count);
@@ -194,7 +194,7 @@ public class CommandShopSell extends Command {
             ItemInfo item = Search.itemById(id, type);
             int count = Integer.parseInt(matcher.group(3));
             if(item == null) {
-                sender.sendMessage("Could not find an item.");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopSell(shop, item, count);
@@ -209,7 +209,7 @@ public class CommandShopSell extends Command {
             ItemInfo item = Search.itemByName(itemName);
             int count = Integer.parseInt(matcher.group(2));
             if(item == null) {
-                sender.sendMessage("Could not find an item.");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopSell(shop, item, count);
@@ -224,7 +224,7 @@ public class CommandShopSell extends Command {
             String itemName = matcher.group(1);
             ItemInfo item = Search.itemByName(itemName);
             if(item == null) {
-                sender.sendMessage("Could not find an item.");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             int count = countItemsInInventory(player.getInventory(), item.toStack());
@@ -239,7 +239,7 @@ public class CommandShopSell extends Command {
             String itemName = matcher.group(1);
             ItemInfo item = Search.itemByName(itemName);
             if(item == null) {
-                sender.sendMessage("Could not find an item.");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopSell(shop, item, 1);

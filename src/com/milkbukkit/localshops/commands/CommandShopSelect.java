@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.PlayerData;
+import com.milkbukkit.localshops.ResourceManager;
 
 public class CommandShopSelect extends Command {
 
@@ -44,7 +45,7 @@ public class CommandShopSelect extends Command {
             }
             return true;
         } else {
-            sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You don't have permission to use this command");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
             return true;
         }
     }

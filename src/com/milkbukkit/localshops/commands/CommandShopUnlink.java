@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.milkbukkit.localshops.LocalShops;
+import com.milkbukkit.localshops.ResourceManager;
 import com.milkbukkit.localshops.objects.GlobalShop;
 
 /**
@@ -32,7 +33,7 @@ public class CommandShopUnlink extends Command {
 
         // Check Permissions
         if (!canUseCommand(CommandTypes.ADMIN)) {
-            sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You don't have permission to use this command");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
             return true;
         }
         

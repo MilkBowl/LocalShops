@@ -18,6 +18,7 @@ import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.InventoryItem;
 import com.milkbukkit.localshops.ItemInfo;
 import com.milkbukkit.localshops.LocalShops;
+import com.milkbukkit.localshops.ResourceManager;
 import com.milkbukkit.localshops.Search;
 import com.milkbukkit.localshops.comparator.EntryValueComparator;
 import com.milkbukkit.localshops.objects.GlobalShop;
@@ -63,7 +64,7 @@ public class CommandShopFind extends Command {
                 found = Search.itemById(itemStack.getTypeId(), itemStack.getDurability());
             }
             if (found == null) {
-                sender.sendMessage("Could not find an item.");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopFind(player, found);
@@ -77,7 +78,7 @@ public class CommandShopFind extends Command {
             int id = Integer.parseInt(matcher.group(1));
             ItemInfo found = Search.itemById(id);
             if (found == null) {
-                sender.sendMessage("Could not find an item.");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopFind(player, found);
@@ -92,7 +93,7 @@ public class CommandShopFind extends Command {
             short type = Short.parseShort(matcher.group(2));
             ItemInfo found = Search.itemById(id, type);
             if (found == null) {
-                sender.sendMessage("Could not find an item.");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopFind(player, found);

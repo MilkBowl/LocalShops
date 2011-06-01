@@ -3,7 +3,6 @@ package com.milkbukkit.localshops.commands;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.milkbukkit.localshops.ItemInfo;
 import com.milkbukkit.localshops.LocalShops;
+import com.milkbukkit.localshops.ResourceManager;
 import com.milkbukkit.localshops.Search;
 import com.milkbukkit.localshops.objects.Shop;
 
@@ -34,20 +34,20 @@ public class CommandShopRemove extends Command {
             
             shop = getCurrentShop(player);
             if (shop == null) {
-                sender.sendMessage("You are not in a shop!");
+                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
                 return false;
             }
 
             // Check Permissions
             if (!canUseCommand(CommandTypes.REMOVE)) {
-                sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You don't have permission to use this command");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
                 return false;
             }            
 
             // Check if Player can Modify
             if (!isShopController(shop)) {
-                player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to set this.");
-                player.sendMessage(ChatColor.DARK_AQUA + "The current shop owner is " + ChatColor.WHITE + shop.getOwner());
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_MUST_BE_SHOP_OWNER));
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
                 return true;
             }
 
@@ -61,14 +61,14 @@ public class CommandShopRemove extends Command {
                 }
                 ItemInfo item = Search.itemById(itemStack.getTypeId(), itemStack.getDurability());
                 if(item == null) {
-                    sender.sendMessage("Could not find an item.");
+                    sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
                     return false;
                 }
                 return shopRemove(shop, item);
             }
 
         } else {
-            sender.sendMessage("Console is not implemented yet.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
             return false;
         }
 

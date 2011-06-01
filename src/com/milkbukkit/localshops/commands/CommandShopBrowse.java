@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,6 +13,7 @@ import org.bukkit.entity.Player;
 import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.InventoryItem;
 import com.milkbukkit.localshops.LocalShops;
+import com.milkbukkit.localshops.ResourceManager;
 import com.milkbukkit.localshops.comparator.InventoryItemSortByName;
 import com.milkbukkit.localshops.objects.Shop;
 
@@ -37,18 +37,18 @@ public class CommandShopBrowse extends Command {
             
             shop = getCurrentShop(player);
             if (shop == null || (isGlobal && !Config.getGlobalShopsEnabled())) {
-                sender.sendMessage("You are not in a shop!");
+                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
                 return true;
             }
 
             // Check Permissions
             if (!canUseCommand(CommandTypes.BROWSE)) {
-                sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You don't have permission to use this command");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
                 return true;
             }
 
         } else {
-            sender.sendMessage("Console is not implemented yet.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
             return true;
         }
 

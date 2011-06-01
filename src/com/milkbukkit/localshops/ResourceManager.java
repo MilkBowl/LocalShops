@@ -21,6 +21,11 @@ public class ResourceManager {
     
     public final static String GEN_INVALID_VALUE = "GEN_INVALID_VALUE";
     public final static String GEN_USER_ACCESS_DENIED = "GEN_USER_ACCESS_DENIED";
+    public final static String GEN_NOT_IN_SHOP = "GEN_NOT_IN_SHOP";
+    public final static String GEN_MUST_BE_SHOP_OWNER = "GEN_MUST_BE_SHOP_OWNER";
+    public final static String GEN_CURR_OWNER_IS = "GEN_CURR_OWNER_IS";
+    public final static String GEN_ITEM_NOT_FOUND = "GEN_ITEM_NOT_FOUND";
+    public final static String GEN_CONSOLE_NOT_IMPLEMENTED = "GEN_CONSOLE_NOT_IMPLEMENTED";
     
     public final static String CMD_ISSUED_LOCAL = "CMD_ISSUED_LOCAL";
     public final static String CMD_ISSUED_GLOBAL = "CMD_ISSUED_GLOBAL";
@@ -43,6 +48,19 @@ public class ResourceManager {
     public final static String CMD_ADM_SET_CFG_SHOP_NOTIFICATION = "CMD_ADM_SET_CFG_SHOP_NOTIFICATION";
     public final static String CMD_ADM_SET_CFG_CHAT_MAX_LINES = "CMD_ADM_SET_CFG_CHAT_MAX_LINES";
     public final static String CMD_ADM_SET_CFG_LOG_TRANSACTIONS = "CMD_ADM_SET_CFG_LOG_TRANSACTIONS";
+    
+    public final static String CMD_SHP_ADD_TOO_DAM = "CMD_SHP_ADD_TOO_DAM";
+    public final static String CMD_SHP_ADD_DMG_LESS_THAN = "CMD_SHP_ADD_DMG_LESS_THAN";
+    public final static String CMD_SHP_ADD_USAGE = "CMD_SHP_ADD_USAGE";
+    public final static String CMD_SHP_ADD_LOG = "CMD_SHP_LOG";
+    public final static String CMD_SHP_ADD_INSUFFICIENT_INV = "CMD_SHP_ADD_INSUFFICIENT_INV";
+    public final static String CMD_SHP_ADD_UNLIM_STOCK = "CMD_SHP_ADD_UNLIM_STOCK";
+    public final static String CMD_SHP_ADD_ALREADY_HAS = "CMD_SHP_ADD_ALREADY_HAS";
+    public final static String CMD_SHP_ADD_SUCCESS = "CMD_SHP_ADD_SUCCESS";
+    public final static String CMD_SHP_ADD_STOCK_SUCCESS = "CMD_SHP_ADD_STOCK_SUCCESS";
+    public final static String CMD_SHP_ADD_READY0 = "CMD_SHP_ADD_READY0";
+    public final static String CMD_SHP_ADD_READY1 = "CMD_SHP_ADD_READY1";
+    public final static String CMD_SHP_ADD_READY2 = "CMD_SHP_ADD_READY2";
     
     // Objects
     private PluginDescriptionFile pdf;

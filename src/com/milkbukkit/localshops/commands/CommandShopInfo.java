@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import com.milkbukkit.localshops.InventoryItem;
 import com.milkbukkit.localshops.LocalShops;
+import com.milkbukkit.localshops.ResourceManager;
 import com.milkbukkit.localshops.objects.LocalShop;
 import com.milkbukkit.localshops.objects.Shop;
 import com.milkbukkit.localshops.util.GenericFunctions;
@@ -38,7 +39,7 @@ public class CommandShopInfo extends Command {
             if (matcher.find()) {
                 shop = getCurrentShop(player);
                 if (shop == null) {
-                    sender.sendMessage("You are not in a shop!");
+                    sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
                     return false;
                 }
             }
@@ -57,7 +58,7 @@ public class CommandShopInfo extends Command {
             }
 
         } else {
-            sender.sendMessage("Console is not implemented yet.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
             return false;
         }
 
