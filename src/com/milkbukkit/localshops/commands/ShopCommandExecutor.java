@@ -108,9 +108,9 @@ public class ShopCommandExecutor implements CommandExecutor {
                 }
 
                 if(global) {
-                    log.info(plugin.getResourceManager().getString(ResourceManager.COMMAND_ISSUED_GLOBAL, new String[] { "%NAME%", "%COMMAND%" }, new Object[] { user, cmdString } ));
+                    log.info(plugin.getResourceManager().getString(ResourceManager.CMD_ISSUED_GLOBAL, new String[] { "%NAME%", "%COMMAND%" }, new Object[] { user, cmdString } ));
                 } else {
-                    log.info(plugin.getResourceManager().getString(ResourceManager.COMMAND_ISSUED_LOCAL, new String[] { "%NAME%", "%COMMAND%" }, new Object[] { user, cmdString } ));
+                    log.info(plugin.getResourceManager().getString(ResourceManager.CMD_ISSUED_LOCAL, new String[] { "%NAME%", "%COMMAND%" }, new Object[] { user, cmdString } ));
                 }
 
                 return cVal;

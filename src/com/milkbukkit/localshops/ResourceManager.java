@@ -12,34 +12,37 @@ import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class ResourceManager {
     // Constants
-    public final static String LOAD = "LOAD";
-    public final static String USING_LOCALE = "USING_LOCALE";
-    public final static String ENABLE = "ENABLE";
-    public final static String DISABLE = "DISABLE";
-    public final static String ECONOMY_NOT_FOUND = "ECONOMY_NOT_FOUND";
-    public final static String PERMISSION_NOT_FOUND = "PERMISSION_NOT_FOUND";
-    public final static String COMMAND_ISSUED_LOCAL = "COMMAND_ISSUED_LOCAL";
-    public final static String COMMAND_ISSUED_GLOBAL = "COMMAND_ISSUED_GLOBAL";
-    public final static String USER_ACCESS_DENIED = "ACCESS_DENIED";
-    public final static String ADMIN_CFG_CHARGE_FOR_SHOP = "ADMIN_CFG_CHARGE_FOR_SHOP";
-    public final static String ADMIN_CFG_GLOBAL_SHOP = "ADMIN_CFG_GLOBAL_SHOP";
-    public final static String ADMIN_CFG_SHOP_WIDTH = "ADMIN_CFG_SHOP_WIDTH";
-    public final static String ADMIN_CFG_REPORT_STATS = "ADMIN_CFG_REPORT_STATS";
-    public final static String ADMIN_CFG_MAX_HEIGHT = "ADMIN_CFG_MAX_HEIGHT";
-    public final static String ADMIN_CFG_MAX_WIDTH = "ADMIN_CFG_MAX_WIDTH";
-    public final static String ADMIN_CFG_SHOPS_TRANS_MAX_SIZE = "ADMIN_CFG_SHOPS_TRANS_MAX_SIZE";
-    public final static String ADMIN_CFG_SHOPS_COST = "ADMIN_CFG_SHOPS_COST";
-    public final static String ADMIN_CFG_FIND_MAX_DISTANCE = "ADMIN_CFG_FIND_MAX_DISTANCE";
-    public final static String ADMIN_CFG_SHOPS_PER_PLAYER = "ADMIN_CFG_SHOPS_PER_PLAYER";
-    public final static String ADMIN_CFG_SHOP_HEIGHT = "ADMIN_CFG_SHOP_HEIGHT";
-    public final static String ADMIN_CFG_DEBUG = "ADMIN_CFG_DEBUG";
-    public final static String ADMIN_CFG_MAX_DAMAGE = "ADMIN_CFG_MAX_DAMAGE";
-    public final static String ADMIN_CFG_MOVE_COST = "ADMIN_CFG_MOVE_COST";
-    public final static String ADMIN_CFG_SHOP_NOTIFICATION_TIMER = "ADMIN_CFG_SHOP_NOTIFICATION_TIMER";
-    public final static String ADMIN_CFG_SHOP_NOTIFICATION = "ADMIN_CFG_SHOP_NOTIFICATION";
-    public final static String ADMIN_CFG_CHAT_MAX_LINES = "ADMIN_CFG_CHAT_MAX_LINES";
-    public final static String ADMIN_CFG_LOG_TRANSACTIONS = "ADMIN_CFG_LOG_TRANSACTIONS";
-    public final static String INVALID_VALUE = "INVALID_VALUE";
+    public final static String MAIN_LOAD = "MAIN_LOAD";
+    public final static String MAIN_USING_LOCALE = "MAIN_USING_LOCALE";
+    public final static String MAIN_ENABLE = "MAIN_ENABLE";
+    public final static String MAIN_DISABLE = "MAIN_DISABLE";
+    public final static String MAIN_ECONOMY_NOT_FOUND = "MAIN_ECONOMY_NOT_FOUND";
+    public final static String MAIN_PERMISSION_NOT_FOUND = "MAIN_PERMISSION_NOT_FOUND";
+    
+    public final static String GEN_INVALID_VALUE = "GEN_INVALID_VALUE";
+    public final static String GEN_USER_ACCESS_DENIED = "GEN_USER_ACCESS_DENIED";
+    
+    public final static String CMD_ISSUED_LOCAL = "CMD_ISSUED_LOCAL";
+    public final static String CMD_ISSUED_GLOBAL = "CMD_ISSUED_GLOBAL";
+    
+    public final static String CMD_ADM_SET_CFG_CHARGE_FOR_SHOP = "CMD_ADM_SET_CFG_CHARGE_FOR_SHOP";
+    public final static String CMD_ADM_SET_CFG_GLOBAL_SHOP = "CMD_ADM_SET_CFG_GLOBAL_SHOP";
+    public final static String CMD_ADM_SET_CFG_SHOP_WIDTH = "CMD_ADM_SET_CFG_SHOP_WIDTH";
+    public final static String CMD_ADM_SET_CFG_REPORT_STATS = "CMD_ADM_SET_CFG_REPORT_STATS";
+    public final static String CMD_ADM_SET_CFG_MAX_HEIGHT = "CMD_ADM_SET_CFG_MAX_HEIGHT";
+    public final static String CMD_ADM_SET_CFG_MAX_WIDTH = "CMD_ADM_SET_CFG_MAX_WIDTH";
+    public final static String CMD_ADM_SET_CFG_SHOPS_TRANS_MAX_SIZE = "CMD_ADM_SET_CFG_SHOPS_TRANS_MAX_SIZE";
+    public final static String CMD_ADM_SET_CFG_SHOPS_COST = "CMD_ADM_SET_CFG_SHOPS_COST";
+    public final static String CMD_ADM_SET_CFG_FIND_MAX_DISTANCE = "CMD_ADM_SET_CFG_FIND_MAX_DISTANCE";
+    public final static String CMD_ADM_SET_CFG_SHOPS_PER_PLAYER = "CMD_ADM_SET_CFG_SHOPS_PER_PLAYER";
+    public final static String CMD_ADM_SET_CFG_SHOP_HEIGHT = "CMD_ADM_SET_CFG_SHOP_HEIGHT";
+    public final static String CMD_ADM_SET_CFG_DEBUG = "CMD_ADM_SET_CFG_DEBUG";
+    public final static String CMD_ADM_SET_CFG_MAX_DAMAGE = "CMD_ADM_SET_CFG_MAX_DAMAGE";
+    public final static String CMD_ADM_SET_CFG_MOVE_COST = "CMD_ADM_SET_CFG_MOVE_COST";
+    public final static String CMD_ADM_SET_CFG_SHOP_NOTIFICATION_TIMER = "CMD_ADM_SET_CFG_SHOP_NOTIFICATION_TIMER";
+    public final static String CMD_ADM_SET_CFG_SHOP_NOTIFICATION = "CMD_ADM_SET_CFG_SHOP_NOTIFICATION";
+    public final static String CMD_ADM_SET_CFG_CHAT_MAX_LINES = "CMD_ADM_SET_CFG_CHAT_MAX_LINES";
+    public final static String CMD_ADM_SET_CFG_LOG_TRANSACTIONS = "CMD_ADM_SET_CFG_LOG_TRANSACTIONS";
     
     // Objects
     private PluginDescriptionFile pdf;

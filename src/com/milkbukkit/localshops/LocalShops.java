@@ -59,7 +59,7 @@ public class LocalShops extends JavaPlugin {
     public void onEnable() {
         setPlayerData(Collections.synchronizedMap(new HashMap<String, PlayerData>()));
         resManager = new ResourceManager(getDescription(), new Locale("pirate"));
-        log.info(resManager.getString(ResourceManager.USING_LOCALE, new String[] { "%LOCALE%" }, new String[] { resManager.getLocale().toString() } ));
+        log.info(resManager.getString(ResourceManager.MAIN_USING_LOCALE, new String[] { "%LOCALE%" }, new String[] { resManager.getLocale().toString() } ));
 
         // add all the online users to the data trees
         for (Player player : this.getServer().getOnlinePlayers()) {
@@ -98,8 +98,8 @@ public class LocalShops extends JavaPlugin {
         getShopManager().loadShops(shopsDir);
             
         // update the console that we've started
-        log.info(resManager.getString(ResourceManager.LOAD, new String[] { "%NUM_SHOPS%" }, new Object[] { getShopManager().getNumShops() }));
-        log.info(resManager.getString(ResourceManager.ENABLE, new String[] { "%UUID%" }, new Object[] { Config.getSrvUuid().toString() }));
+        log.info(resManager.getString(ResourceManager.MAIN_LOAD, new String[] { "%NUM_SHOPS%" }, new Object[] { getShopManager().getNumShops() }));
+        log.info(resManager.getString(ResourceManager.MAIN_ENABLE, new String[] { "%UUID%" }, new Object[] { Config.getSrvUuid().toString() }));
 
         // check which shops players are inside
         for (Player player : this.getServer().getOnlinePlayers()) {
@@ -123,14 +123,14 @@ public class LocalShops extends JavaPlugin {
         setEconManager(new EconomyManager(this));
         if(!getEconManager().loadEconomies()) {
             // No valid economies, display error message and disables
-            log.warning(resManager.getString(ResourceManager.ECONOMY_NOT_FOUND, new String[] { }, new Object[] { }));
+            log.warning(resManager.getString(ResourceManager.MAIN_ECONOMY_NOT_FOUND, new String[] { }, new Object[] { }));
             getPluginLoader().disablePlugin(this);
         }
         
         setPermManager(new PermissionManager(this));
         if(!getPermManager().load()) {
             // no valid permissions, display error message and disables
-            log.warning(resManager.getString(ResourceManager.PERMISSION_NOT_FOUND, new String[] { }, new Object[] { }));
+            log.warning(resManager.getString(ResourceManager.MAIN_PERMISSION_NOT_FOUND, new String[] { }, new Object[] { }));
             getPluginLoader().disablePlugin(this);
         }
     }
@@ -152,7 +152,7 @@ public class LocalShops extends JavaPlugin {
         threadManager.notificationStop();
         
         // update the console that we've stopped
-        log.warning(resManager.getString(ResourceManager.DISABLE, new String[] { }, new Object[] { }));
+        log.warning(resManager.getString(ResourceManager.MAIN_DISABLE, new String[] { }, new Object[] { }));
     }
 
     public void setShopData(ShopManager shopData) {
