@@ -183,7 +183,7 @@ public class CommandShopFind extends Command {
                 }
 
                 String buyPrice;
-                if (item.getSellPrice() <= 0 || item.getSellSize() <= 0 || (item.getStock() > item.getMaxStock() && !shop.isUnlimitedStock() )) {
+                if (item.getSellPrice() <= 0 || item.getSellSize() <= 0 || (item.getStock() > 0 && item.getStock() > item.getMaxStock() && !shop.isUnlimitedStock() )) {
                     buyPrice = "--";
                 } else {
                     buyPrice = String.format("%.2f", (item.getSellPrice() / item.getSellSize()));
