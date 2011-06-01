@@ -14,6 +14,7 @@ public class StringLabel extends ListResourceBundle {
 
     static final Object[][] contents = {
             { ResourceManager.LOAD, "[%PLUGIN_NAME%] Loaded with %NUM_SHOPS% shop(s)" },
+            { ResourceManager.USING_LOCALE, "[%PLUGIN_NAME%] Using language: %LOCALE%" },
             { ResourceManager.ENABLE, "[%PLUGIN_NAME%] Version %PLUGIN_VERSION% is enabled: %UUID%" },
             { ResourceManager.DISABLE, "[%PLUGIN_NAME%] Version %PLUGIN_VERSION% is disabled." },
             { ResourceManager.ECONOMY_NOT_FOUND, "[%PLUGIN_NAME%] FATAL: No economic plugins found, please refer to the documentation." },

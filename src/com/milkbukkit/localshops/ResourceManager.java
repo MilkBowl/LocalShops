@@ -13,6 +13,7 @@ import com.milkbukkit.localshops.util.GenericFunctions;
 public class ResourceManager {
     // Constants
     public final static String LOAD = "LOAD";
+    public final static String USING_LOCALE = "USING_LOCALE";
     public final static String ENABLE = "ENABLE";
     public final static String DISABLE = "DISABLE";
     public final static String ECONOMY_NOT_FOUND = "ECONOMY_NOT_FOUND";
@@ -72,6 +73,11 @@ public class ResourceManager {
         } else {
             bundle = ResourceBundle.getBundle("com.milkbukkit.localshops.resources.StringLabel", l);
         }
+    }
+    
+    // Get locale
+    public Locale getLocale() {
+        return bundle.getLocale();
     }
     
     // Get String

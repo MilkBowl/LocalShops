@@ -59,6 +59,7 @@ public class LocalShops extends JavaPlugin {
     public void onEnable() {
         setPlayerData(Collections.synchronizedMap(new HashMap<String, PlayerData>()));
         resManager = new ResourceManager(getDescription(), new Locale("pirate"));
+        log.info(resManager.getString(ResourceManager.USING_LOCALE, new String[] { "%LOCALE%" }, new String[] { resManager.getLocale().toString() } ));
 
         // add all the online users to the data trees
         for (Player player : this.getServer().getOnlinePlayers()) {
