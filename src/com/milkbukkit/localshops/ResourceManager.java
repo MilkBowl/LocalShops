@@ -17,10 +17,32 @@ public class ResourceManager {
     public final static String DISABLE = "DISABLE";
     public final static String ECONOMY_NOT_FOUND = "ECONOMY_NOT_FOUND";
     public final static String PERMISSION_NOT_FOUND = "PERMISSION_NOT_FOUND";
+    public final static String COMMAND_ISSUED_LOCAL = "COMMAND_ISSUED_LOCAL";
+    public final static String COMMAND_ISSUED_GLOBAL = "COMMAND_ISSUED_GLOBAL";
+    public final static String USER_ACCESS_DENIED = "ACCESS_DENIED";
+    public final static String ADMIN_CFG_CHARGE_FOR_SHOP = "ADMIN_CFG_CHARGE_FOR_SHOP";
+    public final static String ADMIN_CFG_GLOBAL_SHOP = "ADMIN_CFG_GLOBAL_SHOP";
+    public final static String ADMIN_CFG_SHOP_WIDTH = "ADMIN_CFG_SHOP_WIDTH";
+    public final static String ADMIN_CFG_REPORT_STATS = "ADMIN_CFG_REPORT_STATS";
+    public final static String ADMIN_CFG_MAX_HEIGHT = "ADMIN_CFG_MAX_HEIGHT";
+    public final static String ADMIN_CFG_MAX_WIDTH = "ADMIN_CFG_MAX_WIDTH";
+    public final static String ADMIN_CFG_SHOPS_TRANS_MAX_SIZE = "ADMIN_CFG_SHOPS_TRANS_MAX_SIZE";
+    public final static String ADMIN_CFG_SHOPS_COST = "ADMIN_CFG_SHOPS_COST";
+    public final static String ADMIN_CFG_FIND_MAX_DISTANCE = "ADMIN_CFG_FIND_MAX_DISTANCE";
+    public final static String ADMIN_CFG_SHOPS_PER_PLAYER = "ADMIN_CFG_SHOPS_PER_PLAYER";
+    public final static String ADMIN_CFG_SHOP_HEIGHT = "ADMIN_CFG_SHOP_HEIGHT";
+    public final static String ADMIN_CFG_DEBUG = "ADMIN_CFG_DEBUG";
+    public final static String ADMIN_CFG_MAX_DAMAGE = "ADMIN_CFG_MAX_DAMAGE";
+    public final static String ADMIN_CFG_MOVE_COST = "ADMIN_CFG_MOVE_COST";
+    public final static String ADMIN_CFG_SHOP_NOTIFICATION_TIMER = "ADMIN_CFG_SHOP_NOTIFICATION_TIMER";
+    public final static String ADMIN_CFG_SHOP_NOTIFICATION = "ADMIN_CFG_SHOP_NOTIFICATION";
+    public final static String ADMIN_CFG_CHAT_MAX_LINES = "ADMIN_CFG_CHAT_MAX_LINES";
+    public final static String ADMIN_CFG_LOG_TRANSACTIONS = "ADMIN_CFG_LOG_TRANSACTIONS";
+    public final static String INVALID_VALUE = "INVALID_VALUE";
     
     // Objects
     private PluginDescriptionFile pdf;
-    private ResourceBundle RES_BUNDLE;
+    private ResourceBundle bundle;
     
     // Color Map
     private static final Map<String, ChatColor> COLOR_MAP = new HashMap<String, ChatColor>();
@@ -46,15 +68,15 @@ public class ResourceManager {
     public ResourceManager(PluginDescriptionFile p, Locale l) {
         pdf = p;
         if(l == null) {
-            ResourceBundle.getBundle("com.milkbukkit.localshops.resources.StringLabel");
+            bundle = ResourceBundle.getBundle("com.milkbukkit.localshops.resources.StringLabel");
         } else {
-            ResourceBundle.getBundle("com.milkbukkit.localshops.resources.StringLabel", l);
+            bundle = ResourceBundle.getBundle("com.milkbukkit.localshops.resources.StringLabel", l);
         }
     }
     
     // Get String
     public String getString(String key) {
-        return parsePluginData(parseColors(RES_BUNDLE.getString(key)));
+        return parsePluginData(parseColors(bundle.getString(key))).replaceAll("%CHAT_PREFIX%", LocalShops.CHAT_PREFIX);
     }
     
     // Get String w/ Data Values (replace key array and replace value array MUST match lengths!

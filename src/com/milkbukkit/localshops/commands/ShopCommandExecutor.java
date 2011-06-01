@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.milkbukkit.localshops.LocalShops;
+import com.milkbukkit.localshops.ResourceManager;
 import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class ShopCommandExecutor implements CommandExecutor {
@@ -106,7 +107,11 @@ public class ShopCommandExecutor implements CommandExecutor {
                     }
                 }
 
-                log.info(String.format("[%s] %s issued %s command: %s", plugin.getDescription().getName(), user, global ? "global" : "local", cmd.getCommand()));
+                if(global) {
+                    log.info(plugin.getResourceManager().getString(ResourceManager.COMMAND_ISSUED_GLOBAL, new String[] { "%NAME%", "%COMMAND%" }, new Object[] { user, cmdString } ));
+                } else {
+                    log.info(plugin.getResourceManager().getString(ResourceManager.COMMAND_ISSUED_LOCAL, new String[] { "%NAME%", "%COMMAND%" }, new Object[] { user, cmdString } ));
+                }
 
                 return cVal;
             } else {

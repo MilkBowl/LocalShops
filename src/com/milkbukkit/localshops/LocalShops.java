@@ -64,7 +64,7 @@ public class LocalShops extends JavaPlugin {
         for (Player player : this.getServer().getOnlinePlayers()) {
             getPlayerData().put(player.getName(), new PlayerData(this, player.getName()));
         }
-
+        
         // Register our events
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Monitor, this);
@@ -200,5 +200,9 @@ public class LocalShops extends JavaPlugin {
 
     public DynamicManager getDynamicManager() {
         return dynamicManager;
+    }
+    
+    public ResourceManager getResourceManager() {
+        return resManager;
     }
 }

@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 
 import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.LocalShops;
+import com.milkbukkit.localshops.ResourceManager;
 
 public class CommandAdminSet extends Command {
 
@@ -23,11 +24,9 @@ public class CommandAdminSet extends Command {
     public boolean process() {
         // Check Permissions
         if (!canUseCommand(CommandTypes.ADMIN)) {
-            sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You don't have permission to use this command");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.USER_ACCESS_DENIED));
             return true;
         }
-
-        log.info(String.format("[%s] Command issued: %s", plugin.getDescription().getName(), command));
 
         // Parse Arguments
 
@@ -36,7 +35,7 @@ public class CommandAdminSet extends Command {
         Matcher matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(ChatColor.BLUE + "charge-for-shop:" + ChatColor.WHITE + " [true/false] Charge for shop creation toggle.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.ADMIN_CFG_CHARGE_FOR_SHOP));
             sender.sendMessage(key + "=" + Config.getShopChargeCreate());
             return true;
         }
@@ -53,7 +52,7 @@ public class CommandAdminSet extends Command {
                 Config.setShopChargeCreate(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage("Invalid value");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.INVALID_VALUE));
             }
             return true;
         }
@@ -64,7 +63,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(ChatColor.BLUE + "global-shop:" + ChatColor.WHITE + " [true/false] Global Shop toggle.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.ADMIN_CFG_GLOBAL_SHOP));
             sender.sendMessage(key + "=" + Config.getGlobalShopsEnabled());
             return true;
         }
@@ -81,7 +80,7 @@ public class CommandAdminSet extends Command {
                 Config.setGlobalShopsEnabled(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage("Invalid value");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.INVALID_VALUE));
             }
             return true;
         }
@@ -92,7 +91,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(ChatColor.BLUE + "shop-width:" + ChatColor.WHITE + " [number] Default shop width.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.ADMIN_CFG_SHOP_WIDTH));
             sender.sendMessage(key + "=" + Config.getShopSizeDefWidth());
             return true;
         }
@@ -109,7 +108,7 @@ public class CommandAdminSet extends Command {
                 Config.setShopSizeDefWidth(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage("Invalid value");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.INVALID_VALUE));
             }
             return true;
         }
@@ -120,7 +119,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(ChatColor.BLUE + "report-stats:" + ChatColor.WHITE + " [number] Allows anonymous usage statistics.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.ADMIN_CFG_REPORT_STATS));
             sender.sendMessage(key + "=" + Config.getSrvReport());
             return true;
         }
@@ -137,7 +136,7 @@ public class CommandAdminSet extends Command {
                 Config.setSrvReport(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage("Invalid value");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.INVALID_VALUE));
             }
             return true;
         }
@@ -148,7 +147,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(ChatColor.BLUE + "max-height:" + ChatColor.WHITE + " [number] Maximum height of a shop.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.ADMIN_CFG_MAX_HEIGHT));
             sender.sendMessage(key + "=" + Config.getShopSizeMaxHeight());
             return true;
         }
@@ -165,7 +164,7 @@ public class CommandAdminSet extends Command {
                 Config.setShopSizeMaxHeight(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage("Invalid value");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.INVALID_VALUE));
             }
             return true;
         }
@@ -176,7 +175,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(ChatColor.BLUE + "max-width:" + ChatColor.WHITE + " [number] Maximum width of a shop.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.ADMIN_CFG_MAX_WIDTH));
             sender.sendMessage(key + "=" + Config.getShopSizeMaxWidth());
             return true;
         }
@@ -193,7 +192,7 @@ public class CommandAdminSet extends Command {
                 Config.setShopSizeMaxWidth(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage("Invalid value");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.INVALID_VALUE));
             }
             return true;
         }
@@ -204,7 +203,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(ChatColor.BLUE + "shops-transaction-max-size:" + ChatColor.WHITE + " [number] Maximum transactions to store in memory used by notifications.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.ADMIN_CFG_SHOPS_TRANS_MAX_SIZE));
             sender.sendMessage(key + "=" + Config.getShopTransactionMaxSize());
             return true;
         }
@@ -221,7 +220,7 @@ public class CommandAdminSet extends Command {
                 Config.setShopTransactionMaxSize(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage("Invalid value");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.INVALID_VALUE));
             }
             return true;
         }
@@ -232,7 +231,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(ChatColor.BLUE + "shops-cost:" + ChatColor.WHITE + " [decimal] Cost of creating a shop.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.ADMIN_CFG_SHOPS_COST));
             sender.sendMessage(key + "=" + Config.getShopChargeCreateCost());
             return true;
         }
@@ -249,7 +248,7 @@ public class CommandAdminSet extends Command {
                 Config.setShopChargeCreateCost(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage("Invalid value");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.INVALID_VALUE));
             }
             return true;
         }
@@ -260,7 +259,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(ChatColor.BLUE + "find-max-distance:" + ChatColor.WHITE + " [number] Maximum distance between player and shop for /shop find command.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.ADMIN_CFG_FIND_MAX_DISTANCE));
             sender.sendMessage(key + "=" + Config.getFindMaxDistance());
             return true;
         }
@@ -277,7 +276,7 @@ public class CommandAdminSet extends Command {
                 Config.setFindMaxDistance(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage("Invalid value");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.INVALID_VALUE));
             }
             return true;
         }
@@ -288,7 +287,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(ChatColor.BLUE + "shops-per-player:" + ChatColor.WHITE + " [number] Maximum number of shops a player can own.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.ADMIN_CFG_SHOPS_PER_PLAYER));
             sender.sendMessage(key + "=" + Config.getPlayerMaxShops());
             return true;
         }
@@ -305,7 +304,7 @@ public class CommandAdminSet extends Command {
                 Config.setPlayerMaxShops(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage("Invalid value");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.INVALID_VALUE));
             }
             return true;
         }
@@ -316,7 +315,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(ChatColor.BLUE + "shop-height:" + ChatColor.WHITE + " [number] Default height of shops.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.ADMIN_CFG_SHOP_HEIGHT));
             sender.sendMessage(key + "=" + Config.getShopSizeDefHeight());
             return true;
         }
@@ -333,7 +332,7 @@ public class CommandAdminSet extends Command {
                 Config.setShopSizeDefHeight(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage("Invalid value");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.INVALID_VALUE));
             }
             return true;
         }
@@ -344,7 +343,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(ChatColor.BLUE + "debug:" + ChatColor.WHITE + " [true/false] Debugging mode, may degrade performance or be annoying.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.ADMIN_CFG_DEBUG));
             sender.sendMessage(key + "=" + Config.getSrvDebug());
             return true;
         }
@@ -361,7 +360,7 @@ public class CommandAdminSet extends Command {
                 Config.setSrvDebug(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage("Invalid value");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.INVALID_VALUE));
             }
             return true;
         }
@@ -372,7 +371,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(ChatColor.BLUE + "max-damage:" + ChatColor.WHITE + " [number] Number between 0 and 100, percent of damage an item is allowed to have, not remaining durablity.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.ADMIN_CFG_MAX_DAMAGE));
             sender.sendMessage(key + "=" + Config.getItemMaxDamage());
             return true;
         }
@@ -389,7 +388,7 @@ public class CommandAdminSet extends Command {
                 Config.setItemMaxDamage(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage("Invalid value");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.INVALID_VALUE));
             }
             return true;
         }
@@ -400,7 +399,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(ChatColor.BLUE + "move-cost:" + ChatColor.WHITE + " [decimal] Cost for moving a shop.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.ADMIN_CFG_MOVE_COST));
             sender.sendMessage(key + "=" + Config.getShopChargeMoveCost());
             return true;
         }
@@ -417,7 +416,7 @@ public class CommandAdminSet extends Command {
                 Config.setShopChargeMoveCost(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage("Invalid value");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.INVALID_VALUE));
             }
             return true;
         }
@@ -428,7 +427,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(ChatColor.BLUE + "shop-notification-timer:" + ChatColor.WHITE + " [number] Interval between transaction notifications.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.ADMIN_CFG_SHOP_NOTIFICATION_TIMER));
             sender.sendMessage(key + "=" + Config.getShopTransactionNoticeTimer());
             return true;
         }
@@ -445,7 +444,7 @@ public class CommandAdminSet extends Command {
                 Config.setShopTransactionNoticeTimer(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage("Invalid value");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.INVALID_VALUE));
             }
             return true;
         }
@@ -456,7 +455,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(ChatColor.BLUE + "shop-transaction-notice:" + ChatColor.WHITE + " [true/false] Notification of transactions to shop owners.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.ADMIN_CFG_SHOP_NOTIFICATION));
             sender.sendMessage(key + "=" + Config.getShopTransactionNotice());
             return true;
         }
@@ -473,7 +472,7 @@ public class CommandAdminSet extends Command {
                 Config.setShopTransactionNotice(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage("Invalid value");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.INVALID_VALUE));
             }
             return true;
         }
@@ -484,7 +483,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(ChatColor.BLUE + "chat-max-lines:" + ChatColor.WHITE + " [number] Number of lines displayed in paginated output.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.ADMIN_CFG_CHAT_MAX_LINES));
             sender.sendMessage(key + "=" + Config.getChatMaxLines());
             return true;
         }
@@ -501,7 +500,7 @@ public class CommandAdminSet extends Command {
                 Config.setChatMaxLines(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage("Invalid value");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.INVALID_VALUE));
             }
             return true;
         }
@@ -512,7 +511,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(ChatColor.BLUE + "log-transactions:" + ChatColor.WHITE + " [true/false] Transaction logging to transactions.log file.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.ADMIN_CFG_LOG_TRANSACTIONS));
             sender.sendMessage(key + "=" + Config.getSrvLogTransactions());
             return true;
         }
@@ -529,7 +528,7 @@ public class CommandAdminSet extends Command {
                 Config.setSrvLogTransactions(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage("Invalid value");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.INVALID_VALUE));
             }
             return true;
         }
