@@ -2,8 +2,6 @@ package com.milkbukkit.localshops.resources;
 
 import java.util.ListResourceBundle;
 
-import org.bukkit.ChatColor;
-
 import com.milkbukkit.localshops.ResourceManager;
 
 public class StringLabel extends ListResourceBundle {

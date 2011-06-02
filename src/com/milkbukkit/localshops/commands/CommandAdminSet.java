@@ -4,7 +4,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import com.milkbukkit.localshops.Config;

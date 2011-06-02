@@ -114,6 +114,7 @@ public class Search {
         items.add(new ItemInfo("Glowstone", new String[][] { { "glow", "stone" }, { "light", "stone" } }, 89, (short) 0, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Portal", new String[][] { {"port"} }, 90, (short) 0, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Jack-O-Lantern", new String[][] { { "jack" }, { "lante" } }, 91, (short) 0, new int[]{ 64, 64, 64 } ));
+        items.add(new ItemInfo("Trapdoor", new String[][] { { "trap", "doo" }, { "hatc" } }, 96, (short) 0, new int[]{ 1, 16, 64 } ));
         items.add(new ItemInfo("Iron Shovel", new String[][] { { "shov", "ir" }, { "spad", "ir" } }, 256, (short) 0, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Iron Pickaxe", new String[][] { { "pick", "ir" } }, 257, (short) 0, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Iron Axe", new String[][] { { "axe", "ir" } }, 258, (short) 0, new int[]{ 0, 0, 0 } ));
@@ -232,6 +233,7 @@ public class Search {
         items.add(new ItemInfo("Bed", new String[][] { { "bed" } }, 355, (short) 0, new int[]{ 1, 16, 64 } ));
         items.add(new ItemInfo("Redstone Repeater", new String[][] { { "diod" }, { "repeat" } }, 356, (short) 0, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Cookie", new String[][] { { "cooki" } }, 357, (short) 0, new int[]{ 8, 16, 64 } ));
+        items.add(new ItemInfo("Map", new String[][] { { "map" } }, 358, (short) 0, new int[]{ 1, 16, 64 } ));
         items.add(new ItemInfo("Gold Music Disc", new String[][] { { "dis", "gol" }, { "rec", "gol" } }, 2256, (short) 0, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Green Music Disc", new String[][] { { "dis", "gre" }, { "rec", "gre" } }, 2257, (short) 0, new int[]{ 64, 64, 64 } ));
     }
