@@ -407,6 +407,9 @@ public class CommandShopBuy extends Command {
         givePlayerItem(item.toStack(), amount);
         plugin.getShopManager().saveShop(shop);
 
+        //update any sign in this shop with that value.
+        shop.updateSigns(shop.getSignSet());
+        
         return true;
     }
 }

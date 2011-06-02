@@ -358,6 +358,9 @@ public class CommandShopSell extends Command {
 
         removeItemsFromInventory(player.getInventory(), item.toStack(), amount);
         plugin.getShopManager().saveShop(shop);
+        
+        //update any sign in this shop with that value.
+        shop.updateSigns(item.name);
 
         return true;
     }
