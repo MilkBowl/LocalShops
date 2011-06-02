@@ -73,7 +73,7 @@ public class CommandShopSet extends Command {
             shop = getCurrentShop(player);
 
             if (shop == null) {
-                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP));
                 return true;
             }
 
@@ -253,7 +253,7 @@ public class CommandShopSet extends Command {
 
             shop = getCurrentShop(player);
             if (shop == null) {
-                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP));
                 return true;
             }
 
@@ -431,7 +431,7 @@ public class CommandShopSet extends Command {
 
             shop = getCurrentShop(player);
             if (shop == null) {
-                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP));
                 return true;
             }
 
@@ -530,7 +530,7 @@ public class CommandShopSet extends Command {
 
             shop = getCurrentShop(player);
             if (shop == null) {
-                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP));
                 return true;
             }
 
@@ -598,7 +598,7 @@ public class CommandShopSet extends Command {
 
             shop = getCurrentShop(player);
             if (shop == null) {
-                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP));
                 return true;
             }
 
@@ -653,7 +653,7 @@ public class CommandShopSet extends Command {
 
             shop = getCurrentShop(player);
             if(shop == null) {
-                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP));
                 return true;
             }
 
@@ -689,7 +689,7 @@ public class CommandShopSet extends Command {
 
             shop = getCurrentShop(player);
             if (shop == null) {
-                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP));
                 return true;
             }
 
@@ -732,7 +732,7 @@ public class CommandShopSet extends Command {
 
             shop = getCurrentShop(player);
             if (shop == null) {
-                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP));
                 return true;
             }
 
@@ -802,7 +802,7 @@ public class CommandShopSet extends Command {
 
             shop = getCurrentShop(player);
             if(shop == null) {
-                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP));
                 return true;                
             }
 
@@ -867,7 +867,7 @@ public class CommandShopSet extends Command {
             Player player = (Player) sender;
             shop = getCurrentShop(player);
             if (shop == null) {
-                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP));
                 return false;
             }
 
