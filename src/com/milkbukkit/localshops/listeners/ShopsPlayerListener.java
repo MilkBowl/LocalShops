@@ -18,6 +18,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.PlayerData;
+import com.milkbukkit.localshops.ShopSign;
+import com.milkbukkit.localshops.commands.ShopCommandExecutor;
 import com.milkbukkit.localshops.objects.Shop;
 import com.milkbukkit.localshops.util.GenericFunctions;
 
@@ -36,6 +38,7 @@ public class ShopsPlayerListener extends PlayerListener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.isCancelled())
@@ -46,7 +49,33 @@ public class ShopsPlayerListener extends PlayerListener {
         if (!plugin.getPlayerData().containsKey(playerName)) {
             plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
         }
-
+        //If user Right clicks a sign try to buy/sell from it.
+        if ((event.getClickedBlock().getType().equals(Material.WALL_SIGN) || event.getClickedBlock().getType().equals(Material.SIGN_POST)) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            Location eventBlockLoc = event.getClickedBlock().getLocation();
+            Shop shop = plugin.getShopManager().getLocalShop(eventBlockLoc);
+            if (shop != null) {
+                for (ShopSign sign : shop.getSignSet()) {
+                    if (sign.getLoc().equals(eventBlockLoc)) {
+                        if (sign.getType().equals(ShopSign.SignType.BUY)) {
+                            ShopCommandExecutor.commandTypeMap.get("buy").getCommandInstance(plugin, "buy", event.getPlayer(), "buy " + sign.getItemName(), false).process();
+                            //TODO: Remove when bukkit fixes inventory updating
+                            try {
+                            
+                                player.updateInventory();
+                            } catch (Exception e) {}
+                            return;
+                        } else if (sign.getType().equals(ShopSign.SignType.SELL)) {
+                            ShopCommandExecutor.commandTypeMap.get("sell").getCommandInstance(plugin, "sell", event.getPlayer(), "sell " + sign.getItemName(), false).process();
+                            player.updateInventory();
+                            return;
+                        } else {
+                            //Stop the loop if it's not a Buy/Sell Sign - only 1 possible sign location match
+                            break;
+                        }
+                    }
+                }
+            }
+        }
         // If our user is select & is not holding an item, selection time
         if (plugin.getPlayerData().get(playerName).isSelecting() && player.getItemInHand().getType() == Material.AIR) {
             int x, y, z;

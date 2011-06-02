@@ -17,7 +17,7 @@ public class ShopCommandExecutor implements CommandExecutor {
 
     private final LocalShops plugin;
     private final Logger log = Logger.getLogger("Minecraft");
-    private static Map<String, CommandTypeInfo> commandTypeMap = new HashMap<String, CommandTypeInfo>();
+    public static Map<String, CommandTypeInfo> commandTypeMap = new HashMap<String, CommandTypeInfo>();
     static {
         commandTypeMap.put("admin", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandAdminSet.class, false, false, false));
         commandTypeMap.put("add", new CommandTypeInfo(com.milkbukkit.localshops.commands.CommandShopAdd.class, true, true, false));
