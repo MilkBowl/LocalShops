@@ -12,55 +12,55 @@ import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class ResourceManager {
     // Constants
-    public final static String MAIN_LOAD = "MAIN_LOAD";
-    public final static String MAIN_USING_LOCALE = "MAIN_USING_LOCALE";
-    public final static String MAIN_ENABLE = "MAIN_ENABLE";
-    public final static String MAIN_DISABLE = "MAIN_DISABLE";
-    public final static String MAIN_ECONOMY_NOT_FOUND = "MAIN_ECONOMY_NOT_FOUND";
-    public final static String MAIN_PERMISSION_NOT_FOUND = "MAIN_PERMISSION_NOT_FOUND";
+    public final static String MAIN_LOAD = "Main.Load";
+    public final static String MAIN_USING_LOCALE = "Main.UsingLocale";
+    public final static String MAIN_ENABLE = "Main.Enable";
+    public final static String MAIN_DISABLE = "Main.Disable";
+    public final static String MAIN_ECONOMY_NOT_FOUND = "Main.EconomyNotFound";
+    public final static String MAIN_PERMISSION_NOT_FOUND = "Main.PermissionNotFound";
     
-    public final static String GEN_INVALID_VALUE = "GEN_INVALID_VALUE";
-    public final static String GEN_USER_ACCESS_DENIED = "GEN_USER_ACCESS_DENIED";
-    public final static String GEN_NOT_IN_SHOP = "GEN_NOT_IN_SHOP";
-    public final static String GEN_MUST_BE_SHOP_OWNER = "GEN_MUST_BE_SHOP_OWNER";
-    public final static String GEN_CURR_OWNER_IS = "GEN_CURR_OWNER_IS";
-    public final static String GEN_ITEM_NOT_FOUND = "GEN_ITEM_NOT_FOUND";
-    public final static String GEN_CONSOLE_NOT_IMPLEMENTED = "GEN_CONSOLE_NOT_IMPLEMENTED";
+    public final static String GEN_INVALID_VALUE = "Generic.InvalidValue";
+    public final static String GEN_USER_ACCESS_DENIED = "Generic.UserAccessDenied";
+    public final static String GEN_NOT_IN_SHOP = "Generic.UserNotInShop";
+    public final static String GEN_MUST_BE_SHOP_OWNER = "Generic.UserMustBeShopOwner";
+    public final static String GEN_CURR_OWNER_IS = "Generic.CurrentOwnerIs";
+    public final static String GEN_ITEM_NOT_FOUND = "Generic.ItemNotFound";
+    public final static String GEN_CONSOLE_NOT_IMPLEMENTED = "Generic.ConsoleNotImplemented";
     
-    public final static String CMD_ISSUED_LOCAL = "CMD_ISSUED_LOCAL";
-    public final static String CMD_ISSUED_GLOBAL = "CMD_ISSUED_GLOBAL";
+    public final static String CMD_ISSUED_LOCAL = "Command.IssuedLocal";
+    public final static String CMD_ISSUED_GLOBAL = "Command.IssuedGlobal";
     
-    public final static String CMD_ADM_SET_CFG_CHARGE_FOR_SHOP = "CMD_ADM_SET_CFG_CHARGE_FOR_SHOP";
-    public final static String CMD_ADM_SET_CFG_GLOBAL_SHOP = "CMD_ADM_SET_CFG_GLOBAL_SHOP";
-    public final static String CMD_ADM_SET_CFG_SHOP_WIDTH = "CMD_ADM_SET_CFG_SHOP_WIDTH";
-    public final static String CMD_ADM_SET_CFG_REPORT_STATS = "CMD_ADM_SET_CFG_REPORT_STATS";
-    public final static String CMD_ADM_SET_CFG_MAX_HEIGHT = "CMD_ADM_SET_CFG_MAX_HEIGHT";
-    public final static String CMD_ADM_SET_CFG_MAX_WIDTH = "CMD_ADM_SET_CFG_MAX_WIDTH";
-    public final static String CMD_ADM_SET_CFG_SHOPS_TRANS_MAX_SIZE = "CMD_ADM_SET_CFG_SHOPS_TRANS_MAX_SIZE";
-    public final static String CMD_ADM_SET_CFG_SHOPS_COST = "CMD_ADM_SET_CFG_SHOPS_COST";
-    public final static String CMD_ADM_SET_CFG_FIND_MAX_DISTANCE = "CMD_ADM_SET_CFG_FIND_MAX_DISTANCE";
-    public final static String CMD_ADM_SET_CFG_SHOPS_PER_PLAYER = "CMD_ADM_SET_CFG_SHOPS_PER_PLAYER";
-    public final static String CMD_ADM_SET_CFG_SHOP_HEIGHT = "CMD_ADM_SET_CFG_SHOP_HEIGHT";
-    public final static String CMD_ADM_SET_CFG_DEBUG = "CMD_ADM_SET_CFG_DEBUG";
-    public final static String CMD_ADM_SET_CFG_MAX_DAMAGE = "CMD_ADM_SET_CFG_MAX_DAMAGE";
-    public final static String CMD_ADM_SET_CFG_MOVE_COST = "CMD_ADM_SET_CFG_MOVE_COST";
-    public final static String CMD_ADM_SET_CFG_SHOP_NOTIFICATION_TIMER = "CMD_ADM_SET_CFG_SHOP_NOTIFICATION_TIMER";
-    public final static String CMD_ADM_SET_CFG_SHOP_NOTIFICATION = "CMD_ADM_SET_CFG_SHOP_NOTIFICATION";
-    public final static String CMD_ADM_SET_CFG_CHAT_MAX_LINES = "CMD_ADM_SET_CFG_CHAT_MAX_LINES";
-    public final static String CMD_ADM_SET_CFG_LOG_TRANSACTIONS = "CMD_ADM_SET_CFG_LOG_TRANSACTIONS";
+    public final static String CMD_ADM_SET_CFG_CHARGE_FOR_SHOP = "Command.Admin.SetConfig.ChargeForShop";
+    public final static String CMD_ADM_SET_CFG_GLOBAL_SHOP = "Command.Admin.SetConfig.GlobalShop";
+    public final static String CMD_ADM_SET_CFG_SHOP_WIDTH = "Command.Admin.SetConfig.ShopWidth";
+    public final static String CMD_ADM_SET_CFG_REPORT_STATS = "Command.Admin.SetConfig.ReportStats";
+    public final static String CMD_ADM_SET_CFG_MAX_HEIGHT = "Command.Admin.SetConfig.MaxHeight";
+    public final static String CMD_ADM_SET_CFG_MAX_WIDTH = "Command.Admin.SetConfig.MaxWidth";
+    public final static String CMD_ADM_SET_CFG_SHOPS_TRANS_MAX_SIZE = "Command.Admin.SetConfig.ShopsTransactionsMaxSize";
+    public final static String CMD_ADM_SET_CFG_SHOPS_COST = "Command.Admin.SetConfig.ShopsCost";
+    public final static String CMD_ADM_SET_CFG_FIND_MAX_DISTANCE = "Command.Admin.SetConfig.FindMaxDistance";
+    public final static String CMD_ADM_SET_CFG_SHOPS_PER_PLAYER = "Command.Admin.SetConfig.ShopsPerPlayer";
+    public final static String CMD_ADM_SET_CFG_SHOP_HEIGHT = "Command.Admin.SetConfig.ShopHeight";
+    public final static String CMD_ADM_SET_CFG_DEBUG = "Command.Admin.SetConfig.Debug";
+    public final static String CMD_ADM_SET_CFG_MAX_DAMAGE = "Command.Admin.SetConfig.MaxDamage";
+    public final static String CMD_ADM_SET_CFG_MOVE_COST = "Command.Admin.SetConfig.MoveCost";
+    public final static String CMD_ADM_SET_CFG_SHOP_NOTIFICATION_TIMER = "Command.Admin.SetConfig.ShopNotificationTimer";
+    public final static String CMD_ADM_SET_CFG_SHOP_NOTIFICATION = "Command.Admin.SetConfig.ShopNotification";
+    public final static String CMD_ADM_SET_CFG_CHAT_MAX_LINES = "Command.Admin.SetConfig.ChatMaxLines";
+    public final static String CMD_ADM_SET_CFG_LOG_TRANSACTIONS = "Command.Admin.SetConfig.LogTransactions";
     
-    public final static String CMD_SHP_ADD_TOO_DAM = "CMD_SHP_ADD_TOO_DAM";
-    public final static String CMD_SHP_ADD_DMG_LESS_THAN = "CMD_SHP_ADD_DMG_LESS_THAN";
-    public final static String CMD_SHP_ADD_USAGE = "CMD_SHP_ADD_USAGE";
-    public final static String CMD_SHP_ADD_LOG = "CMD_SHP_LOG";
-    public final static String CMD_SHP_ADD_INSUFFICIENT_INV = "CMD_SHP_ADD_INSUFFICIENT_INV";
-    public final static String CMD_SHP_ADD_UNLIM_STOCK = "CMD_SHP_ADD_UNLIM_STOCK";
-    public final static String CMD_SHP_ADD_ALREADY_HAS = "CMD_SHP_ADD_ALREADY_HAS";
-    public final static String CMD_SHP_ADD_SUCCESS = "CMD_SHP_ADD_SUCCESS";
-    public final static String CMD_SHP_ADD_STOCK_SUCCESS = "CMD_SHP_ADD_STOCK_SUCCESS";
-    public final static String CMD_SHP_ADD_READY0 = "CMD_SHP_ADD_READY0";
-    public final static String CMD_SHP_ADD_READY1 = "CMD_SHP_ADD_READY1";
-    public final static String CMD_SHP_ADD_READY2 = "CMD_SHP_ADD_READY2";
+    public final static String CMD_SHP_ADD_TOO_DAM = "Command.Shop.Add.TooDamaged";
+    public final static String CMD_SHP_ADD_DMG_LESS_THAN = "Command.Shop.Add.DamageLessThan";
+    public final static String CMD_SHP_ADD_USAGE = "Command.Shop.Add.Usage";
+    public final static String CMD_SHP_ADD_LOG = "Command.Shop.Add.Log";
+    public final static String CMD_SHP_ADD_INSUFFICIENT_INV = "Command.Shop.Add.InsufficientInventory";
+    public final static String CMD_SHP_ADD_UNLIM_STOCK = "Command.Shop.Add.UnlimitedStock";
+    public final static String CMD_SHP_ADD_ALREADY_HAS = "Command.Shop.Add.AlreadyHas";
+    public final static String CMD_SHP_ADD_SUCCESS = "Command.Shop.Add.Success";
+    public final static String CMD_SHP_ADD_STOCK_SUCCESS = "Command.Shop.Add.SuccessWithStock";
+    public final static String CMD_SHP_ADD_READY0 = "Command.Shop.Add.Ready0";
+    public final static String CMD_SHP_ADD_READY1 = "Command.Shop.Add.Ready1";
+    public final static String CMD_SHP_ADD_READY2 = "Command.Shop.Add.Ready2";
     
     // Objects
     private PluginDescriptionFile pdf;
@@ -90,9 +90,9 @@ public class ResourceManager {
     public ResourceManager(PluginDescriptionFile p, Locale l) {
         pdf = p;
         if(l == null) {
-            bundle = ResourceBundle.getBundle("com.milkbukkit.localshops.resources.StringLabel");
+            bundle = ResourceBundle.getBundle("props/Messages");
         } else {
-            bundle = ResourceBundle.getBundle("com.milkbukkit.localshops.resources.StringLabel", l);
+            bundle = ResourceBundle.getBundle("props/Messages", l);
         }
     }
     

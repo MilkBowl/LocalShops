@@ -37,7 +37,7 @@ public class CommandShopBrowse extends Command {
             
             shop = getCurrentShop(player);
             if (shop == null || (isGlobal && !Config.getGlobalShopsEnabled())) {
-                sender.sendMessage("plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP)");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP));
                 return true;
             }
 

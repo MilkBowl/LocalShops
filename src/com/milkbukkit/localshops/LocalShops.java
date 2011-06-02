@@ -152,7 +152,7 @@ public class LocalShops extends JavaPlugin {
         threadManager.notificationStop();
         
         // update the console that we've stopped
-        log.warning(resManager.getString(ResourceManager.MAIN_DISABLE, new String[] { }, new Object[] { }));
+        log.info(resManager.getString(ResourceManager.MAIN_DISABLE, new String[] { }, new Object[] { }));
     }
 
     public void setShopData(ShopManager shopData) {
