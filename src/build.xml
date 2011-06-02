@@ -22,12 +22,15 @@
     <target name="compile" description="Compilation target">
     	<echo>Compiling</echo>
         <javac srcdir="." destdir="bin" debug="on" debuglevel="lines,vars,source" classpathref="classpath" />
-    	<copyfile dest="bin/plugin.yml" src="plugin.yml"/>
+    	<copy file="plugin.yml" tofile="bin/plugin.yml" />
+    	<copy todir="bin/props">
+    		<fileset dir="props" />
+    	</copy>
     </target>
   
   <target name="compress" description="Compression target">
   		<echo>Compressing</echo>
-        <jar jarfile="LocalShops.jar" basedir="bin" includes="com/**/*, plugin.yml" />
+        <jar jarfile="LocalShops.jar" basedir="bin" includes="com/**/*, plugin.yml, props/*" />
     	<delete dir="bin" />
   </target>
 </project>
