@@ -159,4 +159,17 @@ public class InventoryItem {
         this.baseStock = baseStock;
     }
     
+    public boolean equals(Object o) {
+        if(o instanceof InventoryItem) {
+            InventoryItem item = (InventoryItem) o;
+            if(item.info == info) {
+                return true;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+    
 }
