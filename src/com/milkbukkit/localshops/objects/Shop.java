@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 
 import com.milkbukkit.localshops.Config;
@@ -348,13 +349,14 @@ public abstract class Shop implements Comparator<Shop> {
     public void updateSign(ShopSign sign) {
         String[] signLines = generateSignLines(sign);
       
+        BlockState signState = sign.getLoc().getBlock().getState();
         //Set the lines
-        ((Sign) sign.getLoc().getBlock().getState()).setLine(0, signLines[0]);
-        ((Sign) sign.getLoc().getBlock().getState()).setLine(1, signLines[1]);
-        ((Sign) sign.getLoc().getBlock().getState()).setLine(2, signLines[2]);
-        ((Sign) sign.getLoc().getBlock().getState()).setLine(3, signLines[3]);
+        ((Sign) signState).setLine(0, signLines[0]);
+        ((Sign) signState).setLine(1, signLines[1]);
+        ((Sign) signState).setLine(2, signLines[2]);
+        ((Sign) signState).setLine(3, signLines[3]);
 
-        sign.getLoc().getBlock().getState().update();
+        signState.update();
     }
 
     public void updateSign(Location loc) {
