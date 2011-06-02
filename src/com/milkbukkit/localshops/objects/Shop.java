@@ -22,6 +22,7 @@ import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.InventoryItem;
 import com.milkbukkit.localshops.ItemInfo;
 import com.milkbukkit.localshops.Search;
+import com.milkbukkit.localshops.ShopManager;
 import com.milkbukkit.localshops.ShopSign;
 import com.milkbukkit.localshops.Transaction;
 
@@ -346,17 +347,22 @@ public abstract class Shop implements Comparator<Shop> {
         return signSet;
     }
 
-    public void updateSign(ShopSign sign) {
+    public void updateSign(ShopSign sign, int delay) {
         String[] signLines = generateSignLines(sign);
-      
+        
         BlockState signState = sign.getLoc().getBlock().getState();
         //Set the lines
         ((Sign) signState).setLine(0, signLines[0]);
         ((Sign) signState).setLine(1, signLines[1]);
         ((Sign) signState).setLine(2, signLines[2]);
         ((Sign) signState).setLine(3, signLines[3]);
-
-        signState.update();
+        
+        ShopManager.plugin.scheduleUpdate(sign, 2*delay);
+        
+    }
+    
+    public void updateSign(ShopSign sign) {
+        updateSign(sign, 0);
     }
 
     public void updateSign(Location loc) {
@@ -373,15 +379,21 @@ public abstract class Shop implements Comparator<Shop> {
     }
 
     public void updateSigns(String itemName) {  
+        int index = 0;
         for (ShopSign sign : this.signSet) {
-            if (sign.getItemName().equalsIgnoreCase(itemName))
-                updateSign(sign);
+            if (sign.getItemName().equalsIgnoreCase(itemName)) {
+                updateSign(sign, index);
+                index++;
+            }
         }
     }
 
     public void updateSigns(Set<ShopSign> signSet) {
-        for (ShopSign sign : signSet) 
-            updateSign(sign);
+        int index = 0;
+        for (ShopSign sign : signSet) {
+            updateSign(sign, index);
+            index++;
+        }
     }
     
     

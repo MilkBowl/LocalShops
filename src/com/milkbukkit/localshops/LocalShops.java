@@ -206,4 +206,23 @@ public class LocalShops extends JavaPlugin {
     public ResourceManager getResourceManager() {
         return resManager;
     }
+    
+    //Workaround for Bukkits inability to update multiple Signs in the same Tick
+    public void scheduleUpdate(ShopSign sign, int delay) {
+        getServer().getScheduler().scheduleSyncDelayedTask(this, new updateSignState(sign), delay);
+    }
+    
+    public class updateSignState implements Runnable {
+        private ShopSign sign = null;
+        
+        public updateSignState(ShopSign sign) {
+            this.sign = sign;
+        }
+        
+        @Override
+        public void run() {
+           sign.getLoc().getBlock().getState().update(true);
+        }
+        
+    }
 }

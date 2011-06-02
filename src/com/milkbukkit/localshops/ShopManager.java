@@ -29,13 +29,14 @@ import com.milkbukkit.localshops.objects.ShopLocation;
 import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class ShopManager {
-    private LocalShops plugin = null;
+    public static LocalShops plugin = null;
     private Map<UUID, Shop> shops = Collections.synchronizedMap(new HashMap<UUID, Shop>());
     private Map<String, UUID> worldShops = Collections.synchronizedMap(new HashMap<String, UUID>());
 
     // Logging
     private final Logger log = Logger.getLogger("Minecraft");
 
+    @SuppressWarnings("static-access")
     public ShopManager(LocalShops plugin) {
         this.plugin = plugin;
     }
