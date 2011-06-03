@@ -26,6 +26,7 @@ public class ResourceManager {
     public final static String GEN_CURR_OWNER_IS = "Generic.CurrentOwnerIs";
     public final static String GEN_ITEM_NOT_FOUND = "Generic.ItemNotFound";
     public final static String GEN_CONSOLE_NOT_IMPLEMENTED = "Generic.ConsoleNotImplemented";
+    public final static String GEN_UNEXPECTED_MONEY_ISSUE = "Generic.UnexpectedMoneyIssue";
     
     public final static String CMD_ISSUED_LOCAL = "Command.IssuedLocal";
     public final static String CMD_ISSUED_GLOBAL = "Command.IssuedGlobal";
@@ -61,6 +62,20 @@ public class ResourceManager {
     public final static String CMD_SHP_ADD_READY0 = "Command.Shop.Add.Ready0";
     public final static String CMD_SHP_ADD_READY1 = "Command.Shop.Add.Ready1";
     public final static String CMD_SHP_ADD_READY2 = "Command.Shop.Add.Ready2";
+    
+    public final static String CMD_SHP_BUY_NO_ITEM_IN_HAND = "Command.Shop.Buy.NoItemInHand";
+    public final static String CMD_SHP_BUY_MINIMUM_ONE = "Command.Shop.Buy.MinimumOfOne";
+    public final static String CMD_SHP_BUY_USAGE = "Command.Shop.Buy.Usage";
+    public final static String CMD_SHP_BUY_PLAYERS_ONLY = "Command.Shop.Buy.PlayersOnly";
+    public final static String CMD_SHP_BUY_SHOP_NOT_SELLING = "Command.Shop.Buy.ShopNotSellingItem";
+    public final static String CMD_SHP_BUY_SHOP_SOLD_OUT = "Command.Shop.Buy.ShopSoldOutItem";
+    public final static String CMD_SHP_BUY_SHOP_HAS_QTY = "Command.Shop.Buy.ShopHasQuantity";
+    public final static String CMD_SHP_BUY_ORDER_REDUCED = "Command.Shop.Buy.OrderReduced";
+    public final static String CMD_SHP_BUY_PLAYER_INSUFFICIENT_ROOM = "Command.Shop.Buy.PlayerInsufficientRoom";
+    public final static String CMD_SHP_BUY_PLAYER_AFFORD_NONE = "Command.Shop.Buy.PlayerCanAffordNone";
+    public final static String CMD_SHP_BUY_PLAYER_AFFORD_QTY = "Command.Shop.Buy.PlayerCanAffordQuantity";
+    public final static String CMD_SHP_BUY_REMOVED_QTY = "Command.Shop.Buy.RemovedQuantity";
+    public final static String CMD_SHP_BUY_PURCHASED_QTY = "Command.Shop.Buy.PurchasedQuantity";
     
     // Objects
     private PluginDescriptionFile pdf;

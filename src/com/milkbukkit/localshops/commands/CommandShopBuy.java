@@ -71,7 +71,7 @@ public class CommandShopBuy extends Command {
             if (matcher.find()) {
                 ItemStack itemStack = player.getItemInHand();
                 if (itemStack == null) {
-                    sender.sendMessage("You must be holding an item, or specify an item.");
+                    sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_NO_ITEM_IN_HAND));
                     return true;
                 }
                 ItemInfo item = Search.itemById(itemStack.getTypeId(), itemStack.getDurability());
@@ -111,7 +111,8 @@ public class CommandShopBuy extends Command {
                     count = shop.getItem(item.name).getStock();
                 }
                 if (count < 1) {
-                    sender.sendMessage("You must buy at least one " + item.name + "!");
+                    //
+                    sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_MINIMUM_ONE, new String[] { "%ITEMNAME%" }, new Object[] { item.name } ));
                     return true;
                 }
                 return shopBuy(shop, item, count);
@@ -138,7 +139,7 @@ public class CommandShopBuy extends Command {
                     count = shop.getItem(item.name).getStock();
                 }
                 if (count < 1) {
-                    sender.sendMessage("You must buy at least one " + item.name + "!");
+                    sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_MINIMUM_ONE, new String[] { "%ITEMNAME%" }, new Object[] { item.name } ));
                     return true;
                 }
                 return shopBuy(shop, item, count);
@@ -164,7 +165,7 @@ public class CommandShopBuy extends Command {
                     count = shop.getItem(item.name).getStock();
                 }
                 if (count < 1) {
-                    sender.sendMessage("You must buy at least one " + item.name + "!");
+                    sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_MINIMUM_ONE, new String[] { "%ITEMNAME%" }, new Object[] { item.name } ));
                     return true;
                 }
                 return shopBuy(shop, item, count);
@@ -203,7 +204,7 @@ public class CommandShopBuy extends Command {
                 return true;
             }
             if (count < 1) {
-                sender.sendMessage("You must buy at least one " + item.name + "!");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_MINIMUM_ONE, new String[] { "%ITEMNAME%" }, new Object[] { item.name } ));
                 return true;
             }
             return shopBuy(shop, item, count);
@@ -238,7 +239,7 @@ public class CommandShopBuy extends Command {
                 return true;
             }
             if (count < 1) {
-                sender.sendMessage("You must buy at least one " + item.name + "!");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_MINIMUM_ONE, new String[] { "%ITEMNAME%" }, new Object[] { item.name } ));
                 return true;
             }
             return shopBuy(shop, item, count);
@@ -257,7 +258,7 @@ public class CommandShopBuy extends Command {
                 return true;
             }
             if (count < 1) {
-                sender.sendMessage("You must buy at least one " + item.name + "!");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_MINIMUM_ONE, new String[] { "%ITEMNAME%" }, new Object[] { item.name } ));
                 return true;
             }
             return shopBuy(shop, item, count);
@@ -278,13 +279,13 @@ public class CommandShopBuy extends Command {
         }
 
         // Show sell help
-        sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " buy [itemname] [number] " + ChatColor.DARK_AQUA + "- Buy an item.");
+        sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_USAGE, new String[] { "%COMMANDLABEL%" }, new Object[] { commandLabel }));
         return true;
     }
 
     private boolean shopBuy(Shop shop, ItemInfo item, int amount) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("/shop sell can only be used for players!");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_PLAYERS_ONLY));
             return false;
         }
 
@@ -294,16 +295,16 @@ public class CommandShopBuy extends Command {
 
         // check if the shop is buying that item
         if (invItem == null || invItem.getBuyPrice() == 0) {
-            player.sendMessage(ChatColor.DARK_AQUA + "Sorry, " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is not selling " + ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " right now.");
+            player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_SHOP_NOT_SELLING, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.name }));
             return false;
         } else if (invItem.getStock() == 0 && !shop.isUnlimitedStock()) {
-            player.sendMessage(ChatColor.DARK_AQUA + "Sorry, " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is sold out of " + ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " right now.");
+            player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_SHOP_SOLD_OUT, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.name }));
             return false;
         }
 
         // check if the item has a price, or if this is a shop owner
         if (invItem.getBuyPrice() == 0 && !isShopController(shop)) {
-            player.sendMessage(ChatColor.DARK_AQUA + "Sorry, " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is not selling " + ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " right now.");
+            player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_SHOP_NOT_SELLING, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.name }));
             return false;
         }
 
@@ -316,7 +317,7 @@ public class CommandShopBuy extends Command {
         totalAmount = invItem.getStock();
 
         if (totalAmount == 0 && !shop.isUnlimitedStock()) {
-            player.sendMessage(ChatColor.DARK_AQUA + "The shop has " + ChatColor.WHITE + totalAmount + " " + item.name);
+            player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_SHOP_HAS_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { totalAmount, item.name }));
             return true;
         }
 
@@ -330,11 +331,11 @@ public class CommandShopBuy extends Command {
         if (amount > totalAmount) {
             amount = totalAmount - (totalAmount % invItem.getBuySize());
             if (!shop.isUnlimitedStock()) {
-                player.sendMessage(ChatColor.DARK_AQUA + "The shop has " + ChatColor.WHITE + totalAmount + " " + item.name);
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_SHOP_HAS_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { totalAmount, item.name }));
             }
         } else if (amount % invItem.getBuySize() != 0) {
             amount = amount - (amount % invItem.getBuySize());
-            player.sendMessage(ChatColor.DARK_AQUA + "The bundle size is  " + ChatColor.WHITE + invItem.getBuySize() + ChatColor.DARK_AQUA + " order reduced to " + ChatColor.WHITE + amount);
+            player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_SHOP_HAS_QTY, new String[] { "%BUNDLESIZE%", "%AMOUNT%" }, new Object[] { invItem.getBuySize(), amount }));
         }
 
         // check how many items the user has room for
@@ -352,7 +353,7 @@ public class CommandShopBuy extends Command {
         // Calculate the amount the player can store
         if (amount > freeSpots) {
             amount = freeSpots - (freeSpots % invItem.getBuySize());
-            player.sendMessage(ChatColor.DARK_AQUA + "You only have room for " + ChatColor.WHITE + amount);
+            player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_SHOP_HAS_QTY, new String[] { "%AMOUNT%" }, new Object[] { amount }));
         }
 
         // calculate cost
@@ -373,14 +374,14 @@ public class CommandShopBuy extends Command {
                 amount = bundlesCanAford * invItem.getSellSize();
                 
                 if(bundlesCanAford == 0) {
-                    player.sendMessage(ChatColor.DARK_AQUA + "You cannot afford any of " + ChatColor.WHITE + item.name);
+                    player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_PLAYER_AFFORD_NONE, new String[] { "%ITEMNAME%" }, new Object[] { item.name }));
                     return true;
                 } else {
-                    player.sendMessage(ChatColor.DARK_AQUA + "You could only afford " + ChatColor.WHITE + amount + ChatColor.DARK_AQUA + " of " + ChatColor.WHITE + item.name);
+                    player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_PLAYER_AFFORD_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { bundlesCanAford, item.name }));
                 }
 
                 if (!pData.payPlayer(player.getName(), shop.getOwner(), totalCost)) {
-                    player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "Unexpected money problem: could not complete sale.");
+                    player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_UNEXPECTED_MONEY_ISSUE));
                     return true;
                 }
             }
@@ -390,9 +391,9 @@ public class CommandShopBuy extends Command {
             shop.removeStock(item.name, amount);
         }
         if (isShopController(shop)) {
-            player.sendMessage(ChatColor.DARK_AQUA + "You removed " + ChatColor.WHITE + amount + " " + item.name + ChatColor.DARK_AQUA + " from the shop");
+            player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_REMOVED_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { amount, item.name }));
         } else {
-            player.sendMessage(ChatColor.DARK_AQUA + "You purchased " + ChatColor.WHITE + amount + " " + item.name + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + plugin.getEconManager().format(totalCost));
+            player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_PURCHASED_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%", "%COST%" }, new Object[] { amount, item.name, plugin.getEconManager().format(totalCost) }));
         }
 
         // log the transaction
