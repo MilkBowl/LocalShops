@@ -12,6 +12,11 @@ import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class ResourceManager {
     // Constants
+    public final static String BASE_SHOP = "Base.Shop";
+    public final static String BASE_CHAT_PREFIX = "Base.ChatPrefix";
+    public final static String BASE_TRUE = "Base.True";
+    public final static String BASE_FALSE = "Base.False";
+    
     public final static String MAIN_LOAD = "Main.Load";
     public final static String MAIN_USING_LOCALE = "Main.UsingLocale";
     public final static String MAIN_ENABLE = "Main.Enable";
@@ -128,7 +133,7 @@ public class ResourceManager {
     
     // Get String
     public String getString(String key) {
-        return parsePluginData(parseColors(bundle.getString(key))).replaceAll("%CHAT_PREFIX%", LocalShops.CHAT_PREFIX);
+        return parsePluginData(parseColors(parseBase(bundle.getString(key))));
     }
     
     // Get String w/ Data Values (replace key array and replace value array MUST match lengths!
@@ -158,5 +163,20 @@ public class ResourceManager {
         s = s.replaceAll("%PLUGIN_VERSION%", pdf.getVersion());
         s = s.replaceAll("%PLUGIN_AUTHORS%", GenericFunctions.join(pdf.getAuthors(), ", "));
         return s;
+    }
+    
+    // Parse Base
+    private String parseBase(String s) {
+        s = s.replaceAll("%BASESHOP%", bundle.getString(BASE_SHOP));
+        s = s.replaceAll("%CHATPREFIX%", bundle.getString(BASE_CHAT_PREFIX));
+        s = s.replaceAll("%TRUE%", bundle.getString(BASE_TRUE));
+        s = s.replaceAll("%FALSE%", bundle.getString(BASE_FALSE));
+        
+        return s;
+    }
+    
+    // Get Chat Prefix
+    public String getChatPrefix() {
+        return parseColors(getString(BASE_CHAT_PREFIX));
     }
 }

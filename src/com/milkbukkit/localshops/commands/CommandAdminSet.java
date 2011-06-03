@@ -35,7 +35,7 @@ public class CommandAdminSet extends Command {
         if(matcher.find()) {
             String key = matcher.group(1);
             sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_CHARGE_FOR_SHOP));
-            sender.sendMessage(key + "=" + Config.getShopChargeCreate());
+            sender.sendMessage(key + "=" + (Config.getShopChargeCreate() ? plugin.getResourceManager().getString(ResourceManager.BASE_TRUE) : plugin.getResourceManager().getString(ResourceManager.BASE_FALSE)));
             return true;
         }
         
@@ -47,7 +47,7 @@ public class CommandAdminSet extends Command {
             String key = matcher.group(1);
             String value = matcher.group(2);
             try {
-                boolean x = Boolean.parseBoolean(value);
+                boolean x = value.equalsIgnoreCase(plugin.getResourceManager().getString(ResourceManager.BASE_TRUE));
                 Config.setShopChargeCreate(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
@@ -63,7 +63,7 @@ public class CommandAdminSet extends Command {
         if(matcher.find()) {
             String key = matcher.group(1);
             sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_GLOBAL_SHOP));
-            sender.sendMessage(key + "=" + Config.getGlobalShopsEnabled());
+            sender.sendMessage(key + "=" + (Config.getGlobalShopsEnabled() ? plugin.getResourceManager().getString(ResourceManager.BASE_TRUE) : plugin.getResourceManager().getString(ResourceManager.BASE_FALSE)));
             return true;
         }
         
@@ -75,7 +75,7 @@ public class CommandAdminSet extends Command {
             String key = matcher.group(1);
             String value = matcher.group(2);
             try {
-                boolean x = Boolean.parseBoolean(value);
+                boolean x = value.equalsIgnoreCase(plugin.getResourceManager().getString(ResourceManager.BASE_TRUE));
                 Config.setGlobalShopsEnabled(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
@@ -119,7 +119,7 @@ public class CommandAdminSet extends Command {
         if(matcher.find()) {
             String key = matcher.group(1);
             sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_REPORT_STATS));
-            sender.sendMessage(key + "=" + Config.getSrvReport());
+            sender.sendMessage(key + "=" + (Config.getSrvReport() ? plugin.getResourceManager().getString(ResourceManager.BASE_TRUE) : plugin.getResourceManager().getString(ResourceManager.BASE_FALSE)));
             return true;
         }
         
@@ -131,7 +131,7 @@ public class CommandAdminSet extends Command {
             String key = matcher.group(1);
             String value = matcher.group(2);
             try {
-                boolean x = Boolean.parseBoolean(value);
+                boolean x = value.equalsIgnoreCase(plugin.getResourceManager().getString(ResourceManager.BASE_TRUE));
                 Config.setSrvReport(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
@@ -343,7 +343,7 @@ public class CommandAdminSet extends Command {
         if(matcher.find()) {
             String key = matcher.group(1);
             sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_DEBUG));
-            sender.sendMessage(key + "=" + Config.getSrvDebug());
+            sender.sendMessage(key + "=" + (Config.getSrvDebug() ? plugin.getResourceManager().getString(ResourceManager.BASE_TRUE) : plugin.getResourceManager().getString(ResourceManager.BASE_FALSE)));
             return true;
         }
         
@@ -355,7 +355,7 @@ public class CommandAdminSet extends Command {
             String key = matcher.group(1);
             String value = matcher.group(2);
             try {
-                boolean x = Boolean.parseBoolean(value);
+                boolean x = value.equalsIgnoreCase(plugin.getResourceManager().getString(ResourceManager.BASE_TRUE));
                 Config.setSrvDebug(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
@@ -455,7 +455,7 @@ public class CommandAdminSet extends Command {
         if(matcher.find()) {
             String key = matcher.group(1);
             sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_SHOP_NOTIFICATION));
-            sender.sendMessage(key + "=" + Config.getShopTransactionNotice());
+            sender.sendMessage(key + "=" + (Config.getShopTransactionNotice() ? plugin.getResourceManager().getString(ResourceManager.BASE_TRUE) : plugin.getResourceManager().getString(ResourceManager.BASE_FALSE)));
             return true;
         }
         
@@ -467,7 +467,7 @@ public class CommandAdminSet extends Command {
             String key = matcher.group(1);
             String value = matcher.group(2);
             try {
-                boolean x = Boolean.parseBoolean(value);
+                boolean x = value.equalsIgnoreCase(plugin.getResourceManager().getString(ResourceManager.BASE_TRUE));
                 Config.setShopTransactionNotice(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
@@ -511,7 +511,7 @@ public class CommandAdminSet extends Command {
         if(matcher.find()) {
             String key = matcher.group(1);
             sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_LOG_TRANSACTIONS));
-            sender.sendMessage(key + "=" + Config.getSrvLogTransactions());
+            sender.sendMessage(key + "=" + (Config.getSrvLogTransactions() ? plugin.getResourceManager().getString(ResourceManager.BASE_TRUE) : plugin.getResourceManager().getString(ResourceManager.BASE_FALSE)));
             return true;
         }
         
@@ -523,7 +523,7 @@ public class CommandAdminSet extends Command {
             String key = matcher.group(1);
             String value = matcher.group(2);
             try {
-                boolean x = Boolean.parseBoolean(value);
+                boolean x = value.equalsIgnoreCase(plugin.getResourceManager().getString(ResourceManager.BASE_TRUE));
                 Config.setSrvLogTransactions(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {

@@ -536,7 +536,7 @@ public class CommandShopSet extends Command {
 
             // Check Permissions
             if (!canUseCommand(CommandTypes.ADMIN)) {
-                player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You must be a shop admin to do this.");
+                player.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " You must be a shop admin to do this.");
                 return true;
             }            
         } else {
@@ -562,7 +562,7 @@ public class CommandShopSet extends Command {
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             shop.setUnlimitedMoney(!shop.isUnlimitedMoney());
-            sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "Unlimited money was set to " + ChatColor.WHITE + shop.isUnlimitedMoney());
+            sender.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " Unlimited money was set to " + ChatColor.WHITE + shop.isUnlimitedMoney());
             plugin.getShopManager().saveShop(shop);
             return true;
         }
@@ -573,7 +573,7 @@ public class CommandShopSet extends Command {
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             shop.setUnlimitedStock(!shop.isUnlimitedStock());
-            sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "Unlimited stock was set to " + ChatColor.WHITE + shop.isUnlimitedStock());
+            sender.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " Unlimited stock was set to " + ChatColor.WHITE + shop.isUnlimitedStock());
            //Update signs after setting unlimited stock
             for (ShopSign sign : shop.getSignSet() )
                 shop.updateSign(sign);
@@ -659,7 +659,7 @@ public class CommandShopSet extends Command {
 
             // Check if Player can Modify
             if (!shop.getOwner().equalsIgnoreCase(player.getName())) {
-                sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You must be the shop owner to set this.");
+                sender.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " You must be the shop owner to set this.");
                 sender.sendMessage(ChatColor.DARK_AQUA + " The current shop owner is " + ChatColor.WHITE + shop.getOwner());
                 return true;
             }
@@ -695,7 +695,7 @@ public class CommandShopSet extends Command {
 
             // Check if Player can Modify
             if (!shop.getOwner().equalsIgnoreCase(player.getName())) {
-                sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You must be the shop owner to set this.");
+                sender.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " You must be the shop owner to set this.");
                 sender.sendMessage(ChatColor.DARK_AQUA + " The current shop owner is " + ChatColor.WHITE + shop.getOwner());
                 return true;
             }
@@ -738,7 +738,7 @@ public class CommandShopSet extends Command {
 
             // Check if Player can Modify
             if (!canUseCommand(CommandTypes.ADMIN) && !shop.getOwner().equalsIgnoreCase(player.getName())) {
-                sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You must be the shop owner to set this.");
+                sender.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " You must be the shop owner to set this.");
                 sender.sendMessage(ChatColor.DARK_AQUA + "  The current shop owner is " + ChatColor.WHITE + shop.getOwner());
                 return true;
             }
@@ -749,7 +749,7 @@ public class CommandShopSet extends Command {
             }
 
             if(!canUseCommand(CommandTypes.ADMIN)) {
-                sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + shop.getName() + " is no longer buying items.");
+                sender.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " " + shop.getName() + " is no longer buying items.");
                 reset = true;
             }
         } else {
@@ -763,10 +763,10 @@ public class CommandShopSet extends Command {
         if (matcher.find()) {
             String name = matcher.group(1);
             if (!canUseCommand(CommandTypes.SET_OWNER)) {
-                sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You do not have permission to do this.");
+                sender.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " You do not have permission to do this.");
                 return true;
             }  else if ( !canCreateShop(name) ) {
-                sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "that player already has the maximum number of shops!");
+                sender.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " that player already has the maximum number of shops!");
                 return true;
             } else {
                 shop.setOwner(name);
@@ -783,7 +783,7 @@ public class CommandShopSet extends Command {
                     }
                 }
 
-                notifyPlayers(shop, new String[] { LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + shop.getName() + " is now under new management!  The new owner is " + ChatColor.WHITE + shop.getOwner() } );
+                notifyPlayers(shop, new String[] { plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + shop.getName() + " is now under new management!  The new owner is " + ChatColor.WHITE + shop.getOwner() } );
                 return true;
             }
         }
@@ -808,7 +808,7 @@ public class CommandShopSet extends Command {
 
             // Check if Player can Modify  
             if(!canModifyShop(shop)) {
-                sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You must be the shop owner to set this.");
+                sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "You must be the shop owner to set this.");
                 sender.sendMessage(ChatColor.DARK_AQUA + "  The current shop owner is " + ChatColor.WHITE + shop.getOwner());                
                 return true;
             }
@@ -823,7 +823,7 @@ public class CommandShopSet extends Command {
             String name = matcher.group(1).trim();
             shop.setName(name);
             plugin.getShopManager().saveShop(shop);
-            notifyPlayers(shop, new String[] { LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "Shop name is now " + ChatColor.WHITE + shop.getName() } );
+            notifyPlayers(shop, new String[] { plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "Shop name is now " + ChatColor.WHITE + shop.getName() } );
             return true;
         }
 
@@ -850,7 +850,7 @@ public class CommandShopSet extends Command {
         plugin.getShopManager().saveShop(shop);
 
         // Send Result
-        sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "Dynamic pricing for " + ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " is now " + shop.isItemDynamic(item.name));
+        sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "Dynamic pricing for " + ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " is now " + shop.isItemDynamic(item.name));
         
         //update any sign in this shop with that value.
         shop.updateSigns(item.name);
@@ -873,7 +873,7 @@ public class CommandShopSet extends Command {
 
             // Check Permissions
             if (!canUseCommand(CommandTypes.ADMIN)) {
-                player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You do not have permission to set dynamic shops.");
+                player.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " You do not have permission to set dynamic shops.");
                 return false;
             }            
         } else {
@@ -934,7 +934,7 @@ public class CommandShopSet extends Command {
 
     private boolean shopSetHelp() {
         // Display list of set commands & return
-        sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "The following set commands are available: ");
+        sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "The following set commands are available: ");
         sender.sendMessage("   " + "/" + commandLabel + " set buy [item name] [price] <bundle size>");
         sender.sendMessage("   " + "/" + commandLabel + " set sell [item name] [price] <bundle size>");
         sender.sendMessage("   " + "/" + commandLabel + " set max [item name] [max number]");

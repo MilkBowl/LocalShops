@@ -44,10 +44,6 @@ public class LocalShops extends JavaPlugin {
 
     // Logging
     private final Logger log = Logger.getLogger("Minecraft");
-
-    // Constants
-    public static final String CHAT_PREFIX = ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] ";
-
     
     private static ItemData itemList = new ItemData();
     private Map<String, PlayerData> playerData; // synchronized player hash

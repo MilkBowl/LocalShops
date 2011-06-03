@@ -18,7 +18,7 @@ public class CommandShopHelp extends Command {
     }
 
     public boolean process() {
-        sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "Here are the available commands [required] <optional>");
+        sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "Here are the available commands [required] <optional>");
 
         if (canUseCommand(CommandTypes.ADD)) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " add" + ChatColor.DARK_AQUA + " - Add the item that you are holding to the shop.");

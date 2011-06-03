@@ -55,7 +55,7 @@ public class CommandShopDestroy extends Command {
                 if (p.shopList.contains(shop.getUuid())) {
                     Player thisPlayer = plugin.getServer().getPlayer(p.playerName);
                     p.removePlayerFromShop(thisPlayer, shop.getUuid());
-                    thisPlayer.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " has been destroyed");
+                    thisPlayer.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " has been destroyed");
                 }
             }
 
@@ -90,9 +90,9 @@ public class CommandShopDestroy extends Command {
             
             // Delete Shop
             if (plugin.getShopManager().deleteShop(shop)) {
-                player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " has been destroyed");
+                player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " has been destroyed");
             } else {
-                player.sendMessage(LocalShops.CHAT_PREFIX + " Error while attempting to destroy shop: " + ChatColor.WHITE + shop.getName());
+                player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + " Error while attempting to destroy shop: " + ChatColor.WHITE + shop.getName());
             }
         }
 

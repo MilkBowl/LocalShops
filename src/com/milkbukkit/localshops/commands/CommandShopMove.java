@@ -29,7 +29,7 @@ public class CommandShopMove extends Command {
     public boolean process() {
         
         if(isGlobal) {
-            sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You cannot move a global shop!");
+            sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "You cannot move a global shop!");
             return true;
         }
 
@@ -39,7 +39,7 @@ public class CommandShopMove extends Command {
         }
 
         if(!(sender instanceof Player)) {
-            sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "Console is not implemented yet.");
+            sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "Console is not implemented yet.");
             return true;
         }
 
@@ -54,13 +54,13 @@ public class CommandShopMove extends Command {
             // check to see if that shop exists
             LocalShop thisShop = plugin.getShopManager().getLocalShop(id);
             if(thisShop == null) {
-                sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "Could not find shop: " + ChatColor.WHITE + id);
+                sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "Could not find shop: " + ChatColor.WHITE + id);
                 return false;
             }
 
             // check if player has access
             if (!thisShop.getOwner().equalsIgnoreCase(player.getName())) {
-                player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You must be the shop owner to move this shop.");
+                player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "You must be the shop owner to move this shop.");
                 return false;
             }
 
@@ -119,7 +119,7 @@ public class CommandShopMove extends Command {
                         if (!plugin.getPlayerData().get(player.getName()).chargePlayer(player.getName(), Config.getShopChargeMoveCost())) {
                             // return, this player did not have enough money
 
-                            player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You need " + plugin.getEconManager().format(Config.getShopChargeMoveCost()) + " to move a shop.");
+                            player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "You need " + plugin.getEconManager().format(Config.getShopChargeMoveCost()) + " to move a shop.");
                             return false;
                         }
                     }
@@ -134,18 +134,18 @@ public class CommandShopMove extends Command {
 
                 // write the file
                 if (plugin.getShopManager().saveShop(thisShop)) {
-                    player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.WHITE + thisShop.getName() + ChatColor.DARK_AQUA + " was moved successfully.");
+                    player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.WHITE + thisShop.getName() + ChatColor.DARK_AQUA + " was moved successfully.");
                     return true;
                 } else {
-                    player.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "There was an error, could not move shop.");
+                    player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "There was an error, could not move shop.");
                     return false;
                 }
             }            
         }
 
         // Show usage
-        sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "The command format is " + ChatColor.WHITE + "/" + commandLabel + " move [id]");
-        sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "Use " + ChatColor.WHITE + "/" + commandLabel + " info" + ChatColor.DARK_AQUA + " to obtain the id.");
+        sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "The command format is " + ChatColor.WHITE + "/" + commandLabel + " move [id]");
+        sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "Use " + ChatColor.WHITE + "/" + commandLabel + " info" + ChatColor.DARK_AQUA + " to obtain the id.");
         return true;
     }
 
