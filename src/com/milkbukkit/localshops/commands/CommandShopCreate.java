@@ -47,7 +47,7 @@ public class CommandShopCreate extends Command {
 
             //Check permissions
             if (!canCreateShop(creator)) {
-                sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You already have the maximum number of shops or don't have permission to create them!");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_MAX_NUM_SHOPS));
                 return false;
             }
 
@@ -55,7 +55,7 @@ public class CommandShopCreate extends Command {
             if (pData.isSelecting()) {
                 if (GenericFunctions.calculateCuboidSize(pData.getPositionA(), pData.getPositionB(), Config.getShopSizeMaxWidth(), Config.getShopSizeMaxHeight()) == null) {
                     String size = Config.getShopSizeMaxWidth() + "x" + Config.getShopSizeMaxHeight() + "x" + Config.getShopSizeMaxWidth();
-                    player.sendMessage(ChatColor.DARK_AQUA + "Problem with selection. Max size is " + ChatColor.WHITE + size);
+                    player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SELECTION_PROB_SIZE, new String[] { "%SIZE%" }, new Object[] { size }));
                     return false;
                 }
 
@@ -63,7 +63,7 @@ public class CommandShopCreate extends Command {
                 xyzB = pData.getPositionB();
 
                 if (xyzA == null || xyzB == null) {
-                    player.sendMessage(ChatColor.DARK_AQUA + "Problem with selection. Only one point selected");
+                    player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SELECTION_PROB_ONLY_ONE_POINT));
                     return false;
                 }
             } else {
@@ -90,17 +90,17 @@ public class CommandShopCreate extends Command {
             }
 
             if(!plugin.getShopManager().shopPositionOk(xyzA, xyzB, world) && !isGlobal) {
-                sender.sendMessage("A shop already exists here!");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SHOP_EXISTS));
                 return false;
             }
             if (isGlobal && plugin.getShopManager().getGlobalShopByWorld(world) != null) {
-                sender.sendMessage(world + " already has a global shop. Remove it before creating a new one!");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_WORLD_HAS_GLOBAL));
                 return false;
             }
             if (Config.getShopChargeCreate()) {
                 if (!canUseCommand(CommandTypes.CREATE_FREE)) {
                     if (!plugin.getPlayerData().get(player.getName()).chargePlayer(player.getName(), Config.getShopChargeCreateCost())) {
-                        sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "You need " + plugin.getEconManager().format(Config.getShopChargeCreateCost()) + " to create a shop.");
+                        sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_INSUFFICIENT_FUNDS));
                         return false;
                     }
                 }
@@ -144,7 +144,7 @@ public class CommandShopCreate extends Command {
             gShop.addWorld(world);
             plugin.getShopManager().addShop(gShop);
             shop = gShop;
-            log.info(String.format("[%s] Created Global: %s", plugin.getDescription().getName(), gShop.toString()));
+            log.info(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_LOG, new String[] { "%TYPE%", "%SHOP%" }, new Object[] { "Global", gShop }));
         } else {
             LocalShop lShop = new LocalShop(UUID.randomUUID());
             lShop.setCreator(creator);
@@ -154,7 +154,7 @@ public class CommandShopCreate extends Command {
             lShop.setLocations(new ShopLocation(xyzA), new ShopLocation(xyzB));
             plugin.getShopManager().addShop(lShop);
             shop = lShop;
-            log.info(String.format("[%s] Created Local: %s", plugin.getDescription().getName(), lShop.toString()));
+            log.info(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_LOG, new String[] { "%TYPE%", "%SHOP%" }, new Object[] { "Local", lShop }));
             for (Player p : plugin.getServer().getOnlinePlayers()) {
                 plugin.playerListener.checkPlayerPosition(p);
             }
@@ -167,10 +167,11 @@ public class CommandShopCreate extends Command {
 
         // write the file
         if (plugin.getShopManager().saveShop(shop)) {
-            sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " was created successfully.");
+            //Command.Shop.Create.Success=%CHAT_PREFIX%%WHITE%%SHOPNAME%%DARK_AQUA% was created successfully.  CMD_SHP_CREATE_SUCCESS
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SUCCESS, new String[] { "%SHOPNAME%" }, new Object[] { shop.getName() }));
             return true;
         } else {
-            sender.sendMessage(LocalShops.CHAT_PREFIX + ChatColor.DARK_AQUA + "There was an error, could not create shop.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_FAIL));
             return false;
         }
 

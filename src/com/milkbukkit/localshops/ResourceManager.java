@@ -77,6 +77,16 @@ public class ResourceManager {
     public final static String CMD_SHP_BUY_REMOVED_QTY = "Command.Shop.Buy.RemovedQuantity";
     public final static String CMD_SHP_BUY_PURCHASED_QTY = "Command.Shop.Buy.PurchasedQuantity";
     
+    public final static String CMD_SHP_CREATE_MAX_NUM_SHOPS = "Command.Shop.Create.MaximumNumberShops";
+    public final static String CMD_SHP_CREATE_SELECTION_PROB_SIZE = "Command.Shop.Create.SelectionSizeProblem";
+    public final static String CMD_SHP_CREATE_SELECTION_PROB_ONLY_ONE_POINT = "Command.Shop.Create.SelectionOnePointProblem";
+    public final static String CMD_SHP_CREATE_SHOP_EXISTS = "Command.Shop.Create.ShopExists";
+    public final static String CMD_SHP_CREATE_WORLD_HAS_GLOBAL = "Command.Shop.Create.WorldShopExists";
+    public final static String CMD_SHP_CREATE_INSUFFICIENT_FUNDS = "Command.Shop.Create.InsufficientFunds";
+    public final static String CMD_SHP_CREATE_LOG = "Command.Shop.Create.Log";
+    public final static String CMD_SHP_CREATE_SUCCESS = "Command.Shop.Create.Success";
+    public final static String CMD_SHP_CREATE_FAIL = "Command.Shop.Create.Fail";
+    
     // Objects
     private PluginDescriptionFile pdf;
     private ResourceBundle bundle;
