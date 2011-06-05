@@ -3,7 +3,6 @@ package com.milkbukkit.localshops.commands;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

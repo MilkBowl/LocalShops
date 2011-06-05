@@ -7,7 +7,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
