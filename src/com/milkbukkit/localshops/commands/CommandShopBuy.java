@@ -42,7 +42,7 @@ public class CommandShopBuy extends Command {
             }
 
             // Check Permissions
-            if (!canUseCommand(CommandTypes.SELL)) {
+            if ((!canUseCommand(CommandTypes.BUY) && !isGlobal) || (!canUseCommand(CommandTypes.GLOBAL_BUY) && isGlobal)) {
                 sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
                 return true;
             }
