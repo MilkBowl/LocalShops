@@ -12,6 +12,7 @@ import java.util.Map;
  *
  */
 public class DynamicManager {
+    @SuppressWarnings("unused")
     private LocalShops plugin = null;
     private static Map<ItemInfo, Double> priceAdjMap = Collections.synchronizedMap(new HashMap<ItemInfo, Double>());
         
