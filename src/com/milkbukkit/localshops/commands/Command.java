@@ -117,7 +117,8 @@ public abstract class Command {
                 }
             else 
                 for (String permission : CommandTypes.ADMIN_LOCAL.getPermissions()) {
-                    if (plugin.getPermManager().hasPermission(player, permission))
+                    //Make sure this isn't a server command before allowing access.
+                    if (plugin.getPermManager().hasPermission(player, permission) && !(this instanceof com.milkbukkit.localshops.commands.CommandAdminSet))
                         return true;
                 }
 

@@ -21,8 +21,8 @@ public class CommandAdminSet extends Command {
     }
 
     public boolean process() {
-        // Check Permissions
-        if (!canUseCommand(CommandTypes.ADMIN)) {
+        // Check Permissions - Server Permissions
+        if (!canUseCommand(CommandTypes.ADMIN_SERVER)) {
             sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
             return true;
         }
