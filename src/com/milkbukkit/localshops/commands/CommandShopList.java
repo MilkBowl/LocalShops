@@ -55,7 +55,8 @@ public class CommandShopList extends Command {
         List<Shop> shops = plugin.getShopManager().getAllShops();
         Collections.sort(shops, new ShopSortByName());
         
-        if(isGlobal && !canUseCommand(CommandTypes.ADMIN)) {
+        //What is this here for?
+        if(isGlobal && !canUseCommand(CommandTypes.ADMIN_GLOBAL)) {
             // send nice message
         }
         

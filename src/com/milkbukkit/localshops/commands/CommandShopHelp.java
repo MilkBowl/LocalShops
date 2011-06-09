@@ -38,7 +38,7 @@ public class CommandShopHelp extends Command {
         if (Config.getFindMaxDistance() != 0 && !isGlobal) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " find [itemname]" + ChatColor.DARK_AQUA + " - Find closest shops by item name.");
         }
-        if (canUseCommand(CommandTypes.ADMIN) && isGlobal) {
+        if (canUseCommand(CommandTypes.ADMIN_GLOBAL) && isGlobal) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " link <shopid> [worldname]" + ChatColor.DARK_AQUA + " - Link a global shop to another world");
         }
         if (canUseCommand(CommandTypes.MOVE) && !isGlobal) {

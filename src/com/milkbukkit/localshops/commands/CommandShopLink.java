@@ -34,7 +34,7 @@ public class CommandShopLink extends Command {
         GlobalShop shop = null;
 
         // Check Permissions
-        if (!canUseCommand(CommandTypes.ADMIN)) {
+        if (!canUseCommand(CommandTypes.ADMIN_GLOBAL)) {
             sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
             return true;
         }

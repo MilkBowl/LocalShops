@@ -535,7 +535,7 @@ public class CommandShopSet extends Command {
             }
 
             // Check Permissions
-            if (!canUseCommand(CommandTypes.ADMIN)) {
+            if ( (!canUseCommand(CommandTypes.ADMIN_LOCAL) && !isGlobal) || (!canUseCommand(CommandTypes.ADMIN_GLOBAL) && isGlobal)) {
                 player.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " You must be a shop admin to do this.");
                 return true;
             }            
@@ -737,18 +737,18 @@ public class CommandShopSet extends Command {
             }
 
             // Check if Player can Modify
-            if (!canUseCommand(CommandTypes.ADMIN) && !shop.getOwner().equalsIgnoreCase(player.getName())) {
+            if ( ((!canUseCommand(CommandTypes.ADMIN_LOCAL) && !isGlobal) || (!canUseCommand(CommandTypes.ADMIN_GLOBAL) && isGlobal)) && !shop.getOwner().equalsIgnoreCase(player.getName())) {
                 sender.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " You must be the shop owner to set this.");
                 sender.sendMessage(ChatColor.DARK_AQUA + "  The current shop owner is " + ChatColor.WHITE + shop.getOwner());
                 return true;
             }
 
-            if (!canUseCommand(CommandTypes.SET_OWNER) && !canUseCommand(CommandTypes.ADMIN)) {
+            if (!canUseCommand(CommandTypes.SET_OWNER) && ((!canUseCommand(CommandTypes.ADMIN_LOCAL) && !isGlobal) || (!canUseCommand(CommandTypes.ADMIN_GLOBAL) && isGlobal))) {
                 sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
                 return true;
             }
 
-            if(!canUseCommand(CommandTypes.ADMIN)) {
+            if((!canUseCommand(CommandTypes.ADMIN_LOCAL) && !isGlobal) || (!canUseCommand(CommandTypes.ADMIN_GLOBAL) && isGlobal)) {
                 sender.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " " + shop.getName() + " is no longer buying items.");
                 reset = true;
             }
@@ -872,7 +872,7 @@ public class CommandShopSet extends Command {
             }
 
             // Check Permissions
-            if (!canUseCommand(CommandTypes.ADMIN)) {
+            if (!canUseCommand(CommandTypes.ADMIN_SERVER)) {
                 player.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " You do not have permission to set dynamic shops.");
                 return false;
             }            
@@ -942,7 +942,7 @@ public class CommandShopSet extends Command {
         sender.sendMessage("   " + "/" + commandLabel + " set minbalance [amount]");
         sender.sendMessage("   " + "/" + commandLabel + " set name [shop name]");
         sender.sendMessage("   " + "/" + commandLabel + " set owner [player name]");
-        if (canUseCommand(CommandTypes.ADMIN)) {
+        if (((canUseCommand(CommandTypes.ADMIN_LOCAL) && !isGlobal) || (canUseCommand(CommandTypes.ADMIN_GLOBAL) && isGlobal))) {
             sender.sendMessage("   " + "/" + commandLabel + " set unlimited money");
             sender.sendMessage("   " + "/" + commandLabel + " set unlimited stock");
             sender.sendMessage("   " + "/" + commandLabel + " set dynamic <id>");
