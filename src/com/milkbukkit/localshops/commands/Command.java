@@ -30,9 +30,9 @@ public abstract class Command {
 
     // Command Types Enum
     public static enum CommandTypes {
-        ADMIN(0, new String[] { "localshops.admin" }),
+        ADMIN_LOCAL(0, new String[] { "localshops.admin.local" }),
         ADD(1, new String[] { "localshops.manager.add" }),
-        BUY(2, new String[] { "localshops.user.buy" }),
+        BUY(2, new String[] { "localshops.local.buy" }),
         CREATE(3, new String[] { "localshops.manager.create" }),
         CREATE_FREE(4, new String[] { "localshops.free.create" }),
         DESTROY(5, new String[] { "localshops.manager.destroy" }),
@@ -43,9 +43,13 @@ public abstract class Command {
         REMOVE(10, new String[] { "localshops.manager.remove" }),
         SEARCH(11, new String[] {}),
         SELECT(12, new String[] { "localshops.manager.select" }),
-        SELL(13, new String[] { "localshops.user.sell" }),
+        SELL(13, new String[] { "localshops.local.sell" }),
         SET_OWNER(14, new String[] { "localshops.manager.set.owner" }),
-        SET(15, new String[] { "localshops.manager.set" });
+        SET(15, new String[] { "localshops.manager.set" }),
+        GLOBAL_BUY(16, new String[] { "localshops.global.buy" }),
+        GLOBAL_SELL(17, new String[] { "localshops.global.sell" } ),
+        ADMIN_GLOBAL(18, new String[] { "localshops.admin.global" } ),
+        ADMIN_SERVER(19, new String[] { "localshops.admin.server" });
 
         int id = -1;
         String[] permissions = null;
@@ -105,11 +109,17 @@ public abstract class Command {
             Player player = (Player) sender;
 
             // check if admin first
-            for (String permission : CommandTypes.ADMIN.getPermissions()) {
-                if (plugin.getPermManager().hasPermission(player, permission)) {
-                    return true;
+            if (isGlobal)
+                for (String permission : CommandTypes.ADMIN_GLOBAL.getPermissions()) {
+                    if (plugin.getPermManager().hasPermission(player, permission)) {
+                        return true;
+                    }
                 }
-            }
+            else 
+                for (String permission : CommandTypes.ADMIN_LOCAL.getPermissions()) {
+                    if (plugin.getPermManager().hasPermission(player, permission))
+                        return true;
+                }
 
             // fail back to provided permissions second
             for (String permission : type.getPermissions()) {
@@ -124,7 +134,7 @@ public abstract class Command {
     }
 
     protected boolean canCreateShop(String playerName) {
-        if (canUseCommand(CommandTypes.ADMIN)) {
+        if ((canUseCommand(CommandTypes.ADMIN_LOCAL) && !isGlobal) || (canUseCommand(CommandTypes.ADMIN_GLOBAL) && isGlobal )) {
             return true;
         } else if (( plugin.getShopManager().numOwnedShops(playerName) < Config.getPlayerMaxShops() || Config.getPlayerMaxShops() < 0) && canUseCommand(CommandTypes.CREATE)) {
             return true;
@@ -145,9 +155,12 @@ public abstract class Command {
                 return true;
             }
             // If admin, true
-            if(canUseCommand(CommandTypes.ADMIN)) {
+            if(canUseCommand(CommandTypes.ADMIN_LOCAL) && shop instanceof com.milkbukkit.localshops.objects.LocalShop) {
+                return true;
+            } else if (canUseCommand(CommandTypes.ADMIN_GLOBAL) && shop instanceof com.milkbukkit.localshops.objects.GlobalShop) {
                 return true;
             }
+
             return false;
         } else {
             // Console, true
@@ -331,7 +344,7 @@ public abstract class Command {
         }
         return true;
     }
-    
+
     protected Shop getCurrentShop(Player player) {
         Shop shop = null;
         UUID shopUuid = null;
