@@ -3,17 +3,13 @@
  */
 package com.milkbukkit.localshops.listeners;
 
-import java.util.Iterator;
-
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityListener;
 
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.objects.Shop;
-import com.milkbukkit.localshops.objects.ShopSign;
 
 /**
  * @author sleaker
@@ -32,22 +28,27 @@ public class ShopsEntityListener extends EntityListener {
         if (event.isCancelled()) {
             return;
         }
-
+        
+        
         //Check the blocks to see if we need to remove a sign from the shopdata
         for (Block block : event.blockList()) {
             Location blockLoc = block.getLocation();
+            /*
             //Skip checking this block if it's not a sign
-            if (block.getType() != Material.WALL_SIGN && block.getType() != Material.SIGN_POST ) {
+            if (block.getType() != Material.WALL_SIGN && block.getType() != Material.SIGN_POST && block.getType() != Material.CHEST) {
                 continue;
             }
-            
+            */
             //Search for shop at block location
             Shop shop = plugin.getShopManager().getLocalShop(blockLoc);
             //If no shop found at the location skip to the next block
             if (shop == null) {
                 continue;
             } else {
-                Iterator<ShopSign> iter = shop.getSignSet().iterator();
+                //Just cancel the event if it's happening inside of a shop - don't try to cleanup an explosion event
+                event.setCancelled(true);
+                return;
+               /* Iterator<ShopSign> iter = shop.getSignSet().iterator();
                 while (iter.hasNext()) {
                     ShopSign sign = iter.next();
                     if (sign.getLoc().equals(block.getLocation())) {
@@ -56,6 +57,7 @@ public class ShopsEntityListener extends EntityListener {
                         break;
                     }
                 } 
+                */
             }
         }
     }
