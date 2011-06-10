@@ -149,7 +149,7 @@ public class CommandShopCreate extends Command {
             lShop.setCreator(creator);
             lShop.setOwner(creator);
             lShop.setName(name);
-            lShop.setWorld(world);
+            lShop.addWorld(world);
             lShop.setLocations(new ShopLocation(xyzA), new ShopLocation(xyzB));
             plugin.getShopManager().addShop(lShop);
             shop = lShop;

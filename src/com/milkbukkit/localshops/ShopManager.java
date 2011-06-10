@@ -296,7 +296,7 @@ public class ShopManager {
                 }
 
                 if (cols[0].equalsIgnoreCase("world")) { // World
-                    shop.setWorld(cols[1]);
+                    shop.addWorld(cols[1]);
                 } else if (cols[0].equalsIgnoreCase("owner")) { // Owner
                     shop.setOwner(cols[1]);
                 } else if (cols[0].equalsIgnoreCase("managers")) { // Managers
@@ -491,48 +491,35 @@ public class ShopManager {
         String owner = props.getProperty("owner", "");
         String[] managers = props.getProperty("managers", "").replaceAll("[\\[\\]]", "").split(", ");
         String creator = props.getProperty("creator", "LocalShops");
-        
+
         // Users and Groups
         String[] groups = props.getProperty("groups", "").replaceAll("[\\[\\]]", "").split(", ");
         String[] users = props.getProperty("users", "").replaceAll("[\\[\\]]", "").split(", ");
-        
+
+        //Construct our shop object
         if(global) {
             GlobalShop gShop = new GlobalShop(uuid);
-            gShop.setName(name);
-            gShop.setUnlimitedMoney(unlimitedMoney);
-            gShop.setUnlimitedStock(unlimitedStock);
-            gShop.setOwner(owner);
-            gShop.setManagers(managers);
-            gShop.setCreator(creator);
-            gShop.setNotification(notification);
-            gShop.setDynamicPrices(dynamic);
-
-            // Add worlds
-            String worlds = props.getProperty("worlds");
-            for(String world : worlds.split(",")) {
-                if (!world.equals("")) {
-                    gShop.addWorld(world);
-                }
-            }
-
             shop = gShop;
         } else {
             LocalShop lShop = new LocalShop(uuid);
-            lShop.setName(name);
-            lShop.setUnlimitedMoney(unlimitedMoney);
-            lShop.setUnlimitedStock(unlimitedStock);
-            lShop.setOwner(owner);
-            lShop.setManagers(managers);
-            lShop.setCreator(creator);
-            lShop.setNotification(notification);
-            lShop.setDynamicPrices(dynamic);
+            shop = lShop;
+        }
+
+        // Add worlds - to list
+        String worlds = props.getProperty("worlds");
+        for(String world : worlds.split(",")) {
+            if (!world.equals("")) {
+                shop.addWorld(world);
+            }
+        }
+        
+        //TODO: Support multi-location (Location strings should load in with world data.
+        if (shop instanceof LocalShop ){
             try {
                 locationA = convertStringArraytoIntArray(props.getProperty("locationA").split(", "));
                 locationB = convertStringArraytoIntArray(props.getProperty("locationB").split(", "));
-                String world = props.getProperty("world", "world1");
-                lShop.setWorld(world);
-                lShop.setLocationA(new ShopLocation(locationA));
-                lShop.setLocationB(new ShopLocation(locationB));
+                ((LocalShop) shop).setLocationA(new ShopLocation(locationA));
+                ((LocalShop) shop).setLocationB(new ShopLocation(locationB));
             } catch (Exception e) {
                 if (isolateBrokenShopFile(file)) {
                     log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
@@ -541,10 +528,18 @@ public class ShopManager {
                 }
                 return null;
             }
-
-            shop = lShop;
         }
-        
+        //Add necessary shop data.that is for all shop types
+        shop.setName(name);
+        shop.setUnlimitedMoney(unlimitedMoney);
+        shop.setUnlimitedStock(unlimitedStock);
+        shop.setOwner(owner);
+        shop.setManagers(managers);
+        shop.setCreator(creator);
+        shop.setNotification(notification);
+        shop.setDynamicPrices(dynamic);
+
+
         // Only set our Users & Groups if they are not empty
         if (!groups.equals(""))
             for (String group : groups)
@@ -552,7 +547,7 @@ public class ShopManager {
         if (!users.equals(""))
             for (String user : users)
                 shop.addUser(user);
-            
+
         // Make sure minimum balance isn't negative
         if (minBalance < 0) {
             shop.setMinBalance(0);
@@ -617,9 +612,9 @@ public class ShopManager {
                 int z = Integer.parseInt(v2[2]);
                 String itemName = v2[3];
                 int signId = Integer.parseInt(v2[4]);
-                
+
                 //Make sure the sign we're adding actually exists in the same world as the shop
-                if (!shop.getWorlds().contains(signWorld))
+                if (!shop.containsWorld(signWorld))
                     continue;
                 //Add the sign to the 
                 if (plugin.getServer().getWorld(signWorld) != null) {
@@ -705,22 +700,20 @@ public class ShopManager {
         props.setProperty("min-balance", String.valueOf(shop.getMinBalance()));
         props.setProperty("notification", String.valueOf(shop.getNotification()));
         props.setProperty("dynamic-prices", String.valueOf(shop.isDynamicPrices()));
-
+        props.setProperty("worlds", GenericFunctions.join(shop.getWorlds(), ","));
+        
         // Location
         if(shop instanceof GlobalShop) {
-            GlobalShop gShop = (GlobalShop) shop;
             props.setProperty("global", "true");
-            props.setProperty("worlds", GenericFunctions.join(gShop.getWorlds(), ","));
         } else if(shop instanceof LocalShop) {
             LocalShop lShop = (LocalShop) shop;
             props.setProperty("locationA", lShop.getLocationA().toString());
             props.setProperty("locationB", lShop.getLocationB().toString());
-            props.setProperty("world", lShop.getWorld());
         } else {
             // Unknown shop type!
         }
-        
-        
+
+
         // People
         props.setProperty("owner", shop.getOwner());
         props.setProperty("managers", GenericFunctions.join(shop.getManagers(), ", "));
@@ -731,7 +724,7 @@ public class ShopManager {
             props.setProperty("users", GenericFunctions.join(shop.getUserSet(), ", "));
         if (!shop.getGroupSet().isEmpty())
             props.setProperty("groups", GenericFunctions.join(shop.getGroupSet(), ", "));
-        
+
         // Inventory
         for (InventoryItem item : shop.getItems()) {
             ItemInfo info = item.getInfo();

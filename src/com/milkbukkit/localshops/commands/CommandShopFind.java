@@ -133,7 +133,7 @@ public class CommandShopFind extends Command {
                 LocalShop lShop = (LocalShop) shop;
                 
                 // Check that its the current world
-                if (!playerWorld.equals(lShop.getWorld())) {
+                if (!lShop.containsWorld(playerWorld)) {
                     continue;
                 }
                 

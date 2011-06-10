@@ -268,13 +268,10 @@ public abstract class Shop implements Comparator<Shop> {
         inventory.get(itemName).addStock(amount);
         return true;
     }
-
-    public List<String> getWorlds() {
-        return worlds;
-    }
     
     public void addWorld(String worldName) {
-        worlds.add(worldName);
+        if (!worlds.contains(worldName))
+            worlds.add(worldName);
     }
     
     public void removeWorld(String worldName) {
@@ -287,6 +284,15 @@ public abstract class Shop implements Comparator<Shop> {
     
     public void clearWorlds() {
         worlds.clear();
+    }
+    
+    public List<String> getWorlds() {
+        List<String> list = new ArrayList<String>();
+        for(String s : worlds) {
+            list.add(s);
+        }
+        
+        return Collections.unmodifiableList(list);
     }
     
     public boolean removeStock(String itemName, int amount) {

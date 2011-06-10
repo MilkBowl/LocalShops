@@ -10,34 +10,13 @@ import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class LocalShop extends Shop {
     // Location Information
-    private String world = null;
+    //TODO: Store Location information in List to match World Information indices
     private ShopLocation locationA = null;
     private ShopLocation locationB = null;
     private int locationLowX, locationHighX, locationLowY, locationHighY, locationLowZ, locationHighZ;
 
     public LocalShop(UUID uuid) {
         super(uuid);
-    }
-
-    /**
-     * Sets the World the shop is located in
-     * Updates the Set list for worlds
-     * 
-     * @param String world of the shop
-     */
-    public void setWorld(String name) {
-        this.worlds.remove(world);
-        world = name;
-        this.worlds.add(name);
-    }
-
-    /**
-     * Returns the name of the world the shop is located in
-     * 
-     * @return String world of the shop
-     */
-    public String getWorld() {
-        return world;
     }
     
     public void setLocations(ShopLocation locationA, ShopLocation locationB) {
@@ -178,7 +157,7 @@ public class LocalShop extends Shop {
         log.info(String.format("   %-16s %s", "Unlimited Stock:", unlimitedStock ? "Yes" : "No"));
         log.info(String.format("   %-16s %s", "Location A:", locationA.toString()));
         log.info(String.format("   %-16s %s", "Location B:", locationB.toString()));
-        log.info(String.format("   %-16s %s", "World:", world));
+        log.info(String.format("   %-16s %s", "World:", GenericFunctions.join(worlds, ", ")));
 
         // Items
         log.info("Shop Inventory");
@@ -198,8 +177,9 @@ public class LocalShop extends Shop {
         }
     }
     
+    //TODO: Support world# check vs location data check.
     public boolean containsPoint(String worldName, int x, int y, int z) {
-        if(!worldName.equals(world)) {
+        if(!containsWorld(worldName)) {
             return false;
         }
 

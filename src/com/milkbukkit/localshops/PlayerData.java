@@ -53,7 +53,7 @@ public class PlayerData {
         String playerWorld = plugin.getServer().getPlayer(playerName).getWorld().getName();
 
         if (shop instanceof LocalShop) {
-            if (!playerIsInShop(shop) && ((LocalShop) shop).getWorld().equalsIgnoreCase(playerWorld)) {
+            if (!playerIsInShop(shop) && shop.containsWorld(playerWorld)) {
                 shopList.add(shop.getUuid());
                 return true;
             } else {
@@ -68,11 +68,11 @@ public class PlayerData {
         String playerWorld = plugin.getServer().getPlayer(playerName).getWorld().getName();
 
         if (shop instanceof GlobalShop) {
-            if (((GlobalShop) shop).containsWorld(playerWorld))
+            if (shop.containsWorld(playerWorld))
                 ;
         } else if (shop instanceof LocalShop) {
             if (shopList.contains(shop.getUuid())) {
-                if (((LocalShop) shop).getWorld().equalsIgnoreCase(playerWorld)) {
+                if (shop.containsWorld(playerWorld)) {
                     return true;
                 }
             }

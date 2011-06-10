@@ -15,9 +15,10 @@ import com.milkbukkit.localshops.ResourceManager;
 import com.milkbukkit.localshops.objects.LocalShop;
 import com.milkbukkit.localshops.objects.ShopLocation;
 import com.milkbukkit.localshops.util.GenericFunctions;
-
+@Deprecated
+//TODO: Re-write logic to handle multi-location shops. This may mean removing the command.
 public class CommandShopMove extends Command {
-
+    
     public CommandShopMove(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command);
     }
@@ -126,7 +127,8 @@ public class CommandShopMove extends Command {
                 }
 
                 // update the shop
-                thisShop.setWorld(player.getWorld().getName());
+                
+                thisShop.addWorld(player.getWorld().getName());
                 thisShop.setLocations(new ShopLocation(xyzA), new ShopLocation(xyzB));
                 log.info(thisShop.getUuid().toString());
 

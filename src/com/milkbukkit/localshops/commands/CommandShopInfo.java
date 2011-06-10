@@ -88,7 +88,8 @@ public class CommandShopInfo extends Command {
 
         if(shop instanceof LocalShop) {
             LocalShop lShop = (LocalShop) shop;
-            sender.sendMessage(String.format("  Located at %s x %s in \"%s\"", lShop.getLocationA().toString(), lShop.getLocationB().toString(), lShop.getWorld()));
+            //TODO: Fix Me - needs to dump all locations for the shop not just one.
+            sender.sendMessage(String.format("  Located at %s x %s in \"%s\"", lShop.getLocationA().toString(), lShop.getLocationB().toString(), lShop.getWorlds().toString()));
         }
 
         // Calculate values

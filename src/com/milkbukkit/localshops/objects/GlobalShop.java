@@ -1,9 +1,6 @@
 package com.milkbukkit.localshops.objects;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.UUID;
 
 import com.milkbukkit.localshops.InventoryItem;
@@ -16,15 +13,6 @@ public class GlobalShop extends Shop {
         super(uuid);
     }
     
-    
-    public List<String> getWorlds() {
-        List<String> list = new ArrayList<String>();
-        for(String s : worlds) {
-            list.add(s);
-        }
-        
-        return Collections.unmodifiableList(list);
-    }
     
     @Override
     public String toString() {
