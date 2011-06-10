@@ -33,14 +33,11 @@ public class ShopsWorldListener extends WorldListener {
         for (Shop shop : plugin.getShopManager().getAllShops()) {
             //If the event world is different than the shop world skip
             String worldName = event.getWorld().getName();
+            //ignore global shops
             if(shop instanceof GlobalShop) {
-                GlobalShop gShop = (GlobalShop) shop;
-                if(!gShop.containsWorld(worldName)) {
                     continue;
-                }
             } else if(shop instanceof LocalShop) {
-                LocalShop lShop = (LocalShop) shop;
-                if(!lShop.getWorld().equals(worldName)) {
+                if(!shop.containsWorld(worldName)) {
                     continue;
                 }
             }
