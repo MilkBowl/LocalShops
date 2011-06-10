@@ -50,7 +50,7 @@ public class ShopsPlayerListener extends PlayerListener {
             plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
         }
         //If user Right clicks a sign try to buy/sell from it.
-        if ((event.getClickedBlock().getType().equals(Material.WALL_SIGN) || event.getClickedBlock().getType().equals(Material.SIGN_POST)) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+        if (((event.getClickedBlock().getType().equals(Material.WALL_SIGN) || event.getClickedBlock().getType().equals(Material.SIGN_POST)) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && player.getItemInHand().getType().equals(Material.AIR)) {
             Location eventBlockLoc = event.getClickedBlock().getLocation();
             Shop shop = plugin.getShopManager().getLocalShop(eventBlockLoc);
             if (shop != null) {
@@ -60,7 +60,6 @@ public class ShopsPlayerListener extends PlayerListener {
                             ShopCommandExecutor.commandTypeMap.get("buy").getCommandInstance(plugin, "buy", event.getPlayer(), "buy " + sign.getItemName(), false).process();
                             //TODO: Remove when bukkit fixes inventory updating
                             try {
-                            
                                 player.updateInventory();
                             } catch (Exception e) {}
                             return;
