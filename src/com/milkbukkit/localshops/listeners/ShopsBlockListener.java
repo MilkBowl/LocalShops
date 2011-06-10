@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.ContainerBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockListener;
@@ -92,7 +93,7 @@ public class ShopsBlockListener extends BlockListener {
         Block block = event.getBlock();
 
         // If not a sign ignore event.
-        if ((!(block.getType() == Material.SIGN_POST) && !(block.getType() == Material.WALL_SIGN)) || event.isCancelled()) {
+        if ( (!(block.getType().equals(Material.SIGN_POST)) && !(block.getType().equals(Material.WALL_SIGN)) && !(block.getType().equals(Material.CHEST))) || event.isCancelled()) {
             return;
         }
 
@@ -108,7 +109,7 @@ public class ShopsBlockListener extends BlockListener {
         }
 
         if (shop.getCreator() != player.getName() && !(shop.getManagers().contains(player.getName())) && !(plugin.getPermManager().hasPermission(player, "localshops.admin"))) {
-            player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to place signs in the shop");
+            player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to place a sign or chest in the shop");
             event.setCancelled(true);
             return;
         }
@@ -122,7 +123,7 @@ public class ShopsBlockListener extends BlockListener {
         Block block = event.getBlock();
 
         // If not a sign ignore event.
-        if ((block.getType() != Material.SIGN_POST && block.getType() != Material.WALL_SIGN) || event.isCancelled()) {
+        if ((!block.getType().equals(Material.SIGN_POST) && !block.getType().equals(Material.WALL_SIGN) && !block.getType().equals(Material.CHEST)) || event.isCancelled()) {
             return;
         }
 
@@ -138,16 +139,22 @@ public class ShopsBlockListener extends BlockListener {
         }
 
         if (shop.getCreator() != player.getName() && !(shop.getManagers().contains(player.getName())) && !(plugin.getPermManager().hasPermission(player, "localshops.admin"))) {
-            player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to remove signs in the shop");
+            player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to remove signs or chests in the shop");
             event.setCancelled(true);
             return;
-        } else {
+        } else if (!block.getType().equals(Material.CHEST)) {
             Iterator<ShopSign> iter = shop.getSignSet().iterator();
             while (iter.hasNext()) {
                 ShopSign sign = iter.next();
                 if (sign.getLoc().equals(event.getBlock().getLocation())) {
                     iter.remove();
                 }
+            }
+        } else {
+            if (!(((ContainerBlock) block).getInventory().getContents() == null )) {
+                event.setCancelled(true);
+                player.sendMessage(ChatColor.DARK_AQUA + "You must first remove all contents from the chest before removing it from the shop."); 
+                return;
             }
         }
 
