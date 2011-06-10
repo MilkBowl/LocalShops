@@ -1,6 +1,8 @@
 package com.milkbukkit.localshops.modules.permission.plugins;
 
 
+import java.util.List;
+
 import org.bukkit.entity.Player;
 
 import com.milkbukkit.localshops.modules.permission.Permission;
@@ -41,6 +43,14 @@ public class Permission_None implements Permission {
     @Override
     public boolean inGroup(String worldName, String playerName, String groupName) {
         return false;
+    }
+
+    /* (non-Javadoc)
+     * @see com.milkbukkit.localshops.modules.permission.Permission#numChestsAllowed(java.lang.String, java.lang.String)
+     */
+    @Override
+    public int numChestsAllowed(List<String> worlds, String playerName) {
+        return -1;
     }
 
 }

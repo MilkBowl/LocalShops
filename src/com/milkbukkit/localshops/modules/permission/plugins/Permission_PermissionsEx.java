@@ -1,6 +1,8 @@
 package com.milkbukkit.localshops.modules.permission.plugins;
 
 
+import java.util.List;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
@@ -107,6 +109,16 @@ public class Permission_PermissionsEx implements Permission {
     @Override
     public String getName() {
         return name;
+    }
+
+    /* (non-Javadoc)
+     * @see com.milkbukkit.localshops.modules.permission.Permission#numChestsAllowed(java.util.List, java.lang.String)
+     */
+    @Override
+    public int numChestsAllowed(List<String> worlds, String playerName) {
+        
+        //Can't use info nodes with PermEx
+        return -1;
     }
 
 }

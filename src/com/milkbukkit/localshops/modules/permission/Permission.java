@@ -1,5 +1,6 @@
 package com.milkbukkit.localshops.modules.permission;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.entity.Player;
@@ -12,5 +13,6 @@ public interface Permission {
     public boolean isEnabled();
     public boolean hasPermission(Player player, String permission);
     public boolean inGroup(String worldName, String playerName, String groupName);
+    public int numChestsAllowed(List<String> worlds, String playerName);
 
 }

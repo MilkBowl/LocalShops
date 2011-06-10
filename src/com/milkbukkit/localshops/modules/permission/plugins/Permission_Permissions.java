@@ -1,6 +1,8 @@
 package com.milkbukkit.localshops.modules.permission.plugins;
 
 
+import java.util.List;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
@@ -55,11 +57,10 @@ public class Permission_Permissions implements Permission {
         return this.permission.getHandler().has(player, permission);
     }
 
-   @Override
-   public boolean inGroup(String worldName, String playerName, String groupName) {
-       return this.permission.getHandler().inGroup(worldName, playerName, groupName);
-   }
-   
+    @Override
+    public boolean inGroup(String worldName, String playerName, String groupName) {
+        return this.permission.getHandler().inGroup(worldName, playerName, groupName);
+    }
 
     private class PermissionServerListener extends ServerListener {
         Permission_Permissions permission = null;
@@ -94,6 +95,21 @@ public class Permission_Permissions implements Permission {
     @Override
     public String getName() {
         return name;
+    }
+
+    /* (non-Javadoc)
+     * @see com.milkbukkit.localshops.modules.permission.Permission#numChestsAllowed(java.util.List, java.lang.String, java.lang.String)
+     */
+    @Override
+    public int numChestsAllowed(List<String> worlds, String playerName) {
+        int rVal = -1;
+        for (String worldName : worlds) {
+            int tempVal = this.permission.getHandler().getPermissionInteger(worldName, playerName, "maxchests");
+            if (tempVal > rVal)
+                rVal = tempVal;
+        }
+        //Return highest value that player has permission for.
+        return rVal;
     }
 
 

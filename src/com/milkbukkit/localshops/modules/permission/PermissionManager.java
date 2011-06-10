@@ -1,6 +1,7 @@
 package com.milkbukkit.localshops.modules.permission;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
@@ -88,6 +89,11 @@ public class PermissionManager {
     
     public boolean inGroup(String worldName, String playerName, String groupName) {
         boolean rVal = getPermission().inGroup(worldName, playerName, groupName);
+        return rVal;
+    }
+    
+    public int numChestsAllowed(List<String> worlds, String playerName) {
+        int rVal = getPermission().numChestsAllowed(worlds, playerName);
         return rVal;
     }
 
