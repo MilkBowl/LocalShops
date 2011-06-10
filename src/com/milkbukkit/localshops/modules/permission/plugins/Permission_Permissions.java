@@ -105,7 +105,9 @@ public class Permission_Permissions implements Permission {
         int rVal = -1;
         for (String worldName : worlds) {
             int tempVal = this.permission.getHandler().getPermissionInteger(worldName, playerName, "maxchests");
-            if (tempVal > rVal)
+            if (tempVal < rVal && rVal > 0)
+                rVal = tempVal;
+            else if (rVal <= 0)
                 rVal = tempVal;
         }
         //Return highest value that player has permission for.
