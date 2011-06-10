@@ -42,6 +42,7 @@ public abstract class Shop implements Comparator<Shop> {
     protected Set<String> users = Collections.synchronizedSet(new HashSet<String>());
     //TODO: Change to TreeSet? (SetList?) to support proper world# handling for multilocations
     protected List<String> worlds = Collections.synchronizedList(new ArrayList<String>(1));
+    protected Set<Location> chests = null;
 
     // Logging
     protected static final Logger log = Logger.getLogger("Minecraft");
@@ -292,6 +293,14 @@ public abstract class Shop implements Comparator<Shop> {
         return Collections.unmodifiableList(list);
     }
     
+    public Set<Location> getChests() {
+        if (chests == null) {
+            chests = Collections.synchronizedSet(new HashSet<Location>());
+            //TODO: Check for chests and add to set.
+        }
+        return chests;
+    }
+
     public boolean removeStock(String itemName, int amount) {
         if (!inventory.containsKey(itemName))
             return false;

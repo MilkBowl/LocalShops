@@ -18,7 +18,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.PlayerData;
+import com.milkbukkit.localshops.ResourceManager;
 import com.milkbukkit.localshops.commands.ShopCommandExecutor;
+import com.milkbukkit.localshops.commands.Command.CommandTypes;
 import com.milkbukkit.localshops.objects.Shop;
 import com.milkbukkit.localshops.objects.ShopSign;
 import com.milkbukkit.localshops.util.GenericFunctions;
@@ -33,7 +35,7 @@ public class ShopsPlayerListener extends PlayerListener {
 
     // Logging
     private static final Logger log = Logger.getLogger("Minecraft");    
-    
+
     public ShopsPlayerListener(LocalShops plugin) {
         this.plugin = plugin;
     }
@@ -49,29 +51,37 @@ public class ShopsPlayerListener extends PlayerListener {
         if (!plugin.getPlayerData().containsKey(playerName)) {
             plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
         }
+        Location eventBlockLoc = event.getClickedBlock().getLocation();
+        Shop shop = plugin.getShopManager().getLocalShop(eventBlockLoc);
         //If user Right clicks a sign try to buy/sell from it.
-        if (((event.getClickedBlock().getType().equals(Material.WALL_SIGN) || event.getClickedBlock().getType().equals(Material.SIGN_POST)) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && player.getItemInHand().getType().equals(Material.AIR)) {
-            Location eventBlockLoc = event.getClickedBlock().getLocation();
-            Shop shop = plugin.getShopManager().getLocalShop(eventBlockLoc);
-            if (shop != null) {
-                for (ShopSign sign : shop.getSignSet()) {
-                    if (sign.getLoc().equals(eventBlockLoc)) {
-                        if (sign.getType().equals(ShopSign.SignType.BUY)) {
-                            ShopCommandExecutor.commandTypeMap.get("buy").getCommandInstance(plugin, "buy", event.getPlayer(), "buy " + sign.getItemName(), false).process();
-                            //TODO: Remove when bukkit fixes inventory updating
-                            try {
-                                player.updateInventory();
-                            } catch (Exception e) {}
-                            return;
-                        } else if (sign.getType().equals(ShopSign.SignType.SELL)) {
-                            ShopCommandExecutor.commandTypeMap.get("sell").getCommandInstance(plugin, "sell", event.getPlayer(), "sell " + sign.getItemName(), false).process();
+        if (((event.getClickedBlock().getType().equals(Material.WALL_SIGN) || event.getClickedBlock().getType().equals(Material.SIGN_POST)) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && player.getItemInHand().getType().equals(Material.AIR) && shop != null) {
+            for (ShopSign sign : shop.getSignSet()) {
+                if (sign.getLoc().equals(eventBlockLoc)) {
+                    if (sign.getType().equals(ShopSign.SignType.BUY)) {
+                        ShopCommandExecutor.commandTypeMap.get("buy").getCommandInstance(plugin, "buy", event.getPlayer(), "buy " + sign.getItemName(), false).process();
+                        //TODO: Remove when bukkit fixes inventory updating
+                        try {
                             player.updateInventory();
-                            return;
-                        } else {
-                            //Stop the loop if it's not a Buy/Sell Sign - only 1 possible sign location match
-                            break;
-                        }
+                        } catch (Exception e) {}
+                        return;
+                    } else if (sign.getType().equals(ShopSign.SignType.SELL)) {
+                        ShopCommandExecutor.commandTypeMap.get("sell").getCommandInstance(plugin, "sell", event.getPlayer(), "sell " + sign.getItemName(), false).process();
+                        player.updateInventory();
+                        return;
+                    } else {
+                        //Stop the loop if it's not a Buy/Sell Sign - only 1 possible sign location match
+                        break;
                     }
+                }
+            }
+
+        } else if (event.getClickedBlock().getType().equals(Material.CHEST) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && shop != null ) {
+            if (shop.getChests().contains(eventBlockLoc)) {
+                // Block access to chests when inside a shop, but allow the owner or managers to use them.
+                if ( !shop.getManagers().contains(playerName) && !shop.getOwner().equals(playerName) && !plugin.getPermManager().hasPermission(player, "localshops.admin.local")) {
+                    player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
+                    event.setCancelled(true);
+                    return;
                 }
             }
         }
@@ -82,9 +92,9 @@ public class ShopsPlayerListener extends PlayerListener {
             x = loc.getBlockX();
             y = loc.getBlockY();
             z = loc.getBlockZ();
-            
+
             PlayerData pData = plugin.getPlayerData().get(playerName);
-            
+
             if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
                 int[] xyz = { x, y, z };
                 pData.setPositionA(xyz);
@@ -94,7 +104,7 @@ public class ShopsPlayerListener extends PlayerListener {
                 } else {
                     player.sendMessage(ChatColor.DARK_AQUA + "First Position " + ChatColor.LIGHT_PURPLE + x + " " + y + " " + z);
                 }
-                
+
                 if(pData.getPositionA() != null && pData.getPositionB() == null) {
                     player.sendMessage(ChatColor.DARK_AQUA + "Now, right click to select the far upper corner for the shop.");
                 } else if(pData.getPositionA() != null && pData.getPositionB() != null) {
@@ -109,7 +119,7 @@ public class ShopsPlayerListener extends PlayerListener {
                 } else {
                     player.sendMessage(ChatColor.DARK_AQUA + "Second Position " + ChatColor.LIGHT_PURPLE + x + " " + y + " " + z);
                 }
-                
+
                 if(pData.getPositionB() != null && pData.getPositionA() == null) {
                     player.sendMessage(ChatColor.DARK_AQUA + "Now, left click to select the bottom corner for a shop.");
                 } else if(pData.getPositionA() != null && pData.getPositionB() != null) {
@@ -119,11 +129,11 @@ public class ShopsPlayerListener extends PlayerListener {
         }
 
     }
-    
+
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         String playerName = player.getName();
-        
+
         if (!plugin.getPlayerData().containsKey(playerName)) {
             plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
         }
@@ -136,20 +146,20 @@ public class ShopsPlayerListener extends PlayerListener {
 
         checkPlayerPosition(player, x, y, z);        
     }
-    
+
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         String playerName = player.getName();
-        
+
         if (!plugin.getPlayerData().containsKey(playerName)) {
             plugin.getPlayerData().remove(playerName);
         }
     }
-    
+
     public void onPlayerKick(PlayerKickEvent event) {
         Player player = event.getPlayer();
         String playerName = player.getName();
-        
+
         if (!plugin.getPlayerData().containsKey(playerName)) {
             plugin.getPlayerData().remove(playerName);
         }
@@ -182,9 +192,9 @@ public class ShopsPlayerListener extends PlayerListener {
 
     public void checkPlayerPosition(Player player, int x, int y, int z) {
         PlayerData pData = plugin.getPlayerData().get(player.getName());
-        
+
         Shop shop = plugin.getShopManager().getLocalShop(player.getWorld().getName(), x, y, z);
-        
+
         if(shop == null) {
             // not in a shop...
             for(UUID uuid : pData.shopList) {
@@ -193,14 +203,14 @@ public class ShopsPlayerListener extends PlayerListener {
             pData.shopList.clear();
             return;
         }
-        
+
         if(!pData.shopList.contains(shop.getUuid())) {
             // Player was not in the shop, and now is...
             pData.shopList.add(shop.getUuid());
             notifyPlayerEnterShop(player, shop.getUuid());
         }
     }
-    
+
     public void checkPlayerPosition(Player player, Location loc) {
         checkPlayerPosition(player, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
