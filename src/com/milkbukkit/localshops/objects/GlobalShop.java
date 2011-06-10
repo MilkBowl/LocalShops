@@ -1,9 +1,9 @@
 package com.milkbukkit.localshops.objects;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 import com.milkbukkit.localshops.InventoryItem;
@@ -16,29 +16,14 @@ public class GlobalShop extends Shop {
         super(uuid);
     }
     
-    public void addWorld(String worldName) {
-        worlds.add(worldName);
-    }
     
-    public void removeWorld(String worldName) {
-        worlds.remove(worldName);
-    }
-    
-    public boolean containsWorld(String worldName) {
-        return worlds.contains(worldName);
-    }
-    
-    public void clearWorlds() {
-        worlds.clear();
-    }
-    
-    public Set<String> getWorlds() {
-        HashSet<String> set = new HashSet<String>();
+    public List<String> getWorlds() {
+        List<String> list = new ArrayList<String>();
         for(String s : worlds) {
-            set.add(s);
+            list.add(s);
         }
         
-        return Collections.unmodifiableSet(set);
+        return Collections.unmodifiableList(list);
     }
     
     @Override

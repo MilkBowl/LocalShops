@@ -43,8 +43,8 @@ public abstract class Shop implements Comparator<Shop> {
     protected Set<ShopSign> signSet = Collections.synchronizedSet(new HashSet<ShopSign>());
     protected Set<String> groups = Collections.synchronizedSet(new HashSet<String>());
     protected Set<String> users = Collections.synchronizedSet(new HashSet<String>());
-    protected Set<String> worlds = Collections.synchronizedSet(new HashSet<String>(1));
-    
+    //TODO: Change to TreeSet? (SetList?) to support proper world# handling for multilocations
+    protected List<String> worlds = Collections.synchronizedList(new ArrayList<String>(1));
 
     // Logging
     protected static final Logger log = Logger.getLogger("Minecraft");
@@ -269,8 +269,24 @@ public abstract class Shop implements Comparator<Shop> {
         return true;
     }
 
-    public Set<String> getWorlds() {
+    public List<String> getWorlds() {
         return worlds;
+    }
+    
+    public void addWorld(String worldName) {
+        worlds.add(worldName);
+    }
+    
+    public void removeWorld(String worldName) {
+        worlds.remove(worldName);
+    }
+    
+    public boolean containsWorld(String worldName) {
+        return worlds.contains(worldName);
+    }
+    
+    public void clearWorlds() {
+        worlds.clear();
     }
     
     public boolean removeStock(String itemName, int amount) {
