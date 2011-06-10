@@ -491,7 +491,11 @@ public class ShopManager {
         String owner = props.getProperty("owner", "");
         String[] managers = props.getProperty("managers", "").replaceAll("[\\[\\]]", "").split(", ");
         String creator = props.getProperty("creator", "LocalShops");
-
+        
+        // Users and Groups
+        String[] groups = props.getProperty("groups", "").replaceAll("[\\[\\]]", "").split(", ");
+        String[] users = props.getProperty("users", "").replaceAll("[\\[\\]]", "").split(", ");
+        
         if(global) {
             GlobalShop gShop = new GlobalShop(uuid);
             gShop.setName(name);
@@ -540,7 +544,15 @@ public class ShopManager {
 
             shop = lShop;
         }
-
+        
+        // Only set our Users & Groups if they are not empty
+        if (!groups.equals(""))
+            for (String group : groups)
+                shop.addGroup(group);
+        if (!users.equals(""))
+            for (String user : users)
+                shop.addUser(user);
+            
         // Make sure minimum balance isn't negative
         if (minBalance < 0) {
             shop.setMinBalance(0);
@@ -705,12 +717,19 @@ public class ShopManager {
         } else {
             // Unknown shop type!
         }
-
+        
+        
         // People
         props.setProperty("owner", shop.getOwner());
         props.setProperty("managers", GenericFunctions.join(shop.getManagers(), ", "));
         props.setProperty("creator", shop.getCreator());
 
+        //Users & Groups
+        if (!shop.getUserSet().isEmpty())
+            props.setProperty("users", GenericFunctions.join(shop.getUserSet(), ", "));
+        if (!shop.getGroupSet().isEmpty())
+            props.setProperty("groups", GenericFunctions.join(shop.getGroupSet(), ", "));
+        
         // Inventory
         for (InventoryItem item : shop.getItems()) {
             ItemInfo info = item.getInfo();

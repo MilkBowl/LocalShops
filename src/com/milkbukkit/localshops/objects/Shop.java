@@ -480,30 +480,4 @@ public abstract class Shop implements Comparator<Shop> {
         return signLines;
 
     }
-
-    public String listGroups() {
-        if (groups.isEmpty())
-            return null;
-
-        String groupListing = "";
-        for (String group : groups) {
-            groupListing += group + ",";
-        }
-        //Trim the last ","
-        groupListing = groupListing.substring(0, groupListing.length() - 1);
-        return groupListing;
-    }
-
-    public String listUsers() {
-        if (users.isEmpty())
-            return null;
-
-        String userListing = "";
-        for (String user : users) {
-            userListing += user + ",";
-        }
-        //Trim the last ","
-        userListing = userListing.substring(0, userListing.length() - 1);
-        return userListing;      
-    }
 }
