@@ -53,6 +53,10 @@ public class CommandShopSet extends Command {
             return shopSetNotification();
         } else if (command.matches("(?i)set\\s+owner.*")) {
             return shopSetOwner();
+        } else if (command.matches("(?i)set\\s+user.*")) {
+            return shopSetUser();
+        } else if (command.matches("(?i)set\\s+group.*")) {
+            return shopSetGroup();
         } else if (command.matches("(?i)set\\s+name.*")) {
             return shopSetName();
         } else if (command.matches("(?i)set\\s+dynamic.*")) {
@@ -603,8 +607,8 @@ public class CommandShopSet extends Command {
             }
 
             // Check if Player can Modify
-            if (!shop.getOwner().equalsIgnoreCase(player.getName())) {
-                player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner to set this.");
+            if (!isShopController(shop)) {
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_MUST_BE_SHOP_OWNER));
                 player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
                 return true;
             }
@@ -642,7 +646,117 @@ public class CommandShopSet extends Command {
         sender.sendMessage("   " + "/" + commandLabel + " set manager +[playername] -[playername2]");
         return true;
     }
+    
+    private boolean shopSetUser() {
+        Shop shop = null;
 
+        // Get current shop
+        if (sender instanceof Player) {
+            // Get player & data
+            Player player = (Player) sender;
+
+            shop = getCurrentShop(player);
+            if (shop == null) {
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP));
+                return true;
+            }
+
+            // Check if Player can Modify
+            if (!isShopController(shop)) {
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_MUST_BE_SHOP_OWNER));
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
+                return true;
+            }
+        } else {
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
+            return true;
+        }
+
+        // set user +name -name ...
+        Pattern pattern = Pattern.compile("(?i)set\\s+user\\s+(.*)");
+        Matcher matcher = pattern.matcher(command);
+        if (matcher.find()) {
+            String names = matcher.group(1);
+            String[] args = names.split(" ");
+
+            for (int i = 0; i < args.length; i++) {
+                String arg = args[i];
+                if (arg.matches("\\+.*")) {
+                    // add user
+                    shop.addUser(arg.replaceFirst("\\+", ""));
+                } else if (arg.matches("\\-.*")) {
+                    // remove user
+                    shop.removeUser(arg.replaceFirst("\\-", ""));
+                } 
+            }
+
+            // Save Shop
+            plugin.getShopManager().saveShop(shop);
+
+            notifyPlayers(shop, new String[] { ChatColor.DARK_AQUA + "This shop's allowed users have been updated. "} );
+            return true;            
+        }
+
+        // show set user usage
+        sender.sendMessage("   " + "/" + commandLabel + " set user +[playername] -[playername2]");
+        return true;
+    }
+    
+    private boolean shopSetGroup() {
+        Shop shop = null;
+
+        // Get current shop
+        if (sender instanceof Player) {
+            // Get player & data
+            Player player = (Player) sender;
+
+            shop = getCurrentShop(player);
+            if (shop == null) {
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP));
+                return true;
+            }
+
+            // Check if Player can Modify
+            if (!isShopController(shop)) {
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_MUST_BE_SHOP_OWNER));
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
+                return true;
+            }
+        } else {
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
+            return true;
+        }
+
+        // set group +name -name ...
+        Pattern pattern = Pattern.compile("(?i)set\\s+group\\s+(.*)");
+        Matcher matcher = pattern.matcher(command);
+        if (matcher.find()) {
+            String names = matcher.group(1);
+            String[] args = names.split(" ");
+
+            for (int i = 0; i < args.length; i++) {
+                String arg = args[i];
+                if (arg.matches("\\+.*")) {
+                    // add group
+                    shop.addGroup(arg.replaceFirst("\\+", ""));
+                } else if (arg.matches("\\-.*")) {
+                    // remove group
+                    shop.removeGroup(arg.replaceFirst("\\-", ""));
+                } 
+            }
+
+            // Save Shop
+            plugin.getShopManager().saveShop(shop);
+
+            notifyPlayers(shop, new String[] { ChatColor.DARK_AQUA + "This shop's allowed group have been updated. "} );
+            return true;            
+        }
+
+        // show set group usage
+        sender.sendMessage("   " + "/" + commandLabel + " set group +[playername] -[playername2]");
+        return true;
+    }
+    
     private boolean shopSetNotification() {
         Shop shop = null;
 

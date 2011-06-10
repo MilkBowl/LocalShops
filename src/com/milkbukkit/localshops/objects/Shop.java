@@ -41,8 +41,8 @@ public abstract class Shop implements Comparator<Shop> {
     protected ArrayBlockingQueue<Transaction> transactions;
     protected boolean notification = true;
     protected Set<ShopSign> signSet = Collections.synchronizedSet(new HashSet<ShopSign>());
-    protected Set<String> groupSet = Collections.synchronizedSet(new HashSet<String>());
-    protected Set<String> userSet = Collections.synchronizedSet(new HashSet<String>());
+    protected Set<String> groups = Collections.synchronizedSet(new HashSet<String>());
+    protected Set<String> users = Collections.synchronizedSet(new HashSet<String>());
 
     // Logging
     protected static final Logger log = Logger.getLogger("Minecraft");
@@ -210,6 +210,22 @@ public abstract class Shop implements Comparator<Shop> {
         managers.remove(manager);
     }
 
+    public void addUser(String user) {
+        users.add(user);
+    }
+
+    public void removeUser(String user) {
+        users.remove(user);
+    }
+
+    public void addGroup(String group) {
+        groups.add(group);
+    }
+
+    public void removeGroup(String group) {
+        groups.remove(group);
+    }
+
     public List<String> getManagers() {
         return managers;
     }
@@ -219,11 +235,11 @@ public abstract class Shop implements Comparator<Shop> {
     }
 
     public Set<String> getGroupSet() {
-        return groupSet;
+        return groups;
     }
 
     public Set<String> getUserSet() {
-        return userSet;
+        return users;
     }
 
     public boolean isUnlimitedStock() {
@@ -340,7 +356,7 @@ public abstract class Shop implements Comparator<Shop> {
     public void clearTransactions() {
         transactions.clear();
     }
-    
+
     public abstract String toString();
     public abstract void log();
 
@@ -359,18 +375,18 @@ public abstract class Shop implements Comparator<Shop> {
 
     public void updateSign(ShopSign sign, int delay) {
         String[] signLines = generateSignLines(sign);
-        
+
         BlockState signState = sign.getLoc().getBlock().getState();
         //Set the lines
         ((Sign) signState).setLine(0, signLines[0]);
         ((Sign) signState).setLine(1, signLines[1]);
         ((Sign) signState).setLine(2, signLines[2]);
         ((Sign) signState).setLine(3, signLines[3]);
-        
+
         ShopManager.plugin.scheduleUpdate(sign, 2*delay);
-        
+
     }
-    
+
     public void updateSign(ShopSign sign) {
         updateSign(sign, 0);
     }
@@ -405,7 +421,7 @@ public abstract class Shop implements Comparator<Shop> {
             index++;
         }
     }   
-    
+
     public String[] generateSignLines(ShopSign sign) {
         //create our string array and set the 1st element to our item name
         String[] signLines = {sign.getItemName(), "", "", ""};
@@ -424,7 +440,7 @@ public abstract class Shop implements Comparator<Shop> {
                 signLines[1] = "Understock";
             else 
                 signLines[1] = "Buy: " + this.getItem(sign.getItemName()).getBuyPrice();
-            
+
             if (this.getItem(sign.getItemName()).getSellPrice() == 0 ) 
                 signLines[2] = "Sell: -";
             else if (this.getItem(sign.getItemName()).maxStock > 0 && this.getItem(sign.getItemName()).getStock() >= this.getItem(sign.getItemName()).maxStock && !this.unlimitedStock)
@@ -458,32 +474,32 @@ public abstract class Shop implements Comparator<Shop> {
                 signLines[1] = "Sell: " + this.getItem(sign.getItemName()).getSellPrice();
                 signLines[2] = "R-Click to Sell";
             }
-            
+
         }
-        
+
         return signLines;
-        
+
     }
-    
+
     public String listGroups() {
-        if (groupSet.isEmpty())
+        if (groups.isEmpty())
             return null;
-        
+
         String groupListing = "";
-        for (String group : groupSet) {
+        for (String group : groups) {
             groupListing += group + ",";
         }
         //Trim the last ","
         groupListing = groupListing.substring(0, groupListing.length() - 1);
         return groupListing;
     }
-    
+
     public String listUsers() {
-        if (userSet.isEmpty())
+        if (users.isEmpty())
             return null;
-        
+
         String userListing = "";
-        for (String user : userSet) {
+        for (String user : users) {
             userListing += user + ",";
         }
         //Trim the last ","
