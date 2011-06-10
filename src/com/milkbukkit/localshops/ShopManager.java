@@ -617,6 +617,11 @@ public class ShopManager {
                 int z = Integer.parseInt(v2[2]);
                 String itemName = v2[3];
                 int signId = Integer.parseInt(v2[4]);
+                
+                //Make sure the sign we're adding actually exists in the same world as the shop
+                if (!shop.getWorlds().contains(signWorld))
+                    continue;
+                //Add the sign to the 
                 if (plugin.getServer().getWorld(signWorld) != null) {
                     signList.add(new ShopSign(plugin.getServer().getWorld(signWorld), x, y, z, itemName, signId));
                 } else {

@@ -11,8 +11,6 @@ import com.milkbukkit.localshops.ItemInfo;
 import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class GlobalShop extends Shop {
-
-    private Set<String> worlds = Collections.synchronizedSet(new HashSet<String>());
     
     public GlobalShop(UUID uuid) {
         super(uuid);

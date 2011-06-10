@@ -21,11 +21,14 @@ public class LocalShop extends Shop {
 
     /**
      * Sets the World the shop is located in
+     * Updates the Set list for worlds
      * 
      * @param String world of the shop
      */
     public void setWorld(String name) {
+        this.worlds.remove(world);
         world = name;
+        this.worlds.add(name);
     }
 
     /**

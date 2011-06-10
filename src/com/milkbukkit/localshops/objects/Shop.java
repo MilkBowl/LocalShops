@@ -43,6 +43,8 @@ public abstract class Shop implements Comparator<Shop> {
     protected Set<ShopSign> signSet = Collections.synchronizedSet(new HashSet<ShopSign>());
     protected Set<String> groups = Collections.synchronizedSet(new HashSet<String>());
     protected Set<String> users = Collections.synchronizedSet(new HashSet<String>());
+    protected Set<String> worlds = Collections.synchronizedSet(new HashSet<String>(1));
+    
 
     // Logging
     protected static final Logger log = Logger.getLogger("Minecraft");
@@ -267,6 +269,10 @@ public abstract class Shop implements Comparator<Shop> {
         return true;
     }
 
+    public Set<String> getWorlds() {
+        return worlds;
+    }
+    
     public boolean removeStock(String itemName, int amount) {
         if (!inventory.containsKey(itemName))
             return false;
