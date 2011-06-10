@@ -156,6 +156,9 @@ public class ShopsBlockListener extends BlockListener {
                 player.sendMessage(ChatColor.DARK_AQUA + "You must first remove all contents from the chest before removing it from the shop."); 
                 return;
             }
+            else {
+                shop.getChests().remove(block.getLocation());
+            }
         }
 
     }
