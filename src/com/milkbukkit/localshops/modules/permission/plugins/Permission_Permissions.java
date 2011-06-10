@@ -55,6 +55,12 @@ public class Permission_Permissions implements Permission {
         return this.permission.getHandler().has(player, permission);
     }
 
+   @Override
+   public boolean inGroup(String worldName, String playerName, String groupName) {
+       return this.permission.getHandler().inGroup(worldName, playerName, groupName);
+   }
+   
+
     private class PermissionServerListener extends ServerListener {
         Permission_Permissions permission = null;
 
@@ -89,4 +95,6 @@ public class Permission_Permissions implements Permission {
     public String getName() {
         return name;
     }
+
+
 }

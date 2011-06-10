@@ -85,5 +85,10 @@ public class PermissionManager {
         boolean rVal = getPermission().hasPermission(player, permission);
         return rVal;
     }
+    
+    public boolean inGroup(String worldName, String playerName, String groupName) {
+        boolean rVal = getPermission().inGroup(worldName, playerName, groupName);
+        return rVal;
+    }
 
 }

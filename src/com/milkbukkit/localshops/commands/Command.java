@@ -362,4 +362,20 @@ public abstract class Command {
 
         return shop;
     }
+    
+    //Checks if a player has permission to access the shop
+    public boolean hasShopAccess(Player player, Shop shop) {
+        //Assume shop allows access to anyone if Sets are empty.
+        if (shop.getUserSet().isEmpty() && shop.getGroupSet().isEmpty())
+            return true;
+        else if (shop.getUserSet().contains(player.getName()))
+            return true;
+        
+        for (String groupName : shop.getGroupSet())
+            if ( plugin.getPermManager().inGroup(player.getWorld().getName(), player.getName(), groupName) )
+                return true;
+        
+        return false;
+    }
+    
 }

@@ -41,6 +41,8 @@ public abstract class Shop implements Comparator<Shop> {
     protected ArrayBlockingQueue<Transaction> transactions;
     protected boolean notification = true;
     protected Set<ShopSign> signSet = Collections.synchronizedSet(new HashSet<ShopSign>());
+    protected Set<String> groupSet = Collections.synchronizedSet(new HashSet<String>());
+    protected Set<String> userSet = Collections.synchronizedSet(new HashSet<String>());
 
     // Logging
     protected static final Logger log = Logger.getLogger("Minecraft");
@@ -214,6 +216,14 @@ public abstract class Shop implements Comparator<Shop> {
 
     public List<InventoryItem> getItems() {
         return new ArrayList<InventoryItem>(inventory.values());
+    }
+
+    public Set<String> getGroupSet() {
+        return groupSet;
+    }
+
+    public Set<String> getUserSet() {
+        return userSet;
     }
 
     public boolean isUnlimitedStock() {
@@ -394,8 +404,7 @@ public abstract class Shop implements Comparator<Shop> {
             updateSign(sign, index);
             index++;
         }
-    }
-    
+    }   
     
     public String[] generateSignLines(ShopSign sign) {
         //create our string array and set the 1st element to our item name

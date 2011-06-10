@@ -12,6 +12,7 @@ import org.bukkit.plugin.PluginManager;
 
 import com.milkbukkit.localshops.modules.permission.Permission;
 
+import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public class Permission_PermissionsEx implements Permission {
@@ -56,6 +57,23 @@ public class Permission_PermissionsEx implements Permission {
         return this.permission.has(player, permission);
     }
 
+    @Override
+    public boolean inGroup(String worldName, String playerName, String groupName) {
+        //Try catch the check because we don't know if the objects will actually exist Good Job on the crap Permissions plugin, why do we support this again?
+        try {
+            PermissionUser[] userList = PermissionsEx.getPermissionManager().getGroup(groupName).getUsers();
+            for (PermissionUser user : userList) {
+                if (user.getName() == playerName)
+                    return true;
+                else
+                    return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
+    }
+
     private class PermissionServerListener extends ServerListener {
         Permission_PermissionsEx permission = null;
 
@@ -90,4 +108,5 @@ public class Permission_PermissionsEx implements Permission {
     public String getName() {
         return name;
     }
+
 }

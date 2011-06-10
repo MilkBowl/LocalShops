@@ -11,5 +11,6 @@ public interface Permission {
     public String getName();
     public boolean isEnabled();
     public boolean hasPermission(Player player, String permission);
+    public boolean inGroup(String worldName, String playerName, String groupName);
 
 }
