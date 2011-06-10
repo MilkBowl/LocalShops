@@ -116,9 +116,16 @@ public class Permission_PermissionsEx implements Permission {
      */
     @Override
     public int getInfoIntLow(List<String> worlds, String playerName, String node) {
-        
-        //Can't use info nodes with PermEx
-        return -1;
+        int rVal = -1;
+        for (String worldName : worlds) {
+            int tempVal = Integer.parseInt(PermissionsEx.getPermissionManager().getUser(playerName).getOptionValue(node, worldName));
+            if (tempVal < rVal && rVal > 0)
+                rVal = tempVal;
+            else if (rVal <= 0)
+                rVal = tempVal;
+        }
+        //Return highest value that player has permission for.
+        return rVal;
     }
 
 }
