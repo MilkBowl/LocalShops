@@ -1,4 +1,4 @@
-package com.milkbukkit.localshops;
+package com.milkbukkit.localshops.objects;
 
 import java.util.Arrays;
 

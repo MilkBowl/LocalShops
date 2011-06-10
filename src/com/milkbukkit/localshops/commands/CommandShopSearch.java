@@ -7,9 +7,9 @@ import java.util.regex.Pattern;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import com.milkbukkit.localshops.ItemInfo;
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.Search;
+import com.milkbukkit.localshops.objects.ItemInfo;
 
 public class CommandShopSearch extends Command {
 

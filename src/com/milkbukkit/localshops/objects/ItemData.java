@@ -1,4 +1,4 @@
-package com.milkbukkit.localshops;
+package com.milkbukkit.localshops.objects;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,7 +12,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-import com.milkbukkit.localshops.objects.Shop;
 
 public class ItemData {
     private ArrayList<String> itemName;

@@ -11,10 +11,10 @@ import org.bukkit.event.world.WorldListener;
 import org.bukkit.event.world.WorldLoadEvent;
 
 import com.milkbukkit.localshops.LocalShops;
-import com.milkbukkit.localshops.ShopSign;
 import com.milkbukkit.localshops.objects.GlobalShop;
 import com.milkbukkit.localshops.objects.LocalShop;
 import com.milkbukkit.localshops.objects.Shop;
+import com.milkbukkit.localshops.objects.ShopSign;
 
 /**
  * @author sleaker

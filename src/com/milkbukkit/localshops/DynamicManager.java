@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.milkbukkit.localshops.objects.ItemInfo;
+
 /**
  * @author sleaker
  *

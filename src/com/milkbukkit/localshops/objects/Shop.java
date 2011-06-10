@@ -19,11 +19,8 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 
 import com.milkbukkit.localshops.Config;
-import com.milkbukkit.localshops.InventoryItem;
-import com.milkbukkit.localshops.ItemInfo;
 import com.milkbukkit.localshops.Search;
 import com.milkbukkit.localshops.ShopManager;
-import com.milkbukkit.localshops.ShopSign;
 import com.milkbukkit.localshops.Transaction;
 
 public abstract class Shop implements Comparator<Shop> {

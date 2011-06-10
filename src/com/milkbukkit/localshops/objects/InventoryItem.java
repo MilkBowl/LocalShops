@@ -1,4 +1,6 @@
-package com.milkbukkit.localshops;
+package com.milkbukkit.localshops.objects;
+
+import com.milkbukkit.localshops.DynamicManager;
 
 public class InventoryItem {
 

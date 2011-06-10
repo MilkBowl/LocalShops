@@ -3,9 +3,6 @@ package com.milkbukkit.localshops.objects;
 import java.util.Iterator;
 import java.util.UUID;
 
-import com.milkbukkit.localshops.InventoryItem;
-import com.milkbukkit.localshops.ItemInfo;
-import com.milkbukkit.localshops.ShopSign;
 import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class LocalShop extends Shop {

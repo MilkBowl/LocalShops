@@ -15,12 +15,12 @@ import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 
-import com.milkbukkit.localshops.ItemInfo;
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.Search;
-import com.milkbukkit.localshops.ShopSign;
 import com.milkbukkit.localshops.exceptions.TypeNotFoundException;
+import com.milkbukkit.localshops.objects.ItemInfo;
 import com.milkbukkit.localshops.objects.Shop;
+import com.milkbukkit.localshops.objects.ShopSign;
 
 /**
  * @author sleaker

@@ -2,7 +2,7 @@ package com.milkbukkit.localshops.comparator;
 
 import java.util.Comparator;
 
-import com.milkbukkit.localshops.InventoryItem;
+import com.milkbukkit.localshops.objects.InventoryItem;
 
 
 public class InventoryItemSortByName implements Comparator<InventoryItem> {

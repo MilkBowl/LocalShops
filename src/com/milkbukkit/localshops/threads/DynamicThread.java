@@ -11,9 +11,9 @@ import org.bukkit.Bukkit;
 
 import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.DynamicManager;
-import com.milkbukkit.localshops.InventoryItem;
-import com.milkbukkit.localshops.ItemInfo;
 import com.milkbukkit.localshops.LocalShops;
+import com.milkbukkit.localshops.objects.InventoryItem;
+import com.milkbukkit.localshops.objects.ItemInfo;
 import com.milkbukkit.localshops.objects.Shop;
 import com.milkbukkit.localshops.util.GenericFunctions;
 

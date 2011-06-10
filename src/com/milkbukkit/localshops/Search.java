@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.milkbukkit.localshops.objects.ItemInfo;
 import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class Search { 

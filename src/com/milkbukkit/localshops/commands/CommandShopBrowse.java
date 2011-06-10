@@ -11,10 +11,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.milkbukkit.localshops.Config;
-import com.milkbukkit.localshops.InventoryItem;
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.ResourceManager;
 import com.milkbukkit.localshops.comparator.InventoryItemSortByName;
+import com.milkbukkit.localshops.objects.InventoryItem;
 import com.milkbukkit.localshops.objects.Shop;
 
 public class CommandShopBrowse extends Command {

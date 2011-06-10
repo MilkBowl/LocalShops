@@ -8,13 +8,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.milkbukkit.localshops.InventoryItem;
-import com.milkbukkit.localshops.ItemInfo;
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.ResourceManager;
 import com.milkbukkit.localshops.Search;
-import com.milkbukkit.localshops.ShopSign;
+import com.milkbukkit.localshops.objects.InventoryItem;
+import com.milkbukkit.localshops.objects.ItemInfo;
 import com.milkbukkit.localshops.objects.Shop;
+import com.milkbukkit.localshops.objects.ShopSign;
 import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class CommandShopSet extends Command {

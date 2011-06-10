@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.milkbukkit.localshops;
+package com.milkbukkit.localshops.objects;
 
 import org.bukkit.Location;
 import org.bukkit.Material;

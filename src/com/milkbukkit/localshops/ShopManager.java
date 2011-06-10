@@ -23,9 +23,12 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import com.milkbukkit.localshops.objects.GlobalShop;
+import com.milkbukkit.localshops.objects.InventoryItem;
+import com.milkbukkit.localshops.objects.ItemInfo;
 import com.milkbukkit.localshops.objects.LocalShop;
 import com.milkbukkit.localshops.objects.Shop;
 import com.milkbukkit.localshops.objects.ShopLocation;
+import com.milkbukkit.localshops.objects.ShopSign;
 import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class ShopManager {
