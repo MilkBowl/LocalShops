@@ -101,10 +101,10 @@ public class Permission_Permissions implements Permission {
      * @see com.milkbukkit.localshops.modules.permission.Permission#numChestsAllowed(java.util.List, java.lang.String, java.lang.String)
      */
     @Override
-    public int numChestsAllowed(List<String> worlds, String playerName) {
+    public int getInfoIntLow(List<String> worlds, String playerName, String node) {
         int rVal = -1;
         for (String worldName : worlds) {
-            int tempVal = this.permission.getHandler().getPermissionInteger(worldName, playerName, "maxchests");
+            int tempVal = this.permission.getHandler().getPermissionInteger(worldName, playerName, node);
             if (tempVal < rVal && rVal > 0)
                 rVal = tempVal;
             else if (rVal <= 0)

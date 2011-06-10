@@ -13,6 +13,6 @@ public interface Permission {
     public boolean isEnabled();
     public boolean hasPermission(Player player, String permission);
     public boolean inGroup(String worldName, String playerName, String groupName);
-    public int numChestsAllowed(List<String> worlds, String playerName);
+    public int getInfoIntLow(List<String> worlds, String playerName, String node);
 
 }

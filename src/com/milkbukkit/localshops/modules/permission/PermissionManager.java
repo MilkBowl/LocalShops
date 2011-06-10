@@ -92,8 +92,8 @@ public class PermissionManager {
         return rVal;
     }
     
-    public int numChestsAllowed(List<String> worlds, String playerName) {
-        int rVal = getPermission().numChestsAllowed(worlds, playerName);
+    public int getInfoIntoLow(List<String> worlds, String playerName, String node) {
+        int rVal = getPermission().getInfoIntLow(worlds, playerName, node);
         return rVal;
     }
 

@@ -115,7 +115,7 @@ public class Permission_PermissionsEx implements Permission {
      * @see com.milkbukkit.localshops.modules.permission.Permission#numChestsAllowed(java.util.List, java.lang.String)
      */
     @Override
-    public int numChestsAllowed(List<String> worlds, String playerName) {
+    public int getInfoIntLow(List<String> worlds, String playerName, String node) {
         
         //Can't use info nodes with PermEx
         return -1;

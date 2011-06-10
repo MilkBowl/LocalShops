@@ -49,7 +49,7 @@ public class Permission_None implements Permission {
      * @see com.milkbukkit.localshops.modules.permission.Permission#numChestsAllowed(java.lang.String, java.lang.String)
      */
     @Override
-    public int numChestsAllowed(List<String> worlds, String playerName) {
+    public int getInfoIntLow(List<String> worlds, String playerName, String node) {
         return -1;
     }
 
