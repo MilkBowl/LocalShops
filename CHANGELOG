@@ -1,3 +1,21 @@
+
+	* Features
+		- Shop Signs
+			- Buy Signs/Sell Signs/Info Signs!
+		- Global Shops
+		- Dynamically Priced Shops
+		- Per-Shop Permissions Support
+		- New Blocks & Missed Blocks (1.6 blocks + 'Hacky' ones)
+		- Partial Localization Support
+    * Major Changes
+    	- Permissions nodes reworked.
+    		- localshops.buy.local / localshops.sell.local
+    		- localshops.buy.global / localshops.sell.global
+	* Bug Fixes
+		- '/shop find' messages displaying improper # of shops.
+	* Known Issues
+		- Buying/Selling maps will probably not work very well.
+
 Version 3.1.0
     * Out of Beta!
     * Features

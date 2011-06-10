@@ -1,6 +1,6 @@
 name: LocalShops
 main: com.milkbukkit.localshops.LocalShops
-version: 3.1.0
+version: 3.2.0dev
 author: Cereal, Jonbas
 description: >
              A localized shop plugin for use with Bukkit economies.

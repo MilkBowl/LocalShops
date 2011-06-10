@@ -650,9 +650,6 @@ public class ShopManager {
             }
         }
 
-        for ( ShopSign sign : shop.getSignSet() ) {
-            log.info("[LocalShops] - Sign Loaded: " + sign.toString());
-        }
         // Sanity Checks
         // Check that filename == UUID from file
         if(!file.getName().equalsIgnoreCase(String.format("%s.shop", shop.getUuid().toString()))) {
