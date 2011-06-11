@@ -112,6 +112,10 @@ public class ShopsBlockListener extends BlockListener {
             player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to place a sign or chest in the shop");
             event.setCancelled(true);
             return;
+        } else if (block.getType().equals(Material.CHEST) && shop.getChests().size() >= plugin.getPermManager().getInfoIntoLow(shop.getWorlds(), player.getName(), "maxchests") && plugin.getPermManager().getInfoIntoLow(shop.getWorlds(), player.getName(), "maxchests") > 0) {
+            player.sendMessage(ChatColor.DARK_AQUA + "You already have the maximum allowed number of chests");
+            event.setCancelled(true);
+            return;
         }
     }
 
