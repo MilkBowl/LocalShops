@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -121,31 +122,35 @@ public class CommandShopFind extends Command {
 
     private boolean shopFind(Player player, ItemInfo found) {
         String playerWorld = player.getWorld().getName();
-        ShopLocation playerLoc = new ShopLocation(player.getLocation());
-
+        Location playerLoc = player.getLocation();
         TreeMap<UUID, Double> foundShops = new TreeMap<UUID, Double>();
         List<Shop> shops = plugin.getShopManager().getAllShops();
         for (Shop shop : shops) {
             double distance = 0;
-            
+
             // Check if global or local
             if(shop instanceof LocalShop) {
                 LocalShop lShop = (LocalShop) shop;
-                
+
                 // Check that its the current world
                 if (!lShop.containsWorld(playerWorld)) {
                     continue;
                 }
-                
-                distance = GenericFunctions.calculateDistance(playerLoc.getX(), playerLoc.getY(), playerLoc.getZ(), lShop.getLocationCenter().getX(), lShop.getLocationCenter().getY(), lShop.getLocationCenter().getZ());
+                for (ShopLocation shopLoc : lShop.getShopLocations()) {
+                    if (playerWorld.equals(shopLoc.getWorld())) {
+                        double tempDist = GenericFunctions.calculateDistance(playerLoc.getX(), playerLoc.getY(), playerLoc.getZ(), shopLoc.getCenter().getX(), shopLoc.getCenter().getY(), shopLoc.getCenter().getZ());
+                        if ( (distance != 0 && distance > tempDist) || distance == 0 )
+                            distance = tempDist;
+                    }
+                }
             } else if(shop instanceof GlobalShop) {
                 GlobalShop gShop = (GlobalShop) shop;
-                
+
                 // Check that its the current world
                 if (!gShop.containsWorld(playerWorld)) {
                     continue;
                 }
-                
+
                 distance = 0;
             }
 

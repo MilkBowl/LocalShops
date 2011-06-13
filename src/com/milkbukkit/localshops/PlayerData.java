@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.milkbukkit.localshops.modules.economy.EconomyResponse;
@@ -21,8 +22,8 @@ public class PlayerData {
     public List<UUID> shopList = Collections.synchronizedList(new ArrayList<UUID>());
     public String playerName = null;
     private boolean isSelecting = false;
-    private int xyzA[] = null;
-    private int xyzB[] = null;
+    private Location xyzA = null;
+    private Location xyzB = null;
     
     // Logging
     private static final Logger log = Logger.getLogger("Minecraft");    
@@ -33,19 +34,19 @@ public class PlayerData {
         this.playerName = playerName;
     }
 
-    public int[] getPositionA() {
+    public Location getPositionA() {
         return xyzA;
     }
 
-    public int[] getPositionB() {
+    public Location getPositionB() {
         return xyzB;
     }
 
-    public void setPositionA(int[] xyz) {
+    public void setPositionA(Location xyz) {
         xyzA = xyz.clone();
     }
 
-    public void setPositionB(int[] xyz) {
+    public void setPositionB(Location xyz) {
         xyzB = xyz.clone();
     }
 

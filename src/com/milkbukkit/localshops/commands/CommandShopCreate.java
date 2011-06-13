@@ -31,11 +31,9 @@ public class CommandShopCreate extends Command {
     public boolean process() {
         String creator = null;
         String world = null;
-        int[] xyzA = new int[3];
-        int[] xyzB = new int[3];
 
         Player player = null;
-
+        ShopLocation shopLoc = null;
         // Get current shop
         if (sender instanceof Player) {
             player = (Player) sender;
@@ -49,7 +47,8 @@ public class CommandShopCreate extends Command {
                 sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_MAX_NUM_SHOPS));
                 return false;
             }
-
+           
+            int x1 = 0, x2 = 0, z1 = 0, z2 = 0;
             // If player is select, use their selection
             if (pData.isSelecting()) {
                 if (GenericFunctions.calculateCuboidSize(pData.getPositionA(), pData.getPositionB(), Config.getShopSizeMaxWidth(), Config.getShopSizeMaxHeight()) == null) {
@@ -58,10 +57,10 @@ public class CommandShopCreate extends Command {
                     return false;
                 }
 
-                xyzA = pData.getPositionA();
-                xyzB = pData.getPositionB();
+                Location loc1 = pData.getPositionA();
+                Location loc2 = pData.getPositionB();
 
-                if (xyzA == null || xyzB == null) {
+                if (loc1 == null || loc2 == null) {
                     player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SELECTION_PROB_ONLY_ONE_POINT));
                     return false;
                 }
@@ -71,24 +70,23 @@ public class CommandShopCreate extends Command {
                 int x = loc.getBlockX();
                 int y = loc.getBlockY();
                 int z = loc.getBlockZ();
-
+                
                 if (Config.getShopSizeDefWidth() % 2 == 0) {
-                    xyzA[0] = x - (Config.getShopSizeDefWidth() / 2);
-                    xyzB[0] = x + (Config.getShopSizeDefWidth() / 2);
-                    xyzA[2] = z - (Config.getShopSizeDefWidth() / 2);
-                    xyzB[2] = z + (Config.getShopSizeDefWidth() / 2);
+                    x1 = x - (Config.getShopSizeDefWidth() / 2);
+                    x2 = x + (Config.getShopSizeDefWidth() / 2);
+                    z1 = z - (Config.getShopSizeDefWidth() / 2);
+                    z2 = z + (Config.getShopSizeDefWidth() / 2);
                 } else {
-                    xyzA[0] = x - (Config.getShopSizeDefWidth() / 2) + 1;
-                    xyzB[0] = x + (Config.getShopSizeDefWidth() / 2);
-                    xyzA[2] = z - (Config.getShopSizeDefWidth() / 2) + 1;
-                    xyzB[2] = z + (Config.getShopSizeDefWidth() / 2);
+                    x1 = x - (Config.getShopSizeDefWidth() / 2) + 1;
+                    x2 = x + (Config.getShopSizeDefWidth() / 2);
+                    z1 = z - (Config.getShopSizeDefWidth() / 2) + 1;
+                    z2 = z + (Config.getShopSizeDefWidth() / 2);
                 }
-
-                xyzA[1] = y - 1;
-                xyzB[1] = y + Config.getShopSizeDefHeight() - 1;
+                //generate the new shopLocation
+                shopLoc = new ShopLocation(x1, y - 1, z1, x2, y + Config.getShopSizeDefHeight() - 1, z2, player.getWorld());
             }
 
-            if(!plugin.getShopManager().shopPositionOk(xyzA, xyzB, world) && !isGlobal) {
+            if(!plugin.getShopManager().shopPositionOk(shopLoc.getLocation1(), shopLoc.getLocation2(), world) && !isGlobal) {
                 sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SHOP_EXISTS));
                 return false;
             }
@@ -150,7 +148,7 @@ public class CommandShopCreate extends Command {
             lShop.setOwner(creator);
             lShop.setName(name);
             lShop.addWorld(world);
-            lShop.setLocations(new ShopLocation(xyzA), new ShopLocation(xyzB));
+            lShop.getShopLocations().add(shopLoc);
             plugin.getShopManager().addShop(lShop);
             shop = lShop;
             log.info(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_LOG, new String[] { "%TYPE%", "%SHOP%" }, new Object[] { "Local", lShop }));

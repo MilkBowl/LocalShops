@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.bukkit.Location;
+
 public class GenericFunctions {
     /**
      * Calculates distance between two cartesian points
@@ -169,6 +171,13 @@ public class GenericFunctions {
         } else {
             return size;
         }
+    }
+    
+    //Takes 2 Locations constructs xyz array and passed it back to original checker function for testing.
+    public static String calculateCuboidSize(Location loc1, Location loc2, int maxWidth, int maxHeight) {
+        int[] xyzA = {loc1.getBlockX(), loc1.getBlockY(), loc1.getBlockZ()};
+        int[] xyzB = {loc2.getBlockX(), loc2.getBlockY(), loc2.getBlockZ()};
+        return calculateCuboidSize(xyzA, xyzB, maxWidth, maxHeight);
     }
     
     /**

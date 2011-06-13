@@ -126,7 +126,9 @@ public class ShopManager {
         return null;
     }
 
-    public boolean shopPositionOk(int[] xyzA, int[] xyzB, String worldName) {
+    public boolean shopPositionOk(Location loc1, Location loc2, String worldName) {
+        int[] xyzA = {loc1.getBlockX(), loc1.getBlockY(), loc1.getBlockZ()};
+        int[] xyzB = {loc2.getBlockX(), loc2.getBlockY(), loc2.getBlockZ()};
         // make sure coords are in right order
         for (int i = 0; i < 3; i++) {
             if (xyzA[i] > xyzB[i]) {

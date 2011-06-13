@@ -96,8 +96,7 @@ public class ShopsPlayerListener extends PlayerListener {
             PlayerData pData = plugin.getPlayerData().get(playerName);
 
             if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-                int[] xyz = { x, y, z };
-                pData.setPositionA(xyz);
+                pData.setPositionA(loc);
                 String size = GenericFunctions.calculateCuboidSize(pData.getPositionA(), pData.getPositionB(), Config.getShopSizeMaxWidth(), Config.getShopSizeMaxHeight());
                 if(size != null) {
                     player.sendMessage(ChatColor.DARK_AQUA + "First Position " + ChatColor.LIGHT_PURPLE + x + " " + y + " " + z + ChatColor.DARK_AQUA + " size " + ChatColor.LIGHT_PURPLE + size);
@@ -111,8 +110,7 @@ public class ShopsPlayerListener extends PlayerListener {
                     player.sendMessage(ChatColor.DARK_AQUA + "Type " + ChatColor.WHITE + "/shop create [Shop Name]" + ChatColor.DARK_AQUA + ", if you're happy with your selection, otherwise keep selecting!");
                 }
             } else if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                int[] xyz = { x, y, z };
-                pData.setPositionB(xyz);
+                pData.setPositionB(loc);
                 String size = GenericFunctions.calculateCuboidSize(pData.getPositionA(), pData.getPositionB(), Config.getShopSizeMaxWidth(), Config.getShopSizeMaxHeight());
                 if(size != null) {
                     player.sendMessage(ChatColor.DARK_AQUA + "Second Position " + ChatColor.LIGHT_PURPLE + x + " " + y + " " + z + ChatColor.DARK_AQUA + " size " + ChatColor.LIGHT_PURPLE + size);

@@ -43,7 +43,8 @@ public class CommandShopMove extends Command {
             sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "Console is not implemented yet.");
             return true;
         }
-
+/*
+ * TODO: Reword Logic completely for /shop move
         Pattern pattern = Pattern.compile("(?i)move\\s+(.*)");
         Matcher matcher = pattern.matcher(command);
         if (matcher.find()) {
@@ -144,7 +145,7 @@ public class CommandShopMove extends Command {
                 }
             }            
         }
-
+*/
         // Show usage
         sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "The command format is " + ChatColor.WHITE + "/" + commandLabel + " move [id]");
         sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "Use " + ChatColor.WHITE + "/" + commandLabel + " info" + ChatColor.DARK_AQUA + " to obtain the id.");
