@@ -7,7 +7,6 @@ import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.ResourceManager;
 import net.milkbowl.localshops.commands.ShopCommandExecutor;
-import net.milkbowl.localshops.objects.ChestState;
 import net.milkbowl.localshops.objects.LocalShop;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;
@@ -84,8 +83,6 @@ public class ShopsPlayerListener extends PlayerListener {
                     player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
                     event.setCancelled(true);
                     return;
-                } else {
-                   plugin.getPlayerData().get(player.getName()).getCurrentChest().set(event.getClickedBlock(), player);
                 }
             }
         }

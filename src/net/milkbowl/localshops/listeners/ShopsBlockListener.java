@@ -114,13 +114,13 @@ public class ShopsBlockListener extends BlockListener {
             player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to place a sign or chest in the shop");
             event.setCancelled(true);
             return;
-        } /* TODO Refactor InfoInt completely
-        else if (block.getType().equals(Material.CHEST) && shop.getChests().size() >= plugin.getPermManager().getInfoIntLow(shop.getWorlds(), player.getName(), "maxchests") && plugin.getPermManager().getInfoIntLow(shop.getWorlds(), player.getName(), "maxchests") > 0) {
+        } // TODO Refactor InfoInt completely
+        else if (block.getType().equals(Material.CHEST) && shop.getChests().size() >= plugin.getPermManager().getInfoIntLow(shop.getWorld(), player.getName(), "maxchests") && plugin.getPermManager().getInfoIntLow(shop.getWorld(), player.getName(), "maxchests") > 0) {
             player.sendMessage(ChatColor.DARK_AQUA + "You already have the maximum allowed number of chests");
             event.setCancelled(true);
             return;
         }
-        */
+        
     }
 
     public void onBlockBreak(BlockBreakEvent event) {

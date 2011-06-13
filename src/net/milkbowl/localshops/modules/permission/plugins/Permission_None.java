@@ -1,8 +1,5 @@
 package net.milkbowl.localshops.modules.permission.plugins;
 
-
-import java.util.List;
-
 import net.milkbowl.localshops.modules.permission.Permission;
 
 import org.bukkit.entity.Player;
@@ -46,11 +43,11 @@ public class Permission_None implements Permission {
         return false;
     }
 
-    /* (non-Javadoc)
-     * @see com.milkbukkit.localshops.modules.permission.Permission#numChestsAllowed(java.lang.String, java.lang.String)
+    /* 
+     *
      */
     @Override
-    public int getInfoIntLow(List<String> worlds, String playerName, String node) {
+    public int getInfoInt(String world, String playerName, String node) {
         return -1;
     }
 

@@ -1,7 +1,6 @@
 package net.milkbowl.localshops.modules.permission;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
@@ -93,8 +92,8 @@ public class PermissionManager {
         return rVal;
     }
     
-    public int getInfoIntLow(List<String> worlds, String playerName, String node) {
-        int rVal = getPermission().getInfoIntLow(worlds, playerName, node);
+    public int getInfoIntLow(String world, String playerName, String node) {
+        int rVal = getPermission().getInfoInt(world, playerName, node);
         return rVal;
     }
 

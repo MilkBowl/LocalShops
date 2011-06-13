@@ -1,8 +1,5 @@
 package net.milkbowl.localshops.modules.permission.plugins;
 
-
-import java.util.List;
-
 import net.milkbowl.localshops.modules.permission.Permission;
 
 import org.bukkit.entity.Player;
@@ -102,17 +99,8 @@ public class Permission_Permissions implements Permission {
      * @see com.milkbukkit.localshops.modules.permission.Permission#numChestsAllowed(java.util.List, java.lang.String, java.lang.String)
      */
     @Override
-    public int getInfoIntLow(List<String> worlds, String playerName, String node) {
-        int rVal = -1;
-        for (String worldName : worlds) {
-            int tempVal = this.permission.getHandler().getPermissionInteger(worldName, playerName, node);
-            if (tempVal < rVal && rVal > 0 && tempVal > 0)
-                rVal = tempVal;
-            else if (rVal <= 0)
-                rVal = tempVal;
-        }
-        //Return highest value that player has permission for.
-        return rVal;
+    public int getInfoInt(String world, String playerName, String node) {
+        return this.permission.getHandler().getPermissionInteger(world, playerName, node);
     }
 
 
