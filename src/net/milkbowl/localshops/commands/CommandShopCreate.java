@@ -84,7 +84,7 @@ public class CommandShopCreate extends Command {
                     z2 = z + (Config.getShopSizeDefWidth() / 2);
                 }
                 //generate the new shopLocation
-                shopLoc = new ShopLocation(x1, y - 1, z1, x2, y + Config.getShopSizeDefHeight() - 1, z2, player.getWorld());
+                shopLoc = new ShopLocation(x1, y - 1, z1, x2, y + Config.getShopSizeDefHeight() - 1, z2);
             }
 
             if(!plugin.getShopManager().shopPositionOk(shopLoc.getLocation1(), shopLoc.getLocation2(), world) && !isGlobal) {
@@ -148,7 +148,7 @@ public class CommandShopCreate extends Command {
             lShop.setCreator(creator);
             lShop.setOwner(creator);
             lShop.setName(name);
-            lShop.addWorld(world);
+            lShop.setWorld(world);
             lShop.getShopLocations().add(shopLoc);
             plugin.getShopManager().addShop(lShop);
             shop = lShop;

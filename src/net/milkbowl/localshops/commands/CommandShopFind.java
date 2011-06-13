@@ -134,15 +134,13 @@ public class CommandShopFind extends Command {
                 LocalShop lShop = (LocalShop) shop;
 
                 // Check that its the current world
-                if (!lShop.containsWorld(playerWorld)) {
+                if (!lShop.getWorld().equals(playerWorld)) {
                     continue;
                 }
                 for (ShopLocation shopLoc : lShop.getShopLocations()) {
-                    if (playerWorld.equals(shopLoc.getWorld())) {
-                        double tempDist = GenericFunctions.calculateDistance(playerLoc.getX(), playerLoc.getY(), playerLoc.getZ(), shopLoc.getCenter().getX(), shopLoc.getCenter().getY(), shopLoc.getCenter().getZ());
+                        double tempDist = GenericFunctions.calculateDistance(playerLoc.getX(), playerLoc.getY(), playerLoc.getZ(), shopLoc.getCenter(player.getWorld()).getX(), shopLoc.getCenter(player.getWorld()).getY(), shopLoc.getCenter(player.getWorld()).getZ());
                         if ( (distance != 0 && distance > tempDist) || distance == 0 )
                             distance = tempDist;
-                    }
                 }
             } else if(shop instanceof GlobalShop) {
                 GlobalShop gShop = (GlobalShop) shop;
