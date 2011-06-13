@@ -92,7 +92,7 @@ public class PermissionManager {
         return rVal;
     }
     
-    public int getInfoIntoLow(List<String> worlds, String playerName, String node) {
+    public int getInfoIntLow(List<String> worlds, String playerName, String node) {
         int rVal = getPermission().getInfoIntLow(worlds, playerName, node);
         return rVal;
     }
