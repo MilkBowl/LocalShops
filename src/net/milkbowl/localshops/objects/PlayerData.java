@@ -23,7 +23,6 @@ public class PlayerData {
     private boolean isSelecting = false;
     private Location xyzA = null;
     private Location xyzB = null;
-    private ChestState currentChest = new ChestState();
 
     // Logging
     private static final Logger log = Logger.getLogger("Minecraft");    
@@ -171,23 +170,4 @@ public class PlayerData {
     public boolean isSelecting() {
         return isSelecting;
     }
-
-    /*
-     * Returns true if a player is interacting with a chest
-     */
-    public boolean isInChest() {
-        return currentChest.isActive();
-    }
-
-    /*
-     * sets whether a player is interacting with a chest
-     */
-    public void setInChest(boolean inChest) {
-        currentChest.setActive(inChest);
-    }
-    
-    public ChestState getCurrentChest() {
-        return currentChest;
-    }
-
 }
