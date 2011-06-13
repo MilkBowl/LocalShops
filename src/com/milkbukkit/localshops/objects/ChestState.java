@@ -3,10 +3,10 @@
  */
 package com.milkbukkit.localshops.objects;
 
-import java.util.ArrayList;
-
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.block.ContainerBlock;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -16,31 +16,45 @@ import org.bukkit.inventory.ItemStack;
  */
 public class ChestState {
 
-    private Block block = null;
-    private ArrayList<ItemStack[]> chestInvBackup = null;
-    private ArrayList<ItemStack[]> playerInvBackup = null;
+    private ContainerBlock block = null;
+    private ItemStack[] chestInvBackup = null;
+    private ItemStack[] playerInvBackup = null;
     private Location playerLoc = null;
     private boolean active = false;
     
-    ChestState() {
+    public void set(Block block, Player player) {
+        setBlock(block);
+        this.playerLoc = player.getLocation();
+        this.active = true;
+        playerInvBackup = player.getInventory().getContents();
+        chestInvBackup = ((ContainerBlock) block).getInventory().getContents();
+    }
+    
+    public void reset() {
+        active = false;
+        block = null;
+        chestInvBackup = null;
+        playerInvBackup = null;
+        playerLoc = null;
     }
     
     public Block getBlock() {
-        return block;
+        return (Block) block;
     }
+    
     public void setBlock(Block block) {
-        this.block = block;
+        this.block = (ContainerBlock) block;
     }
-    public ArrayList<ItemStack[]> getChestInvBackup() {
+    public ItemStack[] getChestInvBackup() {
         return chestInvBackup;
     }
-    public void setChestInvBackup(ArrayList<ItemStack[]> chestInvBackup) {
+    public void setChestInvBackup(ItemStack[] chestInvBackup) {
         this.chestInvBackup = chestInvBackup;
     }
-    public ArrayList<ItemStack[]> getPlayerInvBackup() {
+    public ItemStack[] getPlayerInvBackup() {
         return playerInvBackup;
     }
-    public void setPlayerInvBackup(ArrayList<ItemStack[]> playerInvBackup) {
+    public void setPlayerInvBackup(ItemStack[] playerInvBackup) {
         this.playerInvBackup = playerInvBackup;
     }
     public Location getPlayerLoc() {

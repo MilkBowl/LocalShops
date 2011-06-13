@@ -19,6 +19,7 @@ import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.ResourceManager;
 import com.milkbukkit.localshops.commands.ShopCommandExecutor;
+import com.milkbukkit.localshops.objects.ChestState;
 import com.milkbukkit.localshops.objects.LocalShop;
 import com.milkbukkit.localshops.objects.PlayerData;
 import com.milkbukkit.localshops.objects.Shop;
@@ -82,6 +83,8 @@ public class ShopsPlayerListener extends PlayerListener {
                     player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
                     event.setCancelled(true);
                     return;
+                } else {
+                   plugin.getPlayerData().get(player.getName()).getCurrentChest().set(event.getClickedBlock(), player);
                 }
             }
         }

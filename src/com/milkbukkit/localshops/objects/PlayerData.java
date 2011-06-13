@@ -22,7 +22,7 @@ public class PlayerData {
     private boolean isSelecting = false;
     private Location xyzA = null;
     private Location xyzB = null;
-    private static ChestState currentChest = new ChestState();
+    private ChestState currentChest = new ChestState();
 
     // Logging
     private static final Logger log = Logger.getLogger("Minecraft");    
@@ -185,7 +185,7 @@ public class PlayerData {
         currentChest.setActive(inChest);
     }
     
-    public static ChestState getCurrentChest() {
+    public ChestState getCurrentChest() {
         return currentChest;
     }
 
