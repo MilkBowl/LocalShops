@@ -7,12 +7,14 @@ A localized shop system that lets users create their own shops and then control 
 Changelog
 -------------------
 
-
-	* Features
-		- Shop Signs
-		- Global Shops
-		- Dynamically Priced Shops
-		- More Block support (1.6 blocks + 'Hacky' ones)
+Version 4?
+    * Features
+        - Shop Signs
+	- Global Shops
+        - Multi-Location Shops
+	- Dynamically Priced Shops
+        - In-Game Global Option Setting
+	- More Block support (1.6 blocks + 'Hacky' ones)
 
 Version 3.1.0
     * Out of Beta!
