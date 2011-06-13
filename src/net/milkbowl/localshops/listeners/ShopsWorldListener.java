@@ -38,7 +38,7 @@ public class ShopsWorldListener extends WorldListener {
             if(shop instanceof GlobalShop) {
                     continue;
             } else if(shop instanceof LocalShop) {
-                if(!shop.containsWorld(worldName)) {
+                if(!((LocalShop) shop).getWorld().equals(worldName)) {
                     continue;
                 }
             }
