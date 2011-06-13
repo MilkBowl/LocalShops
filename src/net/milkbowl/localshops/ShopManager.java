@@ -12,9 +12,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
@@ -35,6 +37,7 @@ import org.bukkit.World;
 public class ShopManager {
     public static LocalShops plugin = null;
     private Map<UUID, Shop> shops = Collections.synchronizedMap(new HashMap<UUID, Shop>());
+    private Map<String, Set<UUID>> localShops = Collections.synchronizedMap(new HashMap<String, Set<UUID>>());
     private Map<String, UUID> worldShops = Collections.synchronizedMap(new HashMap<String, UUID>());
 
     // Logging
@@ -115,11 +118,12 @@ public class ShopManager {
     }
 
     public LocalShop getLocalShop(String world, int x, int y, int z) {
-        for(Shop shop : shops.values()) {
-            if(shop instanceof LocalShop) {
+        for (UUID u : localShops.get(world)) {
+            Shop shop = shops.get(u);
+            if (shop instanceof LocalShop) {
                 LocalShop lShop = (LocalShop) shop;
 
-                if(lShop.containsPoint(world, x, y, z)) {
+                if (lShop.containsPoint(world, x, y, z)) {
                     return lShop;
                 }
             }
@@ -172,14 +176,24 @@ public class ShopManager {
         }
 
         if(shop instanceof GlobalShop) {
-            GlobalShop gShop = (GlobalShop) shop;
-            for(String world : gShop.getWorlds()) {
+            for(String world : shop.getWorlds()) {
                 if (worldShops.containsKey(world)) {
                     // Warning
                     log.warning(String.format("[%s] Warning, Global Shop already exists for World \"%s\"!", plugin.getDescription().getName(), world));
                 } else {
                     // Add to map
-                    worldShops.put(world, gShop.getUuid());
+                    worldShops.put(world, shop.getUuid());
+                }
+            }
+        } else if(shop instanceof LocalShop) {
+            for(String world : shop.getWorlds()) {
+                if(localShops.containsKey(world)) {
+                    // World already has a shop, lets add to it!
+                    localShops.get(world).add(shop.getUuid());
+                } else {
+                    Set<UUID> u = Collections.synchronizedSet(new HashSet<UUID>());
+                    u.add(shop.getUuid());
+                    localShops.put(world, u);
                 }
             }
         }
@@ -791,8 +805,12 @@ public class ShopManager {
 
         // if global, remove from map
         if(shop instanceof GlobalShop) {
-            for(String w : ((GlobalShop) shop).getWorlds()) {
+            for(String w : shop.getWorlds()) {
                 worldShops.remove(w);
+            }
+        } else if(shop instanceof LocalShop) {
+            for(String w : shop.getWorlds()) {
+                localShops.get(w).remove(shop.getUuid());
             }
         }
 
