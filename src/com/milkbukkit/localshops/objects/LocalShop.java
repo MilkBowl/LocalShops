@@ -1,7 +1,12 @@
 package com.milkbukkit.localshops.objects;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.UUID;
+
+import org.bukkit.Location;
 
 import com.milkbukkit.localshops.util.GenericFunctions;
 
@@ -11,7 +16,8 @@ public class LocalShop extends Shop {
     private ShopLocation locationA = null;
     private ShopLocation locationB = null;
     private int locationLowX, locationHighX, locationLowY, locationHighY, locationLowZ, locationHighZ;
-
+    protected Set<Location> chests = null;
+    
     public LocalShop(UUID uuid) {
         super(uuid);
     }
@@ -70,7 +76,15 @@ public class LocalShop extends Shop {
 
         return new ShopLocation(xyz);
     }
-
+    
+    public Set<Location> getChests() {
+        if (chests == null) {
+            chests = Collections.synchronizedSet(new HashSet<Location>());
+            //TODO: Check for chests and add to set.
+        }
+        return chests;
+    }
+    
     public int getLocationLowX() {
         return locationLowX;
     }

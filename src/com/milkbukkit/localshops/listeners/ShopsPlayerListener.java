@@ -20,6 +20,7 @@ import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.PlayerData;
 import com.milkbukkit.localshops.ResourceManager;
 import com.milkbukkit.localshops.commands.ShopCommandExecutor;
+import com.milkbukkit.localshops.objects.LocalShop;
 import com.milkbukkit.localshops.objects.Shop;
 import com.milkbukkit.localshops.objects.ShopSign;
 import com.milkbukkit.localshops.util.GenericFunctions;
@@ -51,7 +52,7 @@ public class ShopsPlayerListener extends PlayerListener {
             plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
         }
         Location eventBlockLoc = event.getClickedBlock().getLocation();
-        Shop shop = plugin.getShopManager().getLocalShop(eventBlockLoc);
+        LocalShop shop = plugin.getShopManager().getLocalShop(eventBlockLoc);
         //If user Right clicks a sign try to buy/sell from it.
         if (((event.getClickedBlock().getType().equals(Material.WALL_SIGN) || event.getClickedBlock().getType().equals(Material.SIGN_POST)) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && player.getItemInHand().getType().equals(Material.AIR) && shop != null) {
             for (ShopSign sign : shop.getSignSet()) {

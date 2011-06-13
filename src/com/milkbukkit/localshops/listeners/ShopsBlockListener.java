@@ -20,6 +20,7 @@ import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.Search;
 import com.milkbukkit.localshops.exceptions.TypeNotFoundException;
 import com.milkbukkit.localshops.objects.ItemInfo;
+import com.milkbukkit.localshops.objects.LocalShop;
 import com.milkbukkit.localshops.objects.Shop;
 import com.milkbukkit.localshops.objects.ShopSign;
 
@@ -97,7 +98,7 @@ public class ShopsBlockListener extends BlockListener {
             return;
         }
 
-        Shop shop = null;
+        LocalShop shop = null;
         Player player = event.getPlayer();
 
         // Find the current shop.
@@ -131,7 +132,8 @@ public class ShopsBlockListener extends BlockListener {
             return;
         }
 
-        Shop shop = null;
+        //events only affect localshops
+        LocalShop shop = null;
         Player player = event.getPlayer();
 
         // Find the current shop.
