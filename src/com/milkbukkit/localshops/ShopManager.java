@@ -118,11 +118,6 @@ public class ShopManager {
             if(shop instanceof LocalShop) {
                 LocalShop lShop = (LocalShop) shop;
 
-                ShopLocation[] sLocs = lShop.getLocations();
-                if(sLocs.length != 2) {
-                    continue;
-                }
-
                 if(lShop.containsPoint(world, x, y, z)) {
                     return lShop;
                 }
@@ -278,7 +273,10 @@ public class ShopManager {
             // Open file & iterate over lines
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line = br.readLine();
+            int x1 = 0, x2 = 0, y1 = 0, y2 = 0, z1 = 0, z2 = 0;
+            String world = "";
             while (line != null) {
+                
                 if(Config.getSrvDebug()) {
                     log.info(String.format("[%s] %s", plugin.getDescription().getName(), line));
                 }
@@ -300,6 +298,7 @@ public class ShopManager {
 
                 if (cols[0].equalsIgnoreCase("world")) { // World
                     shop.addWorld(cols[1]);
+                    world = cols[1];
                 } else if (cols[0].equalsIgnoreCase("owner")) { // Owner
                     shop.setOwner(cols[1]);
                 } else if (cols[0].equalsIgnoreCase("managers")) { // Managers
@@ -311,12 +310,10 @@ public class ShopManager {
                     // A
                     String[] xyzStr = cols[1].split(",");
                     try {
-                        int x = Integer.parseInt(xyzStr[0].trim());
-                        int y = Integer.parseInt(xyzStr[1].trim());
-                        int z = Integer.parseInt(xyzStr[2].trim());
+                        x1 = Integer.parseInt(xyzStr[0].trim());
+                        y1 = Integer.parseInt(xyzStr[1].trim());
+                        z1 = Integer.parseInt(xyzStr[2].trim());
 
-                        ShopLocation loc = new ShopLocation(x, y, z);
-                        shop.setLocationA(loc);
                     } catch (NumberFormatException e) {
                         if(isolateBrokenShopFile(file)) {
                             log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
@@ -329,12 +326,9 @@ public class ShopManager {
                     // B
                     String[] xyzStr = cols[1].split(",");
                     try {
-                        int x = Integer.parseInt(xyzStr[0].trim());
-                        int y = Integer.parseInt(xyzStr[1].trim());
-                        int z = Integer.parseInt(xyzStr[2].trim());
-
-                        ShopLocation loc = new ShopLocation(x, y, z);
-                        shop.setLocationB(loc);
+                        x2 = Integer.parseInt(xyzStr[0].trim());
+                        y2 = Integer.parseInt(xyzStr[1].trim());
+                        z2 = Integer.parseInt(xyzStr[2].trim());
                     } catch (NumberFormatException e) {
                         if(isolateBrokenShopFile(file)) {
                             log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
@@ -421,7 +415,7 @@ public class ShopManager {
                 }
                 line = br.readLine();
             }
-
+            ((LocalShop) shop).getShopLocations().add(new ShopLocation(x1, y1, z1, x2, y2, z2, plugin.getServer().getWorld(world)));
             br.close();
 
             File dir = new File(Config.getDirShopsConvertedPath());
@@ -469,8 +463,8 @@ public class ShopManager {
         List<ShopSign> signList = new ArrayList<ShopSign>(4);
 
         Shop shop = null;
-        int[] locationA = null;
-        int[] locationB = null;
+        int[] locA = null;
+        int[] locB = null;
 
         SortedProperties props = new SortedProperties();
         try {
@@ -515,23 +509,24 @@ public class ShopManager {
                 shop.addWorld(world);
             }
         }
-        
-        //TODO: Support multi-location (Location strings should load in with world data.
-        if (shop instanceof LocalShop ){
-            try {
-                locationA = convertStringArraytoIntArray(props.getProperty("locationA").split(", "));
-                locationB = convertStringArraytoIntArray(props.getProperty("locationB").split(", "));
-                ((LocalShop) shop).setLocationA(new ShopLocation(locationA));
-                ((LocalShop) shop).setLocationB(new ShopLocation(locationB));
-            } catch (Exception e) {
-                if (isolateBrokenShopFile(file)) {
-                    log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
-                } else {
-                    log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
+
+        //Convert old Location data
+        if (props.containsKey("locationA"))
+            if (shop instanceof LocalShop ){
+                try {
+                    locA = convertStringArraytoIntArray(props.getProperty("locationA").split(", "));
+                    locB = convertStringArraytoIntArray(props.getProperty("locationB").split(", "));
+                    //Try to convert to new Location data
+                    ((LocalShop) shop).getShopLocations().add(new ShopLocation(locA[0], locA[1], locA[2], locB[0], locB[1], locB[2], plugin.getServer().getWorld(worlds)));
+                } catch (Exception e) {
+                    if (isolateBrokenShopFile(file)) {
+                        log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
+                    } else {
+                        log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
+                    }
+                    return null;
                 }
-                return null;
             }
-        }
         //Add necessary shop data.that is for all shop types
         shop.setName(name);
         shop.setUnlimitedMoney(unlimitedMoney);
@@ -602,7 +597,21 @@ public class ShopManager {
                     }
                     return null;
                 }
+            } else if (key.matches("location\\d+$")) {
+                //Attempt to match new Location Data String
+                try {
+                    String[] values = props.getProperty(key).split(", ");
+                    ((LocalShop) shop).getShopLocations().add(new ShopLocation(Integer.parseInt(values[1]), Integer.parseInt(values[2]), Integer.parseInt(values[3]), Integer.parseInt(values[4]), Integer.parseInt(values[5]), Integer.parseInt(values[6]), plugin.getServer().getWorld(values[0])));
+                } catch (Exception e) {
+                    if (isolateBrokenShopFile(file)) {
+                        log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
+                    } else {
+                        log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, and Error moving file to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
+                    }
+                }
+                
             } else if (key.matches("sign\\d+$")) {
+            
 
                 String values = props.getProperty(key);
 
@@ -704,14 +713,17 @@ public class ShopManager {
         props.setProperty("notification", String.valueOf(shop.getNotification()));
         props.setProperty("dynamic-prices", String.valueOf(shop.isDynamicPrices()));
         props.setProperty("worlds", GenericFunctions.join(shop.getWorlds(), ","));
-        
+
         // Location
         if(shop instanceof GlobalShop) {
             props.setProperty("global", "true");
         } else if(shop instanceof LocalShop) {
             LocalShop lShop = (LocalShop) shop;
-            props.setProperty("locationA", lShop.getLocationA().toString());
-            props.setProperty("locationB", lShop.getLocationB().toString());
+            int i = 1;
+            for (ShopLocation shopLoc : lShop.getShopLocations()) {
+                props.setProperty("location" + i, shopLoc.toString());
+                i++;
+            }
         } else {
             // Unknown shop type!
         }
