@@ -737,12 +737,12 @@ public boolean saveShop(Shop shop) {
         props.setProperty("worlds", GenericFunctions.join( ((GlobalShop) shop).getWorlds(), ", "));
     } else if(shop instanceof LocalShop) {
         LocalShop lShop = (LocalShop) shop;
+        props.setProperty("world", lShop.getWorld());
         int i = 1;
         for (ShopLocation shopLoc : lShop.getShopLocations()) {
             props.setProperty("location" + i, shopLoc.toString());
             i++;
         }
-        props.setProperty("world", lShop.getWorld());
     } else {
         // Unknown shop type!
     }
