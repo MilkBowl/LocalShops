@@ -13,6 +13,7 @@ import com.milkbukkit.localshops.ResourceManager;
 import com.milkbukkit.localshops.objects.InventoryItem;
 import com.milkbukkit.localshops.objects.LocalShop;
 import com.milkbukkit.localshops.objects.Shop;
+import com.milkbukkit.localshops.objects.ShopLocation;
 import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class CommandShopInfo extends Command {
@@ -20,7 +21,7 @@ public class CommandShopInfo extends Command {
     public CommandShopInfo(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command, isGlobal);
     }
-    
+
     public CommandShopInfo(LocalShops plugin, String commandLabel, CommandSender sender, String[] command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command, isGlobal);
     }
@@ -89,7 +90,10 @@ public class CommandShopInfo extends Command {
         if(shop instanceof LocalShop) {
             LocalShop lShop = (LocalShop) shop;
             //TODO: Fix Me - needs to dump all locations for the shop not just one.
-            sender.sendMessage(String.format("  Located at %s x %s in \"%s\"", lShop.getLocationA().toString(), lShop.getLocationB().toString(), lShop.getWorlds().toString()));
+            for (ShopLocation shopLoc : lShop.getShopLocations())
+            {
+                sender.sendMessage(String.format("  Located %s", shopLoc.toString()));
+            }
         }
 
         // Calculate values

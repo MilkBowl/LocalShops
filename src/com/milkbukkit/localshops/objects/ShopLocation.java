@@ -91,6 +91,6 @@ public class ShopLocation {
     
     //TODO: Fix String output
     public String toString() {
-        return String.format("%s, %d, %d, %d, %d, %d, %d", world.getName(), x1, y1, z1, x2, y2, z2);
+        return String.format("on %s at %d %d %d X %d %d %d", world.getName(), x1, y1, z1, x2, y2, z2);
     }
 }
