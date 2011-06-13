@@ -464,14 +464,14 @@ public abstract class Shop implements Comparator<Shop> {
             else if (this.getItem(sign.getItemName()).getStock() == 0 && !this.unlimitedStock)
                 signLines[1] = "Understock";
             else 
-                signLines[1] = "Buy: " + this.getItem(sign.getItemName()).getBuyPrice();
+                signLines[1] = "Buy: " + this.getItem(sign.getItemName()).getBuyPrice() + " [" + this.getItem(sign.getItemName()).getBuySize() + "]";
 
             if (this.getItem(sign.getItemName()).getSellPrice() == 0 ) 
                 signLines[2] = "Sell: -";
             else if (this.getItem(sign.getItemName()).maxStock > 0 && this.getItem(sign.getItemName()).getStock() >= this.getItem(sign.getItemName()).maxStock && !this.unlimitedStock)
                 signLines[2] = "Overstock";
             else 
-                signLines[2] = "Sell: " + this.getItem(sign.getItemName()).getSellPrice();
+                signLines[2] = "Sell: " + this.getItem(sign.getItemName()).getSellPrice() + " [" + this.getItem(sign.getItemName()).getSellSize() + "]";
 
             if (!this.unlimitedStock)
                 signLines[3] = "Stock: " + this.getItem(sign.getItemName()).getStock();
@@ -483,7 +483,7 @@ public abstract class Shop implements Comparator<Shop> {
             else if (this.getItem(sign.getItemName()).getStock() == 0 && !this.unlimitedStock) 
                 signLines[1] = "Understock";
             else  {
-                signLines[1] = "Buy: " + this.getItem(sign.getItemName()).getBuyPrice();
+                signLines[1] = "Buy: " + this.getItem(sign.getItemName()).getBuyPrice() + " [" + this.getItem(sign.getItemName()).getBuySize() + "]";
                 signLines[2] = "R-Click to Buy";
             }
             if (!this.unlimitedStock)
@@ -496,7 +496,7 @@ public abstract class Shop implements Comparator<Shop> {
             else if (this.getItem(sign.getItemName()).maxStock > 0 && this.getItem(sign.getItemName()).getStock() >= this.getItem(sign.getItemName()).maxStock && !this.unlimitedStock)
                 signLines[1] = "Overstock";
             else {
-                signLines[1] = "Sell: " + this.getItem(sign.getItemName()).getSellPrice();
+                signLines[1] = "Sell: " + this.getItem(sign.getItemName()).getSellPrice() + " [" + this.getItem(sign.getItemName()).getSellSize() + "]";
                 signLines[2] = "R-Click to Sell";
             }
 
