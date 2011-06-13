@@ -9,7 +9,6 @@ import java.util.UUID;
 import net.milkbowl.localshops.util.GenericFunctions;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 
 
 public class LocalShop extends Shop {
@@ -17,22 +16,18 @@ public class LocalShop extends Shop {
     //TODO: Store Location information in List to match World Information indices
     protected Set<ShopLocation> shopLocations = Collections.synchronizedSet(new HashSet<ShopLocation>(1));
     protected Set<Location> chests = null;
-
+    String world;
+    
     public LocalShop(UUID uuid) {
         super(uuid);
     }
 
 
     /*
+     * TODO: Reimplement chest grabbing
      * Initialized the chest set if it is empty, or return the set if it's non-null
      */
     public Set<Location> getChests() {
-        if (chests == null) {
-            chests = Collections.synchronizedSet(new HashSet<Location>());
-            for (ShopLocation shopLoc : shopLocations) {
-                chests.addAll(shopLoc.findBlocks(Material.CHEST));
-            }
-        }
         return chests;
     }
 
@@ -41,7 +36,17 @@ public class LocalShop extends Shop {
     }
 
     
-     // TODO: Fix to-string method for new shop-location (embed in ShopLocation class?
+     public String getWorld() {
+        return world;
+    }
+
+
+    public void setWorld(String world) {
+        this.world = world;
+    }
+
+
+    // TODO: Fix to-string method for new shop-location (embed in ShopLocation class?
     public String toString() {
         return null;
         /*
@@ -74,7 +79,7 @@ public class LocalShop extends Shop {
         log.info(String.format("   %-16s %s", "Location A:", locationA.toString()));
         log.info(String.format("   %-16s %s", "Location B:", locationB.toString()));
         */
-        log.info(String.format("   %-16s %s", "World:", GenericFunctions.join(worlds, ", ")));
+        log.info(String.format("   %-16s %s", "World:", world));
 
         // Items
         log.info("Shop Inventory");
@@ -97,11 +102,10 @@ public class LocalShop extends Shop {
     //TODO: Support world# check vs location data check.
     public boolean containsPoint(String worldName, int x, int y, int z) {
         for (ShopLocation shopLoc : shopLocations) {
-            if (shopLoc.getWorld().getName().equals(worldName)) {
-                Location loc1 = shopLoc.getLocation1();
-                Location loc2 = shopLoc.getLocation2();
-                
-                if (x >= loc1.getBlockX() && x <= loc2.getBlockX() && y >= loc1.getBlockY() && y <= loc2.getBlockY() && z >= loc1.getBlockZ() && z <= loc2.getBlockZ())
+            if (world.equals(worldName)) {
+                int[] loc1 = shopLoc.getLocation1();
+                int[] loc2 = shopLoc.getLocation2();
+                if (x >= loc1[0] && x <= loc2[0] && y >= loc1[1] && y <= loc2[1] && z >= loc1[2] && z <= loc2[2])
                     return true;
             }
         }

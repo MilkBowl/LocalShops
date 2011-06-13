@@ -41,7 +41,7 @@ public abstract class Shop implements Comparator<Shop> {
     protected Set<ShopSign> signSet = Collections.synchronizedSet(new HashSet<ShopSign>());
     protected Set<String> groups = Collections.synchronizedSet(new HashSet<String>());
     protected Set<String> users = Collections.synchronizedSet(new HashSet<String>());
-    protected List<String> worlds = Collections.synchronizedList(new ArrayList<String>(1));
+
     
 
     // Logging
@@ -265,32 +265,6 @@ public abstract class Shop implements Comparator<Shop> {
         }
         inventory.get(itemName).addStock(amount);
         return true;
-    }
-    
-    public void addWorld(String worldName) {
-        if (!worlds.contains(worldName))
-            worlds.add(worldName);
-    }
-    
-    public void removeWorld(String worldName) {
-        worlds.remove(worldName);
-    }
-    
-    public boolean containsWorld(String worldName) {
-        return worlds.contains(worldName);
-    }
-    
-    public void clearWorlds() {
-        worlds.clear();
-    }
-    
-    public List<String> getWorlds() {
-        List<String> list = new ArrayList<String>();
-        for(String s : worlds) {
-            list.add(s);
-        }
-        
-        return Collections.unmodifiableList(list);
     }
 
     public boolean removeStock(String itemName, int amount) {

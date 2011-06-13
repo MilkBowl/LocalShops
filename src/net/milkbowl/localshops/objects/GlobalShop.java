@@ -1,17 +1,46 @@
 package net.milkbowl.localshops.objects;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 
 import net.milkbowl.localshops.util.GenericFunctions;
 
 
 public class GlobalShop extends Shop {
+    protected List<String> worlds = Collections.synchronizedList(new ArrayList<String>(1));
     
     public GlobalShop(UUID uuid) {
         super(uuid);
     }
     
+    public void addWorld(String worldName) {
+        if (!worlds.contains(worldName))
+            worlds.add(worldName);
+    }
+    
+    public void removeWorld(String worldName) {
+        worlds.remove(worldName);
+    }
+    
+    public boolean containsWorld(String worldName) {
+        return worlds.contains(worldName);
+    }
+    
+    public void clearWorlds() {
+        worlds.clear();
+    }
+    
+    public List<String> getWorlds() {
+        List<String> list = new ArrayList<String>();
+        for(String s : worlds) {
+            list.add(s);
+        }
+        
+        return Collections.unmodifiableList(list);
+    }
     
     @Override
     public String toString() {

@@ -14,9 +14,8 @@ public class ShopLocation {
     private int x2 = 0;
     private int y2 = 0;
     private int z2 = 0;
-    private World world;
 
-    public ShopLocation(int x1, int y1, int z1, int x2, int y2, int z2, World world) {
+    public ShopLocation(int x1, int y1, int z1, int x2, int y2, int z2) {
         //second point should always be set to the larger number
         if (x1 > x2) {
             this.x1 = x2;
@@ -39,41 +38,36 @@ public class ShopLocation {
             this.z1 = z1;
             this.z2 = z2;
         }
-        this.world = world;
     }
 
-    public ShopLocation(int[] locationA, int[] locationB, World world) {
-        this(locationA[0], locationA[1], locationA[2], locationB[0], locationB[1], locationB[2], world);
+    public ShopLocation(int[] locationA, int[] locationB) {
+        this(locationA[0], locationA[1], locationA[2], locationB[0], locationB[1], locationB[2]);
     }
     
     public ShopLocation(Location loc1, Location loc2) {
-        this(loc1.getBlockX(), loc1.getBlockY(), loc1.getBlockZ(), loc2.getBlockX(), loc2.getBlockY(), loc2.getBlockZ(), loc1.getWorld());
+        this(loc1.getBlockX(), loc1.getBlockY(), loc1.getBlockZ(), loc2.getBlockX(), loc2.getBlockY(), loc2.getBlockZ());
     }
 
     //Returns the Location of the point with the lowest x,y,z values
-    public Location getLocation1() {
-        return new Location(world, x1, y1, z1);
+    public int[] getLocation1() {
+        return new int[] {x1, y1, z1};
     }
     
     //Returns the Location of the point with the highest x,y,z values.
-    public Location getLocation2() {
-        return new Location(world, x2, y2, z2);
+    public int[] getLocation2() {
+        return new int[] {x2, y2, z2};
     }
 
     //Returns center point of the shop location
-    public Location getCenter() {
+    public Location getCenter(World world) {
         int x = Math.abs((this.x2 - this.x1)/2) + this.x1;
         int y = Math.abs((this.y2 - this.y1)/2) + this.y1;
         int z = Math.abs((this.z2 - this.z1)/2) + this.z1;
         return new Location(world, x, y, z);
     }
     
-    public World getWorld() {
-        return world;
-    }
-
     //Returns a Set of all Locations that are of the Material inside the shop
-    public Set<Location> findBlocks(Material blockType) {
+    public Set<Location> findBlocks(Material blockType, World world) {
         Set<Location> foundBlocks = new HashSet<Location>(1);
             for (int i = this.x1; i >= this.x1 && i <= this.x2; i++) {
                 for (int j = this.y1; j >= this.y1 && j <= this.y2; j++) {
@@ -91,6 +85,6 @@ public class ShopLocation {
     
     //TODO: Fix String output
     public String toString() {
-        return String.format("%s, %d, %d, %d, %d, %d, %d", world.getName(), x1, y1, z1, x2, y2, z2);
+        return String.format("%d, %d, %d, %d, %d, %d", x1, y1, z1, x2, y2, z2);
     }
 }
