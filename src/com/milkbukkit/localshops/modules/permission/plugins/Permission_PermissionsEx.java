@@ -119,7 +119,7 @@ public class Permission_PermissionsEx implements Permission {
         int rVal = -1;
         for (String worldName : worlds) {
             int tempVal = PermissionsEx.getPermissionManager().getUser(playerName).getOptionInteger(node, worldName, -1);
-            if (tempVal < rVal && rVal > 0)
+            if (tempVal < rVal && rVal > 0 && tempVal > 0)
                 rVal = tempVal;
             else if (rVal <= 0)
                 rVal = tempVal;

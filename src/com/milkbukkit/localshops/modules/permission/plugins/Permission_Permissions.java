@@ -105,7 +105,7 @@ public class Permission_Permissions implements Permission {
         int rVal = -1;
         for (String worldName : worlds) {
             int tempVal = this.permission.getHandler().getPermissionInteger(worldName, playerName, node);
-            if (tempVal < rVal && rVal > 0)
+            if (tempVal < rVal && rVal > 0 && tempVal > 0)
                 rVal = tempVal;
             else if (rVal <= 0)
                 rVal = tempVal;
