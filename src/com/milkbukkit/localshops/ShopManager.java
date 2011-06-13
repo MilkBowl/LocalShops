@@ -508,12 +508,11 @@ public class ShopManager {
         String world = "";
         if (props.containsKey("worlds")) {
             String worlds = props.getProperty("worlds");
-            if (worlds.matches(","))
-                for(String worldName : worlds.split(",")) {
-                    if (!worldName.equals("")) {
-                        shop.addWorld(worldName);
-                    }
-                } 
+            for(String worldName : worlds.split(", ")) {
+                if (!worldName.equals("")) {
+                    shop.addWorld(worldName);
+                }
+            }
         } else {
             shop.addWorld(props.getProperty("world"));
             world = props.getProperty("world");
@@ -724,7 +723,7 @@ public class ShopManager {
         props.setProperty("min-balance", String.valueOf(shop.getMinBalance()));
         props.setProperty("notification", String.valueOf(shop.getNotification()));
         props.setProperty("dynamic-prices", String.valueOf(shop.isDynamicPrices()));
-        props.setProperty("worlds", GenericFunctions.join(shop.getWorlds(), ","));
+        props.setProperty("worlds", GenericFunctions.join(shop.getWorlds(), ", "));
 
         // Location
         if(shop instanceof GlobalShop) {
