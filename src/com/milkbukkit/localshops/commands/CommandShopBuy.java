@@ -10,12 +10,12 @@ import org.bukkit.inventory.ItemStack;
 
 import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.LocalShops;
-import com.milkbukkit.localshops.PlayerData;
 import com.milkbukkit.localshops.ResourceManager;
 import com.milkbukkit.localshops.Search;
 import com.milkbukkit.localshops.Transaction;
 import com.milkbukkit.localshops.objects.InventoryItem;
 import com.milkbukkit.localshops.objects.ItemInfo;
+import com.milkbukkit.localshops.objects.PlayerData;
 import com.milkbukkit.localshops.objects.Shop;
 
 public class CommandShopBuy extends Command {

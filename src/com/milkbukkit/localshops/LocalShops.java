@@ -21,6 +21,7 @@ import com.milkbukkit.localshops.listeners.ShopsPlayerListener;
 import com.milkbukkit.localshops.modules.economy.EconomyManager;
 import com.milkbukkit.localshops.modules.permission.PermissionManager;
 import com.milkbukkit.localshops.objects.ItemData;
+import com.milkbukkit.localshops.objects.PlayerData;
 import com.milkbukkit.localshops.objects.ShopSign;
 import com.milkbukkit.localshops.threads.ThreadManager;
 

@@ -17,10 +17,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.LocalShops;
-import com.milkbukkit.localshops.PlayerData;
 import com.milkbukkit.localshops.ResourceManager;
 import com.milkbukkit.localshops.commands.ShopCommandExecutor;
 import com.milkbukkit.localshops.objects.LocalShop;
+import com.milkbukkit.localshops.objects.PlayerData;
 import com.milkbukkit.localshops.objects.Shop;
 import com.milkbukkit.localshops.objects.ShopSign;
 import com.milkbukkit.localshops.util.GenericFunctions;

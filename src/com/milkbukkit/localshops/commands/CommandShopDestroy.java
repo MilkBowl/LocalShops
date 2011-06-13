@@ -9,10 +9,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.milkbukkit.localshops.LocalShops;
-import com.milkbukkit.localshops.PlayerData;
 import com.milkbukkit.localshops.ResourceManager;
 import com.milkbukkit.localshops.objects.GlobalShop;
 import com.milkbukkit.localshops.objects.InventoryItem;
+import com.milkbukkit.localshops.objects.PlayerData;
 import com.milkbukkit.localshops.objects.Shop;
 
 public class CommandShopDestroy extends Command {

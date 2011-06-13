@@ -12,8 +12,8 @@ import org.bukkit.inventory.PlayerInventory;
 
 import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.LocalShops;
-import com.milkbukkit.localshops.PlayerData;
 import com.milkbukkit.localshops.objects.ItemInfo;
+import com.milkbukkit.localshops.objects.PlayerData;
 import com.milkbukkit.localshops.objects.Shop;
 import com.milkbukkit.localshops.util.GenericFunctions;
 

@@ -10,9 +10,9 @@ import org.bukkit.entity.Player;
 
 import com.milkbukkit.localshops.Config;
 import com.milkbukkit.localshops.LocalShops;
-import com.milkbukkit.localshops.PlayerData;
 import com.milkbukkit.localshops.ResourceManager;
 import com.milkbukkit.localshops.objects.LocalShop;
+import com.milkbukkit.localshops.objects.PlayerData;
 import com.milkbukkit.localshops.objects.ShopLocation;
 import com.milkbukkit.localshops.util.GenericFunctions;
 @Deprecated

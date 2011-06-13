@@ -1,4 +1,4 @@
-package com.milkbukkit.localshops;
+package com.milkbukkit.localshops.objects;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,10 +9,8 @@ import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import com.milkbukkit.localshops.LocalShops;
 import com.milkbukkit.localshops.modules.economy.EconomyResponse;
-import com.milkbukkit.localshops.objects.GlobalShop;
-import com.milkbukkit.localshops.objects.LocalShop;
-import com.milkbukkit.localshops.objects.Shop;
 
 public class PlayerData {
     // Objects
@@ -24,7 +22,8 @@ public class PlayerData {
     private boolean isSelecting = false;
     private Location xyzA = null;
     private Location xyzB = null;
-    
+    private static ChestState currentChest = new ChestState();
+
     // Logging
     private static final Logger log = Logger.getLogger("Minecraft");    
 
@@ -158,12 +157,36 @@ public class PlayerData {
         }
     }
 
+    /*
+     * Sets a players selection mode
+     */
     public void setSelecting(boolean isSelecting) {
         this.isSelecting = isSelecting;
     }
 
+    /*
+     * Gets the players current selection mode
+     */
     public boolean isSelecting() {
         return isSelecting;
+    }
+
+    /*
+     * Returns true if a player is interacting with a chest
+     */
+    public boolean isInChest() {
+        return currentChest.isActive();
+    }
+
+    /*
+     * sets whether a player is interacting with a chest
+     */
+    public void setInChest(boolean inChest) {
+        currentChest.setActive(inChest);
+    }
+    
+    public static ChestState getCurrentChest() {
+        return currentChest;
     }
 
 }
