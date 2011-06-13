@@ -278,7 +278,7 @@ public class ShopManager {
             int x1 = 0, x2 = 0, y1 = 0, y2 = 0, z1 = 0, z2 = 0;
             String world = "";
             while (line != null) {
-                
+
                 if(Config.getSrvDebug()) {
                     log.info(String.format("[%s] %s", plugin.getDescription().getName(), line));
                 }
@@ -505,30 +505,39 @@ public class ShopManager {
         }
 
         // Add worlds - to list
-        String worlds = props.getProperty("worlds");
-        for(String world : worlds.split(",")) {
-            if (!world.equals("")) {
-                shop.addWorld(world);
-            }
+        String world = "";
+        if (props.containsKey("worlds")) {
+            String worlds = props.getProperty("worlds");
+            if (worlds.matches(","))
+                for(String worldName : worlds.split(",")) {
+                    if (!worldName.equals("")) {
+                        shop.addWorld(worldName);
+                    }
+                } 
+        } else {
+            shop.addWorld(props.getProperty("world"));
+            world = props.getProperty("world");
         }
 
         //Convert old Location data
-        if (props.containsKey("locationA"))
-            if (shop instanceof LocalShop ){
-                try {
-                    locA = convertStringArraytoIntArray(props.getProperty("locationA").split(", "));
-                    locB = convertStringArraytoIntArray(props.getProperty("locationB").split(", "));
-                    //Try to convert to new Location data
-                    ((LocalShop) shop).getShopLocations().add(new ShopLocation(locA[0], locA[1], locA[2], locB[0], locB[1], locB[2], plugin.getServer().getWorld(worlds)));
-                } catch (Exception e) {
-                    if (isolateBrokenShopFile(file)) {
-                        log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
-                    } else {
-                        log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
-                    }
-                    return null;
+        if (props.getProperty("config-version").equals("2.0"))
+            log.info("[LocalShops] - Converting v2.0 shop location data to new v3.0 format.");
+        if (shop instanceof LocalShop ){
+            try {
+                locA = convertStringArraytoIntArray(props.getProperty("locationA").split(", "));
+                locB = convertStringArraytoIntArray(props.getProperty("locationB").split(", "));
+                //Try to convert to new Location data
+                ((LocalShop) shop).getShopLocations().add(new ShopLocation(locA[0], locA[1], locA[2], locB[0], locB[1], locB[2], plugin.getServer().getWorld(world)));
+            } catch (Exception e) {
+                if (isolateBrokenShopFile(file)) {
+                    log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
+                } else {
+                    log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
                 }
+                return null;
             }
+        }
+
         //Add necessary shop data.that is for all shop types
         shop.setName(name);
         shop.setUnlimitedMoney(unlimitedMoney);
@@ -611,9 +620,9 @@ public class ShopManager {
                         log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, and Error moving file to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
                     }
                 }
-                
+
             } else if (key.matches("sign\\d+$")) {
-            
+
 
                 String values = props.getProperty(key);
 
@@ -704,7 +713,7 @@ public class ShopManager {
         SortedProperties props = new SortedProperties();
 
         // Config attributes
-        props.setProperty("config-version", "2.0");
+        props.setProperty("config-version", "3.0");
 
         // Shop attributes
         props.setProperty("uuid", shop.getUuid().toString());
