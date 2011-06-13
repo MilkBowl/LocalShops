@@ -7,142 +7,43 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 
 import com.milkbukkit.localshops.util.GenericFunctions;
 
 public class LocalShop extends Shop {
     // Location Information
     //TODO: Store Location information in List to match World Information indices
-    private ShopLocation locationA = null;
-    private ShopLocation locationB = null;
-    private int locationLowX, locationHighX, locationLowY, locationHighY, locationLowZ, locationHighZ;
+    protected Set<ShopLocation> shopLocations = Collections.synchronizedSet(new HashSet<ShopLocation>(1));
     protected Set<Location> chests = null;
-    
+
     public LocalShop(UUID uuid) {
         super(uuid);
     }
-    
-    public void setLocations(ShopLocation locationA, ShopLocation locationB) {
-        this.locationA = locationA;
-        this.locationB = locationB;
 
-        organizeLocation();
-    }
 
-    public void setLocationA(ShopLocation locationA) {
-        this.locationA = locationA;
-        organizeLocation();
-    }
-
-    public void setLocationA(int x, int y, int z) {
-        locationA = new ShopLocation(x, y, z);
-        organizeLocation();
-    }
-
-    public void setLocationB(ShopLocation locationB) {
-        this.locationB = locationB;
-        organizeLocation();
-    }
-
-    public void setLocationB(int x, int y, int z) {
-        locationB = new ShopLocation(x, y, z);
-        organizeLocation();
-    }
-
-    public ShopLocation[] getLocations() {
-        return new ShopLocation[] { locationA, locationB };
-    }
-
-    public ShopLocation getLocationA() {
-        return locationA;
-    }
-
-    public ShopLocation getLocationB() {
-        return locationB;
-    }
-
-    public ShopLocation getLocationCenter() {
-        int[] xyz = new int[3];
-        int[] xyzA = locationA.toArray();
-        int[] xyzB = locationA.toArray();
-
-        for (int i = 0; i < 3; i++) {
-            if (xyzA[i] < xyzB[i]) {
-                xyz[i] = xyzA[i] + (Math.abs(xyzA[i] - xyzB[i])) / 2;
-            } else {
-                xyz[i] = xyzA[i] - (Math.abs(xyzA[i] - xyzB[i])) / 2;
-            }
-        }
-
-        return new ShopLocation(xyz);
-    }
-    
+    /*
+     * Initialized the chest set if it is empty, or return the set if it's non-null
+     */
     public Set<Location> getChests() {
         if (chests == null) {
             chests = Collections.synchronizedSet(new HashSet<Location>());
-            //TODO: Check for chests and add to set.
+            for (ShopLocation shopLoc : shopLocations) {
+                chests.addAll(shopLoc.findBlocks(Material.CHEST));
+            }
         }
         return chests;
     }
+
+    public Set<ShopLocation> getShopLocations() {
+        return shopLocations;
+    }
+
     
-    public int getLocationLowX() {
-        return locationLowX;
-    }
-
-    public int getLocationLowY() {
-        return locationLowY;
-    }
-
-    public int getLocationLowZ() {
-        return locationLowZ;
-    }
-
-    public int getLocationHighX() {
-        return locationHighX;
-    }
-
-    public int getLocationHighY() {
-        return locationHighY;
-    }
-
-    public int getLocationHighZ() {
-        return locationHighZ;
-    }
-    
-    private void organizeLocation() {
-        if(locationA == null || locationB == null) {
-            return;
-        }
-
-        // X
-        if(locationA.getX() > locationB.getX()) {
-            locationHighX = locationA.getX();
-            locationLowX = locationB.getX();
-        } else {
-            locationHighX = locationB.getX();
-            locationLowX = locationA.getX();            
-        }
-
-        // Y
-        if(locationA.getY() > locationB.getY()) {
-            locationHighY = locationA.getY();
-            locationLowY = locationB.getY();
-        } else {
-            locationHighY = locationB.getY();
-            locationLowY = locationA.getY();            
-        }
-
-        // Z
-        if(locationA.getZ() > locationB.getZ()) {
-            locationHighZ = locationA.getZ();
-            locationLowZ = locationB.getZ();
-        } else {
-            locationHighZ = locationB.getZ();
-            locationLowZ = locationA.getZ();            
-        }
-    }
-    
+     // TODO: Fix to-string method for new shop-location (embed in ShopLocation class?
     public String toString() {
+        return null;
+        /*
         String locA = "";
         String locB = "";
         if (locA != null) {
@@ -152,6 +53,7 @@ public class LocalShop extends Shop {
             locB = locationB.toString();
         }
         return String.format("Shop \"%s\" at [%s], [%s] %d items - %s", this.name, locA, locB, inventory.size(), uuid.toString());
+        */
     }
     
     public void log() {
@@ -166,8 +68,11 @@ public class LocalShop extends Shop {
         log.info(String.format("   %-16s %.2f", "Minimum Balance:", minBalance));
         log.info(String.format("   %-16s %s", "Unlimited Money:", unlimitedMoney ? "Yes" : "No"));
         log.info(String.format("   %-16s %s", "Unlimited Stock:", unlimitedStock ? "Yes" : "No"));
+        /* 
+         * TODO: Redo Shop Location output
         log.info(String.format("   %-16s %s", "Location A:", locationA.toString()));
         log.info(String.format("   %-16s %s", "Location B:", locationB.toString()));
+        */
         log.info(String.format("   %-16s %s", "World:", GenericFunctions.join(worlds, ", ")));
 
         // Items
@@ -187,22 +92,18 @@ public class LocalShop extends Shop {
             log.info(String.format("   %s", sign.toString()));
         }
     }
-    
+
     //TODO: Support world# check vs location data check.
     public boolean containsPoint(String worldName, int x, int y, int z) {
-        if(!containsWorld(worldName)) {
-            return false;
+        for (ShopLocation shopLoc : shopLocations) {
+            if (shopLoc.getWorld().getName().equals(worldName)) {
+                Location loc1 = shopLoc.getLocation1();
+                Location loc2 = shopLoc.getLocation2();
+                
+                if (x >= loc1.getBlockX() && x <= loc2.getBlockX() && y >= loc1.getBlockY() && y <= loc2.getBlockY() && z >= loc1.getBlockZ() && z <= loc2.getBlockZ())
+                    return true;
+            }
         }
-
-        if (x >= locationLowX &&
-                x <= locationHighX &&
-                y >= locationLowY &&
-                y <= locationHighY &&
-                z >= locationLowZ &&
-                z <= locationHighZ) {
-            return true;
-        } else {
-            return false;
-        }
+        return false;
     }
 }

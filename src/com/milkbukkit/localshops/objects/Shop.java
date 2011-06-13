@@ -40,7 +40,6 @@ public abstract class Shop implements Comparator<Shop> {
     protected Set<ShopSign> signSet = Collections.synchronizedSet(new HashSet<ShopSign>());
     protected Set<String> groups = Collections.synchronizedSet(new HashSet<String>());
     protected Set<String> users = Collections.synchronizedSet(new HashSet<String>());
-    //TODO: Change to TreeSet? (SetList?) to support proper world# handling for multilocations
     protected List<String> worlds = Collections.synchronizedList(new ArrayList<String>(1));
     
 
