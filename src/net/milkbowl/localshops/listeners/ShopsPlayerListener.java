@@ -77,7 +77,7 @@ public class ShopsPlayerListener extends PlayerListener {
             }
 
         } else if (event.getClickedBlock().getType().equals(Material.CHEST) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && shop != null ) {
-            if (shop.getChests().contains(eventBlockLoc)) {
+           /* if (shop.getChests().contains(eventBlockLoc)) {
                 // Block access to chests when inside a shop, but allow the owner or managers to use them.
                 if ( !shop.getManagers().contains(playerName) && !shop.getOwner().equals(playerName) && !plugin.getPermManager().hasPermission(player, "localshops.admin.local")) {
                     player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
@@ -85,6 +85,7 @@ public class ShopsPlayerListener extends PlayerListener {
                     return;
                 }
             }
+            */
         }
         // If our user is select & is not holding an item, selection time
         if (plugin.getPlayerData().get(playerName).isSelecting() && player.getItemInHand().getType() == Material.AIR) {
