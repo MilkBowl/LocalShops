@@ -22,7 +22,7 @@ public class ShopCommandExecutor implements CommandExecutor {
     static {
         commandTypeMap.put("admin", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandAdminSet.class, false, false, false));
         commandTypeMap.put("add", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopAdd.class, true, true, false));
-        commandTypeMap.put("addloc", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopLink.class, false, true, false));
+        commandTypeMap.put("addloc", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopLink.class, true, true, true));
         commandTypeMap.put("browse", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopBrowse.class, true, true, false));
         commandTypeMap.put("bro", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopBrowse.class, true, true, false));
         commandTypeMap.put("buy", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopBuy.class, true, true, false));
@@ -34,7 +34,7 @@ public class ShopCommandExecutor implements CommandExecutor {
         commandTypeMap.put("find", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopFind.class, true, false, false));
         commandTypeMap.put("help", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopHelp.class, true, true, false));
         commandTypeMap.put("info", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopInfo.class, true, true, false));
-        commandTypeMap.put("link", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopLink.class, false, true, false));
+        commandTypeMap.put("link", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopLink.class, true, true, true));
         commandTypeMap.put("list", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopList.class, true, true, false));
         commandTypeMap.put("move", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopMove.class, true, false, true));
         commandTypeMap.put("remove", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopRemove.class, true, true, false));
