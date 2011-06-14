@@ -87,7 +87,6 @@ public class LocalShop extends Shop {
         }
     }
 
-    //TODO: Support world# check vs location data check.
     public boolean containsPoint(String worldName, int x, int y, int z) {
         for (ShopLocation shopLoc : shopLocations) {
             if (world.equals(worldName)) {
