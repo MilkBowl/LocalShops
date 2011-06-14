@@ -146,6 +146,10 @@ public class ResourceManager {
         String s = getString(key);
         for(int i = 0; i < replaceKeys.length; i++) {
             s = s.replaceAll(replaceKeys[i], replaceValues[i].toString());
+            //Parse any other values leftover
+            s = parseBase(s);
+            s = parseColors(s);
+            s = parsePluginData(s);
         }
         return s;
     }
