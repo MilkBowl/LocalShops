@@ -146,11 +146,13 @@ public class ResourceManager {
         String s = getString(key);
         for(int i = 0; i < replaceKeys.length; i++) {
             s = s.replaceAll(replaceKeys[i], replaceValues[i].toString());
-            //Parse any other values leftover
-            s = parseBase(s);
-            s = parseColors(s);
-            s = parsePluginData(s);
         }
+        
+        //Parse any other values leftover
+        s = parseBase(s);
+        s = parseColors(s);
+        s = parsePluginData(s);
+        
         return s;
     }
     
@@ -159,6 +161,7 @@ public class ResourceManager {
         for(String key : COLOR_MAP.keySet()) {
             s = s.replaceAll(key, COLOR_MAP.get(key).toString());
         }
+        
         return s;
     }
     
@@ -167,6 +170,7 @@ public class ResourceManager {
         s = s.replaceAll("%PLUGIN_NAME%", pdf.getName());
         s = s.replaceAll("%PLUGIN_VERSION%", pdf.getVersion());
         s = s.replaceAll("%PLUGIN_AUTHORS%", GenericFunctions.join(pdf.getAuthors(), ", "));
+        
         return s;
     }
     
@@ -182,6 +186,6 @@ public class ResourceManager {
     
     // Get Chat Prefix
     public String getChatPrefix() {
-        return parseColors(getString(BASE_CHAT_PREFIX));
+        return getString(BASE_CHAT_PREFIX);
     }
 }
