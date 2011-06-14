@@ -243,7 +243,7 @@ public class CommandShopSell extends Command {
                 sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
                 return true;
             }
-            return shopSell(shop, item, 1);
+            return shopSell(shop, item, 0);
         }
 
         // Show sell help
@@ -266,12 +266,15 @@ public class CommandShopSell extends Command {
             player.sendMessage(ChatColor.DARK_AQUA + "Sorry, " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is not buying " + ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " right now.");
             return false;
         }
-
+        
+        if (amount == 0) {
+            amount = shop.getItem(item).getSellSize();
+        }
         // check how many items the player has
         int playerInventory = countItemsInInventory(player.getInventory(), item.toStack());
         if (amount < 0) {
             amount = 0;
-        }
+        } 
 
         // check if the amount to add is okay
         if (amount > playerInventory) {

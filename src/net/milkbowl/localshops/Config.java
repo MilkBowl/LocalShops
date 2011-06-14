@@ -55,14 +55,6 @@ public class Config {
     private static int globalBaseStock = 0;
     private static double globalVolatility = 25.0;
     
-    /**
-     * TODO: implement event system/vars
-    private static int dynamicInterval = 900;
-    private static int dynamicMaxPriceChange = 50;
-    private static int dynamicMinPriceChange = 1;
-    private static int dynamicChance = 50;
-    */
-    
     // Global Shops
     private static boolean globalShopsEnabled = false;
     
