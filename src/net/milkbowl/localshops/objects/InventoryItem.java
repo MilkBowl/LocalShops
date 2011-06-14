@@ -98,7 +98,7 @@ public class InventoryItem {
 
     public double getSellPrice() {
         //for dynamic items use the currently adjusted price
-        if (dynamic)
+        if (dynamic && DynamicManager.getPriceAdjMap().get(info) != null)
             return sellPrice * DynamicManager.getPriceAdjMap().get(info);
 
         return sellPrice;
@@ -134,7 +134,7 @@ public class InventoryItem {
 
     public double getBuyPrice() {
         //for dynamic items use the current dynamic price
-        if (dynamic)
+        if (dynamic && DynamicManager.getPriceAdjMap().get(info) != null)
             return buyPrice * DynamicManager.getPriceAdjMap().get(info);
 
         return buyPrice;
