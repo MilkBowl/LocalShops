@@ -43,7 +43,7 @@ public class ShopLocation {
     public ShopLocation(int[] locationA, int[] locationB) {
         this(locationA[0], locationA[1], locationA[2], locationB[0], locationB[1], locationB[2]);
     }
-    
+
     public ShopLocation(Location loc1, Location loc2) {
         this(loc1.getBlockX(), loc1.getBlockY(), loc1.getBlockZ(), loc2.getBlockX(), loc2.getBlockY(), loc2.getBlockZ());
     }
@@ -52,7 +52,7 @@ public class ShopLocation {
     public int[] getLocation1() {
         return new int[] {x1, y1, z1};
     }
-    
+
     //Returns the Location of the point with the highest x,y,z values.
     public int[] getLocation2() {
         return new int[] {x2, y2, z2};
@@ -65,25 +65,41 @@ public class ShopLocation {
         int z = Math.abs((this.z2 - this.z1)/2) + this.z1;
         return new Location(world, x, y, z);
     }
-    
+
     //Returns a Set of all Locations that are of the Material inside the shop
     public Set<Location> findBlocks(Material blockType, World world) {
         Set<Location> foundBlocks = new HashSet<Location>(1);
-            for (int i = this.x1; i >= this.x1 && i <= this.x2; i++) {
-                for (int j = this.y1; j >= this.y1 && j <= this.y2; j++) {
-                    for (int k = this.z1; k >= this.z1 && k <= this.z2; k++) {
-                        Location loc = new Location(world, i, j, k);
-                        if (!loc.getWorld().isChunkLoaded(loc.getWorld().getChunkAt(loc)))
-                                loc.getWorld().loadChunk(loc.getWorld().getChunkAt(loc));
-                        if (loc.getBlock().getType().equals(blockType))
-                            foundBlocks.add(loc);
-                    }
+        for (int i = this.x1; i >= this.x1 && i <= this.x2; i++) {
+            for (int j = this.y1; j >= this.y1 && j <= this.y2; j++) {
+                for (int k = this.z1; k >= this.z1 && k <= this.z2; k++) {
+                    Location loc = new Location(world, i, j, k);
+                    if (!loc.getWorld().isChunkLoaded(loc.getWorld().getChunkAt(loc)))
+                        loc.getWorld().loadChunk(loc.getWorld().getChunkAt(loc));
+                    if (loc.getBlock().getType().equals(blockType))
+                        foundBlocks.add(loc);
                 }
             }
+        }
         return foundBlocks;
     }
-    
-    //TODO: Fix String output
+
+    public boolean contains (Location loc) {
+        if (loc.getBlockX() >= x1 && loc.getBlockX() <= x2 && loc.getBlockY() >= y1 && loc.getBlockY() <= y2 && loc.getBlockZ() >= z1 && loc.getBlockZ() <= z2)
+            return true;
+        else
+            return false;
+    }
+
+    public boolean equals (ShopLocation shopLoc) {
+        int[] xyz1 = shopLoc.getLocation1();
+        int[] xyz2 = shopLoc.getLocation2();
+        if (xyz1[0] == this.x1 && xyz1[1] == y1 && xyz1[2] == z1 && xyz2[0] == x2 && xyz2[1] == y2 && xyz2[2] == z2)
+            return true;
+        else
+            return false;
+
+    }
+
     public String toString() {
         return String.format("%d, %d, %d, %d, %d, %d", x1, y1, z1, x2, y2, z2);
     }
