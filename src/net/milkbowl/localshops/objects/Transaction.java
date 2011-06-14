@@ -1,5 +1,8 @@
-package net.milkbowl.localshops;
+package net.milkbowl.localshops.objects;
 
+/*
+ * represents a transaction object
+ */
 public class Transaction implements Cloneable {
 
     // Transactions are in perspective of the shop

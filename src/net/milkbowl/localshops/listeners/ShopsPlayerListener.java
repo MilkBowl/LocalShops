@@ -97,8 +97,10 @@ public class ShopsPlayerListener extends PlayerListener {
             PlayerData pData = plugin.getPlayerData().get(playerName);
 
             if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
+                String size = null;
                 pData.setPositionA(loc);
-                String size = GenericFunctions.calculateCuboidSize(pData.getPositionA(), pData.getPositionB(), Config.getShopSizeMaxWidth(), Config.getShopSizeMaxHeight());
+                if (pData.getPositionB() != null)
+                    size = GenericFunctions.calculateCuboidSize(pData.getPositionA(), pData.getPositionB(), Config.getShopSizeMaxWidth(), Config.getShopSizeMaxHeight());
                 if(size != null) {
                     player.sendMessage(ChatColor.DARK_AQUA + "First Position " + ChatColor.LIGHT_PURPLE + x + " " + y + " " + z + ChatColor.DARK_AQUA + " size " + ChatColor.LIGHT_PURPLE + size);
                 } else {

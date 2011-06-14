@@ -46,20 +46,8 @@ public class LocalShop extends Shop {
     }
 
 
-    // TODO: Fix to-string method for new shop-location (embed in ShopLocation class?
     public String toString() {
-        return null;
-        /*
-        String locA = "";
-        String locB = "";
-        if (locA != null) {
-            locA = locationA.toString();
-        }
-        if (locB != null) {
-            locB = locationB.toString();
-        }
-        return String.format("Shop \"%s\" at [%s], [%s] %d items - %s", this.name, locA, locB, inventory.size(), uuid.toString());
-        */
+        return String.format("Shop \"%s\" with %d items - %s", this.name, inventory.size(), uuid.toString());
     }
     
     public void log() {

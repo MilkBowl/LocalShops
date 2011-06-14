@@ -16,7 +16,6 @@ import java.util.logging.Logger;
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.ShopManager;
-import net.milkbowl.localshops.Transaction;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;

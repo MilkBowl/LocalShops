@@ -7,11 +7,11 @@ import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.ResourceManager;
 import net.milkbowl.localshops.Search;
-import net.milkbowl.localshops.Transaction;
 import net.milkbowl.localshops.objects.InventoryItem;
 import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;
+import net.milkbowl.localshops.objects.Transaction;
 
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;

@@ -9,8 +9,8 @@ import java.util.logging.Logger;
 
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.Transaction;
 import net.milkbowl.localshops.objects.Shop;
+import net.milkbowl.localshops.objects.Transaction;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

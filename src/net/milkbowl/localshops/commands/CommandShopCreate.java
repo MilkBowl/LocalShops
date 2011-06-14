@@ -57,14 +57,13 @@ public class CommandShopCreate extends Command {
                     player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SELECTION_PROB_SIZE, new String[] { "%SIZE%" }, new Object[] { size }));
                     return false;
                 }
-
-                Location loc1 = pData.getPositionA();
-                Location loc2 = pData.getPositionB();
-
-                if (loc1 == null || loc2 == null) {
+                
+                
+                if (pData.getPositionA() == null || pData.getPositionB() == null) {
                     player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SELECTION_PROB_ONLY_ONE_POINT));
                     return false;
-                }
+                } else
+                    shopLoc = new ShopLocation(pData.getPositionA(), pData.getPositionB());
             } else {
                 // get current position
                 Location loc = player.getLocation();
