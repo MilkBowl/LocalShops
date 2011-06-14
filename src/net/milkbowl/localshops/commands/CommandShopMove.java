@@ -16,10 +16,8 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@Deprecated
-//TODO: Re-write logic to handle multi-location shops. This may mean removing the command.
 public class CommandShopMove extends Command {
-    
+
     public CommandShopMove(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command);
     }
@@ -29,124 +27,115 @@ public class CommandShopMove extends Command {
     }
 
     public boolean process() {
-        
+
         if(isGlobal) {
             sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "You cannot move a global shop!");
-            return true;
-        }
-
-        if(!canUseCommand(CommandTypes.MOVE)) {
+            return false;
+        } else if(!canUseCommand(CommandTypes.MOVE)) {
             sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
-            return true;
+            return false;
+        } else if(!(sender instanceof Player)) {
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
+            return false;
         }
 
-        if(!(sender instanceof Player)) {
-            sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "Console is not implemented yet.");
-            return true;
-        }
-/*
- * TODO: Reword Logic completely for /shop move
         Pattern pattern = Pattern.compile("(?i)move\\s+(.*)");
         Matcher matcher = pattern.matcher(command);
         if (matcher.find()) {
             String id = matcher.group(1);
 
             Player player = (Player) sender;
-            Location location = player.getLocation();
+            String world = player.getWorld().getName();
+
+            PlayerData pData = plugin.getPlayerData().get(player.getName());
 
             // check to see if that shop exists
             LocalShop thisShop = plugin.getShopManager().getLocalShop(id);
             if(thisShop == null) {
                 sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "Could not find shop: " + ChatColor.WHITE + id);
                 return false;
-            }
-
-            // check if player has access
-            if (!thisShop.getOwner().equalsIgnoreCase(player.getName())) {
-                player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "You must be the shop owner to move this shop.");
+            } else if (!thisShop.getOwner().equalsIgnoreCase(player.getName())) {
+                // check if player has access
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_MUST_BE_SHOP_OWNER));
+                return false;
+            } else if (thisShop.getShopLocations().size() > 1) {
+                //Can't move a shop that has more than 1 location
+                player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "You can't move a shop that has more than 1 location!");
                 return false;
             }
 
-            // Get current player location
-            int x = location.getBlockX();
-            int y = location.getBlockY();
-            int z = location.getBlockZ();
+            //Shop location variables
+            int x1 = 0, x2 = 0, z1 = 0, z2 = 0;
+            ShopLocation shopLoc = null;
 
-            // setup the cuboid for the tree
-            int[] xyzA = new int[3];
-            int[] xyzB = new int[3];
-
-            if (plugin.getPlayerData().containsKey(player.getName()) && plugin.getPlayerData().get(player.getName()).isSelecting()) {
-
-                // Check if size is ok
-                PlayerData pData = plugin.getPlayerData().get(player.getName());
+            if (pData.isSelecting()) {
                 if (GenericFunctions.calculateCuboidSize(pData.getPositionA(), pData.getPositionB(), Config.getShopSizeMaxWidth(), Config.getShopSizeMaxHeight()) == null) {
-                    String size = Config.getShopSizeMaxWidth() + "x" + Config.getShopSizeDefHeight() + "x" + Config.getShopSizeMaxWidth();
-                    player.sendMessage(ChatColor.DARK_AQUA + "Problem with selection. Max size is " + ChatColor.WHITE + size);
+                    String size = Config.getShopSizeMaxWidth() + "x" + Config.getShopSizeMaxHeight() + "x" + Config.getShopSizeMaxWidth();
+                    player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SELECTION_PROB_SIZE, new String[] { "%SIZE%" }, new Object[] { size }));
                     return false;
                 }
 
-                // if a custom size had been set, use that
-                PlayerData data = plugin.getPlayerData().get(player.getName());
-                xyzA = data.getPositionA().clone();
-                xyzB = data.getPositionB().clone();
 
-                if (xyzA == null || xyzB == null) {
-                    player.sendMessage(ChatColor.DARK_AQUA + "Problem with selection.");
+                if (pData.getPositionA() == null || pData.getPositionB() == null) {
+                    player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SELECTION_PROB_ONLY_ONE_POINT));
                     return false;
-                }
+                } else
+                    shopLoc = new ShopLocation(pData.getPositionA(), pData.getPositionB());
+
             } else {
                 // otherwise calculate the shop from the player's location
-                if (Config.getShopSizeDefWidth() % 2 == 0) {
-                    xyzA[0] = x - (Config.getShopSizeDefWidth() / 2);
-                    xyzB[0] = x + (Config.getShopSizeDefWidth() / 2);
-                    xyzA[2] = z - (Config.getShopSizeDefWidth() / 2);
-                    xyzB[2] = z + (Config.getShopSizeDefWidth() / 2);
-                } else {
-                    xyzA[0] = x - (Config.getShopSizeDefWidth() / 2) + 1;
-                    xyzB[0] = x + (Config.getShopSizeDefWidth() / 2);
-                    xyzA[2] = z - (Config.getShopSizeDefWidth() / 2) + 1;
-                    xyzB[2] = z + (Config.getShopSizeDefWidth() / 2);
-                }
+                // get current position
+                Location loc = player.getLocation();
+                int x = loc.getBlockX();
+                int y = loc.getBlockY();
+                int z = loc.getBlockZ();
 
-                xyzA[1] = y - 1;
-                xyzB[1] = y + Config.getShopSizeDefHeight() - 1;
+                if (Config.getShopSizeDefWidth() % 2 == 0) {
+                    x1 = x - (Config.getShopSizeDefWidth() / 2);
+                    x2 = x + (Config.getShopSizeDefWidth() / 2);
+                    z1 = z - (Config.getShopSizeDefWidth() / 2);
+                    z2 = z + (Config.getShopSizeDefWidth() / 2);
+                } else {
+                    x1 = x - (Config.getShopSizeDefWidth() / 2) + 1;
+                    x2 = x + (Config.getShopSizeDefWidth() / 2);
+                    z1 = z - (Config.getShopSizeDefWidth() / 2) + 1;
+                    z2 = z + (Config.getShopSizeDefWidth() / 2);
+                }
+                //generate the new shopLocation
+                shopLoc = new ShopLocation(x1, y - 1, z1, x2, y + Config.getShopSizeDefHeight() - 1, z2);
 
             }
 
-            // need to check to see if the shop overlaps another shop
-            if (plugin.getShopManager().shopPositionOk(xyzA, xyzB, player.getWorld().getName())) {
-
-                if (Config.getShopChargeMove()) {
-                    if (!canUseCommand(CommandTypes.MOVE_FREE)) {
-                        if (!plugin.getPlayerData().get(player.getName()).chargePlayer(player.getName(), Config.getShopChargeMoveCost())) {
-                            // return, this player did not have enough money
-
-                            player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "You need " + plugin.getEconManager().format(Config.getShopChargeMoveCost()) + " to move a shop.");
-                            return false;
-                        }
-                    }
-                }
-
-                // update the shop
-                
-                thisShop.addWorld(player.getWorld().getName());
-                thisShop.setLocations(new ShopLocation(xyzA), new ShopLocation(xyzB));
-                log.info(thisShop.getUuid().toString());
-
-                plugin.getPlayerData().put(player.getName(), new PlayerData(plugin, player.getName()));
-
-                // write the file
-                if (plugin.getShopManager().saveShop(thisShop)) {
-                    player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.WHITE + thisShop.getName() + ChatColor.DARK_AQUA + " was moved successfully.");
-                    return true;
-                } else {
-                    player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "There was an error, could not move shop.");
+            if(!plugin.getShopManager().shopPositionOk(shopLoc.getLocation1(), shopLoc.getLocation2(), world)) {
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SHOP_EXISTS));
+                return false;
+            } else if (Config.getShopChargeMove() && !canUseCommand(CommandTypes.MOVE_FREE)) {
+                if (!plugin.getPlayerData().get(player.getName()).chargePlayer(player.getName(), Config.getShopChargeMoveCost())) {
+                    // return, this player did not have enough money
+                    player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "You need " + plugin.getEconManager().format(Config.getShopChargeMoveCost()) + " to move a shop.");
                     return false;
                 }
-            }            
-        }
-*/
+            }
+            // update the shop
+            thisShop.setWorld(world);
+            thisShop.getShopLocations().clear();
+            thisShop.getShopLocations().add(shopLoc);
+
+            log.info(thisShop.getUuid().toString());
+
+            pData.setSelecting(false);
+
+            // write the file
+            if (plugin.getShopManager().saveShop(thisShop)) {
+                player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.WHITE + thisShop.getName() + ChatColor.DARK_AQUA + " was moved successfully.");
+                return true;
+            } else {
+                player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "There was an error, could not move shop.");
+                return false;
+            }
+        }            
+
+
         // Show usage
         sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "The command format is " + ChatColor.WHITE + "/" + commandLabel + " move [id]");
         sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "Use " + ChatColor.WHITE + "/" + commandLabel + " info" + ChatColor.DARK_AQUA + " to obtain the id.");
