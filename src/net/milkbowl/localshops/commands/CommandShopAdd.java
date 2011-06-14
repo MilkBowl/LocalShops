@@ -266,10 +266,7 @@ public class CommandShopAdd extends Command {
         if (player != null) {
             int playerItemCount = countItemsInInventory(player.getInventory(), item.toStack());
             // Validate Count
-            if (playerItemCount >= amount) {
-                // Perform add
-                log.info(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_ADD_USAGE, new String[] { "%AMOUNT%", "%ITEMNAME%", "%SHOPNAME%" }, new Object[] { amount, item, shop }));
-            } else {
+            if (playerItemCount < amount) {
                 // Nag player
                 log.info(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_ADD_INSUFFICIENT_INV, new String[] { "%ITEMCOUNT%" }, new Object[] { playerItemCount }));
                 return false;
