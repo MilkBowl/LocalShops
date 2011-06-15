@@ -33,7 +33,7 @@ public class ShopLocation {
         }
         if ( z1 > z2) {
             this.z1 = z2;
-            this.z2 = z2;
+            this.z2 = z1;
         } else {
             this.z1 = z1;
             this.z2 = z2;
