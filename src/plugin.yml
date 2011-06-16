@@ -1,6 +1,6 @@
 name: LocalShops
 main: net.milkbowl.localshops.LocalShops
-version: 3.2.0dev
+version: 4.0.0dev
 author: Cereal, Jonbas
 description: >
              A localized shop plugin for use with Bukkit economies.

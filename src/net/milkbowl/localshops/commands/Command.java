@@ -38,7 +38,7 @@ public abstract class Command {
         CREATE_FREE(4, new String[] { "localshops.free.create" }),
         DESTROY(5, new String[] { "localshops.manager.destroy" }),
         HELP(6, new String[] {}),
-        BROWSE(7, new String[] { "localshops.user.browse" }),
+        BROWSE(7, new String[] { "localshops.local.browse" }),
         MOVE(8, new String[] { "localshops.manager.move" }),
         MOVE_FREE(9, new String[] { "localshops.free.move" }),
         REMOVE(10, new String[] { "localshops.manager.remove" }),
@@ -50,7 +50,8 @@ public abstract class Command {
         GLOBAL_BUY(16, new String[] { "localshops.global.buy" }),
         GLOBAL_SELL(17, new String[] { "localshops.global.sell" } ),
         ADMIN_GLOBAL(18, new String[] { "localshops.admin.global" } ),
-        ADMIN_SERVER(19, new String[] { "localshops.admin.server" });
+        ADMIN_SERVER(19, new String[] { "localshops.admin.server" }),
+        GLOBAL_BROWSE(20, new String[] {"localshops.global.browse" });
 
         int id = -1;
         String[] permissions = null;

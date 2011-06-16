@@ -43,7 +43,7 @@ public class CommandShopBrowse extends Command {
             }
 
             // Check Permissions
-            if (!canUseCommand(CommandTypes.BROWSE)) {
+            if ((!canUseCommand(CommandTypes.BROWSE) && !isGlobal) || (isGlobal && !canUseCommand(CommandTypes.GLOBAL_BROWSE))) {
                 sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
                 return true;
             }
