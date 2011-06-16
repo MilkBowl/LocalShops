@@ -94,6 +94,8 @@ public class ResourceManager {
     public final static String CMD_SHP_CREATE_SUCCESS = "Command.Shop.Create.Success";
     public final static String CMD_SHP_CREATE_FAIL = "Command.Shop.Create.Fail";
     
+    public final static String CMD_SHP_SET_BUNDLE_FAIL = "Command.Shop.Set.Bundles.UnderOne";
+    
     // Objects
     private PluginDescriptionFile pdf;
     private ResourceBundle bundle;

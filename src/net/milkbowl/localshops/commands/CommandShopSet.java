@@ -212,7 +212,7 @@ public class CommandShopSet extends Command {
         
         // Check for valid size
         if(size < 1) {
-            sender.sendMessage("Bundles must be at least 1!");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_SET_BUNDLE_FAIL));
             return true;
         }
 
@@ -226,10 +226,6 @@ public class CommandShopSet extends Command {
         // Warn about negative items
         if (price < 0) {
             sender.sendMessage("[WARNING] This shop will loose money with negative values!");
-        }
-        if (size < 0) {
-            sender.sendMessage("[ERROR] Stacks cannot be negative!");
-            return true;
         }
 
         // Set new values
@@ -359,7 +355,7 @@ public class CommandShopSet extends Command {
         
         // Check for valid size
         if(size < 1) {
-            sender.sendMessage("Bundles must be at least 1!");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_SET_BUNDLE_FAIL));
             return true;
         }
 
@@ -373,10 +369,6 @@ public class CommandShopSet extends Command {
         // Warn about negative items
         if (price < 0) {
             sender.sendMessage("[WARNING] This shop will loose money with negative values!");
-        }
-        if (size < 0) {
-            sender.sendMessage("[ERROR] Stacks cannot be negative!");
-            return true;
         }
 
         // Set new values
