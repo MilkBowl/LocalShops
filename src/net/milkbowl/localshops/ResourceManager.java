@@ -177,8 +177,8 @@ public class ResourceManager {
     
     // Parse Base
     private String parseBase(String s) {
-        s = s.replaceAll("%BASESHOP%", bundle.getString(BASE_SHOP));
         s = s.replaceAll("%CHAT_PREFIX%", bundle.getString(BASE_CHAT_PREFIX));
+        s = s.replaceAll("%BASESHOP%", bundle.getString(BASE_SHOP));
         s = s.replaceAll("%TRUE%", bundle.getString(BASE_TRUE));
         s = s.replaceAll("%FALSE%", bundle.getString(BASE_FALSE));
         
