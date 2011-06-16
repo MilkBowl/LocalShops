@@ -113,6 +113,7 @@ public class CommandShopBrowse extends Command {
         printInventory(shop, buySellorList, 1);
     }
     */
+    
     /**
      * Prints shop inventory list. Takes buy, sell, or list as arguments for
      * which format to print.

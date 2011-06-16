@@ -46,7 +46,7 @@ public class CommandShopFind extends Command {
         }
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage("Console is not implemented");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
         }
 
         Player player = (Player) sender;

@@ -33,6 +33,7 @@ public class ResourceManager {
     public final static String GEN_ITEM_NOT_FOUND = "Generic.ItemNotFound";
     public final static String GEN_CONSOLE_NOT_IMPLEMENTED = "Generic.ConsoleNotImplemented";
     public final static String GEN_UNEXPECTED_MONEY_ISSUE = "Generic.UnexpectedMoneyIssue";
+    public final static String GEN_ITEM_NOT_CARRIED = "Generic.ItemNotCarried";
     
     public final static String CMD_ISSUED_LOCAL = "Command.IssuedLocal";
     public final static String CMD_ISSUED_GLOBAL = "Command.IssuedGlobal";

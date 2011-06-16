@@ -172,14 +172,14 @@ public class CommandShopSet extends Command {
 
     private boolean shopSetBuy(Shop shop, ItemInfo item, double price) {
         if (item == null) {
-            sender.sendMessage("Item was not found.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
             return true;
         }
 
         // Check if Shop has item
         if (!shop.containsItem(item)) {
             // nicely message user
-            sender.sendMessage(String.format("This shop does not carry %s!", item.name));
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
             return true;
         }
 
@@ -206,7 +206,7 @@ public class CommandShopSet extends Command {
     private boolean shopSetBuy(Shop shop, ItemInfo item, double price, int size) {
         // Check for valid item
         if (item == null) {
-            sender.sendMessage("Item was not found.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
             return true;
         }
         
@@ -219,7 +219,7 @@ public class CommandShopSet extends Command {
         // Check if Shop has item
         if (!shop.containsItem(item)) {
             // nicely message user
-            sender.sendMessage(String.format("This shop does not carry %s!", item.name));
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
             return true;
         }
 
@@ -353,7 +353,7 @@ public class CommandShopSet extends Command {
     private boolean shopSetSell(Shop shop, ItemInfo item, double price, int size) {
         // Check for valid item
         if (item == null) {
-            sender.sendMessage("Item was not found.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
             return true;
         }
         
@@ -366,7 +366,7 @@ public class CommandShopSet extends Command {
         // Check if Shop has item
         if (!shop.containsItem(item)) {
             // nicely message user
-            sender.sendMessage(String.format("This shop does not carry %s!", item.name));
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
             return true;
         }
 
@@ -396,14 +396,14 @@ public class CommandShopSet extends Command {
 
     private boolean shopSetSell(Shop shop, ItemInfo item, double price) {
         if (item == null) {
-            sender.sendMessage("Item was not found.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
             return true;
         }
 
         // Check if Shop has item
         if (!shop.containsItem(item)) {
             // nicely message user
-            sender.sendMessage(String.format("This shop does not carry %s!", item.name));
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
             return true;
         }
 
@@ -493,14 +493,14 @@ public class CommandShopSet extends Command {
 
     private boolean shopSetMax(Shop shop, ItemInfo item, int max) {
         if (item == null) {
-            sender.sendMessage("Item was not found.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
             return true;
         }
 
         // Check if Shop has item
         if (!shop.containsItem(item)) {
             // nicely message user
-            sender.sendMessage(String.format("This shop does not carry %s!", item.name));
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
             return true;
         }
 
@@ -541,7 +541,7 @@ public class CommandShopSet extends Command {
 
             // Check Permissions
             if ( (!canUseCommand(CommandTypes.ADMIN_LOCAL) && !isGlobal) || (!canUseCommand(CommandTypes.ADMIN_GLOBAL) && isGlobal)) {
-                player.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " You must be a shop admin to do this.");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
                 return true;
             }            
         } else {
@@ -694,7 +694,7 @@ public class CommandShopSet extends Command {
             // Save Shop
             plugin.getShopManager().saveShop(shop);
 
-            notifyPlayers(shop, new String[] { ChatColor.DARK_AQUA + "This shop's allowed users have been updated. "} );
+            notifyPlayers(shop, new String[] { ChatColor.DARK_AQUA + "This shop's allowed users has been updated. "} );
             return true;            
         }
 
@@ -749,7 +749,7 @@ public class CommandShopSet extends Command {
             // Save Shop
             plugin.getShopManager().saveShop(shop);
 
-            notifyPlayers(shop, new String[] { ChatColor.DARK_AQUA + "This shop's allowed group have been updated. "} );
+            notifyPlayers(shop, new String[] { ChatColor.DARK_AQUA + "This shop's allowed groups have been updated. "} );
             return true;            
         }
 
@@ -774,8 +774,8 @@ public class CommandShopSet extends Command {
 
             // Check if Player can Modify
             if (!shop.getOwner().equalsIgnoreCase(player.getName())) {
-                sender.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " You must be the shop owner to set this.");
-                sender.sendMessage(ChatColor.DARK_AQUA + " The current shop owner is " + ChatColor.WHITE + shop.getOwner());
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_MUST_BE_SHOP_OWNER));
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
                 return true;
             }
         } else {
@@ -810,8 +810,8 @@ public class CommandShopSet extends Command {
 
             // Check if Player can Modify
             if (!shop.getOwner().equalsIgnoreCase(player.getName())) {
-                sender.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " You must be the shop owner to set this.");
-                sender.sendMessage(ChatColor.DARK_AQUA + " The current shop owner is " + ChatColor.WHITE + shop.getOwner());
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_MUST_BE_SHOP_OWNER));
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
                 return true;
             }
         } else {
@@ -853,7 +853,7 @@ public class CommandShopSet extends Command {
 
             // Check if Player can Modify
             if ( ((!canUseCommand(CommandTypes.ADMIN_LOCAL) && !isGlobal) || (!canUseCommand(CommandTypes.ADMIN_GLOBAL) && isGlobal)) && !shop.getOwner().equalsIgnoreCase(player.getName())) {
-                sender.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " You must be the shop owner to set this.");
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_MUST_BE_SHOP_OWNER));
                 sender.sendMessage(ChatColor.DARK_AQUA + "  The current shop owner is " + ChatColor.WHITE + shop.getOwner());
                 return true;
             }
@@ -878,7 +878,7 @@ public class CommandShopSet extends Command {
         if (matcher.find()) {
             String name = matcher.group(1);
             if (!canUseCommand(CommandTypes.SET_OWNER)) {
-                sender.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " You do not have permission to do this.");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
                 return true;
             }  else if ( !canCreateShop(name) ) {
                 sender.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " that player already has the maximum number of shops!");
@@ -923,8 +923,8 @@ public class CommandShopSet extends Command {
 
             // Check if Player can Modify  
             if(!canModifyShop(shop)) {
-                sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "You must be the shop owner to set this.");
-                sender.sendMessage(ChatColor.DARK_AQUA + "  The current shop owner is " + ChatColor.WHITE + shop.getOwner());                
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_MUST_BE_SHOP_OWNER));
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));                
                 return true;
             }
         } else {
@@ -947,14 +947,14 @@ public class CommandShopSet extends Command {
     }
     private boolean shopSetDynamic(Shop shop, ItemInfo item) {
         if (item == null) {
-            sender.sendMessage("Item was not found.");
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
             return true;
         }
 
         // Check if Shop has item
         if (!shop.containsItem(item)) {
             // nicely message user
-            sender.sendMessage(String.format("This shop does not carry %s!", item.name));
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
             return true;
         }
 
@@ -988,7 +988,7 @@ public class CommandShopSet extends Command {
 
             // Check Permissions
             if (!canUseCommand(CommandTypes.ADMIN_SERVER)) {
-                player.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " You do not have permission to set dynamic shops.");
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
                 return false;
             }            
         } else {
