@@ -29,6 +29,10 @@ public class GenericFunctions {
      * @return
      */
     public static List<Integer> limitOutliers(List<Integer> list) {
+        //If we don't have at least 2 - ignore. (was causing all stocks with 1 to get 0d)
+        if (list.size() < 2)
+            return list;
+        
         double mean = getMean(list);
         double stdDev = getStandardDeviation(list, mean);
 
