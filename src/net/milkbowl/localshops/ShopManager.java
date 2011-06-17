@@ -594,10 +594,11 @@ public class ShopManager {
                 String[] stock = v[2].split(":");
                 int currStock = Integer.parseInt(stock[0]);
                 int maxStock = Integer.parseInt(stock[1]);
+                
                 boolean dynamicItem;
-
-                if (stock.length > 2) {
-                    dynamicItem = (Integer.parseInt(stock[2]) == 1);
+                
+                if (v.length > 3) {
+                    dynamicItem = (Integer.parseInt(v[3]) == 1);
                     if (!shop.addItem(id, type, buyPrice, buyStackSize, sellPrice, sellStackSize, currStock, maxStock, dynamicItem)) {
                         if(isolateBrokenShopFile(file)) {
                             log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString(), id, type));
