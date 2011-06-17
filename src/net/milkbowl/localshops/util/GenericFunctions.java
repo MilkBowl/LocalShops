@@ -143,7 +143,7 @@ public class GenericFunctions {
      * @return % adjustment as double
      */
     public static double getAdjustment(double volatility, int deltaStock) {
-        return (Math.pow((1.0 + (volatility/10000)), -deltaStock));
+        return (Math.pow((1.0 + (volatility/100000)), -deltaStock));
     }
 
     /**
