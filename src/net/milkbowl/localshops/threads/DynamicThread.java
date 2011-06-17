@@ -27,7 +27,7 @@ import org.bukkit.Bukkit;
  */
 public class DynamicThread extends Thread {
     private LocalShops plugin = null;
-    
+
     protected static final Logger log = Logger.getLogger("Minecraft");
 
     public DynamicThread(ThreadGroup tgroup, String tname, LocalShops plugin) {
@@ -37,7 +37,7 @@ public class DynamicThread extends Thread {
 
     public void run() {
         Map<ItemInfo, List<Integer>> itemStockMap = Collections.synchronizedMap(new HashMap<ItemInfo, List<Integer>>());
-        
+
         //Dump all the shop stock data into the map.
         for ( Shop shop : plugin.getShopManager().getAllShops() ) {
             for ( InventoryItem item : shop.getItems() ) {
@@ -52,17 +52,13 @@ public class DynamicThread extends Thread {
         }
         for(ItemInfo item : itemStockMap.keySet()) {
             List<Integer> stockList = GenericFunctions.limitOutliers(itemStockMap.get(item));
-            //remove the map before re-adding it
-            if (DynamicManager.getPriceAdjMap().containsKey(item)) 
-                DynamicManager.getPriceAdjMap().remove(item);
-            
+
             //Get the overall stock change for a given item and then calculate the adjustment given the volatility
             int deltaStock = GenericFunctions.getSum(stockList) - Config.getGlobalBaseStock();
             double priceAdj = GenericFunctions.getAdjustment(Config.getGlobalVolatility(), deltaStock);
             DynamicManager.getPriceAdjMap().put(item, priceAdj);
-            
         }
-        
+
         Bukkit.getServer().getScheduler().callSyncMethod(plugin, plugin.getShopManager().updateSigns());
     }
 
