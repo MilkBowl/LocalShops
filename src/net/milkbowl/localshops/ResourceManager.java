@@ -41,6 +41,7 @@ public class ResourceManager {
     public final static String CMD_ADM_SET_CFG_CHARGE_FOR_SHOP = "Command.Admin.SetConfig.ChargeForShop";
     public final static String CMD_ADM_SET_CFG_GLOBAL_SHOP = "Command.Admin.SetConfig.GlobalShop";
     public final static String CMD_ADM_SET_CFG_SHOP_WIDTH = "Command.Admin.SetConfig.ShopWidth";
+    public final static String CMD_ADM_SET_CFG_GLOBAL_STOCK = "Command.Admin.SetConfig.GlobalShopStock";
     public final static String CMD_ADM_SET_CFG_REPORT_STATS = "Command.Admin.SetConfig.ReportStats";
     public final static String CMD_ADM_SET_CFG_MAX_HEIGHT = "Command.Admin.SetConfig.MaxHeight";
     public final static String CMD_ADM_SET_CFG_MAX_WIDTH = "Command.Admin.SetConfig.MaxWidth";

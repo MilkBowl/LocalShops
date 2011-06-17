@@ -85,6 +85,34 @@ public class CommandAdminSet extends Command {
             return true;
         }
         
+        // Get Global Base Stock
+        matcher.reset();
+        pattern = Pattern.compile("(?i)(global-base-stock)$");
+        matcher = pattern.matcher(command);
+        if(matcher.find()) {
+            String key = matcher.group(1);
+            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_GLOBAL_STOCK));
+            sender.sendMessage(key + "=" + Config.getGlobalBaseStock());
+            return true;
+        }        
+        
+        // Set Global Base Stock
+        matcher.reset();
+        pattern = Pattern.compile("(?i)(global-base-stock)\\s+(.*)");
+        matcher = pattern.matcher(command);
+        if(matcher.find()) {
+            String key = matcher.group(1);
+            String value = matcher.group(2);
+            try {
+                int x = Integer.parseInt(value);
+                Config.setGlobalBaseStock(x);
+                sender.sendMessage(key + "=" + value);
+            } catch(Exception e) {
+                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_INVALID_VALUE));
+            }
+            return true;
+        }
+        
         // Get Shop width
         matcher.reset();
         pattern = Pattern.compile("(?i)(shop-width)$");
@@ -544,6 +572,7 @@ public class CommandAdminSet extends Command {
         sender.sendMessage("   " + "/" + commandLabel + " debug <value>");
         sender.sendMessage("   " + "/" + commandLabel + " find-max-distance <value>");
         sender.sendMessage("   " + "/" + commandLabel + " global-shop <value>");
+        sender.sendMessage("   " + "/" + commandLabel +  "global-base-stock <value>");
         sender.sendMessage("   " + "/" + commandLabel + " log-transactions <value>");
         sender.sendMessage("   " + "/" + commandLabel + " max-damage <value>");
         sender.sendMessage("   " + "/" + commandLabel + " max-height <value>");
