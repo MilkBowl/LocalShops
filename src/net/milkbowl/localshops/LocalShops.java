@@ -36,7 +36,7 @@ public class LocalShops extends JavaPlugin {
     public ShopsPlayerListener playerListener = new ShopsPlayerListener(this);
     public ShopsBlockListener blockListener = new ShopsBlockListener(this);
     public ShopsEntityListener entityListener = new ShopsEntityListener(this);
-    
+
     // Managers
     private ShopManager shopManager = new ShopManager(this);
     private DynamicManager dynamicManager = new DynamicManager(this);
@@ -47,10 +47,10 @@ public class LocalShops extends JavaPlugin {
 
     // Logging
     private final Logger log = Logger.getLogger("Minecraft");
-    
+
     private static ItemData itemList = new ItemData();
     private Map<String, PlayerData> playerData; // synchronized player hash
-    
+
     public LocalShops() {
         Config.load();
     }
@@ -64,7 +64,7 @@ public class LocalShops extends JavaPlugin {
         for (Player player : this.getServer().getOnlinePlayers()) {
             getPlayerData().put(player.getName(), new PlayerData(this, player.getName()));
         }
-        
+
         // Register our events
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Monitor, this);
@@ -76,7 +76,7 @@ public class LocalShops extends JavaPlugin {
         pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Priority.Normal, this);
         pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Normal, this);
         pm.registerEvent(Event.Type.ENTITY_EXPLODE, entityListener, Priority.Normal, this);
-        
+
         // Register Commands
         CommandExecutor cmdExec = new ShopCommandExecutor(this);
         getCommand("lshop").setExecutor(cmdExec);
@@ -95,7 +95,7 @@ public class LocalShops extends JavaPlugin {
 
         // read the shops into memory
         getShopManager().loadShops(shopsDir);
-            
+
         // update the console that we've started
         log.info(resManager.getString(ResourceManager.MAIN_LOAD, new String[] { "%NUM_SHOPS%" }, new Object[] { getShopManager().getNumShops() }));
         log.info(resManager.getString(ResourceManager.MAIN_ENABLE, new String[] { "%UUID%" }, new Object[] { Config.getSrvUuid().toString() }));
@@ -104,28 +104,28 @@ public class LocalShops extends JavaPlugin {
         for (Player player : this.getServer().getOnlinePlayers()) {
             playerListener.checkPlayerPosition(player);
         }
-        
+
         // Start reporting thread
         if(Config.getSrvReport()) {
             threadManager.reportStart();
         }
-        
+
         // Start Notification thread
         if (Config.getShopTransactionNotice()) {
             threadManager.notificationStart();
         }
-        
+
         // Start Scheduler thread
         threadManager.schedulerStart();
-        
-        
+
+
         setEconManager(new EconomyManager(this));
         if(!getEconManager().loadEconomies()) {
             // No valid economies, display error message and disables
             log.warning(resManager.getString(ResourceManager.MAIN_ECONOMY_NOT_FOUND, new String[] { }, new Object[] { }));
             getPluginLoader().disablePlugin(this);
         }
-        
+
         setPermManager(new PermissionManager(this));
         if(!getPermManager().load()) {
             // no valid permissions, display error message and disables
@@ -137,19 +137,19 @@ public class LocalShops extends JavaPlugin {
     public void onDisable() {
         // Save all shops
         getShopManager().saveAllShops();
-        
+
         // Save config file
         Config.save();
-        
+
         // Stop Reporting thread
         threadManager.reportStop();
-        
-         // Stop Scheduler thread
+
+        // Stop Scheduler thread
         threadManager.schedulerStop();
-        
+
         // Stop Notification thread
         threadManager.notificationStop();
-        
+
         // update the console that we've stopped
         log.info(resManager.getString(ResourceManager.MAIN_DISABLE, new String[] { }, new Object[] { }));
     }
@@ -193,7 +193,7 @@ public class LocalShops extends JavaPlugin {
     public PermissionManager getPermManager() {
         return permManager;
     }
-    
+
     public ThreadManager getThreadManager() {
         return threadManager;
     }
@@ -201,27 +201,27 @@ public class LocalShops extends JavaPlugin {
     public DynamicManager getDynamicManager() {
         return dynamicManager;
     }
-    
+
     public ResourceManager getResourceManager() {
         return resManager;
     }
-    
+
     //Workaround for Bukkits inability to update multiple Signs in the same Tick
     public void scheduleUpdate(ShopSign sign, int delay) {
         getServer().getScheduler().scheduleSyncDelayedTask(this, new updateSignState(sign), delay);
     }
-    
+
     public class updateSignState implements Runnable {
         private ShopSign sign = null;
-        
+
         public updateSignState(ShopSign sign) {
             this.sign = sign;
         }
-        
+
         @Override
         public void run() {
-           sign.getLoc().getBlock().getState().update(true);
+            sign.getLoc().getBlock().getState().update(true);
         }
-        
+
     }
 }
