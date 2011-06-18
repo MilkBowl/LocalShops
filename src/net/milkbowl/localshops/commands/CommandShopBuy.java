@@ -362,9 +362,15 @@ public class CommandShopBuy extends Command {
         // recalculate # of items since may not fit cleanly into bundles
         amount = bundles * invItem.getBuySize();
         double totalCost = bundles * itemPrice;
-
+        
+        if (shop.isUnlimitedMoney()) {
+            if (!pData.chargePlayer(player.getName(), totalCost)) {
+                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_UNEXPECTED_MONEY_ISSUE));
+                return true;
+            }
+        } 
         // try to pay the shop owner
-        if (!isShopController(shop)) {
+        else if (!isShopController(shop)) {
             if (!pData.payPlayer(player.getName(), shop.getOwner(), totalCost)) {
                 // player doesn't have enough money
                 // get player's balance and calculate how many it can buy
@@ -379,13 +385,7 @@ public class CommandShopBuy extends Command {
                 } else {
                     player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_PLAYER_AFFORD_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { bundlesCanAford, item.name }));
                 }
-                
-                if (shop.isUnlimitedMoney()) {
-                    if (!pData.chargePlayer(player.getName(), totalCost)) {
-                        player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_UNEXPECTED_MONEY_ISSUE));
-                        return true;
-                    }
-                } else if (!pData.payPlayer(player.getName(), shop.getOwner(), totalCost)) {
+                if (!pData.payPlayer(player.getName(), shop.getOwner(), totalCost)) {
                     player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_UNEXPECTED_MONEY_ISSUE));
                     return true;
                 }
