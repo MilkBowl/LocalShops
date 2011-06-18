@@ -333,6 +333,12 @@ public class CommandShopSell extends Command {
                     totalCost = bundlesCanAford * itemPrice;
                     amount = bundlesCanAford * invItem.getSellSize();
                     player.sendMessage(ChatColor.DARK_AQUA + shop.getName() + " could only afford " + ChatColor.WHITE + bundlesCanAford + ChatColor.DARK_AQUA + " bundles.");
+                    if (shop.isUnlimitedMoney()) {
+                        if(!pData.payPlayer(player.getName(), totalCost)) {
+                            player.sendMessage(ChatColor.DARK_AQUA + "Unexpected money problem: could not complete sale.");
+                            return true;
+                        }
+                    }
                     if (!pData.payPlayer(shop.getOwner(), player.getName(), totalCost)) {
                         player.sendMessage(ChatColor.DARK_AQUA + "Unexpected money problem: could not complete sale.");
                         return true;

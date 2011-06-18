@@ -379,8 +379,13 @@ public class CommandShopBuy extends Command {
                 } else {
                     player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_PLAYER_AFFORD_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { bundlesCanAford, item.name }));
                 }
-
-                if (!pData.payPlayer(player.getName(), shop.getOwner(), totalCost)) {
+                
+                if (shop.isUnlimitedMoney()) {
+                    if (!pData.chargePlayer(player.getName(), totalCost)) {
+                        player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_UNEXPECTED_MONEY_ISSUE));
+                        return true;
+                    }
+                } else if (!pData.payPlayer(player.getName(), shop.getOwner(), totalCost)) {
                     player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_UNEXPECTED_MONEY_ISSUE));
                     return true;
                 }
