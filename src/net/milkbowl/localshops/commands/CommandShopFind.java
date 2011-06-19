@@ -138,9 +138,13 @@ public class CommandShopFind extends Command {
                     continue;
                 }
                 for (ShopLocation shopLoc : lShop.getShopLocations()) {
-                        double tempDist = GenericFunctions.calculateDistance(playerLoc.getX(), playerLoc.getY(), playerLoc.getZ(), shopLoc.getCenter(player.getWorld()).getX(), shopLoc.getCenter(player.getWorld()).getY(), shopLoc.getCenter(player.getWorld()).getZ());
+                    //If there's only 1 shop don't try to find the minimum distance.
+                    if (lShop.getShopLocations().size() > 1) {
+                        double tempDist = GenericFunctions.calculateDistance(playerLoc, shopLoc.getCenter(player.getWorld()));
                         if ( (distance != 0 && distance > tempDist) || distance == 0 )
                             distance = tempDist;
+                    } else
+                        distance = GenericFunctions.calculateDistance(playerLoc, shopLoc.getCenter(player.getWorld()));
                 }
             } else if(shop instanceof GlobalShop) {
                 GlobalShop gShop = (GlobalShop) shop;
@@ -156,15 +160,12 @@ public class CommandShopFind extends Command {
             // Determine if distance is too far away && ignore
             if (Config.getFindMaxDistance() > 0 && distance > Config.getFindMaxDistance()) {
                 continue;
-            }
-
-            // Check shop has item & is either buying or selling it
-            if (!shop.containsItem(found)) {
+            } else if (!shop.containsItem(found)) {
+                // Check shop has item & is either buying or selling it
                 continue;
-            }
-
-            // This shop is valid, add to list
-            foundShops.put(shop.getUuid(), distance);
+            } else
+                // This shop is valid, add to list
+                foundShops.put(shop.getUuid(), distance);
         }
 
         @SuppressWarnings("unchecked")

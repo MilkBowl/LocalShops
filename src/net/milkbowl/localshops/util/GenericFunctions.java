@@ -22,6 +22,10 @@ public class GenericFunctions {
         double distance = Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2) + Math.pow((z1 - z2), 2));
         return distance;
     }
+    
+    public static double calculateDistance(Location loc1, Location loc2) {
+        return calculateDistance(loc1.getX(), loc1.getY(), loc1.getZ(), loc2.getX(), loc2.getY(), loc2.getZ());
+    }
 
     /**
      * Finds and reduces outliers to the maximum of 2 standard deviations from the population
