@@ -41,8 +41,8 @@ public class Search {
         items.add(new ItemInfo("Birch Leaves", new String[][] { { "lea", "birch" } }, 18, (short) 2, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Sponge", new String[][] { { "sponge" } }, 19, (short) 0, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Glass", new String[][] { { "glas" }, { "sili" } }, 20, (short) 0, new int[]{ 64, 64, 64 } ));
-        items.add(new ItemInfo("Lapis Lazuli Ore", new String[][] { { "laz", "ore" } }, 21, (short) 0, new int[]{ 64, 64, 64 } ));
-        items.add(new ItemInfo("Lapis Lazuli Block", new String[][] { { "laz", "bl" } }, 22, (short) 0, new int[]{ 64, 64, 64 } ));
+        items.add(new ItemInfo("Lapis Lazuli Ore", new String[][] { { "laz", "ore" }, { "ore", "lapi" } }, 21, (short) 0, new int[]{ 64, 64, 64 } ));
+        items.add(new ItemInfo("Lapis Lazuli Block", new String[][] { { "laz", "bl" }, { "blo", "lapi"} }, 22, (short) 0, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Dispenser", new String[][] { { "dispen" } }, 23, (short) 0, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Sandstone", new String[][] { { "sand", "st" } }, 24, (short) 0, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Note Block", new String[][] { { "note" } }, 25, (short) 0, new int[]{ 64, 64, 64 } ));
@@ -218,7 +218,7 @@ public class Search {
         items.add(new ItemInfo("Red Dye", new String[][] { { "dye", "red" }, { "pain", "red" }, { "pet", "ros" }, { "pet", "red" } }, 351, (short) 1, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Cactus Green", new String[][] { { "cact", "gree" }, { "dye", "gree" }, { "pain", "gree" } }, 351, (short) 2, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Cocoa Beans", new String[][] { { "bean" }, { "choco" }, { "cocoa" }, { "dye", "bro" }, { "pain", "bro" } }, 351, (short) 3, new int[]{ 64, 64, 64 } ));
-        items.add(new ItemInfo("Lapis Lazuli", new String[][] { { "lapi" }, { "dye", "blu" }, { "pain", "blu" } }, 351, (short) 4, new int[]{ 64, 64, 64 } ));
+        items.add(new ItemInfo("Lapis Lazuli", new String[][] { { "dye", "lapi" }, { "dye", "blu" }, { "pain", "blu" } }, 351, (short) 4, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Purple Dye", new String[][] { { "dye", "pur" }, { "pain", "pur" } }, 351, (short) 5, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Cyan Dye", new String[][] { { "dye", "cya" }, { "pain", "cya" } }, 351, (short) 6, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Light Gray Dye", new String[][] { { "dye", "lig", "gra" }, { "dye", "lig", "grey" }, { "pain", "lig", "grey" }, { "pain", "lig", "grey" } }, 351, (short) 7, new int[]{ 64, 64, 64 } ));
