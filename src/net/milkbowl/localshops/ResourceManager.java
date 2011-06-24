@@ -34,6 +34,7 @@ public class ResourceManager {
     public final static String GEN_CONSOLE_NOT_IMPLEMENTED = "Generic.ConsoleNotImplemented";
     public final static String GEN_UNEXPECTED_MONEY_ISSUE = "Generic.UnexpectedMoneyIssue";
     public final static String GEN_ITEM_NOT_CARRIED = "Generic.ItemNotCarried";
+    public final static String GEN_SHOP_NOT_FOUND = "Generic.ShopNotFound";
     
     public final static String CMD_ISSUED_LOCAL = "Command.IssuedLocal";
     public final static String CMD_ISSUED_GLOBAL = "Command.IssuedGlobal";
@@ -152,7 +153,7 @@ public class ResourceManager {
             s = s.replaceAll(replaceKeys[i], replaceValues[i].toString());
         }
         
-        //Parse any other values leftover
+        //Parse any other values leftover - ORDER IS IMPORTANT!
         s = parseBase(s);
         s = parseColors(s);
         s = parsePluginData(s);
