@@ -9,12 +9,9 @@ import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.ResourceManager;
 import net.milkbowl.localshops.objects.GlobalShop;
 import net.milkbowl.localshops.objects.LocalShop;
-import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopLocation;
-import net.milkbowl.localshops.util.GenericFunctions;
 
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -37,55 +34,21 @@ public class CommandShopCreate extends Command {
         ShopLocation shopLoc = null;
         // Get current shop
         if (sender instanceof Player) {
-            player = (Player) sender;
-            PlayerData pData = plugin.getPlayerData().get(player.getName());          
+            player = (Player) sender;      
 
             creator = player.getName();
             world = player.getWorld().getName();
-
+            shopLoc = getNewShopLoc(player);
+            
+            if (shopLoc == null)
+            	return false;
+            
             //Check permissions
             if (!canCreateShop(creator)) {
                 sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_MAX_NUM_SHOPS));
                 return false;
             }
-           
-            int x1 = 0, x2 = 0, z1 = 0, z2 = 0;
-            // If player is select, use their selection
-            if (pData.isSelecting()) {
-                if (GenericFunctions.calculateCuboidSize(pData.getPositionA(), pData.getPositionB(), Config.getShopSizeMaxWidth(), Config.getShopSizeMaxHeight()) == null) {
-                    String size = Config.getShopSizeMaxWidth() + "x" + Config.getShopSizeMaxHeight() + "x" + Config.getShopSizeMaxWidth();
-                    player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SELECTION_PROB_SIZE, new String[] { "%SIZE%" }, new Object[] { size }));
-                    return false;
-                }
-                
-                
-                if (pData.getPositionA() == null || pData.getPositionB() == null) {
-                    player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SELECTION_PROB_ONLY_ONE_POINT));
-                    return false;
-                } else
-                    shopLoc = new ShopLocation(pData.getPositionA(), pData.getPositionB());
-            } else {
-                // get current position
-                Location loc = player.getLocation();
-                int x = loc.getBlockX();
-                int y = loc.getBlockY();
-                int z = loc.getBlockZ();
-                
-                if (Config.getShopSizeDefWidth() % 2 == 0) {
-                    x1 = x - (Config.getShopSizeDefWidth() / 2);
-                    x2 = x + (Config.getShopSizeDefWidth() / 2);
-                    z1 = z - (Config.getShopSizeDefWidth() / 2);
-                    z2 = z + (Config.getShopSizeDefWidth() / 2);
-                } else {
-                    x1 = x - (Config.getShopSizeDefWidth() / 2) + 1;
-                    x2 = x + (Config.getShopSizeDefWidth() / 2);
-                    z1 = z - (Config.getShopSizeDefWidth() / 2) + 1;
-                    z2 = z + (Config.getShopSizeDefWidth() / 2);
-                }
-                //generate the new shopLocation
-                shopLoc = new ShopLocation(x1, y - 1, z1, x2, y + Config.getShopSizeDefHeight() - 1, z2);
-            }
-
+            
             if(!plugin.getShopManager().shopPositionOk(shopLoc.getLocation1(), shopLoc.getLocation2(), world) && !isGlobal) {
                 sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SHOP_EXISTS));
                 return false;
