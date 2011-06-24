@@ -7,7 +7,6 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.logging.Logger;
 
-
 import net.milkbowl.localshops.Config;
 
 import org.bukkit.plugin.java.JavaPlugin;

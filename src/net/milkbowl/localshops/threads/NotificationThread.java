@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.logging.Logger;
 
-
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.objects.Shop;

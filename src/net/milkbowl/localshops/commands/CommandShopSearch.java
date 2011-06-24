@@ -3,7 +3,6 @@ package net.milkbowl.localshops.commands;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.objects.ItemInfo;

@@ -3,7 +3,6 @@ package net.milkbowl.localshops.commands;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-
 import net.milkbowl.localshops.LocalShops;
 
 import org.bukkit.command.CommandSender;

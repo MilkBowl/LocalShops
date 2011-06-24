@@ -1,11 +1,11 @@
-package net.milkbowl.localshops.modules.permission.plugins;
+package net.milkbowl.localshops.customvault;
 
-import net.milkbowl.localshops.modules.permission.Permission;
+import net.milkbowl.vault.v0.modules.permission.Permission;
 
 import org.bukkit.entity.Player;
 
 
-public class Permission_None implements Permission {
+public class LocalShopsVaultPermission implements Permission {
     private String name = "Local Fallback Permissions";
 
     @Override

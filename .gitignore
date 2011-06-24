@@ -3,6 +3,7 @@
 /.project
 /.settings
 /META-INF
-/src/lib
-/src/LocalShops.jar
+/bin
+/lib
+/LocalShops.jar
 .externalToolBuilders

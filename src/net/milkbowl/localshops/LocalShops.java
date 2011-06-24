@@ -1,6 +1,10 @@
 package net.milkbowl.localshops;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
@@ -8,15 +12,17 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import net.milkbowl.localshops.commands.ShopCommandExecutor;
+import net.milkbowl.localshops.customvault.LocalShopsVaultPermission;
 import net.milkbowl.localshops.listeners.ShopsBlockListener;
 import net.milkbowl.localshops.listeners.ShopsEntityListener;
 import net.milkbowl.localshops.listeners.ShopsPlayerListener;
-import net.milkbowl.localshops.modules.economy.EconomyManager;
-import net.milkbowl.localshops.modules.permission.PermissionManager;
 import net.milkbowl.localshops.objects.ItemData;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.ShopSign;
 import net.milkbowl.localshops.threads.ThreadManager;
+import net.milkbowl.vault.v0.modules.economy.EconomyManager;
+import net.milkbowl.vault.v0.modules.permission.Permission;
+import net.milkbowl.vault.v0.modules.permission.PermissionManager;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
@@ -50,12 +56,39 @@ public class LocalShops extends JavaPlugin {
 
     private static ItemData itemList = new ItemData();
     private Map<String, PlayerData> playerData; // synchronized player hash
-
+    
     public LocalShops() {
+        String[] jars = new String[] { "Vault-0.jar" };
+
+        for (String jar : jars) {
+            try {
+                File f = new File("lib/" + jar);
+                if (!f.exists()) {
+                    log.info(String.format("[LocalShops] Extracting Library %s", jar));
+                    InputStream inputStream = this.getClass().getResourceAsStream("/jars/" + jar);
+                    OutputStream out = new FileOutputStream(f);
+                    byte buf[] = new byte[1024];
+                    int len;
+                    while ((len = inputStream.read(buf)) > 0) {
+                        out.write(buf, 0, len);
+                    }
+                    out.close();
+                    inputStream.close();
+                }
+            } catch (IOException e) {
+                log.warning(String.format("[LocalShops] Failed to extract library %s", jar));
+            }
+        }
+    }
+    
+    public void onLoad() {
         Config.load();
     }
 
     public void onEnable() {
+        // Download dependancies...
+        downloadLibraries();
+        
         setPlayerData(Collections.synchronizedMap(new HashMap<String, PlayerData>()));
         resManager = new ResourceManager(getDescription(), new Locale("pirate"));
         log.info(resManager.getString(ResourceManager.MAIN_USING_LOCALE, new String[] { "%LOCALE%" }, new String[] { resManager.getLocale().toString() } ));
@@ -120,18 +153,24 @@ public class LocalShops extends JavaPlugin {
 
 
         setEconManager(new EconomyManager(this));
-        if(!getEconManager().loadEconomies()) {
+        if(!getEconManager().load()) {
             // No valid economies, display error message and disables
             log.warning(resManager.getString(ResourceManager.MAIN_ECONOMY_NOT_FOUND, new String[] { }, new Object[] { }));
             getPluginLoader().disablePlugin(this);
         }
 
         setPermManager(new PermissionManager(this));
-        if(!getPermManager().load()) {
+        Map<String, Permission> customPerms = new HashMap<String, Permission>();
+        customPerms.put("Local Permissions", (Permission) new LocalShopsVaultPermission());
+        if(!getPermManager().load(customPerms)) {
             // no valid permissions, display error message and disables
             log.warning(resManager.getString(ResourceManager.MAIN_PERMISSION_NOT_FOUND, new String[] { }, new Object[] { }));
             getPluginLoader().disablePlugin(this);
         }
+    }
+
+    private void downloadLibraries() {
+        
     }
 
     public void onDisable() {
