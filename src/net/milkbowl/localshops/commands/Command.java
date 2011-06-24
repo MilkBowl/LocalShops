@@ -6,11 +6,14 @@ import java.util.logging.Logger;
 
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
+import net.milkbowl.localshops.ResourceManager;
 import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;
+import net.milkbowl.localshops.objects.ShopLocation;
 import net.milkbowl.localshops.util.GenericFunctions;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -380,4 +383,42 @@ public abstract class Command {
         return false;
     }
     
+    public ShopLocation getNewShopLoc(Player player) {
+    	PlayerData pData = plugin.getPlayerData().get(player.getName());
+    	 if (pData.isSelecting()) {
+             if (GenericFunctions.calculateCuboidSize(pData.getPositionA(), pData.getPositionB(), Config.getShopSizeMaxWidth(), Config.getShopSizeMaxHeight()) == null) {
+                 String size = Config.getShopSizeMaxWidth() + "x" + Config.getShopSizeMaxHeight() + "x" + Config.getShopSizeMaxWidth();
+                 player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SELECTION_PROB_SIZE, new String[] { "%SIZE%" }, new Object[] { size }));
+                 return null;
+             }
+             
+             
+             if (pData.getPositionA() == null || pData.getPositionB() == null) {
+                 player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SELECTION_PROB_ONLY_ONE_POINT));
+                 return null;
+             } else
+                 return new ShopLocation(pData.getPositionA(), pData.getPositionB());
+         } else {
+        	 int x1 = 0, x2 = 0, z1 = 0, z2 = 0;
+             // get current position
+             Location loc = player.getLocation();
+             int x = loc.getBlockX();
+             int y = loc.getBlockY();
+             int z = loc.getBlockZ();
+             
+             if (Config.getShopSizeDefWidth() % 2 == 0) {
+                 x1 = x - (Config.getShopSizeDefWidth() / 2);
+                 x2 = x + (Config.getShopSizeDefWidth() / 2);
+                 z1 = z - (Config.getShopSizeDefWidth() / 2);
+                 z2 = z + (Config.getShopSizeDefWidth() / 2);
+             } else {
+                 x1 = x - (Config.getShopSizeDefWidth() / 2) + 1;
+                 x2 = x + (Config.getShopSizeDefWidth() / 2);
+                 z1 = z - (Config.getShopSizeDefWidth() / 2) + 1;
+                 z2 = z + (Config.getShopSizeDefWidth() / 2);
+             }
+             //generate the new shopLocation
+             return new ShopLocation(x1, y - 1, z1, x2, y + Config.getShopSizeDefHeight() - 1, z2);
+         }
+    }
 }
