@@ -49,8 +49,6 @@ public class CommandShopCreate extends Command {
                 return false;
             }
             
-            
-            
             if(!plugin.getShopManager().shopPositionOk(shopLoc.getLocation1(), shopLoc.getLocation2(), world) && !isGlobal) {
                 sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SHOP_EXISTS));
                 return false;

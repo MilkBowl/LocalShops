@@ -54,7 +54,8 @@ public abstract class Command {
         GLOBAL_SELL(17, new String[] { "localshops.global.sell" } ),
         ADMIN_GLOBAL(18, new String[] { "localshops.admin.global" } ),
         ADMIN_SERVER(19, new String[] { "localshops.admin.server" }),
-        GLOBAL_BROWSE(20, new String[] {"localshops.global.browse" });
+        GLOBAL_BROWSE(20, new String[] {"localshops.global.browse" }),
+        MULTI_LOCATION(21, new String[] {"localshops.local.multilocation"});
 
         int id = -1;
         String[] permissions = null;

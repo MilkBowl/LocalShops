@@ -98,6 +98,8 @@ public class ResourceManager {
     
     public final static String CMD_SHP_SET_BUNDLE_FAIL = "Command.Shop.Set.Bundles.UnderOne";
     
+    public final static String CMD_SHP_NOT_ON_WORLD = "Command.Shop.Addloc.NotOnWorld";
+    
     // Objects
     private PluginDescriptionFile pdf;
     private ResourceBundle bundle;

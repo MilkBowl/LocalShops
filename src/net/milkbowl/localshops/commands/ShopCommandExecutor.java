@@ -38,12 +38,12 @@ public class ShopCommandExecutor implements CommandExecutor {
         commandTypeMap.put("list", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopList.class, true, true, false));
         commandTypeMap.put("move", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopMove.class, true, false, true));
         commandTypeMap.put("remove", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopRemove.class, true, true, false));
-        commandTypeMap.put("removeloc", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopUnlink.class, false, true, false));
+        commandTypeMap.put("removeloc", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopUnlink.class, false, true, true));
         commandTypeMap.put("search", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopSearch.class, true, true, false));
         commandTypeMap.put("select", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopSelect.class, true, false, false));
         commandTypeMap.put("sell", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopSell.class, true, true, false));
         commandTypeMap.put("set", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopSet.class, true, true, false));
-        commandTypeMap.put("unlink", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopUnlink.class, false, true, false));
+        commandTypeMap.put("unlink", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopUnlink.class, false, true, true));
         commandTypeMap.put("version", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopVersion.class, true, true, false));
     }
     
