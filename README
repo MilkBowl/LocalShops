@@ -29,8 +29,8 @@ the type needs to be included.
                 + localshops.(local|global).sell
                 + localshops.(local|global).browse
     * localshops.manager.*
-          o Owners and Managers can create, move or destroy shops and manage
-            shops (using the set commands)
+          o Owners and Managers can create, move or destroy LOCAL shops and manage
+            them (using the set commands)
           o Sub nodes are:
                 + localshops.manager.add
                 + localshops.manager.create
@@ -42,6 +42,8 @@ the type needs to be included.
                 + localshops.manager.set.owner
     * localshops.admin.(local|global|server)
           o Allows administrative access to override manager permissions or to set serverwide settings
+          o localshops.admin.global is required for a player to create the global shop for the world. 
+            Any managers added to the shop will be able to manage it as if it was a local shop.
     * localshops.free.create
           o Removes the cost associated with creating a shop.
     * localshops.free.move
