@@ -3,7 +3,6 @@
 
     <path id="classpath">
         <fileset dir="lib" includes="**/*.jar"/>
-        <fileset dir="src/jars" includes="**/*.jar"/>
     </path>
 	
     <target name="main" depends="clean, compile, compress" description="Main target">
@@ -26,14 +25,11 @@
     	<copy todir="bin/props">
     		<fileset dir="src/props" />
     	</copy>
-    	<copy todir="bin/jars">
-    		<fileset dir="src/jars" />
-    	</copy>
     </target>
   
   <target name="compress" description="Compression target">
   		<echo>Compressing</echo>
-        <jar jarfile="LocalShops.jar" basedir="bin" includes="net/**/*, plugin.yml, props/*, jars/*">
+        <jar jarfile="LocalShops.jar" basedir="bin" includes="net/**/*, plugin.yml, props/*">
 		<manifest>
 			<attribute name="Built-By" value="${user.name}" />
 			<attribute name="Class-Path" value="../lib/Vault-0.jar"/>

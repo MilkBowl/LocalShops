@@ -7,7 +7,7 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.vault.v0.modules.economy.EconomyResponse;
+import net.milkbowl.vault.modules.economy.EconomyResponse;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

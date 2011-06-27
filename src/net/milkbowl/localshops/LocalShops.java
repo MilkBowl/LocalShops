@@ -20,9 +20,9 @@ import net.milkbowl.localshops.objects.ItemData;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.ShopSign;
 import net.milkbowl.localshops.threads.ThreadManager;
-import net.milkbowl.vault.v0.modules.economy.EconomyManager;
-import net.milkbowl.vault.v0.modules.permission.Permission;
-import net.milkbowl.vault.v0.modules.permission.PermissionManager;
+import net.milkbowl.vault.modules.economy.EconomyManager;
+import net.milkbowl.vault.modules.permission.Permission;
+import net.milkbowl.vault.modules.permission.PermissionManager;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
@@ -56,30 +56,6 @@ public class LocalShops extends JavaPlugin {
 
     private static ItemData itemList = new ItemData();
     private Map<String, PlayerData> playerData; // synchronized player hash
-    
-    public LocalShops() {
-        String[] jars = new String[] { "Vault-0.jar" };
-
-        for (String jar : jars) {
-            try {
-                File f = new File("lib/" + jar);
-                if (!f.exists()) {
-                    log.info(String.format("[LocalShops] Extracting Library %s", jar));
-                    InputStream inputStream = this.getClass().getResourceAsStream("/jars/" + jar);
-                    OutputStream out = new FileOutputStream(f);
-                    byte buf[] = new byte[1024];
-                    int len;
-                    while ((len = inputStream.read(buf)) > 0) {
-                        out.write(buf, 0, len);
-                    }
-                    out.close();
-                    inputStream.close();
-                }
-            } catch (IOException e) {
-                log.warning(String.format("[LocalShops] Failed to extract library %s", jar));
-            }
-        }
-    }
     
     public void onLoad() {
         Config.load();
