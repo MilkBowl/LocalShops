@@ -16,28 +16,34 @@ to edit while the plugin is running!
 =============================
 Permissions
 =============================
-    * localshops.user.*
+LocalShops has different types of shops that can be used, global and local.
+Global shops are accessable and configurable based upon a world locale, while
+Local shops are accessable and configurable based upon a cuboid within a world.
+Permissions are separated to allow for different permission levels and as such
+the type needs to be included.
+
+    * localshops.(local|global).user.*
           o Users can buy and sell to shops but not make or manage them.
           o Sub nodes are:
                 + localshops.user.buy
                 + localshops.user.sell
-    * localshops.manager.*
+    * localshops.(local|global).manager.*
           o Owners and Managers can create, move or destroy shops and manage
             shops (using the set commands)
           o Sub nodes are:
-                + localshops.manager.add
-                + localshops.manager.create
-                + localshops.manager.destroy
-                + localshops.manager.move
-                + localshops.manager.remove
-                + localshops.manager.select
-                + localshops.manager.set
-                + localshops.manager.set.owner
-    * localshops.admin
+                + localshops.(local|global).manager.add
+                + localshops.(local|global).manager.create
+                + localshops.(local|global).manager.destroy
+                + localshops.(local|global).manager.move
+                + localshops.(local|global).manager.remove
+                + localshops.(local|global).manager.select
+                + localshops.(local|global).manager.set
+                + localshops.(local|global).manager.set.owner
+    * localshops.(local|global).admin
           o Allows administrative access to override manager permissions.
-    * localshops.free.create
+    * localshops.(local|global).free.create
           o Removes the cost associated with creating a shop.
-    * localshops.free.move
+    * localshops.(local|global).free.move
           o Removes the cost associated with moving a shop.
 
 
