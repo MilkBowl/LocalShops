@@ -37,7 +37,7 @@ the type needs to be included.
  * localshops.admin.(local|global|server)
    - Allows administrative access to override manager permissions or to set serverwide settings
    - localshops.admin.global is required for a player to create the global shop for the world. 
-            Any managers added to the shop will be able to manage it as if it was a local shop.
+     - **Any managers added to the shop will be able to manage it as if it was a local shop.**
  * localshops.free.create
    - Removes the cost associated with creating a shop.
  * localshops.free.move
