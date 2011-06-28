@@ -17,32 +17,31 @@ Local shops are accessable and configurable based upon a cuboid within a world.
 Permissions are separated to allow for different permission levels and as such
 the type needs to be included.
 
-    * localshops.(local|global).*
-          o Users can buy and sell to shops but not make or manage them.
-          o Sub nodes are:
-                + localshops.(local|global).buy
-                + localshops.(local|global).sell
-                + localshops.(local|global).browse
-    * localshops.manager.*
-          o Owners and Managers can create, move or destroy LOCAL shops and manage
-            them (using the set commands)
-          o Sub nodes are:
-                + localshops.manager.add
-                + localshops.manager.create
-                + localshops.manager.destroy
-                + localshops.manager.move
-                + localshops.manager.remove
-                + localshops.manager.select
-                + localshops.manager.set
-                + localshops.manager.set.owner
-    * localshops.admin.(local|global|server)
-          o Allows administrative access to override manager permissions or to set serverwide settings
-          o localshops.admin.global is required for a player to create the global shop for the world. 
+ * localshops.(local|global).*
+   - Users can buy and sell to shops but not make or manage them.
+   - Sub nodes are:
+     - localshops.(local|global).buy
+     - localshops.(local|global).sell
+     - localshops.(local|global).browse
+ * localshops.manager.*
+   - Owners and Managers can create, move or destroy LOCAL shops and manage them (using the set commands)
+     - Sub nodes are:
+       - localshops.manager.add
+       - localshops.manager.create
+       - localshops.manager.destroy
+       - localshops.manager.move
+       - localshops.manager.remove
+       - localshops.manager.select
+       - localshops.manager.set
+       - localshops.manager.set.owner
+ * localshops.admin.(local|global|server)
+   - Allows administrative access to override manager permissions or to set serverwide settings
+   - localshops.admin.global is required for a player to create the global shop for the world. 
             Any managers added to the shop will be able to manage it as if it was a local shop.
-    * localshops.free.create
-          o Removes the cost associated with creating a shop.
-    * localshops.free.move
-          o Removes the cost associated with moving a shop.
+ * localshops.free.create
+   - Removes the cost associated with creating a shop.
+ * localshops.free.move
+   - Removes the cost associated with moving a shop.
 
 
 ## License
