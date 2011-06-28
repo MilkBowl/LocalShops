@@ -1,10 +1,7 @@
-LocalShops - A cuboid shop plugin for Bukkit
-http://forums.bukkit.org/threads/17131/
-===============================================================================
+# LocalShops - A cuboid shop plugin for Bukkit
+### http://forums.bukkit.org/threads/17131/
 
-=============================
-Installing
-=============================
+## Installing
 Simple copy LocalShops.jar to your <bukkit-directory>/plugins/ and then start
 Bukkit!  Most configuration of the plugin can be done via in-game commands.
 For those adventurous or for changes requiring editing of the config file, it
@@ -13,9 +10,7 @@ is to stop Bukkit, edit the file, and then start Bukkit.  It is not supported
 to edit while the plugin is running!
 
 
-=============================
-Permissions
-=============================
+## Permissions
 LocalShops has different types of shops that can be used, global and local.
 Global shops are accessable and configurable based upon a world locale, while
 Local shops are accessable and configurable based upon a cuboid within a world.
@@ -50,9 +45,7 @@ the type needs to be included.
           o Removes the cost associated with moving a shop.
 
 
-=============================
-LICENSE
-=============================
+## License
 Copyright 2011 MilkBowl (https://github.com/MilkBowl)
 
 This work is licensed under the Creative Commons 
@@ -62,17 +55,13 @@ a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View,
 California, 94041, USA.
 
 
-=============================
-Building
-=============================
+## Building
 LocalShops provides an Ant build script (build.xml) which should be used when
 building LocalShops.  Other methods may work, but are not supported or
 documented.  To learn more about Ant, visit http://ant.apache.org.
 
 
-=============================
-Dependancies
-=============================
+## Dependencies
 LocalShops depends upon Vault (https://github.com/MilkBowl/Vault) for an
 abstraction layer for Permissions, read README.vault for additional info and
 documentation.  To update, simply pull the latest source code from their git
