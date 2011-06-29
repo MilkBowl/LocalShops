@@ -130,20 +130,20 @@ public abstract class Command {
             // check if admin first
             if (isGlobal) {
                 for (String permission : CommandTypes.ADMIN_GLOBAL.getPermissions()) {
-                    if (Vault.getPermission().hasPermission(player, permission, false)) {
+                    if (LocalShops.VAULT.getPermission().hasPermission(player, permission, false)) {
                         return true;
                     }
                 }
             } else { 
                 for (String permission : CommandTypes.ADMIN_LOCAL.getPermissions()) {
                     //Make sure this isn't a server command before allowing access.
-                    if (Vault.getPermission().hasPermission(player, permission, false) && !(this instanceof net.milkbowl.localshops.commands.CommandAdminSet))
+                    if (LocalShops.VAULT.getPermission().hasPermission(player, permission, false) && !(this instanceof net.milkbowl.localshops.commands.CommandAdminSet))
                         return true;
                 }
             }
             // fail back to provided permissions second
             for (String permission : type.getPermissions()) {
-                if (!Vault.getPermission().hasPermission(player, permission, false)) {
+                if (!LocalShops.VAULT.getPermission().hasPermission(player, permission, false)) {
                     return false;
                 }
             }
@@ -391,7 +391,7 @@ public abstract class Command {
             return true;
         
         for (String groupName : shop.getGroupSet())
-            if ( Vault.getPermission().inGroup(player.getWorld().getName(), player.getName(), groupName) )
+            if ( LocalShops.VAULT.getPermission().inGroup(player.getWorld().getName(), player.getName(), groupName) )
                 return true;
         
         return false;

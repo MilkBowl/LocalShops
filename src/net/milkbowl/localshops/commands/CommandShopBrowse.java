@@ -164,7 +164,7 @@ public class CommandShopBrowse extends Command {
                 if (price == 0) {
                     continue;
                 }
-                subMessage += ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + Vault.getEconomy().format(price) + ChatColor.DARK_AQUA + "]";
+                subMessage += ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + LocalShops.VAULT.getEconomy().format(price) + ChatColor.DARK_AQUA + "]";
                 // get stack size
                 int stack = 0;
                 if (buy) {

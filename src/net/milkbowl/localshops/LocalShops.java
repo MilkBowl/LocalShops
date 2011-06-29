@@ -60,6 +60,7 @@ public class LocalShops extends JavaPlugin {
 
     private static ItemData itemList = new ItemData();
     private Map<String, PlayerData> playerData = Collections.synchronizedMap(new HashMap<String, PlayerData>());
+    public static Vault VAULT = null;
     
     public void onLoad() {
         Config.load();
@@ -131,7 +132,8 @@ public class LocalShops extends JavaPlugin {
         // Obtain Vault
         Plugin x = this.getServer().getPluginManager().getPlugin("Vault");
         if(x != null & x instanceof Vault) {
-            log.info(String.format("[%s] Hooked into %s %s", getDescription().getName(), x.getDescription().getName(), x.getDescription().getVersion()));
+            VAULT = (Vault) x;
+            log.info(String.format("[%s] Hooked into %s %s", getDescription().getName(), VAULT.getDescription().getName(), VAULT.getDescription().getVersion()));
         } else {
             log.warning(String.format("[%s] Vault was NOT found! Disabling plugin.", getDescription().getName()));
             getPluginLoader().disablePlugin(this);

@@ -411,7 +411,7 @@ public class CommandShopBuy extends Command {
         if (isShopController(shop)) {
             player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_REMOVED_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { amount, item.name }));
         } else {
-            player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_PURCHASED_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%", "%COST%" }, new Object[] { amount, item.name, Vault.getEconomy().format(totalCost) }));
+            player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_PURCHASED_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%", "%COST%" }, new Object[] { amount, item.name, LocalShops.VAULT.getEconomy().format(totalCost) }));
         }
 
         // log the transaction
