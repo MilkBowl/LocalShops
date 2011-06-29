@@ -13,10 +13,6 @@
 package net.milkbowl.localshops;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
@@ -24,7 +20,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import net.milkbowl.localshops.commands.ShopCommandExecutor;
-import net.milkbowl.localshops.customvault.LocalShopsVaultPermission;
 import net.milkbowl.localshops.listeners.ShopsBlockListener;
 import net.milkbowl.localshops.listeners.ShopsEntityListener;
 import net.milkbowl.localshops.listeners.ShopsPlayerListener;
@@ -32,14 +27,13 @@ import net.milkbowl.localshops.objects.ItemData;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.ShopSign;
 import net.milkbowl.localshops.threads.ThreadManager;
-import net.milkbowl.vault.modules.economy.EconomyManager;
-import net.milkbowl.vault.modules.permission.Permission;
-import net.milkbowl.vault.modules.permission.PermissionManager;
+import net.milkbowl.vault.Vault;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -59,25 +53,20 @@ public class LocalShops extends JavaPlugin {
     private ShopManager shopManager = new ShopManager(this);
     private DynamicManager dynamicManager = new DynamicManager(this);
     public ThreadManager threadManager = new ThreadManager(this);
-    private EconomyManager econManager = null;
-    private PermissionManager permManager = null;
     private ResourceManager resManager = null;
 
     // Logging
     private final Logger log = Logger.getLogger("Minecraft");
 
     private static ItemData itemList = new ItemData();
-    private Map<String, PlayerData> playerData; // synchronized player hash
+    private Map<String, PlayerData> playerData = Collections.synchronizedMap(new HashMap<String, PlayerData>());
     
     public void onLoad() {
         Config.load();
     }
 
     public void onEnable() {
-        // Download dependancies...
-        downloadLibraries();
         
-        setPlayerData(Collections.synchronizedMap(new HashMap<String, PlayerData>()));
         resManager = new ResourceManager(getDescription(), new Locale("pirate"));
         log.info(resManager.getString(ResourceManager.MAIN_USING_LOCALE, new String[] { "%LOCALE%" }, new String[] { resManager.getLocale().toString() } ));
 
@@ -138,27 +127,16 @@ public class LocalShops extends JavaPlugin {
 
         // Start Scheduler thread
         threadManager.schedulerStart();
-
-
-        setEconManager(new EconomyManager(this));
-        if(!getEconManager().load()) {
-            // No valid economies, display error message and disables
-            log.warning(resManager.getString(ResourceManager.MAIN_ECONOMY_NOT_FOUND, new String[] { }, new Object[] { }));
-            getPluginLoader().disablePlugin(this);
-        }
-
-        setPermManager(new PermissionManager(this));
-        Map<String, Permission> customPerms = new HashMap<String, Permission>();
-        customPerms.put("Local Permissions", (Permission) new LocalShopsVaultPermission());
-        if(!getPermManager().load(customPerms)) {
-            // no valid permissions, display error message and disables
-            log.warning(resManager.getString(ResourceManager.MAIN_PERMISSION_NOT_FOUND, new String[] { }, new Object[] { }));
-            getPluginLoader().disablePlugin(this);
-        }
-    }
-
-    private void downloadLibraries() {
         
+        // Obtain Vault
+        Plugin x = this.getServer().getPluginManager().getPlugin("Vault");
+        if(x != null & x instanceof Vault) {
+            log.info(String.format("[%s] Hooked into %s %s", getDescription().getName(), x.getDescription().getName(), x.getDescription().getVersion()));
+        } else {
+            log.warning(String.format("[%s] Vault was NOT found! Disabling plugin.", getDescription().getName()));
+            getPluginLoader().disablePlugin(this);
+            return;
+        }
     }
 
     public void onDisable() {
@@ -181,44 +159,16 @@ public class LocalShops extends JavaPlugin {
         log.info(resManager.getString(ResourceManager.MAIN_DISABLE, new String[] { }, new Object[] { }));
     }
 
-    public void setShopData(ShopManager shopData) {
-        this.shopManager = shopData;
-    }
-
     public ShopManager getShopManager() {
         return shopManager;
-    }
-
-    public void setPlayerData(Map<String, PlayerData> playerData) {
-        this.playerData = playerData;
     }
 
     public Map<String, PlayerData> getPlayerData() {
         return playerData;
     }
 
-    public static void setItemList(ItemData itemList) {
-        LocalShops.itemList = itemList;
-    }
-
     public static ItemData getItemList() {
         return itemList;
-    }
-
-    public void setEconManager(EconomyManager econManager) {
-        this.econManager = econManager;
-    }
-
-    public EconomyManager getEconManager() {
-        return econManager;
-    }
-
-    public void setPermManager(PermissionManager permManager) {
-        this.permManager = permManager;
-    }
-
-    public PermissionManager getPermManager() {
-        return permManager;
     }
 
     public ThreadManager getThreadManager() {

@@ -19,7 +19,8 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.vault.modules.economy.EconomyResponse;
+import net.milkbowl.vault.Vault;
+import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -101,7 +102,7 @@ public class PlayerData {
     }
 
     public boolean payPlayer(String playerName, double cost) {
-        EconomyResponse depositResp = plugin.getEconManager().depositPlayer(playerName, cost);
+        EconomyResponse depositResp = Vault.getEconomy().depositPlayer(playerName, cost);
         if(depositResp.transactionSuccess()) {
             return true;
         } else {
@@ -110,24 +111,24 @@ public class PlayerData {
     }
 
     public boolean payPlayer(String playerFrom, String playerTo, double cost) {       
-        EconomyResponse balanceFromResp = plugin.getEconManager().getBalance(playerFrom);
-        EconomyResponse balanceToResp = plugin.getEconManager().getBalance(playerTo);
+        EconomyResponse balanceFromResp = Vault.getEconomy().getBalance(playerFrom);
+        EconomyResponse balanceToResp = Vault.getEconomy().getBalance(playerTo);
         
         log.info("PlayerFrom: " + playerFrom + " balanceFrom: " + balanceFromResp.amount + " PlayerTo: " + playerTo + " balanceTo: " + balanceToResp.amount + " Cost: " + cost);
         
-        EconomyResponse withdrawResp = plugin.getEconManager().withdrawPlayer(playerFrom, cost);
+        EconomyResponse withdrawResp = Vault.getEconomy().withdrawPlayer(playerFrom, cost);
         if(!withdrawResp.transactionSuccess()) {
             log.info("Failed to withdraw");
             return false;
         }
         
-        EconomyResponse depositResp = plugin.getEconManager().depositPlayer(playerTo, cost);
+        EconomyResponse depositResp = Vault.getEconomy().depositPlayer(playerTo, cost);
         if(!depositResp.transactionSuccess()) {
             log.info("Failed to deposit");
             // Return money to shop owner
-            EconomyResponse returnResp = plugin.getEconManager().depositPlayer(playerFrom, cost);
+            EconomyResponse returnResp = Vault.getEconomy().depositPlayer(playerFrom, cost);
             if(!returnResp.transactionSuccess()) {
-                log.warning(String.format("[%s] ERROR:  Payment failed and could not return funds to original state!  %s may need %s!", plugin.getDescription().getName(), playerName, plugin.getEconManager().format(cost)));
+                log.warning(String.format("[%s] ERROR:  Payment failed and could not return funds to original state!  %s may need %s!", plugin.getDescription().getName(), playerName, Vault.getEconomy().format(cost)));
             }
             return false;
         }
@@ -142,17 +143,17 @@ public class PlayerData {
     }
 
     public double getBalance(String playerName) {
-        EconomyResponse balanceResp = plugin.getEconManager().getBalance(playerName);
+        EconomyResponse balanceResp = Vault.getEconomy().getBalance(playerName);
         return balanceResp.amount;
     }
 
     public boolean chargePlayer(String playerName, double chargeAmount) {
-        EconomyResponse balanceResp = plugin.getEconManager().getBalance(playerName);
+        EconomyResponse balanceResp = Vault.getEconomy().getBalance(playerName);
         if(!balanceResp.transactionSuccess()) {
             return false;
         }
         
-        EconomyResponse withdrawResp = plugin.getEconManager().withdrawPlayer(playerName, chargeAmount);
+        EconomyResponse withdrawResp = Vault.getEconomy().withdrawPlayer(playerName, chargeAmount);
         if(withdrawResp.transactionSuccess()) {
             plugin.getShopManager().logPayment(playerName, "payment", withdrawResp.amount, balanceResp.balance, withdrawResp.balance);
             return true;

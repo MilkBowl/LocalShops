@@ -24,6 +24,7 @@ import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopLocation;
 import net.milkbowl.localshops.util.GenericFunctions;
+import net.milkbowl.vault.Vault;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -127,22 +128,22 @@ public abstract class Command {
             Player player = (Player) sender;
 
             // check if admin first
-            if (isGlobal)
+            if (isGlobal) {
                 for (String permission : CommandTypes.ADMIN_GLOBAL.getPermissions()) {
-                    if (plugin.getPermManager().hasPermission(player, permission)) {
+                    if (Vault.getPermission().hasPermission(player, permission, false)) {
                         return true;
                     }
                 }
-            else 
+            } else { 
                 for (String permission : CommandTypes.ADMIN_LOCAL.getPermissions()) {
                     //Make sure this isn't a server command before allowing access.
-                    if (plugin.getPermManager().hasPermission(player, permission) && !(this instanceof net.milkbowl.localshops.commands.CommandAdminSet))
+                    if (Vault.getPermission().hasPermission(player, permission, false) && !(this instanceof net.milkbowl.localshops.commands.CommandAdminSet))
                         return true;
                 }
-
+            }
             // fail back to provided permissions second
             for (String permission : type.getPermissions()) {
-                if (!plugin.getPermManager().hasPermission(player, permission)) {
+                if (!Vault.getPermission().hasPermission(player, permission, false)) {
                     return false;
                 }
             }
@@ -390,7 +391,7 @@ public abstract class Command {
             return true;
         
         for (String groupName : shop.getGroupSet())
-            if ( plugin.getPermManager().inGroup(player.getWorld().getName(), player.getName(), groupName) )
+            if ( Vault.getPermission().inGroup(player.getWorld().getName(), player.getName(), groupName) )
                 return true;
         
         return false;

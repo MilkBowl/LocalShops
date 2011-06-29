@@ -24,6 +24,7 @@ import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopSign;
 import net.milkbowl.localshops.util.GenericFunctions;
+import net.milkbowl.vault.Vault;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -90,7 +91,7 @@ public class ShopsPlayerListener extends PlayerListener {
 
         } else if (event.getClickedBlock().getType().equals(Material.CHEST) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && shop != null ) {
          // Block access to chests when inside a shop, but allow the owner or managers to use them.
-            if ( !shop.getManagers().contains(playerName) && !shop.getOwner().equals(playerName) && !plugin.getPermManager().hasPermission(player, "localshops.admin.local")) {
+            if ( !shop.getManagers().contains(playerName) && !shop.getOwner().equals(playerName) && !Vault.getPermission().hasPermission(player, "localshops.admin.local", false)) {
                 player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
                 event.setCancelled(true);
                 return;
