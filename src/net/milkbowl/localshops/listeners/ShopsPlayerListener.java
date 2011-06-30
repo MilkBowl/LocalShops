@@ -91,7 +91,7 @@ public class ShopsPlayerListener extends PlayerListener {
 
         } else if (event.getClickedBlock().getType().equals(Material.CHEST) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && shop != null ) {
          // Block access to chests when inside a shop, but allow the owner or managers to use them.
-            if ( !shop.getManagers().contains(playerName) && !shop.getOwner().equals(playerName) && !LocalShops.VAULT.getPermission().hasPermission(player, "localshops.admin.local", false)) {
+            if ( !shop.getManagers().contains(playerName) && !shop.getOwner().equals(playerName) && !LocalShops.VAULT.getPermission().playerHasPermission(player, "localshops.admin.local")) {
                 player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
                 event.setCancelled(true);
                 return;

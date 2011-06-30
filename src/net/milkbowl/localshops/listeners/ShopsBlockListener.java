@@ -118,7 +118,7 @@ public class ShopsBlockListener extends BlockListener {
 			return;
 		}
 
-		if (!shop.getOwner().equals(player.getName()) && !(shop.getManagers().contains(player.getName())) && !(LocalShops.VAULT.getPermission().hasPermission(player, "localshops.admin", false))) {
+		if (!shop.getOwner().equals(player.getName()) && !(shop.getManagers().contains(player.getName())) && !(LocalShops.VAULT.getPermission().playerHasPermission(player, "localshops.admin"))) {
 			player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to place a sign or chest in the shop");
 			event.setCancelled(true);
 			return;
@@ -158,7 +158,7 @@ public class ShopsBlockListener extends BlockListener {
 			return;
 		}
 
-		if (!shop.getOwner().equals(player.getName()) && !(shop.getManagers().contains(player.getName())) && !(LocalShops.VAULT.getPermission().hasPermission(player, "localshops.admin", false))) {
+		if (!shop.getOwner().equals(player.getName()) && !(shop.getManagers().contains(player.getName())) && !(LocalShops.VAULT.getPermission().playerHasPermission(player, "localshops.admin"))) {
 			player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to remove signs in the shop");
 			event.setCancelled(true);
 			return;
