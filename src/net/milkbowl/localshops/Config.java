@@ -31,6 +31,8 @@ public class Config {
     private static final String dirShopsConverted = "shops-converted/";
     private static final String fileTransactionLog = "transactions.log";
     
+    private static String locale = "english";
+    
     // Properties file
     private static Properties properties = null;
 
@@ -81,6 +83,7 @@ public class Config {
     private static List<String> uuidList = Collections.synchronizedList(new ArrayList<String>());
     
     public static void save() {
+    	properties.setProperty("locale", locale);
         properties.setProperty("charge-for-shop", String.valueOf(shopChargeCreate));
         properties.setProperty("charge-for-shop", String.valueOf(shopChargeCreate));
         properties.setProperty("shop-cost", String.valueOf(shopChargeCreateCost));
@@ -139,6 +142,7 @@ public class Config {
             save = true;
         }
         
+        locale = properties.getProperty("locale", locale);
         shopChargeCreate = Boolean.parseBoolean(properties.getProperty("charge-for-shop", String.valueOf(shopChargeCreate)));
         shopChargeCreate = Boolean.parseBoolean(properties.getProperty("charge-for-shop", String.valueOf(shopChargeCreate)));
         shopChargeCreateCost = Double.parseDouble(properties.getProperty("shop-cost", String.valueOf(shopChargeCreateCost)));
@@ -701,4 +705,8 @@ public class Config {
     public static double getGlobalVolatility() {
         return globalVolatility;
     }
+
+	public static String getLocale() {
+		return locale;
+	}
 }

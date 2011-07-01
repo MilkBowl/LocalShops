@@ -68,7 +68,7 @@ public class LocalShops extends JavaPlugin {
 
     public void onEnable() {
         
-        resManager = new ResourceManager(getDescription(), new Locale("pirate"));
+        resManager = new ResourceManager(getDescription(), new Locale(Config.getLocale()));
         log.info(resManager.getString(ResourceManager.MAIN_USING_LOCALE, new String[] { "%LOCALE%" }, new String[] { resManager.getLocale().toString() } ));
 
         // add all the online users to the data trees
