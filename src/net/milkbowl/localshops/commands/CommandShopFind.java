@@ -59,6 +59,7 @@ public class CommandShopFind extends Command {
 
         if (!(sender instanceof Player)) {
             sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
+            return true;
         }
 
         Player player = (Player) sender;
