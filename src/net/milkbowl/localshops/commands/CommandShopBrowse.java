@@ -24,7 +24,6 @@ import net.milkbowl.localshops.ResourceManager;
 import net.milkbowl.localshops.comparator.InventoryItemSortByName;
 import net.milkbowl.localshops.objects.InventoryItem;
 import net.milkbowl.localshops.objects.Shop;
-import net.milkbowl.vault.Vault;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

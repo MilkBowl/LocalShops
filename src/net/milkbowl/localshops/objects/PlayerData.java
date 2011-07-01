@@ -19,7 +19,6 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.bukkit.Location;

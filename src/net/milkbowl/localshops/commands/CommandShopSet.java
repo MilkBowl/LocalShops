@@ -24,7 +24,6 @@ import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopSign;
 import net.milkbowl.localshops.util.GenericFunctions;
-import net.milkbowl.vault.Vault;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

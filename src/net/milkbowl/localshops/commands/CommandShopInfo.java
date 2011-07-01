@@ -23,7 +23,6 @@ import net.milkbowl.localshops.objects.LocalShop;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopLocation;
 import net.milkbowl.localshops.util.GenericFunctions;
-import net.milkbowl.vault.Vault;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

@@ -24,7 +24,6 @@ import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.Transaction;
-import net.milkbowl.vault.Vault;
 
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
