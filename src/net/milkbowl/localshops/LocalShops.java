@@ -63,13 +63,12 @@ public class LocalShops extends JavaPlugin {
     public static Vault VAULT = null;
     
     public void onLoad() {
-        Config.load();
+    	Config.load();
     }
 
     public void onEnable() {
-        
         resManager = new ResourceManager(getDescription(), new Locale(Config.getLocale()));
-        log.info(resManager.getString(ResourceManager.MAIN_USING_LOCALE, new String[] { "%LOCALE%" }, new String[] { resManager.getLocale().toString() } ));
+        log.info(resManager.getString(ResourceManager.MAIN_USING_LOCALE, new String[] { "%LOCALE%" }, new String[] { resManager.getLocale().getLanguage() } ));
 
         // add all the online users to the data trees
         for (Player player : this.getServer().getOnlinePlayers()) {

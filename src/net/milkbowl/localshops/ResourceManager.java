@@ -142,7 +142,7 @@ public class ResourceManager {
 
 	public ResourceManager(PluginDescriptionFile p, Locale l) {
 		pdf = p;
-		if(l == null || l.getLanguage().equals("en")) {
+		if(l == null ) {
 			bundle = ResourceBundle.getBundle("props/Messages");
 		} else {
 			try {

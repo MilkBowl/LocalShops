@@ -83,7 +83,7 @@ public class Config {
     private static List<String> uuidList = Collections.synchronizedList(new ArrayList<String>());
     
     public static void save() {
-    	properties.setProperty("locale", locale);
+    	properties.setProperty("language-code", locale);
         properties.setProperty("charge-for-shop", String.valueOf(shopChargeCreate));
         properties.setProperty("charge-for-shop", String.valueOf(shopChargeCreate));
         properties.setProperty("shop-cost", String.valueOf(shopChargeCreateCost));
@@ -141,8 +141,8 @@ public class Config {
         } else {
             save = true;
         }
-        //Only store the first two characters of any locale string per-ISO standards
-        locale = properties.getProperty("locale", locale.substring(0, 1));
+        
+        locale = properties.getProperty("language-code", locale).toLowerCase();
         shopChargeCreate = Boolean.parseBoolean(properties.getProperty("charge-for-shop", String.valueOf(shopChargeCreate)));
         shopChargeCreate = Boolean.parseBoolean(properties.getProperty("charge-for-shop", String.valueOf(shopChargeCreate)));
         shopChargeCreateCost = Double.parseDouble(properties.getProperty("shop-cost", String.valueOf(shopChargeCreateCost)));
