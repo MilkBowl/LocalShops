@@ -12,7 +12,9 @@
 
 package net.milkbowl.localshops.listeners;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Logger;
 
 import net.milkbowl.localshops.LocalShops;
@@ -26,6 +28,7 @@ import net.milkbowl.localshops.objects.ShopSign;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockListener;
@@ -142,7 +145,7 @@ public class ShopsBlockListener extends BlockListener {
 		Block block = event.getBlock();
 
 		// If not a sign ignore event.
-		if ((!block.getType().equals(Material.SIGN_POST) && !block.getType().equals(Material.WALL_SIGN) && !block.getType().equals(Material.CHEST)) || event.isCancelled()) {
+		if ((!block.getType().equals(Material.SIGN_POST) && !block.getType().equals(Material.WALL_SIGN) )) {
 			return;
 		}
 
@@ -158,17 +161,28 @@ public class ShopsBlockListener extends BlockListener {
 			return;
 		}
 
+		//Lets detect if this block is a sign, or if it has a sign attached to it.
+		List<Block> blockList = new ArrayList<Block>();
+		if (block.getType().equals(Material.SIGN_POST) || block.getType().equals(Material.WALL_SIGN) )
+			blockList.add(block);
+		else {
+			blockList.addAll(findWallSigns(block));
+		}
+		
 		if (!shop.getOwner().equals(player.getName()) && !(shop.getManagers().contains(player.getName())) && !(LocalShops.VAULT.getPermission().playerHasPermission(player, "localshops.admin"))) {
 			player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to remove signs in the shop");
 			event.setCancelled(true);
 			return;
-		} else if (!block.getType().equals(Material.CHEST)) {
+		} 
+		
+		//remove any Blocks in the blocklist
+		if (!blockList.isEmpty()) {
 			Iterator<ShopSign> iter = shop.getSignSet().iterator();
 			while (iter.hasNext()) {
 				ShopSign sign = iter.next();
-				if (sign.getLoc().equals(event.getBlock().getLocation())) {
-					iter.remove();
-				}
+				for (Block b : blockList) 
+					if (sign.getLoc().equals(b.getLocation())) 
+						iter.remove();
 			}
 		} 
 		/*
@@ -184,6 +198,17 @@ public class ShopsBlockListener extends BlockListener {
             }
         }
 		 */
+	}
+	
+	private List<Block> findWallSigns(Block block) {
+		List<Block> foundSigns = new ArrayList<Block>(6);
+		for (BlockFace face : BlockFace.values()) {
+			if (block.getRelative(face).getType().equals(Material.WALL_SIGN))
+				foundSigns.add(block.getRelative(face));
+			else if (block.getRelative(face).getType().equals(Material.SIGN_POST))
+				foundSigns.add(block.getRelative(face));
+		}
+		return foundSigns;
 	}
 
 }
