@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 import net.milkbowl.localshops.util.GenericFunctions;
 
@@ -116,6 +117,8 @@ public class ResourceManager {
 	private PluginDescriptionFile pdf;
 	private ResourceBundle bundle;
 
+    private final Logger log = Logger.getLogger("Minecraft");
+    
 	// Color Map
 	private static final Map<String, ChatColor> COLOR_MAP = new HashMap<String, ChatColor>();
 	static {
@@ -139,13 +142,14 @@ public class ResourceManager {
 
 	public ResourceManager(PluginDescriptionFile p, Locale l) {
 		pdf = p;
-		if(l == null || l.equals("english")) {
+		if(l == null || l.getLanguage().equals("en")) {
 			bundle = ResourceBundle.getBundle("props/Messages");
 		} else {
 			try {
 				bundle = ResourceBundle.getBundle("props/Messages", l);
 			} catch (Exception e) {
 				bundle = ResourceBundle.getBundle("props/Messages");
+				log.warning(getString("Main.ErrorLoadingLocale", new String[] {"%LOCALE%"}, new String[] {l.getLanguage()}));
 			}
 		}
 	}

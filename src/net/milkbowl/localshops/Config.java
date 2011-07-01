@@ -31,7 +31,7 @@ public class Config {
     private static final String dirShopsConverted = "shops-converted/";
     private static final String fileTransactionLog = "transactions.log";
     
-    private static String locale = "english";
+    private static String locale = "en";
     
     // Properties file
     private static Properties properties = null;
@@ -141,8 +141,8 @@ public class Config {
         } else {
             save = true;
         }
-        
-        locale = properties.getProperty("locale", locale);
+        //Only store the first two characters of any locale string per-ISO standards
+        locale = properties.getProperty("locale", locale.substring(0, 1));
         shopChargeCreate = Boolean.parseBoolean(properties.getProperty("charge-for-shop", String.valueOf(shopChargeCreate)));
         shopChargeCreate = Boolean.parseBoolean(properties.getProperty("charge-for-shop", String.valueOf(shopChargeCreate)));
         shopChargeCreateCost = Double.parseDouble(properties.getProperty("shop-cost", String.valueOf(shopChargeCreateCost)));
