@@ -61,7 +61,9 @@ public class Search {
         items.add(new ItemInfo("Bed Block", new String[][] { { "block", "bed" } }, 26, (short) 0, new int[]{ 64, 64, 64 }));
         items.add(new ItemInfo("Powered Rail", new String[][] { { "rail", "pow" }, { "trac", "pow" }, { "boost" } }, 27, (short) 0, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Detector Rail", new String[][] { { "rail", "det" }, { "trac", "det" }, { "detec" } }, 28, (short) 0, new int[]{ 64, 64, 64 } ));
+        items.add(new ItemInfo("Sticky Piston", new String[][] { {"stic", "pis"} }, 29, (short) 0, new int[] {64, 64, 64}));
         items.add(new ItemInfo("Web", new String[][] { { "web" } }, 30, (short) 0, new int[]{ 64, 64, 64 } ));
+        items.add(new ItemInfo("Piston", new String[][] { {"pist"} }, 33, (short) 0, new int[]{ 64, 64, 64 }));
         items.add(new ItemInfo("White Wool", new String[][] { { "wool", "whit" }, { "wool" } }, 35, (short) 0, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Orange Wool", new String[][] { { "wool", "ora" } }, 35, (short) 1, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Magenta Wool", new String[][] { { "wool", "mag" } }, 35, (short) 2, new int[]{ 64, 64, 64 } ));
@@ -249,6 +251,7 @@ public class Search {
         items.add(new ItemInfo("Redstone Repeater", new String[][] { { "diod" }, { "repeat" } }, 356, (short) 0, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Cookie", new String[][] { { "cooki" } }, 357, (short) 0, new int[]{ 8, 16, 64 } ));
         items.add(new ItemInfo("Map", new String[][] { { "map" } }, 358, (short) 0, new int[]{ 1, 16, 64 } ));
+        items.add(new ItemInfo("Map", new String[][] { {"shea"} }, 359, (short) 0, new int[] { 1, 16, 64 } ));
         items.add(new ItemInfo("Gold Music Disc", new String[][] { { "dis", "gol" }, { "rec", "gol" } }, 2256, (short) 0, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Green Music Disc", new String[][] { { "dis", "gre" }, { "rec", "gre" } }, 2257, (short) 0, new int[]{ 64, 64, 64 } ));
     }
