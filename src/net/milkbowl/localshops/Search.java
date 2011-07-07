@@ -248,7 +248,7 @@ public class Search {
         items.add(new ItemInfo("Sugar", new String[][] { { "suga" } }, 353, (short) 0, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Cake", new String[][] { { "cake" } }, 354, (short) 0, new int[]{ 1, 2, 64 } ));
         items.add(new ItemInfo("Bed", new String[][] { { "bed" } }, 355, (short) 0, new int[]{ 1, 16, 64 } ));
-        items.add(new ItemInfo("Redstone Repeater", new String[][] { { "diod" }, { "repeat" } }, 356, (short) 0, new int[]{ 64, 64, 64 } ));
+        items.add(new ItemInfo("Redstone Repeater", new String[][] { {"repe", "reds"}, { "diod" }, { "repeat" } }, 356, (short) 0, new int[]{ 64, 64, 64 } ));
         items.add(new ItemInfo("Cookie", new String[][] { { "cooki" } }, 357, (short) 0, new int[]{ 8, 16, 64 } ));
         items.add(new ItemInfo("Map", new String[][] { { "map" } }, 358, (short) 0, new int[]{ 1, 16, 64 } ));
         items.add(new ItemInfo("Map", new String[][] { {"shea"} }, 359, (short) 0, new int[] { 1, 16, 64 } ));
