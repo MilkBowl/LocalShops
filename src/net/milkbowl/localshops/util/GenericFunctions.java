@@ -14,12 +14,50 @@ package net.milkbowl.localshops.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
 public class GenericFunctions {
+	// Color Map
+	private static final Map<String, ChatColor> COLOR_MAP = new HashMap<String, ChatColor>();
+	static {
+		COLOR_MAP.put("%AQUA%", ChatColor.AQUA);
+		COLOR_MAP.put("%BLACK%", ChatColor.BLACK);
+		COLOR_MAP.put("%BLUE%", ChatColor.BLUE);
+		COLOR_MAP.put("%DARK_AQUA%", ChatColor.DARK_AQUA);
+		COLOR_MAP.put("%DARK_BLUE%", ChatColor.DARK_BLUE);
+		COLOR_MAP.put("%DARK_GRAY%", ChatColor.DARK_GRAY);
+		COLOR_MAP.put("%DARK_GREEN%", ChatColor.DARK_GREEN);
+		COLOR_MAP.put("%DARK_PURPLE%", ChatColor.DARK_PURPLE);
+		COLOR_MAP.put("%DARK_RED%", ChatColor.DARK_RED);
+		COLOR_MAP.put("%GOLD%", ChatColor.GOLD);
+		COLOR_MAP.put("%GRAY%", ChatColor.GRAY);
+		COLOR_MAP.put("%GREEN%", ChatColor.GREEN);
+		COLOR_MAP.put("%LIGHT_PURPLE%", ChatColor.LIGHT_PURPLE);
+		COLOR_MAP.put("%RED%", ChatColor.RED);
+		COLOR_MAP.put("%WHITE%", ChatColor.WHITE);
+		COLOR_MAP.put("%YELLOW%", ChatColor.YELLOW);
+	}
+	
+	/**
+	 * Parses the Color data to the proper chat-color string.
+	 * 
+	 * @param s
+	 * @return
+	 */
+	public static String parseColors(String s) {
+		for(String key : COLOR_MAP.keySet()) {
+			s = s.replaceAll(key, COLOR_MAP.get(key).toString());
+		}
+
+		return s;
+	}
+	
     /**
      * Calculates distance between two cartesian points
      * @param x1
