@@ -306,4 +306,13 @@ public class GenericFunctions {
             return joined;
         }
     }
+    
+    public static String stripVowels(String s) {
+    	s = s.replace("a", "");
+    	s = s.replace("e", "");
+    	s = s.replace("i", "");
+    	s = s.replace("o", "");
+    	s = s.replace("u", "");
+    	return s;
+    }
 }

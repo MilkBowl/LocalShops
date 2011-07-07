@@ -12,6 +12,8 @@
 
 package net.milkbowl.localshops.objects;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,6 +30,7 @@ import java.util.logging.Logger;
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.ShopManager;
+import net.milkbowl.localshops.util.GenericFunctions;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -53,7 +56,7 @@ public abstract class Shop implements Comparator<Shop> {
     protected Set<String> groups = Collections.synchronizedSet(new HashSet<String>());
     protected Set<String> users = Collections.synchronizedSet(new HashSet<String>());
 
-    
+    private static final NumberFormat numFormat = new DecimalFormat("0.##");
 
     // Logging
     protected static final Logger log = Logger.getLogger("Minecraft");
@@ -436,7 +439,33 @@ public abstract class Shop implements Comparator<Shop> {
     public String[] generateSignLines(ShopSign sign) {
         //create our string array and set the 1st element to our item name
         String[] signLines = {sign.getItemName(), "", "", ""};
-
+        //Store the variables we'll be using multiple times
+    	int stock = this.getItem(sign.getItemName()).getStock();
+    	double buyPrice = this.getItem(sign.getItemName()).getBuyPrice();
+    	double sellPrice = this.getItem(sign.getItemName()).getSellPrice();
+    	int maxStock = this.getItem(sign.getItemName()).getMaxStock();
+    	String buyBundle = "";
+    	String sellBundle = "";
+    	
+    	String bCol = GenericFunctions.parseColors(Config.getSignBuyColor());
+    	String sCol = GenericFunctions.parseColors(Config.getSignSellColor());
+    	String bunCol = GenericFunctions.parseColors(Config.getSignBundleColor());
+    	String dCol = GenericFunctions.parseColors(Config.getSignDefaultColor());
+    	String stoCol = GenericFunctions.parseColors(Config.getSignStockColor());
+    	
+    	//Only set Bundle strings if they are greater than 1
+    	if (this.getItem(sign.getItemName()).getBuySize() > 1) {
+    		buyBundle = bunCol + "  [" + this.getItem(sign.getItemName()).getBuySize() + "]";
+    	}
+    	if (this.getItem(sign.getItemName()).getSellSize() > 1) {
+    		sellBundle = bunCol + "  [" + this.getItem(sign.getItemName()).getSellSize() + "]";
+    	}
+    	
+    	//Colorize the title and strip it of vowels if it's too long
+    	if (signLines[0].length() >= 12) {
+    		signLines[0] = GenericFunctions.stripVowels(signLines[0]);
+    	}
+    	signLines[0] = GenericFunctions.parseColors(Config.getSignNameColor()) + signLines[0];
         //If shop no longer carries this item - otherwise update it
         if(this.getItem(sign.getItemName()) == null) {
             signLines[0] = "";
@@ -445,50 +474,51 @@ public abstract class Shop implements Comparator<Shop> {
             signLines[3] = "";
             this.signSet.remove(sign);
         } else if (sign.getType() == ShopSign.SignType.INFO ){
-            if (this.getItem(sign.getItemName()).getBuyPrice() == 0 ) 
-                signLines[1] = "Buy: -";
-            else if (this.getItem(sign.getItemName()).getStock() == 0 && !this.unlimitedStock)
-                signLines[1] = "Understock";
+            if (buyPrice == 0 ) 
+                signLines[1] = bCol + "-";
+            else if (stock == 0 && !this.unlimitedStock)
+                signLines[1] = dCol + "Understock";
             else 
-                signLines[1] = "Buy: " + String.format("%.2f", this.getItem(sign.getItemName()).getBuyPrice()) + " [" + this.getItem(sign.getItemName()).getBuySize() + "]";
-
-            if (this.getItem(sign.getItemName()).getSellPrice() == 0 ) 
-                signLines[2] = "Sell: -";
-            else if (this.getItem(sign.getItemName()).maxStock > 0 && this.getItem(sign.getItemName()).getStock() >= this.getItem(sign.getItemName()).maxStock && !this.unlimitedStock)
-                signLines[2] = "Overstock";
+                signLines[1] =  bCol + numFormat.format(buyPrice) + buyBundle;
+            if (sellPrice == 0 ) 
+                signLines[2] = stoCol + "-";
+            else if (maxStock > 0 && stock >= maxStock && !this.unlimitedStock)
+                signLines[2] = dCol + "Overstock";
             else 
-                signLines[2] = "Sell: " + String.format("%.2f", this.getItem(sign.getItemName()).getSellPrice()) + " [" + this.getItem(sign.getItemName()).getSellSize() + "]";
+                signLines[2] = sCol + numFormat.format(sellPrice) + sellBundle;
 
             if (!this.unlimitedStock)
-                signLines[3] = "Stock: " + this.getItem(sign.getItemName()).getStock();
+                signLines[3] = dCol + "Stock: " + stoCol + stock;
             else
-                signLines[3] = "Unlimited";
+                signLines[3] = stoCol + "Unlimited";
         } else if (sign.getType() == ShopSign.SignType.BUY ) {
-            if (this.getItem(sign.getItemName()).getBuyPrice() == 0 ) 
-                signLines[1] = "Not Selling";
-            else if (this.getItem(sign.getItemName()).getStock() == 0 && !this.unlimitedStock) 
-                signLines[1] = "Understock";
+            if (buyPrice == 0 ) 
+                signLines[1] = dCol + "Not Selling";
+            else if (stock == 0 && !this.unlimitedStock) 
+                signLines[1] = dCol + "Understock";
             else  {
-                signLines[1] = "Buy: " + String.format("%.2f", this.getItem(sign.getItemName()).getBuyPrice()) + " [" + this.getItem(sign.getItemName()).getBuySize() + "]";
-                signLines[2] = "R-Click to Buy";
+                signLines[1] = sCol + numFormat.format(buyPrice) + buyBundle;
+                signLines[3] = dCol + "R-Clk to Buy";
             }
             if (!this.unlimitedStock)
-                signLines[3] = "Stock: " + this.getItem(sign.getItemName()).getStock();
+                signLines[2] = dCol + "Stock: " + stoCol + stock;
             else
-                signLines[3] = "Unlimited";         
+                signLines[2] = stoCol + "Unlimited";         
         } else if (sign.getType() == ShopSign.SignType.SELL ) {
-            if (this.getItem(sign.getItemName()).getSellPrice() == 0 ) 
-                signLines[1] = "Not Buying";
-            else if (this.getItem(sign.getItemName()).maxStock > 0 && this.getItem(sign.getItemName()).getStock() >= this.getItem(sign.getItemName()).maxStock && !this.unlimitedStock)
-                signLines[1] = "Overstock";
+            if (sellPrice == 0 ) 
+                signLines[1] = dCol + "Not Buying";
+            else if (maxStock > 0 && stock >= maxStock && !this.unlimitedStock)
+                signLines[1] = dCol + "Overstock";
             else {
-                signLines[1] = "Sell: " + String.format("%.2f", this.getItem(sign.getItemName()).getSellPrice()) + " [" + this.getItem(sign.getItemName()).getSellSize() + "]";
-                signLines[2] = "R-Click to Sell";
+                signLines[1] = sCol + numFormat.format(sellPrice) + sellBundle;
+                signLines[3] = dCol + "R-Clk to Sell";
             }
-
+            if (!this.unlimitedStock)
+                signLines[2] = dCol + "Stk: " + stoCol + stock;
+            else
+                signLines[2] = stoCol + "Unlimited";   
         }
 
         return signLines;
-
     }
 }
