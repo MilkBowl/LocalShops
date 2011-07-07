@@ -440,10 +440,16 @@ public abstract class Shop implements Comparator<Shop> {
         //create our string array and set the 1st element to our item name
         String[] signLines = {sign.getItemName(), "", "", ""};
         //Store the variables we'll be using multiple times
-    	int stock = this.getItem(sign.getItemName()).getStock();
-    	double buyPrice = this.getItem(sign.getItemName()).getBuyPrice();
-    	double sellPrice = this.getItem(sign.getItemName()).getSellPrice();
-    	int maxStock = this.getItem(sign.getItemName()).getMaxStock();
+        int stock = 0;
+        double buyPrice = 0;
+        double sellPrice = 0;
+        int maxStock = 0;
+        if (this.getItem(sign.getItemName()) != null) {
+        	stock = this.getItem(sign.getItemName()).getStock();
+        	buyPrice = this.getItem(sign.getItemName()).getBuyPrice();
+        	sellPrice = this.getItem(sign.getItemName()).getSellPrice();
+        	maxStock = this.getItem(sign.getItemName()).getMaxStock();
+        }
     	String buyBundle = "";
     	String sellBundle = "";
     	
