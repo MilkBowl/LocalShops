@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.ResourceManager;
+import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;
@@ -190,7 +191,7 @@ public abstract class Command {
     protected void givePlayerItem(ItemStack item, int amount) {
         Player player = (Player) sender;
 
-        int maxStackSize = 64;
+        int maxStackSize = Search.itemById(item.getTypeId(), item.getDurability()).maxStackSize[0];
 
         // fill all the existing stacks first
         for (int i : player.getInventory().all(item.getType()).keySet()) {
