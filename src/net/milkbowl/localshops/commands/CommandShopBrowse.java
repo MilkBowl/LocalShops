@@ -24,6 +24,7 @@ import net.milkbowl.localshops.ResourceManager;
 import net.milkbowl.localshops.comparator.InventoryItemSortByName;
 import net.milkbowl.localshops.objects.InventoryItem;
 import net.milkbowl.localshops.objects.Shop;
+import net.milkbowl.vault.Vault;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -163,7 +164,7 @@ public class CommandShopBrowse extends Command {
                 if (price == 0) {
                     continue;
                 }
-                subMessage += ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + LocalShops.VAULT.getEconomy().format(price) + ChatColor.DARK_AQUA + "]";
+                subMessage += ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + Vault.getEconomy().format(price) + ChatColor.DARK_AQUA + "]";
                 // get stack size
                 int stack = 0;
                 if (buy) {

@@ -37,169 +37,168 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-
 /**
  * Local Shops Plugin
  * 
  * @author Jonbas
  */
 public class LocalShops extends JavaPlugin {
-    // Listeners & Objects
-    public ShopsPlayerListener playerListener = new ShopsPlayerListener(this);
-    public ShopsBlockListener blockListener = new ShopsBlockListener(this);
-    public ShopsEntityListener entityListener = new ShopsEntityListener(this);
+	// Listeners & Objects
+	public ShopsPlayerListener playerListener = new ShopsPlayerListener(this);
+	public ShopsBlockListener blockListener = new ShopsBlockListener(this);
+	public ShopsEntityListener entityListener = new ShopsEntityListener(this);
 
-    // Managers
-    private ShopManager shopManager = new ShopManager(this);
-    private DynamicManager dynamicManager = new DynamicManager(this);
-    public ThreadManager threadManager = new ThreadManager(this);
-    private ResourceManager resManager = null;
+	// Managers
+	private ShopManager shopManager = new ShopManager(this);
+	private DynamicManager dynamicManager = new DynamicManager(this);
+	public ThreadManager threadManager = new ThreadManager(this);
+	private ResourceManager resManager = null;
 
-    // Logging
-    private final Logger log = Logger.getLogger("Minecraft");
+	// Logging
+	private final Logger log = Logger.getLogger("Minecraft");
 
-    private static ItemData itemList = new ItemData();
-    private Map<String, PlayerData> playerData = Collections.synchronizedMap(new HashMap<String, PlayerData>());
-    public static Vault VAULT = null;
-    
-    public void onLoad() {
-    	Config.load();
-    }
+	private static ItemData itemList = new ItemData();
+	private Map<String, PlayerData> playerData = Collections.synchronizedMap(new HashMap<String, PlayerData>());
+	public static Vault VAULT = null;
 
-    public void onEnable() {
-        resManager = new ResourceManager(getDescription(), new Locale(Config.getLocale()));
-        log.info(resManager.getString(ResourceManager.MAIN_USING_LOCALE, new String[] { "%LOCALE%" }, new String[] { resManager.getLocale().getLanguage() } ));
+	public void onLoad() {
+		Config.load();
+	}
 
-        // add all the online users to the data trees
-        for (Player player : this.getServer().getOnlinePlayers()) {
-            getPlayerData().put(player.getName(), new PlayerData(this, player.getName()));
-        }
+	public void onEnable() {
+		resManager = new ResourceManager(getDescription(), new Locale(Config.getLocale()));
+		log.info(resManager.getString(ResourceManager.MAIN_USING_LOCALE, new String[] { "%LOCALE%" }, new String[] { resManager.getLocale().getLanguage() } ));
 
-        // Register our events
-        PluginManager pm = getServer().getPluginManager();
-        pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
-        pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.PLAYER_KICK, playerListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.SIGN_CHANGE, blockListener, Priority.Normal, this);
-        pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Priority.Normal, this);
-        pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Normal, this);
-        pm.registerEvent(Event.Type.ENTITY_EXPLODE, entityListener, Priority.Normal, this);
+		// add all the online users to the data trees
+		for (Player player : this.getServer().getOnlinePlayers()) {
+			getPlayerData().put(player.getName(), new PlayerData(this, player.getName()));
+		}
 
-        // Register Commands
-        CommandExecutor cmdExec = new ShopCommandExecutor(this);
-        getCommand("lshop").setExecutor(cmdExec);
-        getCommand("lsadmin").setExecutor(cmdExec);
-        getCommand("gshop").setExecutor(cmdExec);
-        getCommand("buy").setExecutor(cmdExec);
-        getCommand("sell").setExecutor(cmdExec);
-        getCommand("gbuy").setExecutor(cmdExec);
-        getCommand("gsell").setExecutor(cmdExec);
+		// Register our events
+		PluginManager pm = getServer().getPluginManager();
+		pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Monitor, this);
+		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
+		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
+		pm.registerEvent(Event.Type.PLAYER_KICK, playerListener, Priority.Monitor, this);
+		pm.registerEvent(Event.Type.SIGN_CHANGE, blockListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.ENTITY_EXPLODE, entityListener, Priority.Normal, this);
 
-        // setup the file IO
-        File folderDir = new File(Config.getDirPath());
-        folderDir.mkdir();
-        File shopsDir = new File(Config.getDirShopsActivePath());
-        shopsDir.mkdir();
+		// Register Commands
+		CommandExecutor cmdExec = new ShopCommandExecutor(this);
+		getCommand("lshop").setExecutor(cmdExec);
+		getCommand("lsadmin").setExecutor(cmdExec);
+		getCommand("gshop").setExecutor(cmdExec);
+		getCommand("buy").setExecutor(cmdExec);
+		getCommand("sell").setExecutor(cmdExec);
+		getCommand("gbuy").setExecutor(cmdExec);
+		getCommand("gsell").setExecutor(cmdExec);
 
-        // read the shops into memory
-        getShopManager().loadShops(shopsDir);
+		// setup the file IO
+		File folderDir = new File(Config.getDirPath());
+		folderDir.mkdir();
+		File shopsDir = new File(Config.getDirShopsActivePath());
+		shopsDir.mkdir();
 
-        // update the console that we've started
-        log.info(resManager.getString(ResourceManager.MAIN_LOAD, new String[] { "%NUM_SHOPS%" }, new Object[] { getShopManager().getNumShops() }));
-        log.info(resManager.getString(ResourceManager.MAIN_ENABLE, new String[] { "%UUID%" }, new Object[] { Config.getSrvUuid().toString() }));
+		// read the shops into memory
+		getShopManager().loadShops(shopsDir);
 
-        // check which shops players are inside
-        for (Player player : this.getServer().getOnlinePlayers()) {
-            playerListener.checkPlayerPosition(player);
-        }
+		// update the console that we've started
+		log.info(resManager.getString(ResourceManager.MAIN_LOAD, new String[] { "%NUM_SHOPS%" }, new Object[] { getShopManager().getNumShops() }));
+		log.info(resManager.getString(ResourceManager.MAIN_ENABLE, new String[] { "%UUID%" }, new Object[] { Config.getSrvUuid().toString() }));
 
-        // Start reporting thread
-        if(Config.getSrvReport()) {
-            threadManager.reportStart();
-        }
+		// check which shops players are inside
+		for (Player player : this.getServer().getOnlinePlayers()) {
+			playerListener.checkPlayerPosition(player);
+		}
 
-        // Start Notification thread
-        if (Config.getShopTransactionNotice()) {
-            threadManager.notificationStart();
-        }
+		// Start reporting thread
+		if(Config.getSrvReport()) {
+			threadManager.reportStart();
+		}
 
-        // Start Scheduler thread
-        threadManager.schedulerStart();
-        
-        // Obtain Vault
-        Plugin x = this.getServer().getPluginManager().getPlugin("Vault");
-        if(x != null & x instanceof Vault) {
-            VAULT = (Vault) x;
-            log.info(String.format("[%s] Hooked into %s %s", getDescription().getName(), VAULT.getDescription().getName(), VAULT.getDescription().getVersion()));
-        } else {
-            log.warning(String.format("[%s] Vault was NOT found! Disabling plugin.", getDescription().getName()));
-            getPluginLoader().disablePlugin(this);
-            return;
-        }
-    }
+		// Start Notification thread
+		if (Config.getShopTransactionNotice()) {
+			threadManager.notificationStart();
+		}
 
-    public void onDisable() {
-        // Save all shops
-        getShopManager().saveAllShops();
+		// Start Scheduler thread
+		threadManager.schedulerStart();
 
-        // Save config file
-        Config.save();
+		// Obtain Vault
+		Plugin x = this.getServer().getPluginManager().getPlugin("Vault");
+		if(x != null & x instanceof Vault) {
+			VAULT = (Vault) x;
+			log.info(String.format("[%s] Hooked into %s %s", getDescription().getName(), VAULT.getDescription().getName(), VAULT.getDescription().getVersion()));
+		} else {
+			log.warning(String.format("[%s] Vault was NOT found! Disabling plugin.", getDescription().getName()));
+			getPluginLoader().disablePlugin(this);
+			return;
+		}
+	}
 
-        // Stop Reporting thread
-        threadManager.reportStop();
+	public void onDisable() {
+		// Save all shops
+		getShopManager().saveAllShops();
 
-        // Stop Scheduler thread
-        threadManager.schedulerStop();
+		// Save config file
+		Config.save();
 
-        // Stop Notification thread
-        threadManager.notificationStop();
+		// Stop Reporting thread
+		threadManager.reportStop();
 
-        // update the console that we've stopped
-        log.info(resManager.getString(ResourceManager.MAIN_DISABLE, new String[] { }, new Object[] { }));
-    }
+		// Stop Scheduler thread
+		threadManager.schedulerStop();
 
-    public ShopManager getShopManager() {
-        return shopManager;
-    }
+		// Stop Notification thread
+		threadManager.notificationStop();
 
-    public Map<String, PlayerData> getPlayerData() {
-        return playerData;
-    }
+		// update the console that we've stopped
+		log.info(resManager.getString(ResourceManager.MAIN_DISABLE, new String[] { }, new Object[] { }));
+	}
 
-    public static ItemData getItemList() {
-        return itemList;
-    }
+	public ShopManager getShopManager() {
+		return shopManager;
+	}
 
-    public ThreadManager getThreadManager() {
-        return threadManager;
-    }
+	public Map<String, PlayerData> getPlayerData() {
+		return playerData;
+	}
 
-    public DynamicManager getDynamicManager() {
-        return dynamicManager;
-    }
+	public static ItemData getItemList() {
+		return itemList;
+	}
 
-    public ResourceManager getResourceManager() {
-        return resManager;
-    }
+	public ThreadManager getThreadManager() {
+		return threadManager;
+	}
 
-    //Workaround for Bukkits inability to update multiple Signs in the same Tick
-    public void scheduleUpdate(ShopSign sign, int delay) {
-        getServer().getScheduler().scheduleSyncDelayedTask(this, new updateSignState(sign), delay);
-    }
+	public DynamicManager getDynamicManager() {
+		return dynamicManager;
+	}
 
-    public class updateSignState implements Runnable {
-        private ShopSign sign = null;
+	public ResourceManager getResourceManager() {
+		return resManager;
+	}
 
-        public updateSignState(ShopSign sign) {
-            this.sign = sign;
-        }
+	//Workaround for Bukkits inability to update multiple Signs in the same Tick
+	public void scheduleUpdate(ShopSign sign, int delay) {
+		getServer().getScheduler().scheduleSyncDelayedTask(this, new updateSignState(sign), delay);
+	}
 
-        @Override
-        public void run() {
-            sign.getLoc().getBlock().getState().update(true);
-        }
+	public class updateSignState implements Runnable {
+		private ShopSign sign = null;
 
-    }
+		public updateSignState(ShopSign sign) {
+			this.sign = sign;
+		}
+
+		@Override
+		public void run() {
+			sign.getLoc().getBlock().getState().update(true);
+		}
+
+	}
 }

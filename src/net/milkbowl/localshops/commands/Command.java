@@ -24,6 +24,7 @@ import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopLocation;
 import net.milkbowl.localshops.util.GenericFunctions;
+import net.milkbowl.vault.Vault;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -129,20 +130,20 @@ public abstract class Command {
             // check if admin first
             if (isGlobal) {
                 for (String permission : CommandTypes.ADMIN_GLOBAL.getPermissions()) {
-                    if (LocalShops.VAULT.getPermission().playerHasPermission(player, permission)) {
+                    if (Vault.getPermission().has(player, permission)) {
                         return true;
                     }
                 }
             } else { 
                 for (String permission : CommandTypes.ADMIN_LOCAL.getPermissions()) {
                     //Make sure this isn't a server command before allowing access.
-                    if (LocalShops.VAULT.getPermission().playerHasPermission(player, permission) && !(this instanceof net.milkbowl.localshops.commands.CommandAdminSet))
+                    if (Vault.getPermission().has(player, permission) && !(this instanceof net.milkbowl.localshops.commands.CommandAdminSet))
                         return true;
                 }
             }
             // fail back to provided permissions second
             for (String permission : type.getPermissions()) {
-                if (!LocalShops.VAULT.getPermission().playerHasPermission(player, permission)) {
+                if (!Vault.getPermission().has(player, permission)) {
                     return false;
                 }
             }
@@ -391,7 +392,7 @@ public abstract class Command {
             return true;
         
         for (String groupName : shop.getGroupSet())
-            if ( LocalShops.VAULT.getPermission().playerInGroup(player.getWorld().getName(), player.getName(), groupName) )
+            if ( Vault.getPermission().playerInGroup(player.getWorld().getName(), player.getName(), groupName) )
                 return true;
         
         return false;

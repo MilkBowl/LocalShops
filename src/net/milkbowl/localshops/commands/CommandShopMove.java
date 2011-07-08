@@ -22,6 +22,7 @@ import net.milkbowl.localshops.objects.LocalShop;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.ShopLocation;
 import net.milkbowl.localshops.util.GenericFunctions;
+import net.milkbowl.vault.Vault;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -124,7 +125,7 @@ public class CommandShopMove extends Command {
             } else if (Config.getShopChargeMove() && !canUseCommand(CommandTypes.MOVE_FREE)) {
                 if (!plugin.getPlayerData().get(player.getName()).chargePlayer(player.getName(), Config.getShopChargeMoveCost())) {
                     // return, this player did not have enough money
-                    player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "You need " + LocalShops.VAULT.getEconomy().format(Config.getShopChargeMoveCost()) + " to move a shop.");
+                    player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "You need " + Vault.getEconomy().format(Config.getShopChargeMoveCost()) + " to move a shop.");
                     return false;
                 }
             }

@@ -23,6 +23,7 @@ import net.milkbowl.localshops.objects.LocalShop;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopLocation;
 import net.milkbowl.localshops.util.GenericFunctions;
+import net.milkbowl.vault.Vault;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -131,7 +132,7 @@ public class CommandShopInfo extends Command {
         sender.sendMessage(String.format("  Selling %d items & buying %d items", sellCount, buyCount));
 
         // Shop stock is worth %d coins
-        sender.sendMessage(String.format("  Inventory worth %s", LocalShops.VAULT.getEconomy().format(worth)));
+        sender.sendMessage(String.format("  Inventory worth %s", Vault.getEconomy().format(worth)));
 
         if(shop.isUnlimitedMoney() || shop.isUnlimitedStock()) {
             sender.sendMessage(String.format("  Shop %s unlimited money and %s unlimited stock.", shop.isUnlimitedMoney() ? "has" : "doesn't have", shop.isUnlimitedStock() ? "has" : "doesn't have"));

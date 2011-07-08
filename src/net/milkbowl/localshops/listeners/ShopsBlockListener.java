@@ -24,6 +24,7 @@ import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.LocalShop;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopSign;
+import net.milkbowl.vault.Vault;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -121,7 +122,7 @@ public class ShopsBlockListener extends BlockListener {
 			return;
 		}
 
-		if (!shop.getOwner().equals(player.getName()) && !(shop.getManagers().contains(player.getName())) && !(LocalShops.VAULT.getPermission().playerHasPermission(player, "localshops.admin"))) {
+		if (!shop.getOwner().equals(player.getName()) && !(shop.getManagers().contains(player.getName())) && !(Vault.getPermission().has(player, "localshops.admin"))) {
 			player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to place a sign or chest in the shop");
 			event.setCancelled(true);
 			return;
@@ -169,7 +170,7 @@ public class ShopsBlockListener extends BlockListener {
 			blockList.addAll(findWallSigns(block));
 		}
 		
-		if (!shop.getOwner().equals(player.getName()) && !(shop.getManagers().contains(player.getName())) && !(LocalShops.VAULT.getPermission().playerHasPermission(player, "localshops.admin"))) {
+		if (!shop.getOwner().equals(player.getName()) && !(shop.getManagers().contains(player.getName())) && !(Vault.getPermission().has(player, "localshops.admin"))) {
 			player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to remove signs in the shop");
 			event.setCancelled(true);
 			return;

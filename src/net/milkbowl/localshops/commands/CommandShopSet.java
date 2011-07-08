@@ -24,6 +24,7 @@ import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopSign;
 import net.milkbowl.localshops.util.GenericFunctions;
+import net.milkbowl.vault.Vault;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -207,7 +208,7 @@ public class CommandShopSet extends Command {
         plugin.getShopManager().saveShop(shop);
 
         // Send Result
-        sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is now buying " + ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + LocalShops.VAULT.getEconomy().format(price));
+        sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is now buying " + ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + Vault.getEconomy().format(price));
         
         //update any sign in this shop with that value.
         shop.updateSigns(item.name);
@@ -248,7 +249,7 @@ public class CommandShopSet extends Command {
         plugin.getShopManager().saveShop(shop);
 
         // Send Result
-        sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is now buying "+ item.name + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + LocalShops.VAULT.getEconomy().format(price) + ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + "Bundle: " + size + ChatColor.DARK_AQUA + "]");
+        sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is now buying "+ item.name + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + Vault.getEconomy().format(price) + ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + "Bundle: " + size + ChatColor.DARK_AQUA + "]");
         
         //update any sign in this shop with that value.
         shop.updateSigns(item.name);
@@ -391,7 +392,7 @@ public class CommandShopSet extends Command {
         plugin.getShopManager().saveShop(shop);
 
         // Send Result
-        sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is now selling "+ item.name + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + LocalShops.VAULT.getEconomy().format(price) + ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + "Bundle: " + size + ChatColor.DARK_AQUA + "]");
+        sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is now selling "+ item.name + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + Vault.getEconomy().format(price) + ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + "Bundle: " + size + ChatColor.DARK_AQUA + "]");
         
         //update any sign in this shop with that value.
         shop.updateSigns(item.name);
@@ -423,7 +424,7 @@ public class CommandShopSet extends Command {
         plugin.getShopManager().saveShop(shop);
 
         // Send Result
-        sender.sendMessage(ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " now sells for "+ ChatColor.WHITE + LocalShops.VAULT.getEconomy().format(price));
+        sender.sendMessage(ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " now sells for "+ ChatColor.WHITE + Vault.getEconomy().format(price));
         
         //update any sign in this shop with that value.
         shop.updateSigns(item.name);
@@ -832,7 +833,7 @@ public class CommandShopSet extends Command {
             // Save Shop
             plugin.getShopManager().saveShop(shop);
 
-            sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " now has a minimum balance of "+ ChatColor.WHITE + LocalShops.VAULT.getEconomy().format(min));
+            sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " now has a minimum balance of "+ ChatColor.WHITE + Vault.getEconomy().format(min));
             return true;
         }
 
