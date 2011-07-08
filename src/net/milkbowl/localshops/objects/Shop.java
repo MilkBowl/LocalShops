@@ -50,6 +50,7 @@ public abstract class Shop implements Comparator<Shop> {
 	protected boolean dynamicPrices = false;
 	protected HashMap<String, InventoryItem> inventory = new HashMap<String, InventoryItem>();
 	protected double minBalance = 0;
+	protected double sharePercent = 0;
 	protected ArrayBlockingQueue<Transaction> transactions;
 	protected boolean notification = true;
 	protected Set<ShopSign> signSet = Collections.synchronizedSet(new HashSet<ShopSign>());
@@ -273,7 +274,15 @@ public abstract class Shop implements Comparator<Shop> {
 		 return dynamicPrices;
 	 }
 
-	 public boolean addStock(String itemName, int amount) {
+	 public double getSharePercent() {
+		return sharePercent;
+	}
+
+	public void setSharePercent(double sharePercent) {
+		this.sharePercent = sharePercent;
+	}
+
+	public boolean addStock(String itemName, int amount) {
 		 if (!inventory.containsKey(itemName)) {
 			 return false;
 		 }
