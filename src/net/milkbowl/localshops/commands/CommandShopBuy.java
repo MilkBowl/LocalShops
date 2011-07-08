@@ -21,9 +21,9 @@ import net.milkbowl.localshops.ResourceManager;
 import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.objects.InventoryItem;
 import net.milkbowl.localshops.objects.ItemInfo;
-import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.Transaction;
+import net.milkbowl.localshops.util.Econ;
 import net.milkbowl.vault.Vault;
 
 import org.bukkit.Material;
@@ -304,7 +304,6 @@ public class CommandShopBuy extends Command {
 
 		Player player = (Player) sender;
 		InventoryItem invItem = shop.getItem(item.name);
-		PlayerData pData = plugin.getPlayerData().get(player.getName());
 
 		// check if the shop is buying that item
 		if (invItem == null || invItem.getBuyPrice() == 0) {
@@ -382,10 +381,10 @@ public class CommandShopBuy extends Command {
 		boolean success = false;
 
 		if (shop.isUnlimitedMoney()) {
-			if (!pData.chargePlayer(player.getName(), totalCost)) {
+			if (!Econ.chargePlayer(player.getName(), totalCost)) {
 				// player doesn't have enough money
 				// get player's balance and calculate how many it can buy
-				double playerBalance = pData.getBalance(player.getName());
+				double playerBalance = Econ.getBalance(player.getName());
 				int bundlesCanAford = (int) Math.floor(playerBalance / itemPrice);
 				totalCost = bundlesCanAford * itemPrice;
 				amount = bundlesCanAford * invItem.getBuySize();
@@ -395,7 +394,7 @@ public class CommandShopBuy extends Command {
 				} else {
 					player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_PLAYER_AFFORD_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { bundlesCanAford, item.name }));
 				}
-				if (!pData.chargePlayer(player.getName(), totalCost)) {
+				if (!Econ.chargePlayer(player.getName(), totalCost)) {
 					player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_UNEXPECTED_MONEY_ISSUE));
 					return true;
 				} else {
@@ -407,10 +406,10 @@ public class CommandShopBuy extends Command {
 		} 
 		// try to pay the shop owner
 		else if (!isShopController(shop)) {
-			if (!pData.payPlayer(player.getName(), shop.getOwner(), totalCost)) {
+			if (!Econ.payPlayer(player.getName(), shop.getOwner(), totalCost)) {
 				// player doesn't have enough money
 				// get player's balance and calculate how many it can buy
-				double playerBalance = pData.getBalance(player.getName());
+				double playerBalance = Econ.getBalance(player.getName());
 				int bundlesCanAford = (int) Math.floor(playerBalance / itemPrice);
 				totalCost = bundlesCanAford * itemPrice;
 				amount = bundlesCanAford * invItem.getBuySize();
@@ -421,7 +420,7 @@ public class CommandShopBuy extends Command {
 				} else {
 					player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_PLAYER_AFFORD_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { bundlesCanAford, item.name }));
 				}
-				if (!pData.payPlayer(player.getName(), shop.getOwner(), totalCost)) {
+				if (!Econ.payPlayer(player.getName(), shop.getOwner(), totalCost)) {
 					player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_UNEXPECTED_MONEY_ISSUE));
 					return true;
 				} else {
@@ -438,7 +437,7 @@ public class CommandShopBuy extends Command {
 				if (shop.isUnlimitedMoney())
 					Vault.getEconomy().depositPlayer(manager, shareAmount);
 				else
-					pData.payPlayer(shop.getOwner(), manager, shareAmount);
+					Econ.payPlayer(shop.getOwner(), manager, shareAmount);
 			}
 		}
 

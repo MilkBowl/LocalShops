@@ -21,9 +21,9 @@ import net.milkbowl.localshops.ResourceManager;
 import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.objects.InventoryItem;
 import net.milkbowl.localshops.objects.ItemInfo;
-import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.Transaction;
+import net.milkbowl.localshops.util.Econ;
 import net.milkbowl.vault.Vault;
 
 import org.bukkit.ChatColor;
@@ -272,7 +272,6 @@ public class CommandShopSell extends Command {
 
         Player player = (Player) sender;
         InventoryItem invItem = shop.getItem(item.name);
-        PlayerData pData = plugin.getPlayerData().get(player.getName());
 
         // check if the shop is buying that item
         if (!shop.containsItem(item) || shop.getItem(item.name).getSellPrice() == 0) {
@@ -326,14 +325,14 @@ public class CommandShopSell extends Command {
 
         // try to pay the player for order
         if (shop.isUnlimitedMoney()) {
-            pData.payPlayer(player.getName(), totalCost);
+            Econ.chargePlayer(player.getName(), totalCost);
         } else if (!isShopController(shop)) {
             log.info(String.format("From: %s, To: %s, Cost: %f", shop.getOwner(), player.getName(), totalCost));
-            if (!pData.payPlayer(shop.getOwner(), player.getName(), totalCost)) {
+            if (!Econ.payPlayer(shop.getOwner(), player.getName(), totalCost)) {
                 // lshop owner doesn't have enough money
                 // get shop owner's balance and calculate how many it can
                 // buy
-                double shopBalance = plugin.getPlayerData().get(player.getName()).getBalance(shop.getOwner());
+                double shopBalance = Econ.getBalance(shop.getOwner());
                 // the current shop balance must be greater than the minimum
                 // balance to do the transaction.
                 if (shopBalance <= shop.getMinBalance() || shopBalance < invItem.getSellPrice()) {
@@ -345,7 +344,7 @@ public class CommandShopSell extends Command {
                 totalCost = bundlesCanAford * itemPrice;
                 amount = bundlesCanAford * invItem.getSellSize();
                 player.sendMessage(ChatColor.DARK_AQUA + shop.getName() + " could only afford " + ChatColor.WHITE + bundlesCanAford + ChatColor.DARK_AQUA + " bundles.");
-                if (!pData.payPlayer(shop.getOwner(), player.getName(), totalCost)) {
+                if (!Econ.payPlayer(shop.getOwner(), player.getName(), totalCost)) {
                     player.sendMessage(ChatColor.DARK_AQUA + "Unexpected money problem: could not complete sale.");
                     return true;
                 }

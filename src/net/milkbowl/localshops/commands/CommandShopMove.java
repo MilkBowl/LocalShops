@@ -21,6 +21,7 @@ import net.milkbowl.localshops.ResourceManager;
 import net.milkbowl.localshops.objects.LocalShop;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.ShopLocation;
+import net.milkbowl.localshops.util.Econ;
 import net.milkbowl.localshops.util.GenericFunctions;
 import net.milkbowl.vault.Vault;
 
@@ -123,7 +124,7 @@ public class CommandShopMove extends Command {
                 sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SHOP_EXISTS));
                 return false;
             } else if (Config.getShopChargeMove() && !canUseCommand(CommandTypes.MOVE_FREE)) {
-                if (!plugin.getPlayerData().get(player.getName()).chargePlayer(player.getName(), Config.getShopChargeMoveCost())) {
+                if (!Econ.chargePlayer(player.getName(), Config.getShopChargeMoveCost())) {
                     // return, this player did not have enough money
                     player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "You need " + Vault.getEconomy().format(Config.getShopChargeMoveCost()) + " to move a shop.");
                     return false;
