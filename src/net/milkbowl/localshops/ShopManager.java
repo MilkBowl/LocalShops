@@ -532,6 +532,16 @@ public class ShopManager {
 		boolean notification = Boolean.parseBoolean(props.getProperty("notification", "true"));
 		boolean global = Boolean.parseBoolean(props.getProperty("global", "false"));
 		boolean dynamic = Boolean.parseBoolean(props.getProperty("dynamic-prices", "false"));
+		double sharePercent;
+		try {
+			sharePercent = Double.parseDouble(props.getProperty("share-percent", "0"));
+			if (sharePercent < 0)
+				sharePercent = 0;
+			else if (sharePercent > 100)
+				sharePercent = 100;
+		} catch (NumberFormatException e) {
+			sharePercent = 0;
+		}
 
 		// People
 		String owner = props.getProperty("owner", "");
@@ -587,6 +597,7 @@ public class ShopManager {
 		shop.setCreator(creator);
 		shop.setNotification(notification);
 		shop.setDynamicPrices(dynamic);
+		shop.setSharePercent(sharePercent);
 
 
 		// Only set our Users & Groups if they are not empty
@@ -767,7 +778,7 @@ public class ShopManager {
 		props.setProperty("min-balance", String.valueOf(shop.getMinBalance()));
 		props.setProperty("notification", String.valueOf(shop.getNotification()));
 		props.setProperty("dynamic-prices", String.valueOf(shop.isDynamicPrices()));
-
+		props.setProperty("share-percent", String.valueOf(shop.getSharePercent()));
 
 		// Location
 		if(shop instanceof GlobalShop) {
@@ -883,7 +894,7 @@ public class ShopManager {
 			String fileOutput = "";
 
 			DateFormat dateFormat = new SimpleDateFormat(
-					"yyyy/MM/dd HH:mm:ss z");
+			"yyyy/MM/dd HH:mm:ss z");
 			Date date = new Date();
 			fileOutput += dateFormat.format(date) + ": ";
 			fileOutput += "Action: ";
