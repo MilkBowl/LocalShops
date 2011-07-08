@@ -326,8 +326,8 @@ public class CommandShopBuy extends Command {
             amount = invItem.getBuySize();
         }
 
-        int totalAmount;
-        totalAmount = invItem.getStock();
+        //Get the total amount of stock in the shop
+        int totalAmount = invItem.getStock();
 
         if (totalAmount == 0 && !shop.isUnlimitedStock()) {
             player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_SHOP_HAS_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { totalAmount, item.name }));
@@ -337,16 +337,20 @@ public class CommandShopBuy extends Command {
         if (amount < 0) {
             amount = 0;
         }
-
+        
+        //If this is an unlimited shop set the total number of items to the amount being requested
         if (shop.isUnlimitedStock()) {
             totalAmount = amount;
         }
+        
         if (amount > totalAmount) {
+        	//normalize the amount to the buy bundle size if it's greater than the number in the shop
             amount = totalAmount - (totalAmount % invItem.getBuySize());
             if (!shop.isUnlimitedStock()) {
                 player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_SHOP_HAS_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { totalAmount, item.name }));
             }
         } else if (amount % invItem.getBuySize() != 0) {
+        	//Make sure we conform to shop bundle size
             amount = amount - (amount % invItem.getBuySize());
             player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_SHOP_HAS_QTY, new String[] { "%BUNDLESIZE%", "%AMOUNT%" }, new Object[] { invItem.getBuySize(), amount }));
         }
@@ -390,7 +394,7 @@ public class CommandShopBuy extends Command {
                 double playerBalance = pData.getBalance(player.getName());
                 int bundlesCanAford = (int) Math.floor(playerBalance / itemPrice);
                 totalCost = bundlesCanAford * itemPrice;
-                amount = bundlesCanAford * invItem.getSellSize();
+                amount = bundlesCanAford * invItem.getBuySize();
                 
                 if(bundlesCanAford == 0) {
                     player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_BUY_PLAYER_AFFORD_NONE, new String[] { "%ITEMNAME%" }, new Object[] { item.name }));
