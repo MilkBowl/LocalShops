@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.ResourceManager;
+import net.milkbowl.localshops.objects.Messages;
 
 import org.bukkit.command.CommandSender;
 
@@ -35,7 +35,7 @@ public class CommandAdminSet extends Command {
     public boolean process() {
         // Check Permissions - Server Permissions
         if (!canUseCommand(CommandTypes.ADMIN_SERVER)) {
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_USER_ACCESS_DENIED));
             return true;
         }
 
@@ -46,8 +46,8 @@ public class CommandAdminSet extends Command {
         Matcher matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_CHARGE_FOR_SHOP));
-            sender.sendMessage(key + "=" + (Config.getShopChargeCreate() ? plugin.getResourceManager().getString(ResourceManager.BASE_TRUE) : plugin.getResourceManager().getString(ResourceManager.BASE_FALSE)));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_ADM_SET_CFG_CHARGE_FOR_SHOP));
+            sender.sendMessage(key + "=" + (Config.getShopChargeCreate() ? plugin.getResourceManager().getString(Messages.BASE_TRUE) : plugin.getResourceManager().getString(Messages.BASE_FALSE)));
             return true;
         }
         
@@ -59,11 +59,11 @@ public class CommandAdminSet extends Command {
             String key = matcher.group(1);
             String value = matcher.group(2);
             try {
-                boolean x = value.equalsIgnoreCase(plugin.getResourceManager().getString(ResourceManager.BASE_TRUE));
+                boolean x = value.equalsIgnoreCase(plugin.getResourceManager().getString(Messages.BASE_TRUE));
                 Config.setShopChargeCreate(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_INVALID_VALUE));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_INVALID_VALUE));
             }
             return true;
         }
@@ -74,8 +74,8 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_GLOBAL_SHOP));
-            sender.sendMessage(key + "=" + (Config.getGlobalShopsEnabled() ? plugin.getResourceManager().getString(ResourceManager.BASE_TRUE) : plugin.getResourceManager().getString(ResourceManager.BASE_FALSE)));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_ADM_SET_CFG_GLOBAL_SHOP));
+            sender.sendMessage(key + "=" + (Config.getGlobalShopsEnabled() ? plugin.getResourceManager().getString(Messages.BASE_TRUE) : plugin.getResourceManager().getString(Messages.BASE_FALSE)));
             return true;
         }
         
@@ -87,11 +87,11 @@ public class CommandAdminSet extends Command {
             String key = matcher.group(1);
             String value = matcher.group(2);
             try {
-                boolean x = value.equalsIgnoreCase(plugin.getResourceManager().getString(ResourceManager.BASE_TRUE));
+                boolean x = value.equalsIgnoreCase(plugin.getResourceManager().getString(Messages.BASE_TRUE));
                 Config.setGlobalShopsEnabled(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_INVALID_VALUE));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_INVALID_VALUE));
             }
             return true;
         }
@@ -102,7 +102,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_GLOBAL_STOCK));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_ADM_SET_CFG_GLOBAL_STOCK));
             sender.sendMessage(key + "=" + Config.getGlobalBaseStock());
             return true;
         }        
@@ -119,7 +119,7 @@ public class CommandAdminSet extends Command {
                 Config.setGlobalBaseStock(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_INVALID_VALUE));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_INVALID_VALUE));
             }
             return true;
         }
@@ -130,7 +130,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_SHOP_WIDTH));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_ADM_SET_CFG_SHOP_WIDTH));
             sender.sendMessage(key + "=" + Config.getShopSizeDefWidth());
             return true;
         }
@@ -147,7 +147,7 @@ public class CommandAdminSet extends Command {
                 Config.setShopSizeDefWidth(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_INVALID_VALUE));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_INVALID_VALUE));
             }
             return true;
         }
@@ -158,8 +158,8 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_REPORT_STATS));
-            sender.sendMessage(key + "=" + (Config.getSrvReport() ? plugin.getResourceManager().getString(ResourceManager.BASE_TRUE) : plugin.getResourceManager().getString(ResourceManager.BASE_FALSE)));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_ADM_SET_CFG_REPORT_STATS));
+            sender.sendMessage(key + "=" + (Config.getSrvReport() ? plugin.getResourceManager().getString(Messages.BASE_TRUE) : plugin.getResourceManager().getString(Messages.BASE_FALSE)));
             return true;
         }
         
@@ -171,11 +171,11 @@ public class CommandAdminSet extends Command {
             String key = matcher.group(1);
             String value = matcher.group(2);
             try {
-                boolean x = value.equalsIgnoreCase(plugin.getResourceManager().getString(ResourceManager.BASE_TRUE));
+                boolean x = value.equalsIgnoreCase(plugin.getResourceManager().getString(Messages.BASE_TRUE));
                 Config.setSrvReport(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_INVALID_VALUE));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_INVALID_VALUE));
             }
             return true;
         }
@@ -186,7 +186,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_MAX_HEIGHT));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_ADM_SET_CFG_MAX_HEIGHT));
             sender.sendMessage(key + "=" + Config.getShopSizeMaxHeight());
             return true;
         }
@@ -203,7 +203,7 @@ public class CommandAdminSet extends Command {
                 Config.setShopSizeMaxHeight(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_INVALID_VALUE));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_INVALID_VALUE));
             }
             return true;
         }
@@ -214,7 +214,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_MAX_WIDTH));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_ADM_SET_CFG_MAX_WIDTH));
             sender.sendMessage(key + "=" + Config.getShopSizeMaxWidth());
             return true;
         }
@@ -231,7 +231,7 @@ public class CommandAdminSet extends Command {
                 Config.setShopSizeMaxWidth(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_INVALID_VALUE));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_INVALID_VALUE));
             }
             return true;
         }
@@ -242,7 +242,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_SHOPS_TRANS_MAX_SIZE));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_ADM_SET_CFG_SHOPS_TRANS_MAX_SIZE));
             sender.sendMessage(key + "=" + Config.getShopTransactionMaxSize());
             return true;
         }
@@ -259,7 +259,7 @@ public class CommandAdminSet extends Command {
                 Config.setShopTransactionMaxSize(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_INVALID_VALUE));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_INVALID_VALUE));
             }
             return true;
         }
@@ -270,7 +270,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_SHOPS_COST));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_ADM_SET_CFG_SHOPS_COST));
             sender.sendMessage(key + "=" + Config.getShopChargeCreateCost());
             return true;
         }
@@ -287,7 +287,7 @@ public class CommandAdminSet extends Command {
                 Config.setShopChargeCreateCost(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_INVALID_VALUE));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_INVALID_VALUE));
             }
             return true;
         }
@@ -298,7 +298,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_FIND_MAX_DISTANCE));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_ADM_SET_CFG_FIND_MAX_DISTANCE));
             sender.sendMessage(key + "=" + Config.getFindMaxDistance());
             return true;
         }
@@ -315,7 +315,7 @@ public class CommandAdminSet extends Command {
                 Config.setFindMaxDistance(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_INVALID_VALUE));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_INVALID_VALUE));
             }
             return true;
         }
@@ -326,7 +326,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_SHOPS_PER_PLAYER));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_ADM_SET_CFG_SHOPS_PER_PLAYER));
             sender.sendMessage(key + "=" + Config.getPlayerMaxShops());
             return true;
         }
@@ -343,7 +343,7 @@ public class CommandAdminSet extends Command {
                 Config.setPlayerMaxShops(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_INVALID_VALUE));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_INVALID_VALUE));
             }
             return true;
         }
@@ -354,7 +354,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_SHOP_HEIGHT));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_ADM_SET_CFG_SHOP_HEIGHT));
             sender.sendMessage(key + "=" + Config.getShopSizeDefHeight());
             return true;
         }
@@ -371,7 +371,7 @@ public class CommandAdminSet extends Command {
                 Config.setShopSizeDefHeight(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_INVALID_VALUE));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_INVALID_VALUE));
             }
             return true;
         }
@@ -382,8 +382,8 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_DEBUG));
-            sender.sendMessage(key + "=" + (Config.getSrvDebug() ? plugin.getResourceManager().getString(ResourceManager.BASE_TRUE) : plugin.getResourceManager().getString(ResourceManager.BASE_FALSE)));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_ADM_SET_CFG_DEBUG));
+            sender.sendMessage(key + "=" + (Config.getSrvDebug() ? plugin.getResourceManager().getString(Messages.BASE_TRUE) : plugin.getResourceManager().getString(Messages.BASE_FALSE)));
             return true;
         }
         
@@ -395,11 +395,11 @@ public class CommandAdminSet extends Command {
             String key = matcher.group(1);
             String value = matcher.group(2);
             try {
-                boolean x = value.equalsIgnoreCase(plugin.getResourceManager().getString(ResourceManager.BASE_TRUE));
+                boolean x = value.equalsIgnoreCase(plugin.getResourceManager().getString(Messages.BASE_TRUE));
                 Config.setSrvDebug(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_INVALID_VALUE));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_INVALID_VALUE));
             }
             return true;
         }
@@ -410,7 +410,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_MAX_DAMAGE));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_ADM_SET_CFG_MAX_DAMAGE));
             sender.sendMessage(key + "=" + Config.getItemMaxDamage());
             return true;
         }
@@ -427,7 +427,7 @@ public class CommandAdminSet extends Command {
                 Config.setItemMaxDamage(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_INVALID_VALUE));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_INVALID_VALUE));
             }
             return true;
         }
@@ -438,7 +438,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_MOVE_COST));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_ADM_SET_CFG_MOVE_COST));
             sender.sendMessage(key + "=" + Config.getShopChargeMoveCost());
             return true;
         }
@@ -455,7 +455,7 @@ public class CommandAdminSet extends Command {
                 Config.setShopChargeMoveCost(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_INVALID_VALUE));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_INVALID_VALUE));
             }
             return true;
         }
@@ -466,7 +466,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_SHOP_NOTIFICATION_TIMER));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_ADM_SET_CFG_SHOP_NOTIFICATION_TIMER));
             sender.sendMessage(key + "=" + Config.getShopTransactionNoticeTimer());
             return true;
         }
@@ -483,7 +483,7 @@ public class CommandAdminSet extends Command {
                 Config.setShopTransactionNoticeTimer(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_INVALID_VALUE));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_INVALID_VALUE));
             }
             return true;
         }
@@ -494,8 +494,8 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_SHOP_NOTIFICATION));
-            sender.sendMessage(key + "=" + (Config.getShopTransactionNotice() ? plugin.getResourceManager().getString(ResourceManager.BASE_TRUE) : plugin.getResourceManager().getString(ResourceManager.BASE_FALSE)));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_ADM_SET_CFG_SHOP_NOTIFICATION));
+            sender.sendMessage(key + "=" + (Config.getShopTransactionNotice() ? plugin.getResourceManager().getString(Messages.BASE_TRUE) : plugin.getResourceManager().getString(Messages.BASE_FALSE)));
             return true;
         }
         
@@ -507,11 +507,11 @@ public class CommandAdminSet extends Command {
             String key = matcher.group(1);
             String value = matcher.group(2);
             try {
-                boolean x = value.equalsIgnoreCase(plugin.getResourceManager().getString(ResourceManager.BASE_TRUE));
+                boolean x = value.equalsIgnoreCase(plugin.getResourceManager().getString(Messages.BASE_TRUE));
                 Config.setShopTransactionNotice(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_INVALID_VALUE));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_INVALID_VALUE));
             }
             return true;
         }
@@ -522,7 +522,7 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_CHAT_MAX_LINES));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_ADM_SET_CFG_CHAT_MAX_LINES));
             sender.sendMessage(key + "=" + Config.getChatMaxLines());
             return true;
         }
@@ -539,7 +539,7 @@ public class CommandAdminSet extends Command {
                 Config.setChatMaxLines(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_INVALID_VALUE));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_INVALID_VALUE));
             }
             return true;
         }
@@ -550,8 +550,8 @@ public class CommandAdminSet extends Command {
         matcher = pattern.matcher(command);
         if(matcher.find()) {
             String key = matcher.group(1);
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_ADM_SET_CFG_LOG_TRANSACTIONS));
-            sender.sendMessage(key + "=" + (Config.getSrvLogTransactions() ? plugin.getResourceManager().getString(ResourceManager.BASE_TRUE) : plugin.getResourceManager().getString(ResourceManager.BASE_FALSE)));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_ADM_SET_CFG_LOG_TRANSACTIONS));
+            sender.sendMessage(key + "=" + (Config.getSrvLogTransactions() ? plugin.getResourceManager().getString(Messages.BASE_TRUE) : plugin.getResourceManager().getString(Messages.BASE_FALSE)));
             return true;
         }
         
@@ -563,11 +563,11 @@ public class CommandAdminSet extends Command {
             String key = matcher.group(1);
             String value = matcher.group(2);
             try {
-                boolean x = value.equalsIgnoreCase(plugin.getResourceManager().getString(ResourceManager.BASE_TRUE));
+                boolean x = value.equalsIgnoreCase(plugin.getResourceManager().getString(Messages.BASE_TRUE));
                 Config.setSrvLogTransactions(x);
                 sender.sendMessage(key + "=" + value);
             } catch(Exception e) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_INVALID_VALUE));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_INVALID_VALUE));
             }
             return true;
         }

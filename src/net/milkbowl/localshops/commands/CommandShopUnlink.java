@@ -17,7 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.ResourceManager;
+import net.milkbowl.localshops.objects.Messages;
 import net.milkbowl.localshops.objects.GlobalShop;
 import net.milkbowl.localshops.objects.LocalShop;
 import net.milkbowl.localshops.objects.ShopLocation;
@@ -46,7 +46,7 @@ public class CommandShopUnlink extends Command {
         if (isGlobal) {
             // Check Permissions
             if (!canUseCommand(CommandTypes.ADMIN_GLOBAL)) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_USER_ACCESS_DENIED));
                 return true;
             }
             String worldName = null;
@@ -79,16 +79,16 @@ public class CommandShopUnlink extends Command {
             if ( sender instanceof Player) {
                 player = (Player) sender;
             } else {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CONSOLE_NOT_IMPLEMENTED));
                 return true;
             }
             LocalShop lShop = (LocalShop) getCurrentShop(player);
             if (lShop == null) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_NOT_IN_SHOP));
                 return true;
             }
             if (!canUseCommand(CommandTypes.ADMIN_LOCAL) && !lShop.getManagers().contains(player.getName()) && ! lShop.getOwner().equals(player.getName())) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_USER_ACCESS_DENIED));
                 return true;
             } else if (!(lShop.getShopLocations().size() > 1)) {
                 sender.sendMessage(ChatColor.DARK_AQUA + "This shop only has 1 location.  You must first add a new location before removing this one.");

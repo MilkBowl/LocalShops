@@ -16,7 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.ResourceManager;
+import net.milkbowl.localshops.objects.Messages;
 import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.Shop;
@@ -47,20 +47,20 @@ public class CommandShopRemove extends Command {
             
             shop = getCurrentShop(player);
             if (shop == null) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_NOT_IN_SHOP));
                 return false;
             }
 
             // Check Permissions
             if (!canUseCommand(CommandTypes.REMOVE)) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_USER_ACCESS_DENIED));
                 return false;
             }            
 
             // Check if Player can Modify
             if (!isShopController(shop)) {
-                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_MUST_BE_SHOP_OWNER));
-                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
+                player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_MUST_BE_SHOP_OWNER));
+                player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
                 return true;
             }
 
@@ -74,14 +74,14 @@ public class CommandShopRemove extends Command {
                 }
                 ItemInfo item = Search.itemById(itemStack.getTypeId(), itemStack.getDurability());
                 if(item == null) {
-                    sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
+                    sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_FOUND));
                     return false;
                 }
                 return shopRemove(shop, item);
             }
 
         } else {
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CONSOLE_NOT_IMPLEMENTED));
             return false;
         }
 

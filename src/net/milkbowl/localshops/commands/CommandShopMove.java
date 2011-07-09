@@ -17,8 +17,8 @@ import java.util.regex.Pattern;
 
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.ResourceManager;
 import net.milkbowl.localshops.objects.LocalShop;
+import net.milkbowl.localshops.objects.Messages;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.ShopLocation;
 import net.milkbowl.localshops.util.Econ;
@@ -46,10 +46,10 @@ public class CommandShopMove extends Command {
             sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "You cannot move a global shop!");
             return false;
         } else if(!canUseCommand(CommandTypes.MOVE)) {
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_USER_ACCESS_DENIED));
             return false;
         } else if(!(sender instanceof Player)) {
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CONSOLE_NOT_IMPLEMENTED));
             return false;
         }
 
@@ -70,7 +70,7 @@ public class CommandShopMove extends Command {
                 return false;
             } else if (!thisShop.getOwner().equalsIgnoreCase(player.getName())) {
                 // check if player has access
-                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_MUST_BE_SHOP_OWNER));
+                player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_MUST_BE_SHOP_OWNER));
                 return false;
             } else if (thisShop.getShopLocations().size() > 1) {
                 //Can't move a shop that has more than 1 location
@@ -85,13 +85,13 @@ public class CommandShopMove extends Command {
             if (pData.isSelecting()) {
                 if (GenericFunctions.calculateCuboidSize(pData.getPositionA(), pData.getPositionB(), Config.getShopSizeMaxWidth(), Config.getShopSizeMaxHeight()) == null) {
                     String size = Config.getShopSizeMaxWidth() + "x" + Config.getShopSizeMaxHeight() + "x" + Config.getShopSizeMaxWidth();
-                    player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SELECTION_PROB_SIZE, new String[] { "%SIZE%" }, new Object[] { size }));
+                    player.sendMessage(plugin.getResourceManager().getString(Messages.CMD_SHP_CREATE_SELECTION_PROB_SIZE, new String[] { "%SIZE%" }, new Object[] { size }));
                     return false;
                 }
 
 
                 if (pData.getPositionA() == null || pData.getPositionB() == null) {
-                    player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SELECTION_PROB_ONLY_ONE_POINT));
+                    player.sendMessage(plugin.getResourceManager().getString(Messages.CMD_SHP_CREATE_SELECTION_PROB_ONLY_ONE_POINT));
                     return false;
                 } else
                     shopLoc = new ShopLocation(pData.getPositionA(), pData.getPositionB());
@@ -121,7 +121,7 @@ public class CommandShopMove extends Command {
             }
 
             if(!plugin.getShopManager().shopPositionOk(shopLoc.getLocation1(), shopLoc.getLocation2(), world)) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SHOP_EXISTS));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_SHP_CREATE_SHOP_EXISTS));
                 return false;
             } else if (Config.getShopChargeMove() && !canUseCommand(CommandTypes.MOVE_FREE)) {
                 if (!Econ.chargePlayer(player.getName(), Config.getShopChargeMoveCost())) {

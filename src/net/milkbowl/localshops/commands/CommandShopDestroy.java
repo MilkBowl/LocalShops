@@ -17,7 +17,7 @@ import java.util.Iterator;
 import java.util.UUID;
 
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.ResourceManager;
+import net.milkbowl.localshops.objects.Messages;
 import net.milkbowl.localshops.objects.GlobalShop;
 import net.milkbowl.localshops.objects.InventoryItem;
 import net.milkbowl.localshops.objects.PlayerData;
@@ -40,7 +40,7 @@ public class CommandShopDestroy extends Command {
 
     public boolean process() {
         if (!(sender instanceof Player) || !canUseCommand(CommandTypes.DESTROY)) {
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_USER_ACCESS_DENIED));
             return false;
         }
 

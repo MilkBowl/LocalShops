@@ -18,9 +18,9 @@ import java.util.regex.Pattern;
 
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.ResourceManager;
 import net.milkbowl.localshops.objects.GlobalShop;
 import net.milkbowl.localshops.objects.LocalShop;
+import net.milkbowl.localshops.objects.Messages;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopLocation;
 import net.milkbowl.localshops.util.Econ;
@@ -58,29 +58,29 @@ public class CommandShopCreate extends Command {
             
             //Check permissions
             if (!canCreateShop(creator)) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_MAX_NUM_SHOPS));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_SHP_CREATE_MAX_NUM_SHOPS));
                 return false;
             }
             
             if(!plugin.getShopManager().shopPositionOk(shopLoc.getLocation1(), shopLoc.getLocation2(), world) && !isGlobal) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SHOP_EXISTS));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_SHP_CREATE_SHOP_EXISTS));
                 return false;
             }
             if (isGlobal && plugin.getShopManager().getGlobalShopByWorld(world) != null) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_WORLD_HAS_GLOBAL));
+                sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_SHP_CREATE_WORLD_HAS_GLOBAL));
                 return false;
             }
             if (Config.getShopChargeCreate()) {
                 if (!canUseCommand(CommandTypes.CREATE_FREE)) {
                     if (!Econ.chargePlayer(player.getName(), Config.getShopChargeCreateCost())) {
-                        sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_INSUFFICIENT_FUNDS));
+                        sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_SHP_CREATE_INSUFFICIENT_FUNDS));
                         return false;
                     }
                 }
             }
 
         } else {
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CONSOLE_NOT_IMPLEMENTED));
             return false;
         }
 
@@ -117,7 +117,7 @@ public class CommandShopCreate extends Command {
             gShop.addWorld(world);
             plugin.getShopManager().addShop(gShop);
             shop = gShop;
-            log.info(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_LOG, new String[] { "%TYPE%", "%SHOP%" }, new Object[] { "Global", gShop }));
+            log.info(plugin.getResourceManager().getString(Messages.CMD_SHP_CREATE_LOG, new String[] { "%TYPE%", "%SHOP%" }, new Object[] { "Global", gShop }));
         } else {
             LocalShop lShop = new LocalShop(UUID.randomUUID());
             lShop.setCreator(creator);
@@ -127,7 +127,7 @@ public class CommandShopCreate extends Command {
             lShop.getShopLocations().add(shopLoc);
             plugin.getShopManager().addShop(lShop);
             shop = lShop;
-            log.info(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_LOG, new String[] { "%TYPE%", "%SHOP%" }, new Object[] { "Local", lShop }));
+            log.info(plugin.getResourceManager().getString(Messages.CMD_SHP_CREATE_LOG, new String[] { "%TYPE%", "%SHOP%" }, new Object[] { "Local", lShop }));
             for (Player p : plugin.getServer().getOnlinePlayers()) {
                 plugin.playerListener.checkPlayerPosition(p);
             }
@@ -141,10 +141,10 @@ public class CommandShopCreate extends Command {
         // write the file
         if (plugin.getShopManager().saveShop(shop)) {
             //Command.Shop.Create.Success=%CHAT_PREFIX%%WHITE%%SHOPNAME%%DARK_AQUA% was created successfully.  CMD_SHP_CREATE_SUCCESS
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SUCCESS, new String[] { "%SHOPNAME%" }, new Object[] { shop.getName() }));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_SHP_CREATE_SUCCESS, new String[] { "%SHOPNAME%" }, new Object[] { shop.getName() }));
             return true;
         } else {
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_FAIL));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_SHP_CREATE_FAIL));
             return false;
         }
 

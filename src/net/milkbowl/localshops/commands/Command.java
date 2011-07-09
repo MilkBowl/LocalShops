@@ -18,8 +18,8 @@ import java.util.logging.Logger;
 
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.ResourceManager;
 import net.milkbowl.localshops.objects.ItemInfo;
+import net.milkbowl.localshops.objects.Messages;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopLocation;
@@ -403,13 +403,13 @@ public abstract class Command {
     	 if (pData.isSelecting()) {
              if (GenericFunctions.calculateCuboidSize(pData.getPositionA(), pData.getPositionB(), Config.getShopSizeMaxWidth(), Config.getShopSizeMaxHeight()) == null) {
                  String size = Config.getShopSizeMaxWidth() + "x" + Config.getShopSizeMaxHeight() + "x" + Config.getShopSizeMaxWidth();
-                 player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SELECTION_PROB_SIZE, new String[] { "%SIZE%" }, new Object[] { size }));
+                 player.sendMessage(plugin.getResourceManager().getString(Messages.CMD_SHP_CREATE_SELECTION_PROB_SIZE, new String[] { "%SIZE%" }, new Object[] { size }));
                  return null;
              }
              
              
              if (pData.getPositionA() == null || pData.getPositionB() == null) {
-                 player.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_CREATE_SELECTION_PROB_ONLY_ONE_POINT));
+                 player.sendMessage(plugin.getResourceManager().getString(Messages.CMD_SHP_CREATE_SELECTION_PROB_ONLY_ONE_POINT));
                  return null;
              } else
                  return new ShopLocation(pData.getPositionA(), pData.getPositionB());

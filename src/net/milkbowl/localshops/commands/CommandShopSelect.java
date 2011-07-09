@@ -14,7 +14,7 @@ package net.milkbowl.localshops.commands;
 
 
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.ResourceManager;
+import net.milkbowl.localshops.objects.Messages;
 import net.milkbowl.localshops.objects.PlayerData;
 
 import org.bukkit.ChatColor;
@@ -58,7 +58,7 @@ public class CommandShopSelect extends Command {
             }
             return true;
         } else {
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
+            sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_USER_ACCESS_DENIED));
             return true;
         }
     }
