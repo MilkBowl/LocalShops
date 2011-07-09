@@ -17,10 +17,11 @@ import java.util.regex.Pattern;
 
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.objects.Messages;
+import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.objects.InventoryItem;
 import net.milkbowl.localshops.objects.ItemInfo;
+import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.Transaction;
 import net.milkbowl.localshops.util.Econ;
@@ -52,13 +53,13 @@ public class CommandShopSell extends Command {
 
             shop = getCurrentShop(player);
             if (shop == null || (isGlobal && !Config.getGlobalShopsEnabled())) {
-                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_NOT_IN_SHOP));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
                 return true;
             }
 
             // Check Permissions
-            if ((!canUseCommand(CommandTypes.SELL) && !isGlobal) || (!canUseCommand(CommandTypes.GLOBAL_SELL) && isGlobal)) {
-                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_USER_ACCESS_DENIED));
+            if ((!canUseCommand(PermType.SELL) && !isGlobal) || (!canUseCommand(PermType.GLOBAL_SELL) && isGlobal)) {
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
                 return true;
             }
 
@@ -84,7 +85,7 @@ public class CommandShopSell extends Command {
                     item = Search.itemById(itemStack.getTypeId(), itemStack.getDurability());
                 }
                 if(item == null) {
-                    sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_FOUND));
+                    sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                     return true;
                 }
                 return shopSell(shop, item, amount);
@@ -112,13 +113,13 @@ public class CommandShopSell extends Command {
                     item = Search.itemById(itemStack.getTypeId(), itemStack.getDurability());
                 }
                 if(item == null) {
-                    sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_FOUND));
+                    sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                     return true;
                 }
                 return shopSell(shop, item, amount);
             }
         } else {
-            sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CONSOLE_NOT_IMPLEMENTED));
+            sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
             return true;
         }
 
@@ -131,7 +132,7 @@ public class CommandShopSell extends Command {
             int id = Integer.parseInt(matcher.group(1));
             ItemInfo item = Search.itemById(id);
             if(item == null) {
-                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_FOUND));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopSell(shop, item, 0);
@@ -146,7 +147,7 @@ public class CommandShopSell extends Command {
             int count = Integer.parseInt(matcher.group(2));
             ItemInfo item = Search.itemById(id);
             if(item == null) {
-                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_FOUND));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopSell(shop, item, count);
@@ -161,7 +162,7 @@ public class CommandShopSell extends Command {
             int count = Integer.parseInt(matcher.group(2));
             ItemInfo item = Search.itemById(id);
             if(item == null) {
-                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_FOUND));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopSell(shop, item, count);
@@ -176,7 +177,7 @@ public class CommandShopSell extends Command {
             short type = Short.parseShort(matcher.group(2));
             ItemInfo item = Search.itemById(id, type);
             if(item == null) {
-                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_FOUND));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopSell(shop, item, 0);
@@ -192,7 +193,7 @@ public class CommandShopSell extends Command {
             ItemInfo item = Search.itemById(id, type);
             int count = Integer.parseInt(matcher.group(3));
             if(item == null) {
-                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_FOUND));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopSell(shop, item, count);
@@ -208,7 +209,7 @@ public class CommandShopSell extends Command {
             ItemInfo item = Search.itemById(id, type);
             int count = Integer.parseInt(matcher.group(3));
             if(item == null) {
-                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_FOUND));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopSell(shop, item, count);
@@ -223,7 +224,7 @@ public class CommandShopSell extends Command {
             ItemInfo item = Search.itemByName(itemName);
             int count = Integer.parseInt(matcher.group(2));
             if(item == null) {
-                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_FOUND));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopSell(shop, item, count);
@@ -238,7 +239,7 @@ public class CommandShopSell extends Command {
             String itemName = matcher.group(1);
             ItemInfo item = Search.itemByName(itemName);
             if(item == null) {
-                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_FOUND));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             int count = countItemsInInventory(player.getInventory(), item.toStack());
@@ -253,7 +254,7 @@ public class CommandShopSell extends Command {
             String itemName = matcher.group(1);
             ItemInfo item = Search.itemByName(itemName);
             if(item == null) {
-                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_FOUND));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopSell(shop, item, 0);

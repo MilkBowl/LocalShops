@@ -22,6 +22,7 @@ import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.exceptions.TypeNotFoundException;
 import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.LocalShop;
+import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopSign;
 import net.milkbowl.vault.Vault;
@@ -107,7 +108,7 @@ public class ShopsBlockListener extends BlockListener {
 		Block block = event.getBlock();
 
 		// If not a sign ignore event.
-		if ( (!(block.getType().equals(Material.SIGN_POST)) && !(block.getType().equals(Material.WALL_SIGN)) && !(block.getType().equals(Material.CHEST))) || event.isCancelled()) {
+		if ( (!(block.getType().equals(Material.SIGN_POST)) && !(block.getType().equals(Material.WALL_SIGN)) ) || event.isCancelled()) {
 			return;
 		}
 
@@ -122,20 +123,11 @@ public class ShopsBlockListener extends BlockListener {
 			return;
 		}
 
-		if (!shop.getOwner().equals(player.getName()) && !(shop.getManagers().contains(player.getName())) && !(Vault.getPermission().has(player, "localshops.admin"))) {
+		if (!shop.getOwner().equals(player.getName()) && !(shop.getManagers().contains(player.getName())) && !(Vault.getPermission().has(player, PermType.ADMIN_LOCAL.get()))) {
 			player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to place a sign or chest in the shop");
 			event.setCancelled(true);
 			return;
 		} 
-		/*
-		 * Disabled chest protection in shops - intense issues when dealing with LWC - will require optional depend to prevent this.
-		 * Possibly disable PvP in a shop?
-		 * else if (block.getType().equals(Material.CHEST) && shop.getChests().size() >= plugin.getPermManager().getInfoIntLow(shop.getWorld(), player.getName(), "maxchests") && plugin.getPermManager().getInfoIntLow(shop.getWorld(), player.getName(), "maxchests") > 0) {
-            player.sendMessage(ChatColor.DARK_AQUA + "You already have the maximum allowed number of chests");
-            event.setCancelled(true);
-            return;
-        }*/
-
 	}
 
 	public void onBlockBreak(BlockBreakEvent event) {
@@ -170,7 +162,7 @@ public class ShopsBlockListener extends BlockListener {
 			blockList.addAll(findWallSigns(block));
 		}
 		
-		if (!shop.getOwner().equals(player.getName()) && !(shop.getManagers().contains(player.getName())) && !(Vault.getPermission().has(player, "localshops.admin"))) {
+		if (!shop.getOwner().equals(player.getName()) && !(shop.getManagers().contains(player.getName())) && !(Vault.getPermission().has(player, PermType.ADMIN_LOCAL.get()))) {
 			player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to remove signs in the shop");
 			event.setCancelled(true);
 			return;
@@ -186,19 +178,6 @@ public class ShopsBlockListener extends BlockListener {
 						iter.remove();
 			}
 		} 
-		/*
-		 * disable chest checking for now.
-        else {
-            if (!(((ContainerBlock) block).getInventory().getContents() == null )) {
-                event.setCancelled(true);
-                player.sendMessage(ChatColor.DARK_AQUA + "You must first remove all contents from the chest before removing it from the shop."); 
-                return;
-            }
-            else {
-                shop.getChests().remove(block.getLocation());
-            }
-        }
-		 */
 	}
 	
 	private List<Block> findWallSigns(Block block) {

@@ -15,6 +15,7 @@ package net.milkbowl.localshops.commands;
 
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
+import net.milkbowl.localshops.objects.PermType;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -33,42 +34,42 @@ public class CommandShopHelp extends Command {
     public boolean process() {
         sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "Here are the available commands [required] <optional>");
 
-        if (canUseCommand(CommandTypes.ADD)) {
+        if (canUseCommand(PermType.ADD)) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " add" + ChatColor.DARK_AQUA + " - Add the item that you are holding to the shop.");
         }
-        if (canUseCommand(CommandTypes.BROWSE)) {
+        if (canUseCommand(PermType.BROWSE)) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " browse <buy|sell> " + ChatColor.DARK_AQUA + "- List the shop's inventory.");
         }
-        if (canUseCommand(CommandTypes.BUY)) {
+        if (canUseCommand(PermType.BUY)) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " buy [itemname] [number] " + ChatColor.DARK_AQUA + "- Buy this item.");
         }
-        if (canUseCommand(CommandTypes.CREATE)) {
+        if (canUseCommand(PermType.CREATE)) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " create [ShopName]" + ChatColor.DARK_AQUA + " - Create a shop at your location.");
         }
-        if (canUseCommand(CommandTypes.DESTROY)) {
+        if (canUseCommand(PermType.DESTROY)) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " destroy" + ChatColor.DARK_AQUA + " - Destroy the shop you're in.");
         }
         if (Config.getFindMaxDistance() != 0 && !isGlobal) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " find [itemname]" + ChatColor.DARK_AQUA + " - Find closest shops by item name.");
         }
-        if (canUseCommand(CommandTypes.ADMIN_GLOBAL) && isGlobal) {
+        if (canUseCommand(PermType.ADMIN_GLOBAL) && isGlobal) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " link <shopid> [worldname]" + ChatColor.DARK_AQUA + " - Link a global shop to another world");
         }
-        if (canUseCommand(CommandTypes.MOVE) && !isGlobal) {
+        if (canUseCommand(PermType.MOVE) && !isGlobal) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " move [ShopID]" + ChatColor.DARK_AQUA + " - Move a shop to your location.");
         }
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " search [itemname]" + ChatColor.DARK_AQUA + " - Search for an item by name.");
-        if (canUseCommand(CommandTypes.SELECT) && !isGlobal) {
+        if (canUseCommand(PermType.SELECT) && !isGlobal) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " select" + ChatColor.DARK_AQUA + " - Select two corners for custom shop size.");
         }
-        if (canUseCommand(CommandTypes.SELL)) {
+        if (canUseCommand(PermType.SELL)) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " sell <#|all>" + ChatColor.DARK_AQUA + " - Sell the item in your hand.");
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " sell [itemname] [number]");
         }
-        if (canUseCommand(CommandTypes.SET)) {
+        if (canUseCommand(PermType.SET)) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " set" + ChatColor.DARK_AQUA + " - Display list of set commands");
         }
-        if (canUseCommand(CommandTypes.REMOVE)) {
+        if (canUseCommand(PermType.REMOVE)) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " remove [itemname]" + ChatColor.DARK_AQUA + " - Stop selling item in shop.");
         }
         return true;

@@ -16,9 +16,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.objects.Messages;
+import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.GlobalShop;
 import net.milkbowl.localshops.objects.LocalShop;
+import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopLocation;
 
@@ -46,8 +47,8 @@ public class CommandShopLink extends Command {
 			if (sender instanceof Player) {
 				Player player = (Player) sender;
 				
-				if (!canUseCommand(CommandTypes.MULTI_LOCATION)) {
-					sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_USER_ACCESS_DENIED));
+				if (!canUseCommand(PermType.MULTI_LOCATION)) {
+					sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
 					return true;
 				}
 
@@ -63,14 +64,14 @@ public class CommandShopLink extends Command {
 				if (matcher.find()) {
 					shop = plugin.getShopManager().getLocalShop(matcher.group(1));
 					if (shop == null) {
-						sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_SHOP_NOT_FOUND));
+						sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_SHOP_NOT_FOUND));
 						return true;
 					} else if (!shop.getWorld().equals(player.getWorld().getName())) {
-						sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_SHP_NOT_ON_WORLD, new String[] {"%SHOPNAME%"}, new String[] {shop.getName()}));
+						sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_NOT_ON_WORLD, new String[] {"%SHOPNAME%"}, new String[] {shop.getName()}));
 						return false;
 					}
 					if (!plugin.getShopManager().shopPositionOk(shopLoc.getLocation1(), shopLoc.getLocation2(), shop.getWorld())) {
-						sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_SHP_CREATE_SHOP_EXISTS));
+						sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_SHOP_EXISTS));
 						return false;
 					}
 					shop.getShopLocations().add(shopLoc);
@@ -81,15 +82,15 @@ public class CommandShopLink extends Command {
 					return true;
 				}
 			} else 
-				sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CONSOLE_NOT_IMPLEMENTED));
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
 
 			return true;
 		} else {
 			String worldName = null;
 			GlobalShop shop = null;
 			// Check Permissions
-			if (!canUseCommand(CommandTypes.ADMIN_GLOBAL)) {
-				sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_USER_ACCESS_DENIED));
+			if (!canUseCommand(PermType.ADMIN_GLOBAL)) {
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
 				return true;
 			}
 			// check if "link shopId worldName

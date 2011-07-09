@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.objects.GlobalShop;
-import net.milkbowl.localshops.objects.Messages;
+import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;
 
@@ -82,7 +82,7 @@ public class CommandShopDebug extends Command {
                         shop = plugin.getShopManager().getLocalShop(shopUuid);
                     }
                     if (shop == null) {
-                        sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_NOT_IN_SHOP));
+                        sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
                         return false;
                     }
                 }

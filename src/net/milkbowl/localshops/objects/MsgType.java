@@ -1,6 +1,6 @@
 package net.milkbowl.localshops.objects;
 
-public enum Messages {
+public enum MsgType {
 	BASE_SHOP("Base.Shop"),
 	BASE_CHAT_PREFIX("Base.ChatPrefix"),
 	BASE_TRUE("Base.True"),
@@ -92,7 +92,7 @@ public enum Messages {
 	
 	String msg = null;
 
-	Messages(String msg) {
+	MsgType(String msg) {
 		this.msg = msg;
 	}
 

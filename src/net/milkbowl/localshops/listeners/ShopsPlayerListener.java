@@ -19,7 +19,8 @@ import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.commands.ShopCommandExecutor;
 import net.milkbowl.localshops.objects.LocalShop;
-import net.milkbowl.localshops.objects.Messages;
+import net.milkbowl.localshops.objects.MsgType;
+import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopSign;
@@ -91,8 +92,8 @@ public class ShopsPlayerListener extends PlayerListener {
 
         } else if (event.getClickedBlock().getType().equals(Material.CHEST) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && shop != null ) {
          // Block access to chests when inside a shop, but allow the owner or managers to use them.
-            if ( !shop.getManagers().contains(playerName) && !shop.getOwner().equals(playerName) && !Vault.getPermission().has(player, "localshops.admin.local")) {
-                player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_USER_ACCESS_DENIED));
+            if ( !shop.getManagers().contains(playerName) && !shop.getOwner().equals(playerName) && !Vault.getPermission().has(player, PermType.ADMIN_LOCAL.get())) {
+                player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
                 event.setCancelled(true);
                 return;
             }
@@ -239,8 +240,7 @@ public class ShopsPlayerListener extends PlayerListener {
     private void notifyPlayerEnterShop(Player player, UUID shopUuid) {
         // TODO Add formatting
         Shop shop = plugin.getShopManager().getLocalShop(shopUuid);
-        player.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA
-                + "] You have entered the shop " + ChatColor.WHITE + shop.getName());
+        player.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] You have entered the shop " + ChatColor.WHITE + shop.getName());
 
     }
 

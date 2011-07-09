@@ -17,9 +17,10 @@ import java.util.Iterator;
 import java.util.UUID;
 
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.objects.Messages;
+import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.GlobalShop;
 import net.milkbowl.localshops.objects.InventoryItem;
+import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;
 
@@ -39,8 +40,8 @@ public class CommandShopDestroy extends Command {
     }
 
     public boolean process() {
-        if (!(sender instanceof Player) || !canUseCommand(CommandTypes.DESTROY)) {
-            sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_USER_ACCESS_DENIED));
+        if (!(sender instanceof Player) || !canUseCommand(PermType.DESTROY)) {
+            sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
             return false;
         }
 
@@ -57,7 +58,7 @@ public class CommandShopDestroy extends Command {
             UUID shopUuid = plugin.getPlayerData().get(playerName).shopList.get(0);
             Shop shop = plugin.getShopManager().getLocalShop(shopUuid);
 
-            if (!shop.getOwner().equalsIgnoreCase(player.getName()) && !canUseCommand(CommandTypes.ADMIN_LOCAL)) {
+            if (!shop.getOwner().equalsIgnoreCase(player.getName()) && !canUseCommand(PermType.ADMIN_LOCAL)) {
                 player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner to destroy it.");
                 return false;
             }
@@ -96,7 +97,7 @@ public class CommandShopDestroy extends Command {
             }
 
             // Check if permissions
-            if (!shop.getOwner().equalsIgnoreCase(player.getName()) && !canUseCommand(CommandTypes.ADMIN_GLOBAL) && !shop.getManagers().contains(player.getName())) {
+            if (!shop.getOwner().equalsIgnoreCase(player.getName()) && !canUseCommand(PermType.ADMIN_GLOBAL) && !shop.getManagers().contains(player.getName())) {
                 player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or manager to destroy a global shop");
                 return false;
             }

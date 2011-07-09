@@ -16,7 +16,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
-import net.milkbowl.localshops.objects.Messages;
+import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.util.GenericFunctions;
 
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -39,7 +39,7 @@ public class ResourceManager {
 				bundle = ResourceBundle.getBundle("props/Messages", l);
 			} catch (Exception e) {
 				bundle = ResourceBundle.getBundle("props/Messages");
-				log.warning(getString(Messages.MAIN_ERROR_LOAD_LOCALE, new String[] {"%LOCALE%"}, new String[] {l.getLanguage()}));
+				log.warning(getString(MsgType.MAIN_ERROR_LOAD_LOCALE, new String[] {"%LOCALE%"}, new String[] {l.getLanguage()}));
 			}
 		}
 	}
@@ -50,12 +50,12 @@ public class ResourceManager {
 	}
 
 	// Get String
-	public String getString(Messages key) {
+	public String getString(MsgType key) {
 		return parsePluginData(GenericFunctions.parseColors(parseBase(bundle.getString(key.getMsg()))));
 	}
 
 	// Get String w/ Data Values (replace key array and replace value array MUST match lengths!
-	public String getString(Messages key, String[] replaceKeys, Object[] replaceValues) {
+	public String getString(MsgType key, String[] replaceKeys, Object[] replaceValues) {
 		if(replaceKeys.length != replaceValues.length) {
 			return null;
 		}
@@ -84,16 +84,16 @@ public class ResourceManager {
 
 	// Parse Base
 	private String parseBase(String s) {
-		s = s.replaceAll("%CHAT_PREFIX%", bundle.getString(Messages.BASE_CHAT_PREFIX.getMsg()));
-		s = s.replaceAll("%BASESHOP%", bundle.getString(Messages.BASE_SHOP.getMsg()));
-		s = s.replaceAll("%TRUE%", bundle.getString(Messages.BASE_TRUE.getMsg()));
-		s = s.replaceAll("%FALSE%", bundle.getString(Messages.BASE_FALSE.getMsg()));
+		s = s.replaceAll("%CHAT_PREFIX%", bundle.getString(MsgType.BASE_CHAT_PREFIX.getMsg()));
+		s = s.replaceAll("%BASESHOP%", bundle.getString(MsgType.BASE_SHOP.getMsg()));
+		s = s.replaceAll("%TRUE%", bundle.getString(MsgType.BASE_TRUE.getMsg()));
+		s = s.replaceAll("%FALSE%", bundle.getString(MsgType.BASE_FALSE.getMsg()));
 
 		return s;
 	}
 
 	// Get Chat Prefix
 	public String getChatPrefix() {
-		return getString(Messages.BASE_CHAT_PREFIX);
+		return getString(MsgType.BASE_CHAT_PREFIX);
 	}
 }

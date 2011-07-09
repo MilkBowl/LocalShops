@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.objects.InventoryItem;
 import net.milkbowl.localshops.objects.LocalShop;
-import net.milkbowl.localshops.objects.Messages;
+import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopLocation;
 import net.milkbowl.localshops.util.GenericFunctions;
@@ -54,7 +54,7 @@ public class CommandShopInfo extends Command {
             if (matcher.find()) {
                 shop = getCurrentShop(player);
                 if (shop == null) {
-                    sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_NOT_IN_SHOP));
+                    sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
                     return false;
                 }
             }
@@ -73,7 +73,7 @@ public class CommandShopInfo extends Command {
             }
 
         } else {
-            sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CONSOLE_NOT_IMPLEMENTED));
+            sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
             return false;
         }
 

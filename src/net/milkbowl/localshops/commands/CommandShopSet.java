@@ -20,7 +20,8 @@ import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.objects.InventoryItem;
 import net.milkbowl.localshops.objects.ItemInfo;
-import net.milkbowl.localshops.objects.Messages;
+import net.milkbowl.localshops.objects.MsgType;
+import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopSign;
 import net.milkbowl.localshops.util.GenericFunctions;
@@ -43,8 +44,8 @@ public class CommandShopSet extends Command {
 
 	public boolean process() {
 		// Check Permissions
-		if (!canUseCommand(CommandTypes.SET)) {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_USER_ACCESS_DENIED));
+		if (!canUseCommand(PermType.SET)) {
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
 			return true;
 		}
 
@@ -93,18 +94,18 @@ public class CommandShopSet extends Command {
 			shop = getCurrentShop(player);
 
 			if (shop == null) {
-				sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_NOT_IN_SHOP));
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
 				return true;
 			}
 
 			// Check if Player can Modify
 			if (!isShopController(shop)) {
-				player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_MUST_BE_SHOP_OWNER));
-				player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_MUST_BE_SHOP_OWNER));
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
 				return true;
 			}
 		} else {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CONSOLE_NOT_IMPLEMENTED));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
 			return true;
 		}
 
@@ -187,14 +188,14 @@ public class CommandShopSet extends Command {
 
 	private boolean shopSetBuy(Shop shop, ItemInfo item, double price) {
 		if (item == null) {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_FOUND));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 			return true;
 		}
 
 		// Check if Shop has item
 		if (!shop.containsItem(item)) {
 			// nicely message user
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
 			return true;
 		}
 
@@ -221,20 +222,20 @@ public class CommandShopSet extends Command {
 	private boolean shopSetBuy(Shop shop, ItemInfo item, double price, int size) {
 		// Check for valid item
 		if (item == null) {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_FOUND));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 			return true;
 		}
 
 		// Check for valid size
 		if(size < 1) {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_SHP_SET_BUNDLE_FAIL));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_SET_BUNDLE_FAIL));
 			return true;
 		}
 
 		// Check if Shop has item
 		if (!shop.containsItem(item)) {
 			// nicely message user
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
 			return true;
 		}
 
@@ -269,18 +270,18 @@ public class CommandShopSet extends Command {
 
 			shop = getCurrentShop(player);
 			if (shop == null) {
-				sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_NOT_IN_SHOP));
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
 				return true;
 			}
 
 			// Check if Player can Modify
 			if (!isShopController(shop)) {
-				player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_MUST_BE_SHOP_OWNER));
-				player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_MUST_BE_SHOP_OWNER));
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
 				return true;
 			}
 		} else {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CONSOLE_NOT_IMPLEMENTED));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
 			return true;
 		}
 
@@ -364,20 +365,20 @@ public class CommandShopSet extends Command {
 	private boolean shopSetSell(Shop shop, ItemInfo item, double price, int size) {
 		// Check for valid item
 		if (item == null) {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_FOUND));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 			return true;
 		}
 
 		// Check for valid size
 		if(size < 1) {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.CMD_SHP_SET_BUNDLE_FAIL));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_SET_BUNDLE_FAIL));
 			return true;
 		}
 
 		// Check if Shop has item
 		if (!shop.containsItem(item)) {
 			// nicely message user
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
 			return true;
 		}
 
@@ -403,14 +404,14 @@ public class CommandShopSet extends Command {
 
 	private boolean shopSetSell(Shop shop, ItemInfo item, double price) {
 		if (item == null) {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_FOUND));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 			return true;
 		}
 
 		// Check if Shop has item
 		if (!shop.containsItem(item)) {
 			// nicely message user
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
 			return true;
 		}
 
@@ -443,18 +444,18 @@ public class CommandShopSet extends Command {
 
 			shop = getCurrentShop(player);
 			if (shop == null) {
-				sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_NOT_IN_SHOP));
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
 				return true;
 			}
 
 			// Check if Player can Modify
 			if (!isShopController(shop)) {
-				player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_MUST_BE_SHOP_OWNER));
-				player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_MUST_BE_SHOP_OWNER));
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
 				return true;
 			}
 		} else {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CONSOLE_NOT_IMPLEMENTED));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
 			return true;
 		}
 
@@ -500,14 +501,14 @@ public class CommandShopSet extends Command {
 
 	private boolean shopSetMax(Shop shop, ItemInfo item, int max) {
 		if (item == null) {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_FOUND));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 			return true;
 		}
 
 		// Check if Shop has item
 		if (!shop.containsItem(item)) {
 			// nicely message user
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
 			return true;
 		}
 
@@ -542,17 +543,17 @@ public class CommandShopSet extends Command {
 
 			shop = getCurrentShop(player);
 			if (shop == null) {
-				sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_NOT_IN_SHOP));
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
 				return true;
 			}
 
 			// Check Permissions
-			if ( (!canUseCommand(CommandTypes.ADMIN_LOCAL) && !isGlobal) || (!canUseCommand(CommandTypes.ADMIN_GLOBAL) && isGlobal)) {
-				sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_USER_ACCESS_DENIED));
+			if ( (!canUseCommand(PermType.ADMIN_LOCAL) && !isGlobal) || (!canUseCommand(PermType.ADMIN_GLOBAL) && isGlobal)) {
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
 				return true;
 			}            
 		} else {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CONSOLE_NOT_IMPLEMENTED));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
 			return true;
 		}
 
@@ -610,18 +611,18 @@ public class CommandShopSet extends Command {
 
 			shop = getCurrentShop(player);
 			if (shop == null) {
-				sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_NOT_IN_SHOP));
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
 				return true;
 			}
 
 			// Check if Player can Modify
 			if (!isShopController(shop)) {
-				player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_MUST_BE_SHOP_OWNER));
-				player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_MUST_BE_SHOP_OWNER));
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
 				return true;
 			}
 		} else {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CONSOLE_NOT_IMPLEMENTED));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
 			return true;
 		}
 
@@ -665,18 +666,18 @@ public class CommandShopSet extends Command {
 
 			shop = getCurrentShop(player);
 			if (shop == null) {
-				sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_NOT_IN_SHOP));
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
 				return true;
 			}
 
 			// Check if Player can Modify
 			if (!isShopController(shop)) {
-				player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_MUST_BE_SHOP_OWNER));
-				player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_MUST_BE_SHOP_OWNER));
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
 				return true;
 			}
 		} else {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CONSOLE_NOT_IMPLEMENTED));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
 			return true;
 		}
 
@@ -720,18 +721,18 @@ public class CommandShopSet extends Command {
 
 			shop = getCurrentShop(player);
 			if (shop == null) {
-				sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_NOT_IN_SHOP));
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
 				return true;
 			}
 
 			// Check if Player can Modify
 			if (!isShopController(shop)) {
-				player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_MUST_BE_SHOP_OWNER));
-				player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_MUST_BE_SHOP_OWNER));
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
 				return true;
 			}
 		} else {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CONSOLE_NOT_IMPLEMENTED));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
 			return true;
 		}
 
@@ -775,18 +776,18 @@ public class CommandShopSet extends Command {
 
 			shop = getCurrentShop(player);
 			if(shop == null) {
-				sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_NOT_IN_SHOP));
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
 				return true;
 			}
 
 			// Check if Player can Modify
 			if (!shop.getOwner().equalsIgnoreCase(player.getName())) {
-				player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_MUST_BE_SHOP_OWNER));
-				player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_MUST_BE_SHOP_OWNER));
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
 				return true;
 			}
 		} else {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CONSOLE_NOT_IMPLEMENTED));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
 			return true;
 		}
 
@@ -811,18 +812,18 @@ public class CommandShopSet extends Command {
 
 			shop = getCurrentShop(player);
 			if (shop == null) {
-				sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_NOT_IN_SHOP));
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
 				return true;
 			}
 
 			// Check if Player can Modify
 			if (!shop.getOwner().equalsIgnoreCase(player.getName())) {
-				player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_MUST_BE_SHOP_OWNER));
-				player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_MUST_BE_SHOP_OWNER));
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
 				return true;
 			}
 		} else {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CONSOLE_NOT_IMPLEMENTED));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
 			return true;
 		}
 
@@ -854,28 +855,28 @@ public class CommandShopSet extends Command {
 
 			shop = getCurrentShop(player);
 			if (shop == null) {
-				sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_NOT_IN_SHOP));
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
 				return true;
 			}
 
 			// Check if Player can Modify
-			if ( ((!canUseCommand(CommandTypes.ADMIN_LOCAL) && !isGlobal) || (!canUseCommand(CommandTypes.ADMIN_GLOBAL) && isGlobal)) && !shop.getOwner().equalsIgnoreCase(player.getName())) {
-				player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_MUST_BE_SHOP_OWNER));
+			if ( ((!canUseCommand(PermType.ADMIN_LOCAL) && !isGlobal) || (!canUseCommand(PermType.ADMIN_GLOBAL) && isGlobal)) && !shop.getOwner().equalsIgnoreCase(player.getName())) {
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_MUST_BE_SHOP_OWNER));
 				sender.sendMessage(ChatColor.DARK_AQUA + "  The current shop owner is " + ChatColor.WHITE + shop.getOwner());
 				return true;
 			}
 
-			if (!canUseCommand(CommandTypes.SET_OWNER) && ((!canUseCommand(CommandTypes.ADMIN_LOCAL) && !isGlobal) || (!canUseCommand(CommandTypes.ADMIN_GLOBAL) && isGlobal))) {
-				sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_USER_ACCESS_DENIED));
+			if (!canUseCommand(PermType.SET_OWNER) && ((!canUseCommand(PermType.ADMIN_LOCAL) && !isGlobal) || (!canUseCommand(PermType.ADMIN_GLOBAL) && isGlobal))) {
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
 				return true;
 			}
 
-			if((!canUseCommand(CommandTypes.ADMIN_LOCAL) && !isGlobal) || (!canUseCommand(CommandTypes.ADMIN_GLOBAL) && isGlobal)) {
+			if((!canUseCommand(PermType.ADMIN_LOCAL) && !isGlobal) || (!canUseCommand(PermType.ADMIN_GLOBAL) && isGlobal)) {
 				sender.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " " + shop.getName() + " is no longer buying items.");
 				reset = true;
 			}
 		} else {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CONSOLE_NOT_IMPLEMENTED));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
 			return true;
 		}
 
@@ -884,8 +885,8 @@ public class CommandShopSet extends Command {
 		Matcher matcher = pattern.matcher(command);
 		if (matcher.find()) {
 			String name = matcher.group(1);
-			if (!canUseCommand(CommandTypes.SET_OWNER)) {
-				sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_USER_ACCESS_DENIED));
+			if (!canUseCommand(PermType.SET_OWNER)) {
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
 				return true;
 			}  else if ( !canCreateShop(name) ) {
 				sender.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " that player already has the maximum number of shops!");
@@ -924,18 +925,18 @@ public class CommandShopSet extends Command {
 
 			shop = getCurrentShop(player);
 			if(shop == null) {
-				sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_NOT_IN_SHOP));
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
 				return true;                
 			}
 
 			// Check if Player can Modify  
 			if(!canModifyShop(shop)) {
-				player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_MUST_BE_SHOP_OWNER));
-				player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));                
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_MUST_BE_SHOP_OWNER));
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));                
 				return true;
 			}
 		} else {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CONSOLE_NOT_IMPLEMENTED));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
 			return true;            
 		}
 
@@ -954,14 +955,14 @@ public class CommandShopSet extends Command {
 	}
 	private boolean shopSetDynamic(Shop shop, ItemInfo item) {
 		if (item == null) {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_FOUND));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 			return true;
 		}
 
 		// Check if Shop has item
 		if (!shop.containsItem(item)) {
 			// nicely message user
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
 			return true;
 		}
 
@@ -989,17 +990,17 @@ public class CommandShopSet extends Command {
 			Player player = (Player) sender;
 			shop = getCurrentShop(player);
 			if (shop == null) {
-				sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_NOT_IN_SHOP));
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
 				return false;
 			}
 
 			// Check Permissions
-			if (!canUseCommand(CommandTypes.ADMIN_SERVER)) {
-				sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_USER_ACCESS_DENIED));
+			if (!canUseCommand(PermType.ADMIN_SERVER)) {
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
 				return false;
 			}            
 		} else {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CONSOLE_NOT_IMPLEMENTED));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
 			return false;
 		}
 
@@ -1064,18 +1065,18 @@ public class CommandShopSet extends Command {
 
 			shop = getCurrentShop(player);
 			if (shop == null) {
-				sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_NOT_IN_SHOP));
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
 				return true;
 			}
 
 			// Check if Player can Modify
 			if (!isShopController(shop)) {
-				player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_MUST_BE_SHOP_OWNER));
-				player.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_MUST_BE_SHOP_OWNER));
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
 				return true;
 			}
 		} else {
-			sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CONSOLE_NOT_IMPLEMENTED));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
 			return true;
 		}
 
@@ -1117,7 +1118,7 @@ public class CommandShopSet extends Command {
 		sender.sendMessage("   " + "/" + commandLabel + " set name [shop name]");
 		sender.sendMessage("   " + "/" + commandLabel + " set owner [player name]");
 		sender.sendMessage("   " + "/" + commandLabel + " set share <amount>");
-		if (((canUseCommand(CommandTypes.ADMIN_LOCAL) && !isGlobal) || (canUseCommand(CommandTypes.ADMIN_GLOBAL) && isGlobal))) {
+		if (((canUseCommand(PermType.ADMIN_LOCAL) && !isGlobal) || (canUseCommand(PermType.ADMIN_GLOBAL) && isGlobal))) {
 			sender.sendMessage("   " + "/" + commandLabel + " set unlimited money");
 			sender.sendMessage("   " + "/" + commandLabel + " set unlimited stock");
 			sender.sendMessage("   " + "/" + commandLabel + " set dynamic <id>");

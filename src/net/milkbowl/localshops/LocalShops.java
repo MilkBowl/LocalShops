@@ -24,7 +24,7 @@ import net.milkbowl.localshops.listeners.ShopsBlockListener;
 import net.milkbowl.localshops.listeners.ShopsEntityListener;
 import net.milkbowl.localshops.listeners.ShopsPlayerListener;
 import net.milkbowl.localshops.objects.ItemData;
-import net.milkbowl.localshops.objects.Messages;
+import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.ShopSign;
 import net.milkbowl.localshops.threads.ThreadManager;
@@ -68,7 +68,7 @@ public class LocalShops extends JavaPlugin {
 
 	public void onEnable() {
 		resManager = new ResourceManager(getDescription(), new Locale(Config.getLocale()));
-		log.info(resManager.getString(Messages.MAIN_USING_LOCALE, new String[] { "%LOCALE%" }, new String[] { resManager.getLocale().getLanguage() } ));
+		log.info(resManager.getString(MsgType.MAIN_USING_LOCALE, new String[] { "%LOCALE%" }, new String[] { resManager.getLocale().getLanguage() } ));
 
 		// add all the online users to the data trees
 		for (Player player : this.getServer().getOnlinePlayers()) {
@@ -107,8 +107,8 @@ public class LocalShops extends JavaPlugin {
 		getShopManager().loadShops(shopsDir);
 
 		// update the console that we've started
-		log.info(resManager.getString(Messages.MAIN_LOAD, new String[] { "%NUM_SHOPS%" }, new Object[] { getShopManager().getNumShops() }));
-		log.info(resManager.getString(Messages.MAIN_ENABLE, new String[] { "%UUID%" }, new Object[] { Config.getSrvUuid().toString() }));
+		log.info(resManager.getString(MsgType.MAIN_LOAD, new String[] { "%NUM_SHOPS%" }, new Object[] { getShopManager().getNumShops() }));
+		log.info(resManager.getString(MsgType.MAIN_ENABLE, new String[] { "%UUID%" }, new Object[] { Config.getSrvUuid().toString() }));
 
 		// check which shops players are inside
 		for (Player player : this.getServer().getOnlinePlayers()) {
@@ -157,7 +157,7 @@ public class LocalShops extends JavaPlugin {
 		threadManager.notificationStop();
 
 		// update the console that we've stopped
-		log.info(resManager.getString(Messages.MAIN_DISABLE, new String[] { }, new Object[] { }));
+		log.info(resManager.getString(MsgType.MAIN_DISABLE, new String[] { }, new Object[] { }));
 	}
 
 	public ShopManager getShopManager() {

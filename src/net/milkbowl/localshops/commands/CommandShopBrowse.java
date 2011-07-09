@@ -22,7 +22,8 @@ import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.comparator.InventoryItemSortByName;
 import net.milkbowl.localshops.objects.InventoryItem;
-import net.milkbowl.localshops.objects.Messages;
+import net.milkbowl.localshops.objects.MsgType;
+import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.vault.Vault;
 
@@ -51,18 +52,18 @@ public class CommandShopBrowse extends Command {
             
             shop = getCurrentShop(player);
             if (shop == null || (isGlobal && !Config.getGlobalShopsEnabled())) {
-                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_NOT_IN_SHOP));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
                 return true;
             }
 
             // Check Permissions
-            if ((!canUseCommand(CommandTypes.BROWSE) && !isGlobal) || (isGlobal && !canUseCommand(CommandTypes.GLOBAL_BROWSE))) {
-                sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_USER_ACCESS_DENIED));
+            if ((!canUseCommand(PermType.BROWSE) && !isGlobal) || (isGlobal && !canUseCommand(PermType.GLOBAL_BROWSE))) {
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
                 return true;
             }
 
         } else {
-            sender.sendMessage(plugin.getResourceManager().getString(Messages.GEN_CONSOLE_NOT_IMPLEMENTED));
+            sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
             return true;
         }
 
