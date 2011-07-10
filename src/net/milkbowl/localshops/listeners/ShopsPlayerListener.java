@@ -19,13 +19,10 @@ import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.commands.ShopCommandExecutor;
 import net.milkbowl.localshops.objects.LocalShop;
-import net.milkbowl.localshops.objects.MsgType;
-import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopSign;
 import net.milkbowl.localshops.util.GenericFunctions;
-import net.milkbowl.vault.Vault;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -90,17 +87,7 @@ public class ShopsPlayerListener extends PlayerListener {
                 }
             }
 
-        } else if (event.getClickedBlock().getType().equals(Material.CHEST) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && shop != null ) {
-         // Block access to chests when inside a shop, but allow the owner or managers to use them.
-            if ( !shop.getManagers().contains(playerName) && !shop.getOwner().equals(playerName) && !Vault.getPermission().has(player, PermType.ADMIN_LOCAL.get())) {
-                player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
-                event.setCancelled(true);
-                return;
-            }
-           /* if (shop.getChests().contains(eventBlockLoc)) {
-            }
-            */
-        }
+        } 
         // If our user is select & is not holding an item, selection time
         if (plugin.getPlayerData().get(playerName).isSelecting() && player.getItemInHand().getType() == Material.AIR) {
             int x, y, z;
