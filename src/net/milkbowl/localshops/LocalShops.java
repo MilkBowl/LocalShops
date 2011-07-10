@@ -96,6 +96,7 @@ public class LocalShops extends JavaPlugin {
 		getCommand("sell").setExecutor(cmdExec);
 		getCommand("gbuy").setExecutor(cmdExec);
 		getCommand("gsell").setExecutor(cmdExec);
+		
 
 		// setup the file IO
 		File folderDir = new File(Config.getDirPath());

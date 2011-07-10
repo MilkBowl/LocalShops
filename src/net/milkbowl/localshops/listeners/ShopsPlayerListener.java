@@ -90,13 +90,11 @@ public class ShopsPlayerListener extends PlayerListener {
         } 
         // If our user is select & is not holding an item, selection time
         if (plugin.getPlayerData().get(playerName).isSelecting() && player.getItemInHand().getType() == Material.AIR) {
-            int x, y, z;
+        	PlayerData pData = plugin.getPlayerData().get(playerName);
             Location loc = event.getClickedBlock().getLocation();
-            x = loc.getBlockX();
-            y = loc.getBlockY();
-            z = loc.getBlockZ();
-
-            PlayerData pData = plugin.getPlayerData().get(playerName);
+            int x = loc.getBlockX();
+            int y = loc.getBlockY();
+            int z = loc.getBlockZ();
 
             if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
                 String size = null;

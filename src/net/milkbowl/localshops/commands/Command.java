@@ -353,6 +353,10 @@ public abstract class Command {
 
 	public ShopLocation getNewShopLoc(Player player) {
 		PlayerData pData = plugin.getPlayerData().get(player.getName());
+		//Null check our pData
+		if (pData == null) {
+			plugin.getPlayerData().put(player.getName(), new PlayerData(plugin, player.getName()));
+		}
 		if (pData.isSelecting()) {
 			if (GenericFunctions.calculateCuboidSize(pData.getPositionA(), pData.getPositionB(), Config.getShopSizeMaxWidth(), Config.getShopSizeMaxHeight()) == null) {
 				String size = Config.getShopSizeMaxWidth() + "x" + Config.getShopSizeMaxHeight() + "x" + Config.getShopSizeMaxWidth();

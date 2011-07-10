@@ -67,10 +67,12 @@ public class CommandShopCreate extends Command {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_SHOP_EXISTS));
                 return false;
             }
+            
             if (isGlobal && plugin.getShopManager().getGlobalShopByWorld(world) != null) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_WORLD_HAS_GLOBAL));
                 return false;
             }
+            
             if (Config.getShopChargeCreate()) {
                 if (!canUseCommand(PermType.CREATE_FREE)) {
                     if (!Econ.chargePlayer(player.getName(), Config.getShopChargeCreateCost())) {

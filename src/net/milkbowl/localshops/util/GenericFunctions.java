@@ -224,7 +224,7 @@ public class GenericFunctions {
 
         String size = "" + width1 + "x" + height + "x" + width2;
 
-        if (width1 > maxWidth || width2 > maxWidth || height > maxHeight) {
+        if (width1 > maxWidth || width2 > maxWidth || height > maxHeight || height < 2) {
             return null;
         } else {
             return size;
