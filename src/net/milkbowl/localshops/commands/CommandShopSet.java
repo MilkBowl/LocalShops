@@ -588,7 +588,7 @@ public class CommandShopSet extends Command {
 			shop.setUnlimitedStock(!shop.isUnlimitedStock());
 			sender.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " Unlimited stock was set to " + ChatColor.WHITE + shop.isUnlimitedStock());
 			//Update signs after setting unlimited stock
-			for (ShopSign sign : shop.getSignSet() )
+			for (ShopSign sign : shop.getSigns() )
 				shop.updateSign(sign);
 
 			plugin.getShopManager().saveShop(shop);

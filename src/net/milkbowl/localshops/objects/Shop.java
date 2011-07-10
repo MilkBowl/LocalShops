@@ -392,7 +392,7 @@ public abstract class Shop implements Comparator<Shop> {
 		 this.signSet = signSet;
 	 }
 
-	 public Set<ShopSign> getSignSet() {
+	 public Set<ShopSign> getSigns() {
 		 return signSet;
 	 }
 

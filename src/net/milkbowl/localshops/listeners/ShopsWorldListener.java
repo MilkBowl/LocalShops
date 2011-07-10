@@ -54,7 +54,7 @@ public class ShopsWorldListener extends WorldListener {
             
             //Get an iterator from the shops signMap and loop through
             Set<ShopSign> addSet = new HashSet<ShopSign>();
-            Iterator<ShopSign> iter = shop.getSignSet().iterator();
+            Iterator<ShopSign> iter = shop.getSigns().iterator();
             while (iter.hasNext()) {
                 ShopSign sign = iter.next();
                 //If event world and signWorld are the same, set the signworld and validate the sign.
@@ -70,7 +70,7 @@ public class ShopsWorldListener extends WorldListener {
                 }
             }
             shop.updateSigns(addSet);
-            shop.getSignSet().addAll(addSet);
+            shop.getSigns().addAll(addSet);
             
         }
         

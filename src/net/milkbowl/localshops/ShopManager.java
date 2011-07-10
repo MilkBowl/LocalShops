@@ -707,7 +707,7 @@ public class ShopManager {
 		for (ShopSign sign : signList) {
 			//Add signs that can't be verified yet.
 			if (sign.getWorld() == null) {
-				shop.getSignSet().add(sign);
+				shop.getSigns().add(sign);
 				continue;
 			}
 			//Load the chunk so we don't try getting blocks that are non-existent
@@ -722,7 +722,7 @@ public class ShopManager {
 				if (!(shop.containsItem(item))) {
 					continue;
 				} else {
-					shop.getSignSet().add(sign);
+					shop.getSigns().add(sign);
 					shop.updateSign(sign);
 				}
 			}
@@ -823,7 +823,7 @@ public class ShopManager {
 		}
 
 		//Sign Data saving
-		Iterator<ShopSign> iter = shop.getSignSet().iterator();
+		Iterator<ShopSign> iter = shop.getSigns().iterator();
 		for (int index = 1; iter.hasNext(); index++ ) {
 			ShopSign sign = iter.next();
 			props.setProperty("sign"+index, String.format("%s:%d,%d,%d,%s,%d", sign.getWorldName(), sign.getX(), sign.getY(), sign.getZ(), sign.getItemName(), sign.getType().getId()));
@@ -952,7 +952,7 @@ public class ShopManager {
 		for (UUID key : shops.keySet()) {
 			Shop shop = shops.get(key);
 			if (shop.isDynamicPrices())
-				for (ShopSign sign : shop.getSignSet())
+				for (ShopSign sign : shop.getSigns())
 					shop.updateSign(sign);
 		}
 		return null;

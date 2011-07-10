@@ -67,8 +67,13 @@ public class ShopsPlayerListener extends PlayerListener {
         LocalShop shop = plugin.getShopManager().getLocalShop(eventBlockLoc);
         //If user Right clicks a sign try to buy/sell from it.
         if (((event.getClickedBlock().getType().equals(Material.WALL_SIGN) || event.getClickedBlock().getType().equals(Material.SIGN_POST)) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && (player.getItemInHand().getType().equals(Material.AIR) || player.getItemInHand().equals(Material.STICK)) && shop != null) {
-            for (ShopSign sign : shop.getSignSet()) {
+            for (ShopSign sign : shop.getSigns()) {
                 if (sign.getLoc().equals(eventBlockLoc)) {
+                	//Check for null sign-type? We should NEVER have this issue
+                	if (sign.getType() == null) {
+                		log.warning("[LocalShops] - Null Shop Sign detected, report error. Sign info: " + sign.toString());
+                		continue;
+                	}
                     if (sign.getType().equals(ShopSign.SignType.BUY)) {
                         ShopCommandExecutor.commandTypeMap.get("buy").getCommandInstance(plugin, "buy", event.getPlayer(), "buy " + sign.getItemName(), false).process();
                         //TODO: Remove when bukkit fixes inventory updating

@@ -81,7 +81,7 @@ public class ShopsBlockListener extends BlockListener {
 					}
 
 					// Set, save, get lines
-					shop.getSignSet().add(sign);
+					shop.getSigns().add(sign);
 					plugin.getShopManager().saveShop(shop);
 					signLines = shop.generateSignLines(sign);
 
@@ -170,7 +170,7 @@ public class ShopsBlockListener extends BlockListener {
 		
 		//remove any Blocks in the blocklist
 		if (!blockList.isEmpty()) {
-			Iterator<ShopSign> iter = shop.getSignSet().iterator();
+			Iterator<ShopSign> iter = shop.getSigns().iterator();
 			while (iter.hasNext()) {
 				ShopSign sign = iter.next();
 				for (Block b : blockList) 
