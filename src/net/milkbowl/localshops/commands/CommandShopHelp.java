@@ -58,7 +58,7 @@ public class CommandShopHelp extends Command {
         if (canUseCommand(PermType.MOVE) && !isGlobal) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " move [ShopID]" + ChatColor.DARK_AQUA + " - Move a shop to your location.");
         }
-            sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " search [itemname]" + ChatColor.DARK_AQUA + " - Search for an item by name.");
+            sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " search|searchall [itemname]" + ChatColor.DARK_AQUA + " - Search for an item by name.");
         if (canUseCommand(PermType.SELECT) && !isGlobal) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " select" + ChatColor.DARK_AQUA + " - Select two corners for custom shop size.");
         }
