@@ -188,6 +188,7 @@ public class ShopManager {
 			if (!lShop.getWorld().equals(worldName))
 				continue;
 
+
 			for (ShopLocation sLoc : lShop.getShopLocations()) {
 				for (int y = xyzA[1]; y <= xyzB[1]; y++) {
 					//If y is less than Loc1 (min Y Value) or greater than Loc2 (Max Y value) ignore it
@@ -199,11 +200,24 @@ public class ShopManager {
 						if (x < sLoc.getLocation1()[0] || x > sLoc.getLocation2()[0])
 							continue;
 
-						for (int z = xyzA[2]; z <= xyzB[2]; z++) {
-							//Just check if we are within the bounds - if so then we must be within the hsop
-							if (z > sLoc.getLocation1()[2] && z < sLoc.getLocation2()[2])
-								return false;
-						}
+						/**
+						 * Since we know that the X and Y plane converge 
+						 * if test shops max Z is less than other shops Lowest z we know they can't converge.
+						 * Likewise if test Shops minimum Z is greater than other shops max Z they can't converge
+						 * if minZ > shop maxZ shop must be outside
+						 * if maxZ < shop minZ shop must be outside
+						 * If Neither of these are true:
+						 * we know that minZ must be less than maxZ and shop maxZ
+						 * we also know maxZ must be greater than MinZ and shop minZ
+						 * This means the Shops MUST converge.
+						 * 
+						 * This also means that the inverse is true.
+						 */
+						if (xyzB[2] < sLoc.getLocation1()[2] || xyzA[2] > sLoc.getLocation2()[2])
+							return true;
+						else 
+							return false;
+
 					}
 				}
 			}
@@ -226,8 +240,8 @@ public class ShopManager {
 				}
 			}
 		}
-		*/
-		
+		 */
+
 		return true;
 	}
 
