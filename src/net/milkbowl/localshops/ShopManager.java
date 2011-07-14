@@ -178,7 +178,40 @@ public class ShopManager {
 			}
 		}
 
+		for (Shop shop : shops.values()) {
+			//ignore global shops
+			if (shop instanceof GlobalShop)
+				continue;
+
+			LocalShop lShop = (LocalShop) shop;
+			//ignore shops on different worlds
+			if (!lShop.getWorld().equals(worldName))
+				continue;
+
+			for (ShopLocation sLoc : lShop.getShopLocations()) {
+				for (int y = xyzA[1]; y <= xyzB[1]; y++) {
+					//If y is less than Loc1 (min Y Value) or greater than Loc2 (Max Y value) ignore it
+					if (y < sLoc.getLocation1()[1] || y > sLoc.getLocation2()[1] )
+						continue;
+
+					for (int x = xyzA[0]; x <= xyzB[0]; x++) {
+						//If x is less than loc1 (min X Val) or greater than Loc2 (Max X Val) ignore it.
+						if (x < sLoc.getLocation1()[0] || x > sLoc.getLocation2()[0])
+							continue;
+
+						for (int z = xyzA[2]; z <= xyzB[2]; z++) {
+							//Just check if we are within the bounds - if so then we must be within the hsop
+							if (z > sLoc.getLocation1()[2] && z < sLoc.getLocation2()[2])
+								return false;
+						}
+					}
+				}
+			}
+		}
 		// Need to test every position to account for variable shop sizes
+		/*
+		 * We really don't need to test EVERY value.
+		 * 
 		for (int x = xyzA[0]; x <= xyzB[0]; x++) {
 			for (int z = xyzA[2]; z <= xyzB[2]; z++) {
 				for (int y = xyzA[1]; y <= xyzB[1]; y++) {
@@ -193,6 +226,8 @@ public class ShopManager {
 				}
 			}
 		}
+		*/
+		
 		return true;
 	}
 
