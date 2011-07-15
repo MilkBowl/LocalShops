@@ -117,7 +117,7 @@ public class Config {
         properties.setProperty("chat-max-lines", String.valueOf(chatMaxLines));
         
         try {
-            properties.store(new FileOutputStream(Config.dirPath + "localshops.properties"), null);
+            properties.store(new FileOutputStream(Config.dirPath + "localshops.properties", false), null);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -820,7 +820,7 @@ public class ShopManager {
 
 		String fileName = Config.getDirShopsActivePath() + shop.getUuid().toString() + ".shop";
 		try {
-			props.store(new FileOutputStream(fileName), "LocalShops Config Version 2.0");
+			props.store(new FileOutputStream(fileName, false), "LocalShops Config Version 2.0");
 		} catch (IOException e) {
 			log.warning("IOException: " + e.getMessage());
 		}
