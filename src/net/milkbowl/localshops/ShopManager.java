@@ -206,42 +206,9 @@ public class ShopManager {
 					continue;
 				else if (xyzA[2] > sLoc.getLocation2()[2] || xyzB[2] < sLoc.getLocation1()[2])
 					continue;
-				//If All three checks are false, this cube converges on all 3 planes = point inside
+				//If All three checks are false, this cube converges on all 3 planes
 				else
-					return false;
-				/*
-				 * In case it's not working?
-				for (int y = xyzA[1]; y <= xyzB[1]; y++) {
-					//If y is less than Loc1 (min Y Value) or greater than Loc2 (Max Y value) ignore it
-					if (y < sLoc.getLocation1()[1] || y > sLoc.getLocation2()[1] )
-						continue;
-
-					for (int x = xyzA[0]; x <= xyzB[0]; x++) {
-						//If x is less than loc1 (min X Val) or greater than Loc2 (Max X Val) ignore it.
-						if (x < sLoc.getLocation1()[0] || x > sLoc.getLocation2()[0])
-							continue;
-
-						
-						 * Since we know that the X and Y plane converge 
-						 * if test shops max Z is less than other shops Lowest z we know they can't converge.
-						 * Likewise if test Shops minimum Z is greater than other shops max Z they can't converge
-						 * if minZ > shop maxZ shop must be outside
-						 * if maxZ < shop minZ shop must be outside
-						 * If Neither of these are true:
-						 * we know that minZ must be less than maxZ and shop maxZ
-						 * we also know maxZ must be greater than MinZ and shop minZ
-						 * This means the Shops MUST converge.
-						 * 
-						 * This also means that the inverse is true.
-						 
-						if (xyzB[2] < sLoc.getLocation1()[2] || xyzA[2] > sLoc.getLocation2()[2])
-							return true;
-						else 
-							return false;
-
-					}
-				}
-		*/
+					return false;	
 			}
 		}
 
