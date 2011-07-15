@@ -352,7 +352,7 @@ public class CommandShopBuy extends Command {
 		} else if (amount % invItem.getBuySize() != 0) {
 			//Make sure we conform to shop bundle size
 			amount = amount - (amount % invItem.getBuySize());
-			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_HAS_QTY, new String[] { "%BUNDLESIZE%", "%AMOUNT%" }, new Object[] { invItem.getBuySize(), amount }));
+			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_ORDER_REDUCED, new String[] { "%BUNDLESIZE%", "%AMOUNT%" }, new Object[] { invItem.getBuySize(), amount }));
 		}
 
 		// check how many items the user has room for
