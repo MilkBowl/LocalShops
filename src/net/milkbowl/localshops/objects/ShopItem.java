@@ -14,7 +14,7 @@ package net.milkbowl.localshops.objects;
 
 import net.milkbowl.localshops.DynamicManager;
 
-public class InventoryItem {
+public class ShopItem {
 
     private ItemInfo info;
     private int bundleSize = 1;
@@ -25,7 +25,7 @@ public class InventoryItem {
     private boolean dynamic;
     public int maxStock;
 
-    public InventoryItem() {
+    public ShopItem() {
         info = null;
         bundleSize = 1;
         buyPrice = 0;
@@ -35,7 +35,7 @@ public class InventoryItem {
         dynamic = false;
     }
 
-    public InventoryItem(ItemInfo info) {
+    public ShopItem(ItemInfo info) {
         this.info = info;
         bundleSize = 1;
         buyPrice = 0;
@@ -44,7 +44,7 @@ public class InventoryItem {
         dynamic = false;
     }
     //TODO: Cleanup Constructor
-    public InventoryItem(ItemInfo info, int buySize, double buyPrice, int sellSize, double sellPrice, int stock, int maxStock) {
+    public ShopItem(ItemInfo info, int buySize, double buyPrice, int sellSize, double sellPrice, int stock, int maxStock) {
         this.info = info;
         this.bundleSize = buySize;
         this.buyPrice = buyPrice;
@@ -170,8 +170,8 @@ public class InventoryItem {
     }
     
     public boolean equals(Object o) {
-        if(o instanceof InventoryItem) {
-            InventoryItem item = (InventoryItem) o;
+        if(o instanceof ShopItem) {
+            ShopItem item = (ShopItem) o;
             if(item.info == info) {
                 return true;
             } else {

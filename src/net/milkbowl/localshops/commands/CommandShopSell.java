@@ -19,7 +19,7 @@ import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.Search;
-import net.milkbowl.localshops.objects.InventoryItem;
+import net.milkbowl.localshops.objects.ShopItem;
 import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;
@@ -272,7 +272,7 @@ public class CommandShopSell extends Command {
         }
 
         Player player = (Player) sender;
-        InventoryItem invItem = shop.getItem(item.name);
+        ShopItem invItem = shop.getItem(item.name);
 
         // check if the shop is buying that item
         if (!shop.containsItem(item) || shop.getItem(item.name).getSellPrice() == 0) {

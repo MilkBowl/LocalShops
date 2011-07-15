@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.Search;
-import net.milkbowl.localshops.objects.InventoryItem;
+import net.milkbowl.localshops.objects.ShopItem;
 import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.PermType;
@@ -304,9 +304,9 @@ public class CommandShopBuy extends Command {
 		}
 
 		Player player = (Player) sender;
-		InventoryItem invItem = shop.getItem(item.name);
+		ShopItem invItem = shop.getItem(item.name);
 
-		// check if the shop is buying that item
+		// check if the shop is selling that item
 		if (invItem == null || invItem.getBuyPrice() == 0) {
 			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_NOT_SELLING, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.name }));
 			return false;
@@ -321,66 +321,22 @@ public class CommandShopBuy extends Command {
 			return false;
 		}
 
-		// if amount = 0, assume single stack size
-		if (amount == 0) {
-			amount = invItem.getBuySize();
-		}
+		
+		//Get what the player can actually buy
+		amount = getBuyAmount(player, amount, invItem, shop.isUnlimitedStock());
+			
 
-		//Get the total amount of stock in the shop
-		int totalAmount = invItem.getStock();
-
-		if (totalAmount == 0 && !shop.isUnlimitedStock()) {
-			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_HAS_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { totalAmount, item.name }));
-			return true;
-		}
-
-		if (amount < 0) {
-			amount = 0;
-		}
-
-		//If this is an unlimited shop set the total number of items to the amount being requested
-		if (shop.isUnlimitedStock()) {
-			totalAmount = amount;
-		}
-
-		if (amount > totalAmount) {
-			//normalize the amount to the buy bundle size if it's greater than the number in the shop
-			amount = totalAmount - (totalAmount % invItem.getBuySize());
-			if (!shop.isUnlimitedStock()) {
-				player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_HAS_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { totalAmount, item.name }));
-			}
-		} else if (amount % invItem.getBuySize() != 0) {
-			//Make sure we conform to shop bundle size
-			amount = amount - (amount % invItem.getBuySize());
-			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_ORDER_REDUCED, new String[] { "%BUNDLESIZE%", "%AMOUNT%" }, new Object[] { invItem.getBuySize(), amount }));
-		}
-
-		// check how many items the user has room for
-		int freeSpots = 0;
-		for (ItemStack thisSlot : player.getInventory().getContents()) {
-			if (thisSlot == null || thisSlot.getType() == Material.AIR) {
-				freeSpots += 64;
-				continue;
-			}
-			if (thisSlot.getTypeId() == item.typeId && thisSlot.getDurability() == item.subTypeId) {
-				freeSpots += 64 - thisSlot.getAmount();
-			}
-		}
-
-		// Calculate the amount the player can store
-		if (amount > freeSpots) {
-			amount = freeSpots - (freeSpots % invItem.getBuySize());
-			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_HAS_QTY, new String[] { "%AMOUNT%" }, new Object[] { amount }));
-		}
-
-		//TODO: Instead of attempting a sale on the original amount of items - we should check how much they can buy regardless of transaction and adjust the data down
+		
 		int bundles = amount / invItem.getBuySize();
-		double itemPrice = invItem.getBuyPrice();
 		// recalculate # of items since may not fit cleanly into bundles
 		amount = bundles * invItem.getBuySize();
+		
+		//cost Related stuff
+		double itemPrice = invItem.getBuyPrice();
 		double totalCost = bundles * itemPrice;
 		boolean success = false;
-
+		
+		//TODO: Instead of attempting a sale on the original amount of items - we should check how much they can buy regardless of transaction and adjust the data down
 		if (shop.isUnlimitedMoney()) {
 			if (!Econ.chargePlayer(player.getName(), totalCost)) {
 				// player doesn't have enough money
@@ -467,5 +423,57 @@ public class CommandShopBuy extends Command {
 		shop.updateSigns(shop.getSigns());
 
 		return true;
+	}
+	
+	private int getBuyAmount(Player player, int amount, ShopItem invItem, boolean unlimitedStock) {
+		
+		int originalAmount = amount;
+		// if amount <= 0, assume single stack size
+		if (amount <= 0) {
+			amount = invItem.getBuySize();
+		}
+
+		//Get the total amount of stock in the shop
+		int totalAmount = invItem.getStock();
+		
+		if (totalAmount == 0 && !unlimitedStock) {
+			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_HAS_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { totalAmount, invItem.getInfo().name }));
+			return totalAmount;
+		}
+
+		//If this is an unlimited shop set the total number of items to the amount being requested
+		if (unlimitedStock) {
+			totalAmount = amount;
+		}
+		
+		// check how many items the user has room for
+		int freeSpots = 0;
+		for (ItemStack thisSlot : player.getInventory().getContents()) {
+			if (thisSlot == null || thisSlot.getType() == Material.AIR) {
+				//Adjust number of items slots by the number an air block can hold
+				freeSpots += invItem.getInfo().getStackSize();
+				continue;
+			}
+			if (thisSlot.getType().equals(invItem.getInfo().material) && thisSlot.getDurability() == invItem.getInfo().subTypeId) {
+				freeSpots += invItem.getInfo().getStackSize() - thisSlot.getAmount();
+			}
+		}
+		// Calculate the amount the player can store
+		if (amount > freeSpots) {
+			amount = freeSpots - (freeSpots % invItem.getBuySize());
+		}
+		if (amount > totalAmount && !unlimitedStock) {
+			//normalize the amount to the buy bundle size if it's greater than the number in the shop
+			amount = totalAmount - (totalAmount % invItem.getBuySize());
+		} 
+		if (amount % invItem.getBuySize() != 0) {
+			//Make sure we conform to shop bundle size
+			amount = amount - (amount % invItem.getBuySize());
+		}
+		if (amount < originalAmount)
+			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_ORDER_REDUCED, new String[] { "%BUNDLESIZE%", "%AMOUNT%" }, new Object[] { invItem.getBuySize(), amount }));
+			
+		
+		return amount;
 	}
 }

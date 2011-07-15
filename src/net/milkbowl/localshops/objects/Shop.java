@@ -48,7 +48,7 @@ public abstract class Shop implements Comparator<Shop> {
 	protected boolean unlimitedMoney = false;
 	protected boolean unlimitedStock = false;
 	protected boolean dynamicPrices = false;
-	protected HashMap<String, InventoryItem> inventory = new HashMap<String, InventoryItem>();
+	protected HashMap<String, ShopItem> inventory = new HashMap<String, ShopItem>();
 	protected double minBalance = 0;
 	protected double sharePercent = 0;
 	protected ArrayBlockingQueue<Transaction> transactions;
@@ -117,18 +117,18 @@ public abstract class Shop implements Comparator<Shop> {
 		this.dynamicPrices = dynamicPrices;
 	}
 
-	public InventoryItem getItem(String item) {
+	public ShopItem getItem(String item) {
 		return inventory.get(item);
 	}
 
-	public InventoryItem getItem(ItemInfo item) {
+	public ShopItem getItem(ItemInfo item) {
 		return inventory.get(item.name);
 	}
 
 	public boolean containsItem(ItemInfo item) {
-		Iterator<InventoryItem> it = inventory.values().iterator();
+		Iterator<ShopItem> it = inventory.values().iterator();
 		while(it.hasNext()) {
-			InventoryItem invItem = it.next();
+			ShopItem invItem = it.next();
 			if(invItem.getInfo().equals(item)) {
 				return true;
 			}
@@ -178,6 +178,8 @@ public abstract class Shop implements Comparator<Shop> {
 	  * @param dynamicItem
 	  * @return
 	  */
+	 
+	 //TODO: Shouldn't addItem take it's own Data Object passed in to 'add' to the shop?
 	 public boolean addItem(int itemNumber, short itemData, double buyPrice, int buyStackSize, double sellPrice, int sellStackSize,  int stock, int maxStock, boolean dynamicItem) {
 
 		 ItemInfo item = Search.itemById(itemNumber, itemData);
@@ -185,7 +187,7 @@ public abstract class Shop implements Comparator<Shop> {
 			 return false;
 		 }
 
-		 InventoryItem thisItem = new InventoryItem(item);
+		 ShopItem thisItem = new ShopItem(item);
 
 		 thisItem.setBuy(buyPrice, buyStackSize);
 		 thisItem.setSell(sellPrice, sellStackSize);
@@ -245,8 +247,8 @@ public abstract class Shop implements Comparator<Shop> {
 		 return managers;
 	 }
 
-	 public List<InventoryItem> getItems() {
-		 return new ArrayList<InventoryItem>(inventory.values());
+	 public List<ShopItem> getItems() {
+		 return new ArrayList<ShopItem>(inventory.values());
 	 }
 
 	 public Set<String> getGroupSet() {
@@ -340,7 +342,7 @@ public abstract class Shop implements Comparator<Shop> {
 	  */
 	 public int numDynamicItems() {
 		 int num = 0;
-		 for (InventoryItem item : this.getItems() ) {
+		 for (ShopItem item : this.getItems() ) {
 			 if (item.isDynamic())
 				 num++;
 		 }

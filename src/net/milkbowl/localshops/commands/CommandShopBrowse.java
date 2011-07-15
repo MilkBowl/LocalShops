@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.comparator.InventoryItemSortByName;
-import net.milkbowl.localshops.objects.InventoryItem;
+import net.milkbowl.localshops.objects.ShopItem;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;
@@ -139,7 +139,7 @@ public class CommandShopBrowse extends Command {
      */
     private void printInventory(Shop shop, String buySellorList, int pageNumber) {
         String inShopName = shop.getName();
-        List<InventoryItem> items = shop.getItems();
+        List<ShopItem> items = shop.getItems();
         Collections.sort(items, new InventoryItemSortByName());
 
         boolean buy = buySellorList.equalsIgnoreCase("buy");
@@ -147,7 +147,7 @@ public class CommandShopBrowse extends Command {
         boolean list = buySellorList.equalsIgnoreCase("list");
 
         ArrayList<String> inventoryMessage = new ArrayList<String>();
-        for (InventoryItem item : items) {
+        for (ShopItem item : items) {
 
             String subMessage = "   " + item.getInfo().name;
             int maxStock = 0;

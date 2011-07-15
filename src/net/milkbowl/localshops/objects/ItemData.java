@@ -253,8 +253,8 @@ public class ItemData {
             ArrayList<String> foundMatches = new ArrayList<String>();
             foundMatches.clear();
 
-            Collection<InventoryItem> items = shop.getItems();
-            for (InventoryItem item : items) {
+            Collection<ShopItem> items = shop.getItems();
+            for (ShopItem item : items) {
                 if (item.getInfo().name.matches(name)) {
                     foundMatches.add(item.getInfo().name);
                 }

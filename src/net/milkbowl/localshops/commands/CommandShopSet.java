@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.Search;
-import net.milkbowl.localshops.objects.InventoryItem;
+import net.milkbowl.localshops.objects.ShopItem;
 import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.PermType;
@@ -899,9 +899,9 @@ public class CommandShopSet extends Command {
 
 				// Reset buy prices (0)
 				if(reset) {
-					Iterator<InventoryItem> it = shop.getItems().iterator();
+					Iterator<ShopItem> it = shop.getItems().iterator();
 					while(it.hasNext()) {
-						InventoryItem item = it.next();
+						ShopItem item = it.next();
 						item.setSellPrice(0);
 					}
 				}

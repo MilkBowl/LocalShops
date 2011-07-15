@@ -17,7 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.objects.InventoryItem;
+import net.milkbowl.localshops.objects.ShopItem;
 import net.milkbowl.localshops.objects.LocalShop;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.Shop;
@@ -115,9 +115,9 @@ public class CommandShopInfo extends Command {
         int buyCount = 0;
         int worth = 0;
 
-        Iterator<InventoryItem> it = shop.getItems().iterator();
+        Iterator<ShopItem> it = shop.getItems().iterator();
         while(it.hasNext()) {
-            InventoryItem i = it.next();
+            ShopItem i = it.next();
             if(i.getBuyPrice() > 0) {
                 sellCount++;
                 worth += (i.getStock()/i.getBuySize()) * i.getBuyPrice();

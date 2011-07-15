@@ -19,7 +19,7 @@ import java.util.UUID;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.GlobalShop;
-import net.milkbowl.localshops.objects.InventoryItem;
+import net.milkbowl.localshops.objects.ShopItem;
 import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;
@@ -73,12 +73,12 @@ public class CommandShopDestroy extends Command {
                 }
             }
 
-            Collection<InventoryItem> shopItems = shop.getItems();
+            Collection<ShopItem> shopItems = shop.getItems();
 
             if (plugin.getShopManager().deleteShop(shop)) {
                 // return items to player (if a player)
                 if (sender instanceof Player) {
-                    for (InventoryItem item : shopItems) {
+                    for (ShopItem item : shopItems) {
                         givePlayerItem(item.getInfo().toStack(), item.getStock());
                     }
                 }

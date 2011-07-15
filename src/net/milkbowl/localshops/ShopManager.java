@@ -34,7 +34,7 @@ import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
 import net.milkbowl.localshops.objects.GlobalShop;
-import net.milkbowl.localshops.objects.InventoryItem;
+import net.milkbowl.localshops.objects.ShopItem;
 import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.LocalShop;
 import net.milkbowl.localshops.objects.Shop;
@@ -828,7 +828,7 @@ public class ShopManager {
 			props.setProperty("groups", GenericFunctions.join(shop.getGroupSet(), ", "));
 
 		// Inventory
-		for (InventoryItem item : shop.getItems()) {
+		for (ShopItem item : shop.getItems()) {
 			ItemInfo info = item.getInfo();
 			double buyPrice = item.getBuyPrice();
 			int buySize = item.getBuySize();
@@ -838,7 +838,7 @@ public class ShopManager {
 			int maxStock = item.getMaxStock();
 			int dynamic = (item.isDynamic()? 1 : 0);
 
-			props.setProperty(String.format("%d:%d", info.typeId, info.subTypeId), String.format("%f:%d,%f:%d,%d:%d,%d", buyPrice, buySize, sellPrice, sellSize, stock, maxStock, dynamic));
+			props.setProperty(String.format("%d:%d", info.getId(), info.subTypeId), String.format("%f:%d,%f:%d,%d:%d,%d", buyPrice, buySize, sellPrice, sellSize, stock, maxStock, dynamic));
 		}
 
 		//Sign Data saving

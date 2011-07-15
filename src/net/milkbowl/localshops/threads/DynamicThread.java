@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.DynamicManager;
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.objects.InventoryItem;
+import net.milkbowl.localshops.objects.ShopItem;
 import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.util.GenericFunctions;
@@ -52,7 +52,7 @@ public class DynamicThread extends Thread {
 
         //Dump all the shop stock data into the map.
         for ( Shop shop : plugin.getShopManager().getAllShops() ) {
-            for ( InventoryItem item : shop.getItems() ) {
+            for ( ShopItem item : shop.getItems() ) {
                 if (itemStockMap.containsKey(item.getInfo()))
                     itemStockMap.get(item.getInfo()).add(item.getStock());
                 else {

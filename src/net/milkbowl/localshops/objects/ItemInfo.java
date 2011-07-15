@@ -14,56 +14,48 @@ package net.milkbowl.localshops.objects;
 
 import java.util.Arrays;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public class ItemInfo {
     
-    public static enum StackMode {
-        VANILLA(0),
-        ENHANCED(1),
-        MAXIMUM(2);
-        
-        int id;
-        
-        StackMode(int id) {
-            this.id = id;
-        }
-        
-        public int getId() {
-            return id;
-        }
-    }
-    
     public String name = null;
     public String[][] search = null;
-    public int typeId = -1;
+    public Material material;
     public short subTypeId = 0;
-    public int[] maxStackSize = { 64, 64, 64 };
     
-    public ItemInfo(String name, String[][] search, int typeId, short subTypeId) {
+    public ItemInfo(String name, String[][] search, Material material, short subTypeId) {
         this.name = name;
         this.search = search;
-        this.typeId = typeId;
+        this.material = material;
         this.subTypeId = subTypeId;
     }
     
-    public ItemInfo(String name, String[][] search, int typeId, short subTypeId, int[] maxStackSize) {
-        this(name, search, typeId, subTypeId);
-        this.maxStackSize = maxStackSize;
+    public ItemInfo (String name, String[][] search, Material material) {
+    	this(name, search, material, (short) 0);
+    	
     }
     
     public String toString() {
-        return String.format("%s, %s, %d:%d", name, Arrays.deepToString(search), typeId, subTypeId);
+        return String.format("%s, %s, %d:%d", name, Arrays.deepToString(search), material.getId(), subTypeId);
     }
     
     public ItemStack toStack() {
-        return new ItemStack (typeId, 1, subTypeId);
+        return new ItemStack (material, 1, subTypeId);
     }
     
     public boolean equals(ItemInfo item){
-        if (this.typeId == item.typeId && this.subTypeId == item.subTypeId)
+        if (this.material == item.material && this.subTypeId == item.subTypeId)
             return true;
         
         return false;
+    }
+    
+    public int getStackSize() {
+    	return material.getMaxStackSize();
+    }
+    
+    public int getId() {
+    	return material.getId();
     }
 }
