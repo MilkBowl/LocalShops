@@ -190,6 +190,27 @@ public class ShopManager {
 
 
 			for (ShopLocation sLoc : lShop.getShopLocations()) {
+				/**
+				 * For each Val is one of x,y,z
+				 * 
+				 * If minVal is greater than shop maxVal or maxVal is less than shop minVal
+				 * these shops never converge, so skip to another location.
+				 * 
+				 * If all non-convergence checks are false, then must Converge on all 3 planes
+				 * on at least one point.
+				 * 
+				 */
+				if (xyzA[1] > sLoc.getLocation2()[1] || xyzB[1] < sLoc.getLocation1()[1]) 
+					continue;
+				else if (xyzA[0] > sLoc.getLocation2()[0] || xyzB[0] < sLoc.getLocation1()[0])
+					continue;
+				else if (xyzA[2] > sLoc.getLocation2()[2] || xyzB[2] < sLoc.getLocation1()[2])
+					continue;
+				//If All three checks are false, this cube converges on all 3 planes = point inside
+				else
+					return false;
+				/*
+				 * In case it's not working?
 				for (int y = xyzA[1]; y <= xyzB[1]; y++) {
 					//If y is less than Loc1 (min Y Value) or greater than Loc2 (Max Y value) ignore it
 					if (y < sLoc.getLocation1()[1] || y > sLoc.getLocation2()[1] )
@@ -200,7 +221,7 @@ public class ShopManager {
 						if (x < sLoc.getLocation1()[0] || x > sLoc.getLocation2()[0])
 							continue;
 
-						/**
+						
 						 * Since we know that the X and Y plane converge 
 						 * if test shops max Z is less than other shops Lowest z we know they can't converge.
 						 * Likewise if test Shops minimum Z is greater than other shops max Z they can't converge
@@ -212,7 +233,7 @@ public class ShopManager {
 						 * This means the Shops MUST converge.
 						 * 
 						 * This also means that the inverse is true.
-						 */
+						 
 						if (xyzB[2] < sLoc.getLocation1()[2] || xyzA[2] > sLoc.getLocation2()[2])
 							return true;
 						else 
@@ -220,27 +241,9 @@ public class ShopManager {
 
 					}
 				}
+		*/
 			}
 		}
-		// Need to test every position to account for variable shop sizes
-		/*
-		 * We really don't need to test EVERY value.
-		 * 
-		for (int x = xyzA[0]; x <= xyzB[0]; x++) {
-			for (int z = xyzA[2]; z <= xyzB[2]; z++) {
-				for (int y = xyzA[1]; y <= xyzB[1]; y++) {
-					for(Shop shop : shops.values()) {
-						if(shop instanceof LocalShop) {
-							LocalShop lShop = (LocalShop) shop;
-							if(lShop.containsPoint(worldName, x, y, z)) {
-								return false;
-							}
-						}
-					}
-				}
-			}
-		}
-		 */
 
 		return true;
 	}
