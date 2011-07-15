@@ -326,7 +326,7 @@ public class CommandShopSell extends Command {
 
         // try to pay the player for order
         if (shop.isUnlimitedMoney()) {
-            Econ.chargePlayer(player.getName(), totalCost);
+            Econ.depositPlayer(player.getName(), totalCost);
         } else if (!isShopController(shop)) {
             log.info(String.format("From: %s, To: %s, Cost: %f", shop.getOwner(), player.getName(), totalCost));
             if (!Econ.payPlayer(shop.getOwner(), player.getName(), totalCost)) {
