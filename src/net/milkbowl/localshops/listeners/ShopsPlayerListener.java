@@ -17,14 +17,12 @@ import java.util.logging.Logger;
 
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.ResourceManager;
 import net.milkbowl.localshops.commands.ShopCommandExecutor;
 import net.milkbowl.localshops.objects.LocalShop;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopSign;
 import net.milkbowl.localshops.util.GenericFunctions;
-import net.milkbowl.vault.Vault;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -69,8 +67,13 @@ public class ShopsPlayerListener extends PlayerListener {
         LocalShop shop = plugin.getShopManager().getLocalShop(eventBlockLoc);
         //If user Right clicks a sign try to buy/sell from it.
         if (((event.getClickedBlock().getType().equals(Material.WALL_SIGN) || event.getClickedBlock().getType().equals(Material.SIGN_POST)) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && (player.getItemInHand().getType().equals(Material.AIR) || player.getItemInHand().equals(Material.STICK)) && shop != null) {
-            for (ShopSign sign : shop.getSignSet()) {
+            for (ShopSign sign : shop.getSigns()) {
                 if (sign.getLoc().equals(eventBlockLoc)) {
+                	//Check for null sign-type? We should NEVER have this issue
+                	if (sign.getType() == null) {
+                		log.warning("[LocalShops] - Null Shop Sign detected, report error. Sign info: " + sign.toString());
+                		continue;
+                	}
                     if (sign.getType().equals(ShopSign.SignType.BUY)) {
                         ShopCommandExecutor.commandTypeMap.get("buy").getCommandInstance(plugin, "buy", event.getPlayer(), "buy " + sign.getItemName(), false).process();
                         //TODO: Remove when bukkit fixes inventory updating
@@ -89,26 +92,14 @@ public class ShopsPlayerListener extends PlayerListener {
                 }
             }
 
-        } else if (event.getClickedBlock().getType().equals(Material.CHEST) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && shop != null ) {
-         // Block access to chests when inside a shop, but allow the owner or managers to use them.
-            if ( !shop.getManagers().contains(playerName) && !shop.getOwner().equals(playerName) && !LocalShops.VAULT.getPermission().playerHasPermission(player, "localshops.admin.local")) {
-                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
-                event.setCancelled(true);
-                return;
-            }
-           /* if (shop.getChests().contains(eventBlockLoc)) {
-            }
-            */
-        }
+        } 
         // If our user is select & is not holding an item, selection time
         if (plugin.getPlayerData().get(playerName).isSelecting() && player.getItemInHand().getType() == Material.AIR) {
-            int x, y, z;
+        	PlayerData pData = plugin.getPlayerData().get(playerName);
             Location loc = event.getClickedBlock().getLocation();
-            x = loc.getBlockX();
-            y = loc.getBlockY();
-            z = loc.getBlockZ();
-
-            PlayerData pData = plugin.getPlayerData().get(playerName);
+            int x = loc.getBlockX();
+            int y = loc.getBlockY();
+            int z = loc.getBlockZ();
 
             if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
                 String size = null;
@@ -239,8 +230,7 @@ public class ShopsPlayerListener extends PlayerListener {
     private void notifyPlayerEnterShop(Player player, UUID shopUuid) {
         // TODO Add formatting
         Shop shop = plugin.getShopManager().getLocalShop(shopUuid);
-        player.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA
-                + "] You have entered the shop " + ChatColor.WHITE + shop.getName());
+        player.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] You have entered the shop " + ChatColor.WHITE + shop.getName());
 
     }
 

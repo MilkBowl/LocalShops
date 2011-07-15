@@ -23,6 +23,7 @@ import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.comparator.ShopSortByName;
 import net.milkbowl.localshops.objects.GlobalShop;
 import net.milkbowl.localshops.objects.LocalShop;
+import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;
 
 import org.bukkit.command.CommandSender;
@@ -69,7 +70,7 @@ public class CommandShopList extends Command {
         Collections.sort(shops, new ShopSortByName());
         
         //What is this here for?
-        if(isGlobal && !canUseCommand(CommandTypes.ADMIN_GLOBAL)) {
+        if(isGlobal && !canUseCommand(PermType.ADMIN_GLOBAL)) {
             // send nice message
         }
         

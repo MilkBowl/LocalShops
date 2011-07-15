@@ -17,9 +17,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.ResourceManager;
 import net.milkbowl.localshops.objects.InventoryItem;
 import net.milkbowl.localshops.objects.LocalShop;
+import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopLocation;
 import net.milkbowl.localshops.util.GenericFunctions;
@@ -54,7 +54,7 @@ public class CommandShopInfo extends Command {
             if (matcher.find()) {
                 shop = getCurrentShop(player);
                 if (shop == null) {
-                    sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP));
+                    sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
                     return false;
                 }
             }
@@ -73,7 +73,7 @@ public class CommandShopInfo extends Command {
             }
 
         } else {
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
+            sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
             return false;
         }
 
@@ -132,7 +132,7 @@ public class CommandShopInfo extends Command {
         sender.sendMessage(String.format("  Selling %d items & buying %d items", sellCount, buyCount));
 
         // Shop stock is worth %d coins
-        sender.sendMessage(String.format("  Inventory worth %s", LocalShops.VAULT.getEconomy().format(worth)));
+        sender.sendMessage(String.format("  Inventory worth %s", Vault.getEconomy().format(worth)));
 
         if(shop.isUnlimitedMoney() || shop.isUnlimitedStock()) {
             sender.sendMessage(String.format("  Shop %s unlimited money and %s unlimited stock.", shop.isUnlimitedMoney() ? "has" : "doesn't have", shop.isUnlimitedStock() ? "has" : "doesn't have"));

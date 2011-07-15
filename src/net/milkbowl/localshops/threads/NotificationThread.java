@@ -71,10 +71,10 @@ public class NotificationThread extends Thread {
                     for(Transaction trans : transactions) {
                         switch (trans.type) {
                         case Buy:
-                            messages.add(String.format(ChatColor.WHITE + "   %s " + ChatColor.GOLD + "sold " + ChatColor.WHITE + "%d %s" + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + "%s", trans.playerName, trans.quantity, trans.itemName, LocalShops.VAULT.getEconomy().format(trans.cost)));
+                            messages.add(String.format(ChatColor.WHITE + "   %s " + ChatColor.GOLD + "sold " + ChatColor.WHITE + "%d %s" + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + "%s", trans.playerName, trans.quantity, trans.itemName, Vault.getEconomy().format(trans.cost)));
                             break;
                         case Sell:
-                            messages.add(String.format(ChatColor.WHITE + "   %s " + ChatColor.GREEN + "purchased " + ChatColor.WHITE + "%d %s" + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + " %s", trans.playerName, trans.quantity, trans.itemName, LocalShops.VAULT.getEconomy().format(trans.cost)));
+                            messages.add(String.format(ChatColor.WHITE + "   %s " + ChatColor.GREEN + "purchased " + ChatColor.WHITE + "%d %s" + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + " %s", trans.playerName, trans.quantity, trans.itemName, Vault.getEconomy().format(trans.cost)));
                             break;
 
                         default:
@@ -136,7 +136,7 @@ public class NotificationThread extends Thread {
                     
                     // Create messages :D
                     messages.add(String.format(ChatColor.WHITE + "%d " + ChatColor.DARK_AQUA + "transactions for " + ChatColor.WHITE + "%s", transactions.size(), shop.getName()));
-                    messages.add(String.format(ChatColor.WHITE + "Totals: " + ChatColor.GREEN + "Gained %s, " + ChatColor.GOLD + "Lost %s", LocalShops.VAULT.getEconomy().format(buyCostTotal), LocalShops.VAULT.getEconomy().format(sellCostTotal)));
+                    messages.add(String.format(ChatColor.WHITE + "Totals: " + ChatColor.GREEN + "Gained %s, " + ChatColor.GOLD + "Lost %s", Vault.getEconomy().format(buyCostTotal), Vault.getEconomy().format(sellCostTotal)));
                     String g = "";
                     for(String item : itemSellCost.keySet()) {
                         if(g.equals("")) {

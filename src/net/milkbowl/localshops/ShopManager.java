@@ -178,21 +178,40 @@ public class ShopManager {
 			}
 		}
 
-		// Need to test every position to account for variable shop sizes
-		for (int x = xyzA[0]; x <= xyzB[0]; x++) {
-			for (int z = xyzA[2]; z <= xyzB[2]; z++) {
-				for (int y = xyzA[1]; y <= xyzB[1]; y++) {
-					for(Shop shop : shops.values()) {
-						if(shop instanceof LocalShop) {
-							LocalShop lShop = (LocalShop) shop;
-							if(lShop.containsPoint(worldName, x, y, z)) {
-								return false;
-							}
-						}
-					}
-				}
+		for (Shop shop : shops.values()) {
+			//ignore global shops
+			if (shop instanceof GlobalShop)
+				continue;
+
+			LocalShop lShop = (LocalShop) shop;
+			//ignore shops on different worlds
+			if (!lShop.getWorld().equals(worldName))
+				continue;
+
+
+			for (ShopLocation sLoc : lShop.getShopLocations()) {
+				/**
+				 * For each Val is one of x,y,z
+				 * 
+				 * If minVal is greater than shop maxVal or maxVal is less than shop minVal
+				 * these shops never converge, so skip to another location.
+				 * 
+				 * If all non-convergence checks are false, then must Converge on all 3 planes
+				 * on at least one point.
+				 * 
+				 */
+				if (xyzA[1] > sLoc.getLocation2()[1] || xyzB[1] < sLoc.getLocation1()[1]) 
+					continue;
+				else if (xyzA[0] > sLoc.getLocation2()[0] || xyzB[0] < sLoc.getLocation1()[0])
+					continue;
+				else if (xyzA[2] > sLoc.getLocation2()[2] || xyzB[2] < sLoc.getLocation1()[2])
+					continue;
+				//If All three checks are false, this cube converges on all 3 planes
+				else
+					return false;	
 			}
 		}
+
 		return true;
 	}
 
@@ -532,6 +551,16 @@ public class ShopManager {
 		boolean notification = Boolean.parseBoolean(props.getProperty("notification", "true"));
 		boolean global = Boolean.parseBoolean(props.getProperty("global", "false"));
 		boolean dynamic = Boolean.parseBoolean(props.getProperty("dynamic-prices", "false"));
+		double sharePercent;
+		try {
+			sharePercent = Double.parseDouble(props.getProperty("share-percent", "0"));
+			if (sharePercent < 0)
+				sharePercent = 0;
+			else if (sharePercent > 100)
+				sharePercent = 100;
+		} catch (NumberFormatException e) {
+			sharePercent = 0;
+		}
 
 		// People
 		String owner = props.getProperty("owner", "");
@@ -587,6 +616,7 @@ public class ShopManager {
 		shop.setCreator(creator);
 		shop.setNotification(notification);
 		shop.setDynamicPrices(dynamic);
+		shop.setSharePercent(sharePercent);
 
 
 		// Only set our Users & Groups if they are not empty
@@ -696,7 +726,7 @@ public class ShopManager {
 		for (ShopSign sign : signList) {
 			//Add signs that can't be verified yet.
 			if (sign.getWorld() == null) {
-				shop.getSignSet().add(sign);
+				shop.getSigns().add(sign);
 				continue;
 			}
 			//Load the chunk so we don't try getting blocks that are non-existent
@@ -711,7 +741,7 @@ public class ShopManager {
 				if (!(shop.containsItem(item))) {
 					continue;
 				} else {
-					shop.getSignSet().add(sign);
+					shop.getSigns().add(sign);
 					shop.updateSign(sign);
 				}
 			}
@@ -767,7 +797,7 @@ public class ShopManager {
 		props.setProperty("min-balance", String.valueOf(shop.getMinBalance()));
 		props.setProperty("notification", String.valueOf(shop.getNotification()));
 		props.setProperty("dynamic-prices", String.valueOf(shop.isDynamicPrices()));
-
+		props.setProperty("share-percent", String.valueOf(shop.getSharePercent()));
 
 		// Location
 		if(shop instanceof GlobalShop) {
@@ -812,7 +842,7 @@ public class ShopManager {
 		}
 
 		//Sign Data saving
-		Iterator<ShopSign> iter = shop.getSignSet().iterator();
+		Iterator<ShopSign> iter = shop.getSigns().iterator();
 		for (int index = 1; iter.hasNext(); index++ ) {
 			ShopSign sign = iter.next();
 			props.setProperty("sign"+index, String.format("%s:%d,%d,%d,%s,%d", sign.getWorldName(), sign.getX(), sign.getY(), sign.getZ(), sign.getItemName(), sign.getType().getId()));
@@ -883,7 +913,7 @@ public class ShopManager {
 			String fileOutput = "";
 
 			DateFormat dateFormat = new SimpleDateFormat(
-					"yyyy/MM/dd HH:mm:ss z");
+			"yyyy/MM/dd HH:mm:ss z");
 			Date date = new Date();
 			fileOutput += dateFormat.format(date) + ": ";
 			fileOutput += "Action: ";
@@ -941,7 +971,7 @@ public class ShopManager {
 		for (UUID key : shops.keySet()) {
 			Shop shop = shops.get(key);
 			if (shop.isDynamicPrices())
-				for (ShopSign sign : shop.getSignSet())
+				for (ShopSign sign : shop.getSigns())
 					shop.updateSign(sign);
 		}
 		return null;

@@ -17,9 +17,10 @@ import java.util.regex.Pattern;
 
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.ResourceManager;
 import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.objects.ItemInfo;
+import net.milkbowl.localshops.objects.MsgType;
+import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;
 
 import org.bukkit.command.CommandSender;
@@ -47,20 +48,20 @@ public class CommandShopAdd extends Command {
             
             shop = getCurrentShop(player);
             if (shop == null) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_NOT_IN_SHOP));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
                 return false;
             }
 
             // Check Permissions
-            if (!canUseCommand(CommandTypes.ADD)) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_USER_ACCESS_DENIED));
+            if (!canUseCommand(PermType.ADD)) {
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
                 return false;
             }            
 
             // Check if Player can Modify
             if (!isShopController(shop)) {
-                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_MUST_BE_SHOP_OWNER));
-                player.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
+                player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_MUST_BE_SHOP_OWNER));
+                player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
                 return true;
             }
 
@@ -77,15 +78,15 @@ public class CommandShopAdd extends Command {
                 if(LocalShops.getItemList().isDurable(itemStack)) {
                     item = Search.itemById(itemStack.getTypeId());
                     if (calcDurabilityPercentage(itemStack) > Config.getItemMaxDamage() && Config.getItemMaxDamage() != 0) {
-                        sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_ADD_TOO_DAM, new String[] { "%ITEMNAME%" }, new String[] { item.name }));
-                        sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_ADD_DMG_LESS_THAN, new String[] { "%DAMAGEVALUE%" }, new String[] { String.valueOf(Config.getItemMaxDamage()) }));
+                        sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_TOO_DAM, new String[] { "%ITEMNAME%" }, new String[] { item.name }));
+                        sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_DMG_LESS_THAN, new String[] { "%DAMAGEVALUE%" }, new String[] { String.valueOf(Config.getItemMaxDamage()) }));
                         return true;
                     }
                 } else {
                     item = Search.itemById(itemStack.getTypeId(), itemStack.getDurability());
                 }
                 if(item == null) {
-                    sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
+                    sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                     return false;
                 }
                 return shopAdd(shop, item, amount);
@@ -104,15 +105,15 @@ public class CommandShopAdd extends Command {
                 if(LocalShops.getItemList().isDurable(itemStack)) {
                     item = Search.itemById(itemStack.getTypeId());
                     if (calcDurabilityPercentage(itemStack) > Config.getItemMaxDamage() && Config.getItemMaxDamage() != 0) {
-                        sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_ADD_TOO_DAM, new String[] { "%ITEMNAME%" }, new String[] { item.name }));
-                        sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_ADD_DMG_LESS_THAN, new String[] { "%DAMAGEVALUE%" }, new String[] { String.valueOf(Config.getItemMaxDamage()) }));
+                        sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_TOO_DAM, new String[] { "%ITEMNAME%" }, new String[] { item.name }));
+                        sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_DMG_LESS_THAN, new String[] { "%DAMAGEVALUE%" }, new String[] { String.valueOf(Config.getItemMaxDamage()) }));
                         return true;
                     }
                 } else {
                     item = Search.itemById(itemStack.getTypeId(), itemStack.getDurability());
                 }
                 if(item == null) {
-                    sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
+                    sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                     return false;
                 }
                 int amount = countItemsInInventory(player.getInventory(), itemStack);
@@ -127,7 +128,7 @@ public class CommandShopAdd extends Command {
                 int id = Integer.parseInt(matcher.group(1));
                 ItemInfo item = Search.itemById(id);
                 if(item == null) {
-                    sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
+                    sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                     return false;
                 }
                 int count = countItemsInInventory(player.getInventory(), item.toStack());
@@ -143,7 +144,7 @@ public class CommandShopAdd extends Command {
                 short type = Short.parseShort(matcher.group(2));
                 ItemInfo item = Search.itemById(id, type);
                 if(item == null) {
-                    sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
+                    sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                     return false;
                 }
                 int count = countItemsInInventory(player.getInventory(), item.toStack());
@@ -158,7 +159,7 @@ public class CommandShopAdd extends Command {
                 String itemName = matcher.group(1);
                 ItemInfo item = Search.itemByName(itemName);
                 if(item == null) {
-                    sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
+                    sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                     return false;
                 }
                 int count = countItemsInInventory(player.getInventory(), item.toStack());
@@ -166,7 +167,7 @@ public class CommandShopAdd extends Command {
             }
 
         } else {
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
+            sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
             return false;
         }
 
@@ -179,7 +180,7 @@ public class CommandShopAdd extends Command {
             int id = Integer.parseInt(matcher.group(1));
             ItemInfo item = Search.itemById(id);
             if(item == null) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return false;
             }            
             return shopAdd(shop, item, 0);
@@ -194,7 +195,7 @@ public class CommandShopAdd extends Command {
             int count = Integer.parseInt(matcher.group(2));
             ItemInfo item = Search.itemById(id);
             if(item == null) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return false;
             }            
             return shopAdd(shop, item, count);
@@ -209,7 +210,7 @@ public class CommandShopAdd extends Command {
             short type = Short.parseShort(matcher.group(2));
             ItemInfo item = Search.itemById(id, type);
             if(item == null) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return false;
             }
             return shopAdd(shop, item, 0);
@@ -225,7 +226,7 @@ public class CommandShopAdd extends Command {
             ItemInfo item = Search.itemById(id, type);
             int count = Integer.parseInt(matcher.group(3));
             if(item == null) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return false;
             }
             return shopAdd(shop, item, count);
@@ -240,7 +241,7 @@ public class CommandShopAdd extends Command {
             ItemInfo item = Search.itemByName(itemName);
             int count = Integer.parseInt(matcher.group(2));
             if(item == null) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return false;
             }
             return shopAdd(shop, item, count);
@@ -254,14 +255,14 @@ public class CommandShopAdd extends Command {
             String itemName = matcher.group(1);
             ItemInfo item = Search.itemByName(itemName);
             if(item == null) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return false;
             }
             return shopAdd(shop, item, 0);
         }
 
         // Show add help
-        sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_ADD_USAGE, new String[] { "%CMDLABEL%" }, new String[] { commandLabel }));
+        sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_USAGE, new String[] { "%CMDLABEL%" }, new String[] { commandLabel }));
         return true;
     }
     
@@ -279,7 +280,7 @@ public class CommandShopAdd extends Command {
             // Validate Count
             if (playerItemCount < amount) {
                 // Nag player
-                log.info(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_ADD_INSUFFICIENT_INV, new String[] { "%ITEMCOUNT%" }, new Object[] { playerItemCount }));
+                log.info(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_INSUFFICIENT_INV, new String[] { "%ITEMCOUNT%" }, new Object[] { playerItemCount }));
                 return false;
             }
 
@@ -294,14 +295,14 @@ public class CommandShopAdd extends Command {
             // Check if stock is unlimited
             if (shop.isUnlimitedStock()) {
                 // nicely message user
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_ADD_UNLIM_STOCK, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.name }));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_UNLIM_STOCK, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.name }));
                 return true;
             }
 
             // Check if amount to be added is 0 (no point adding 0)
             if (amount == 0) {
                 // nicely message user
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_ADD_ALREADY_HAS, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.name }));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_ALREADY_HAS, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.name }));
                 return true;
             }
         }
@@ -314,17 +315,17 @@ public class CommandShopAdd extends Command {
 
         // Check stock settings, add stock if necessary
         if (shop.isUnlimitedStock()) {
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_ADD_SUCCESS, new String[] { "%ITEMNAME%" }, new Object[] { item.name }));
+            sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_SUCCESS, new String[] { "%ITEMNAME%" }, new Object[] { item.name }));
         } else {
             shop.addStock(item.name, amount);
             shop.updateSigns(item.name);
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_ADD_STOCK_SUCCESS, new String[] { "%ITEMNAME%", "%STOCK%" }, new Object[] { item.name, shop.getItem(item.name).getStock() }));
+            sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_STOCK_SUCCESS, new String[] { "%ITEMNAME%", "%STOCK%" }, new Object[] { item.name, shop.getItem(item.name).getStock() }));
         }
         
         if(amount == 0) {
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_ADD_READY0, new String[] { "%ITEMNAME%" }, new Object[] { item.name }));
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_ADD_READY1, new String[] { "%ITEMNAME%" }, new Object[] { item.name }));
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.CMD_SHP_ADD_READY2, new String[] { "%ITEMNAME%" }, new Object[] { item.name }));
+            sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_READY0, new String[] { "%ITEMNAME%" }, new Object[] { item.name }));
+            sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_READY1, new String[] { "%ITEMNAME%" }, new Object[] { item.name }));
+            sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_READY2, new String[] { "%ITEMNAME%" }, new Object[] { item.name }));
         }
 
         // log the transaction

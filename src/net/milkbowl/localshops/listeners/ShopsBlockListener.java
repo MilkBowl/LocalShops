@@ -12,7 +12,9 @@
 
 package net.milkbowl.localshops.listeners;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Logger;
 
 import net.milkbowl.localshops.LocalShops;
@@ -20,12 +22,15 @@ import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.exceptions.TypeNotFoundException;
 import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.LocalShop;
+import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopSign;
+import net.milkbowl.vault.Vault;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockListener;
@@ -76,7 +81,7 @@ public class ShopsBlockListener extends BlockListener {
 					}
 
 					// Set, save, get lines
-					shop.getSignSet().add(sign);
+					shop.getSigns().add(sign);
 					plugin.getShopManager().saveShop(shop);
 					signLines = shop.generateSignLines(sign);
 
@@ -103,7 +108,7 @@ public class ShopsBlockListener extends BlockListener {
 		Block block = event.getBlock();
 
 		// If not a sign ignore event.
-		if ( (!(block.getType().equals(Material.SIGN_POST)) && !(block.getType().equals(Material.WALL_SIGN)) && !(block.getType().equals(Material.CHEST))) || event.isCancelled()) {
+		if ( (!(block.getType().equals(Material.SIGN_POST)) && !(block.getType().equals(Material.WALL_SIGN)) ) || event.isCancelled()) {
 			return;
 		}
 
@@ -118,20 +123,11 @@ public class ShopsBlockListener extends BlockListener {
 			return;
 		}
 
-		if (!shop.getOwner().equals(player.getName()) && !(shop.getManagers().contains(player.getName())) && !(LocalShops.VAULT.getPermission().playerHasPermission(player, "localshops.admin"))) {
+		if (!shop.getOwner().equals(player.getName()) && !(shop.getManagers().contains(player.getName())) && !(Vault.getPermission().has(player, PermType.ADMIN_LOCAL.get()))) {
 			player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to place a sign or chest in the shop");
 			event.setCancelled(true);
 			return;
 		} 
-		/*
-		 * Disabled chest protection in shops - intense issues when dealing with LWC - will require optional depend to prevent this.
-		 * Possibly disable PvP in a shop?
-		 * else if (block.getType().equals(Material.CHEST) && shop.getChests().size() >= plugin.getPermManager().getInfoIntLow(shop.getWorld(), player.getName(), "maxchests") && plugin.getPermManager().getInfoIntLow(shop.getWorld(), player.getName(), "maxchests") > 0) {
-            player.sendMessage(ChatColor.DARK_AQUA + "You already have the maximum allowed number of chests");
-            event.setCancelled(true);
-            return;
-        }*/
-
 	}
 
 	public void onBlockBreak(BlockBreakEvent event) {
@@ -142,7 +138,7 @@ public class ShopsBlockListener extends BlockListener {
 		Block block = event.getBlock();
 
 		// If not a sign ignore event.
-		if ((!block.getType().equals(Material.SIGN_POST) && !block.getType().equals(Material.WALL_SIGN) && !block.getType().equals(Material.CHEST)) || event.isCancelled()) {
+		if ((!block.getType().equals(Material.SIGN_POST) && !block.getType().equals(Material.WALL_SIGN) )) {
 			return;
 		}
 
@@ -158,32 +154,41 @@ public class ShopsBlockListener extends BlockListener {
 			return;
 		}
 
-		if (!shop.getOwner().equals(player.getName()) && !(shop.getManagers().contains(player.getName())) && !(LocalShops.VAULT.getPermission().playerHasPermission(player, "localshops.admin"))) {
+		//Lets detect if this block is a sign, or if it has a sign attached to it.
+		List<Block> blockList = new ArrayList<Block>();
+		if (block.getType().equals(Material.SIGN_POST) || block.getType().equals(Material.WALL_SIGN) )
+			blockList.add(block);
+		else {
+			blockList.addAll(findWallSigns(block));
+		}
+		
+		if (!shop.getOwner().equals(player.getName()) && !(shop.getManagers().contains(player.getName())) && !(Vault.getPermission().has(player, PermType.ADMIN_LOCAL.get()))) {
 			player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to remove signs in the shop");
 			event.setCancelled(true);
 			return;
-		} else if (!block.getType().equals(Material.CHEST)) {
-			Iterator<ShopSign> iter = shop.getSignSet().iterator();
+		} 
+		
+		//remove any Blocks in the blocklist
+		if (!blockList.isEmpty()) {
+			Iterator<ShopSign> iter = shop.getSigns().iterator();
 			while (iter.hasNext()) {
 				ShopSign sign = iter.next();
-				if (sign.getLoc().equals(event.getBlock().getLocation())) {
-					iter.remove();
-				}
+				for (Block b : blockList) 
+					if (sign.getLoc().equals(b.getLocation())) 
+						iter.remove();
 			}
 		} 
-		/*
-		 * disable chest checking for now.
-        else {
-            if (!(((ContainerBlock) block).getInventory().getContents() == null )) {
-                event.setCancelled(true);
-                player.sendMessage(ChatColor.DARK_AQUA + "You must first remove all contents from the chest before removing it from the shop."); 
-                return;
-            }
-            else {
-                shop.getChests().remove(block.getLocation());
-            }
-        }
-		 */
+	}
+	
+	private List<Block> findWallSigns(Block block) {
+		List<Block> foundSigns = new ArrayList<Block>(6);
+		for (BlockFace face : BlockFace.values()) {
+			if (block.getRelative(face).getType().equals(Material.WALL_SIGN))
+				foundSigns.add(block.getRelative(face));
+			else if (block.getRelative(face).getType().equals(Material.SIGN_POST))
+				foundSigns.add(block.getRelative(face));
+		}
+		return foundSigns;
 	}
 
 }

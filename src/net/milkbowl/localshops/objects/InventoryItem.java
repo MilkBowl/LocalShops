@@ -17,9 +17,8 @@ import net.milkbowl.localshops.DynamicManager;
 public class InventoryItem {
 
     private ItemInfo info;
-    private int buySize = 1;
+    private int bundleSize = 1;
     private double buyPrice = 0;
-    private int sellSize = 1;
     private double sellPrice = 0;
     private int stock;
     private int baseStock = 0;
@@ -28,9 +27,8 @@ public class InventoryItem {
 
     public InventoryItem() {
         info = null;
-        buySize = 1;
+        bundleSize = 1;
         buyPrice = 0;
-        sellSize = 1;
         sellPrice = 0;
         stock = 0;
         maxStock = 0;
@@ -39,19 +37,17 @@ public class InventoryItem {
 
     public InventoryItem(ItemInfo info) {
         this.info = info;
-        buySize = 1;
+        bundleSize = 1;
         buyPrice = 0;
-        sellSize = 1;
         sellPrice = 0;
         stock = 0;
         dynamic = false;
     }
-    
+    //TODO: Cleanup Constructor
     public InventoryItem(ItemInfo info, int buySize, double buyPrice, int sellSize, double sellPrice, int stock, int maxStock) {
         this.info = info;
-        this.buySize = buySize;
+        this.bundleSize = buySize;
         this.buyPrice = buyPrice;
-        this.sellSize = sellSize;
         this.sellPrice = sellPrice;
         this.stock = stock;
         this.maxStock = maxStock;
@@ -68,7 +64,7 @@ public class InventoryItem {
         }
         
         this.sellPrice = sellPrice;
-        this.sellSize = sellSize;
+        this.bundleSize = sellSize;
 
     }
 
@@ -78,7 +74,7 @@ public class InventoryItem {
         }
         
         this.buyPrice = buyPrice;
-        this.buySize = buySize;
+        this.bundleSize = buySize;
     }
 
     public int getMaxStock() {
@@ -121,11 +117,11 @@ public class InventoryItem {
             size = 1;
         }
         
-        sellSize = size;
+        bundleSize = size;
     }
 
     public int getSellSize() {
-        return sellSize;
+        return bundleSize;
     }
 
     public void setBuySize(int size) {
@@ -133,11 +129,11 @@ public class InventoryItem {
             size = 1;
         }
         
-        buySize = size;
+        bundleSize = size;
     }
 
     public int getBuySize() {
-        return buySize;
+        return bundleSize;
     }
 
     public void setBuyPrice(double price) {

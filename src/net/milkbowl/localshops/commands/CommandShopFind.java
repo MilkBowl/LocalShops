@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.ResourceManager;
+import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.comparator.EntryValueComparator;
 import net.milkbowl.localshops.objects.GlobalShop;
@@ -58,7 +58,8 @@ public class CommandShopFind extends Command {
         }
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_CONSOLE_NOT_IMPLEMENTED));
+            sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
+            return true;
         }
 
         Player player = (Player) sender;
@@ -78,7 +79,7 @@ public class CommandShopFind extends Command {
                 found = Search.itemById(itemStack.getTypeId(), itemStack.getDurability());
             }
             if (found == null) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopFind(player, found);
@@ -92,7 +93,7 @@ public class CommandShopFind extends Command {
             int id = Integer.parseInt(matcher.group(1));
             ItemInfo found = Search.itemById(id);
             if (found == null) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopFind(player, found);
@@ -107,7 +108,7 @@ public class CommandShopFind extends Command {
             short type = Short.parseShort(matcher.group(2));
             ItemInfo found = Search.itemById(id, type);
             if (found == null) {
-                sender.sendMessage(plugin.getResourceManager().getString(ResourceManager.GEN_ITEM_NOT_FOUND));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
             }
             return shopFind(player, found);

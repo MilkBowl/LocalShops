@@ -1,7 +1,7 @@
 name: LocalShops
 main: net.milkbowl.localshops.LocalShops
-version: 4.0.0dev1
-author: Cereal, Jonbas
+version: 4.0.0dev5
+author: Cereal, Jonbas, Sleaker
 description: >
              A localized shop plugin for use with Bukkit economies.
              Users can create and manage their own shops.

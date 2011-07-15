@@ -16,11 +16,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.vault.Vault;
-import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -36,9 +33,6 @@ public class PlayerData {
     private boolean isSelecting = false;
     private Location xyzA = null;
     private Location xyzB = null;
-
-    // Logging
-    private static final Logger log = Logger.getLogger("Minecraft");    
 
     // Constructor
     public PlayerData(LocalShops plugin, String playerName) {
@@ -99,67 +93,6 @@ public class PlayerData {
 
     public List<UUID> playerShopsList(String playerName) {
         return shopList;
-    }
-
-    public boolean payPlayer(String playerName, double cost) {
-        EconomyResponse depositResp = LocalShops.VAULT.getEconomy().depositPlayer(playerName, cost);
-        if(depositResp.transactionSuccess()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean payPlayer(String playerFrom, String playerTo, double cost) {       
-        EconomyResponse balanceFromResp = LocalShops.VAULT.getEconomy().getBalance(playerFrom);
-        EconomyResponse balanceToResp = LocalShops.VAULT.getEconomy().getBalance(playerTo);
-        
-        log.info("PlayerFrom: " + playerFrom + " balanceFrom: " + balanceFromResp.amount + " PlayerTo: " + playerTo + " balanceTo: " + balanceToResp.amount + " Cost: " + cost);
-        
-        EconomyResponse withdrawResp = LocalShops.VAULT.getEconomy().withdrawPlayer(playerFrom, cost);
-        if(!withdrawResp.transactionSuccess()) {
-            log.info("Failed to withdraw");
-            return false;
-        }
-        
-        EconomyResponse depositResp = LocalShops.VAULT.getEconomy().depositPlayer(playerTo, cost);
-        if(!depositResp.transactionSuccess()) {
-            log.info("Failed to deposit");
-            // Return money to shop owner
-            EconomyResponse returnResp = LocalShops.VAULT.getEconomy().depositPlayer(playerFrom, cost);
-            if(!returnResp.transactionSuccess()) {
-                log.warning(String.format("[%s] ERROR:  Payment failed and could not return funds to original state!  %s may need %s!", plugin.getDescription().getName(), playerName, LocalShops.VAULT.getEconomy().format(cost)));
-            }
-            return false;
-        }
-        
-        if (withdrawResp.transactionSuccess() && depositResp.transactionSuccess()) {
-            plugin.getShopManager().logPayment(playerFrom, "payment", withdrawResp.amount, balanceFromResp.amount, withdrawResp.balance);
-            plugin.getShopManager().logPayment(playerTo, "payment", depositResp.amount, balanceToResp.amount, depositResp.balance);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public double getBalance(String playerName) {
-        EconomyResponse balanceResp = LocalShops.VAULT.getEconomy().getBalance(playerName);
-        return balanceResp.amount;
-    }
-
-    public boolean chargePlayer(String playerName, double chargeAmount) {
-        EconomyResponse balanceResp = LocalShops.VAULT.getEconomy().getBalance(playerName);
-        if(!balanceResp.transactionSuccess()) {
-            return false;
-        }
-        
-        EconomyResponse withdrawResp = LocalShops.VAULT.getEconomy().withdrawPlayer(playerName, chargeAmount);
-        if(withdrawResp.transactionSuccess()) {
-            plugin.getShopManager().logPayment(playerName, "payment", withdrawResp.amount, balanceResp.balance, withdrawResp.balance);
-            return true;
-        } else {
-            return false;
-        }
     }
     
     public UUID getCurrentShop() {

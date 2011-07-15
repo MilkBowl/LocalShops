@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.ResourceManager;
+import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.util.GenericFunctions;
 
 import org.bukkit.command.Command;
@@ -52,6 +52,7 @@ public class ShopCommandExecutor implements CommandExecutor {
         commandTypeMap.put("remove", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopRemove.class, true, true, false));
         commandTypeMap.put("removeloc", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopUnlink.class, false, true, true));
         commandTypeMap.put("search", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopSearch.class, true, true, false));
+        commandTypeMap.put("searchall", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopMultiSearch.class, true, true, false));
         commandTypeMap.put("select", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopSelect.class, true, false, false));
         commandTypeMap.put("sell", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopSell.class, true, true, false));
         commandTypeMap.put("set", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopSet.class, true, true, false));
@@ -121,9 +122,9 @@ public class ShopCommandExecutor implements CommandExecutor {
                 }
 
                 if(global) {
-                    log.info(plugin.getResourceManager().getString(ResourceManager.CMD_ISSUED_GLOBAL, new String[] { "%NAME%", "%COMMAND%" }, new Object[] { user, cmdString } ));
+                    log.info(plugin.getResourceManager().getString(MsgType.CMD_ISSUED_GLOBAL, new String[] { "%NAME%", "%COMMAND%" }, new Object[] { user, cmdString } ));
                 } else {
-                    log.info(plugin.getResourceManager().getString(ResourceManager.CMD_ISSUED_LOCAL, new String[] { "%NAME%", "%COMMAND%" }, new Object[] { user, cmdString } ));
+                    log.info(plugin.getResourceManager().getString(MsgType.CMD_ISSUED_LOCAL, new String[] { "%NAME%", "%COMMAND%" }, new Object[] { user, cmdString } ));
                 }
 
                 return cVal;

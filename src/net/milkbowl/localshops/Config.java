@@ -31,6 +31,8 @@ public class Config {
     private static final String dirShopsConverted = "shops-converted/";
     private static final String fileTransactionLog = "transactions.log";
     
+    private static String locale = "en";
+    
     // Properties file
     private static Properties properties = null;
 
@@ -80,7 +82,16 @@ public class Config {
     private static int uuidMinLength = 1;
     private static List<String> uuidList = Collections.synchronizedList(new ArrayList<String>());
     
+    //Sign color settings
+    private static String signNameColor = "%AQUA%";
+    private static String signBuyColor = "%DARK_GREEN%";
+    private static String signSellColor = "%RED%";
+    private static String signBundleColor = "%BLUE%";
+    private static String signDefaultColor = "%GRAY%";
+    private static String signStockColor = "%BLUE%";
+    
     public static void save() {
+    	properties.setProperty("language-code", locale);
         properties.setProperty("charge-for-shop", String.valueOf(shopChargeCreate));
         properties.setProperty("charge-for-shop", String.valueOf(shopChargeCreate));
         properties.setProperty("shop-cost", String.valueOf(shopChargeCreateCost));
@@ -96,6 +107,13 @@ public class Config {
         
         properties.setProperty("global-base-stock", String.valueOf(globalBaseStock));
         properties.setProperty("global-volatility", String.valueOf(globalVolatility));
+        //Color settings
+        properties.setProperty("sign-name-color", signNameColor);
+        properties.setProperty("sign-buy-color", signBuyColor);
+        properties.setProperty("sign-sell-color", signSellColor);
+        properties.setProperty("sign-bundle-color", signBundleColor);
+        properties.setProperty("sign-default-color", signDefaultColor);
+        properties.setProperty("sign-stock-color", signStockColor);
         /*
          * Disabled - for future use with event system
         properties.setProperty("dynamic-interval", String.valueOf(dynamicInterval));
@@ -139,6 +157,7 @@ public class Config {
             save = true;
         }
         
+        locale = properties.getProperty("language-code", locale).toLowerCase();
         shopChargeCreate = Boolean.parseBoolean(properties.getProperty("charge-for-shop", String.valueOf(shopChargeCreate)));
         shopChargeCreate = Boolean.parseBoolean(properties.getProperty("charge-for-shop", String.valueOf(shopChargeCreate)));
         shopChargeCreateCost = Double.parseDouble(properties.getProperty("shop-cost", String.valueOf(shopChargeCreateCost)));
@@ -150,7 +169,14 @@ public class Config {
         shopTransactionNotice = Boolean.parseBoolean(properties.getProperty("shop-transaction-notice", String.valueOf(shopTransactionNotice)));
         shopTransactionNoticeTimer = Integer.parseInt(properties.getProperty("shop-notification-timer", String.valueOf(shopTransactionNoticeTimer)));
         shopTransactionMaxSize = Integer.parseInt(properties.getProperty("shop-transaction-max-size", String.valueOf(shopTransactionMaxSize)));
-
+        //Color settings
+        signNameColor = properties.getProperty("sign-name-color", signNameColor);
+        signBuyColor = properties.getProperty("sign-buy-color", signBuyColor);
+        signSellColor = properties.getProperty("sign-sell-color", signSellColor);
+        signBundleColor = properties.getProperty("sign-bundle-color", signBundleColor);
+        signDefaultColor = properties.getProperty("sign-default-color", signDefaultColor);
+        signStockColor = properties.getProperty("sign-stock-color", signStockColor);
+        
         globalBaseStock = Integer.parseInt(properties.getProperty("global-base-stock", String.valueOf(globalBaseStock)));
         globalVolatility = Double.parseDouble(properties.getProperty("global-volatility", String.valueOf(globalVolatility)));
         /*
@@ -701,4 +727,32 @@ public class Config {
     public static double getGlobalVolatility() {
         return globalVolatility;
     }
+
+	public static String getLocale() {
+		return locale;
+	}
+
+	public static String getSignNameColor() {
+		return signNameColor;
+	}
+
+	public static String getSignBuyColor() {
+		return signBuyColor;
+	}
+
+	public static String getSignSellColor() {
+		return signSellColor;
+	}
+
+	public static String getSignBundleColor() {
+		return signBundleColor;
+	}
+
+	public static String getSignStockColor() {
+		return signStockColor;
+	}
+
+	public static String getSignDefaultColor() {
+		return signDefaultColor;
+	}
 }
