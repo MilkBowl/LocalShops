@@ -454,7 +454,7 @@ public class CommandShopBuy extends Command {
 				freeSpots += invItem.getInfo().getStackSize();
 				continue;
 			}
-			if (thisSlot.getType().equals(invItem.getInfo().material) && thisSlot.getDurability() == invItem.getInfo().subTypeId) {
+			if (thisSlot.getType().equals(invItem.getInfo().getType()) && thisSlot.getDurability() == invItem.getInfo().getSubTypeId()) {
 				freeSpots += invItem.getInfo().getStackSize() - thisSlot.getAmount();
 			}
 		}

@@ -14,7 +14,7 @@ package net.milkbowl.localshops.objects;
 
 import net.milkbowl.localshops.DynamicManager;
 
-public class ShopItem {
+public class ShopItem extends Item {
 
     private ItemInfo info;
     private int bundleSize = 1;
@@ -25,17 +25,9 @@ public class ShopItem {
     private boolean dynamic;
     public int maxStock;
 
-    public ShopItem() {
-        info = null;
-        bundleSize = 1;
-        buyPrice = 0;
-        sellPrice = 0;
-        stock = 0;
-        maxStock = 0;
-        dynamic = false;
-    }
 
     public ShopItem(ItemInfo info) {
+    	super (info.getType(), info.getSubTypeId());
         this.info = info;
         bundleSize = 1;
         buyPrice = 0;
@@ -45,6 +37,7 @@ public class ShopItem {
     }
     //TODO: Cleanup Constructor
     public ShopItem(ItemInfo info, int buySize, double buyPrice, int sellSize, double sellPrice, int stock, int maxStock) {
+    	super(info.getType(), info.getSubTypeId());
         this.info = info;
         this.bundleSize = buySize;
         this.buyPrice = buyPrice;

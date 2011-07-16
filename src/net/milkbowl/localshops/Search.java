@@ -274,7 +274,7 @@ public class Search {
 
 	public static ItemInfo itemByType(Material type, short subType) {
 		for(ItemInfo item : items) {
-			if(item.material == type && item.subTypeId == subType) {
+			if(item.getType() == type && item.getSubTypeId() == subType) {
 				return item;
 			}
 		}
@@ -348,7 +348,7 @@ public class Search {
 			// Iterate through Items
 			for (ItemInfo item : items) {
 				// Test for match
-				if (item.getId() == typeId && item.subTypeId == subTypeId) {
+				if (item.getId() == typeId && item.getSubTypeId() == subTypeId) {
 					itemList[0] = item;
 					break;
 				}
@@ -416,7 +416,7 @@ public class Search {
 			// Iterate through Items
 			for (ItemInfo item : items) {
 				// Test for match
-				if (item.getId() == typeId && item.subTypeId == subTypeId) {
+				if (item.getId() == typeId && item.getSubTypeId() == subTypeId) {
 					matchedItem = item;
 					break;
 				}
@@ -431,7 +431,7 @@ public class Search {
 			// Iterate through Items
 			for (ItemInfo item : items) {
 				// Test for match
-				if (item.getId() == typeId && item.subTypeId == subTypeId) {
+				if (item.getId() == typeId && item.getSubTypeId() == subTypeId) {
 					matchedItem = item;
 					break;
 				}

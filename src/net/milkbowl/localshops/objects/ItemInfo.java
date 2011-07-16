@@ -17,18 +17,15 @@ import java.util.Arrays;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-public class ItemInfo {
+public class ItemInfo extends Item {
     
     public String name = null;
     public String[][] search = null;
-    public Material material;
-    public short subTypeId = 0;
     
     public ItemInfo(String name, String[][] search, Material material, short subTypeId) {
+    	super(material, subTypeId);
         this.name = name;
         this.search = search;
-        this.material = material;
-        this.subTypeId = subTypeId;
     }
     
     public ItemInfo (String name, String[][] search, Material material) {
@@ -41,7 +38,7 @@ public class ItemInfo {
     }
     
     public ItemStack toStack() {
-        return new ItemStack (material, 1, subTypeId);
+        return new ItemStack (this.material, 1, subTypeId);
     }
     
     public boolean equals(ItemInfo item){
@@ -51,11 +48,4 @@ public class ItemInfo {
         return false;
     }
     
-    public int getStackSize() {
-    	return material.getMaxStackSize();
-    }
-    
-    public int getId() {
-    	return material.getId();
-    }
 }

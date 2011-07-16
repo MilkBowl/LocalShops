@@ -838,7 +838,7 @@ public class ShopManager {
 			int maxStock = item.getMaxStock();
 			int dynamic = (item.isDynamic()? 1 : 0);
 
-			props.setProperty(String.format("%d:%d", info.getId(), info.subTypeId), String.format("%f:%d,%f:%d,%d:%d,%d", buyPrice, buySize, sellPrice, sellSize, stock, maxStock, dynamic));
+			props.setProperty(String.format("%d:%d", info.getId(), info.getSubTypeId()), String.format("%f:%d,%f:%d,%d:%d,%d", buyPrice, buySize, sellPrice, sellSize, stock, maxStock, dynamic));
 		}
 
 		//Sign Data saving

@@ -297,7 +297,7 @@ public abstract class Command {
 				count += 64;
 				continue;
 			}
-			if (thisSlot.getType().equals(item.material) && thisSlot.getDurability() == item.subTypeId) {
+			if (thisSlot.getType().equals(item.getType()) && thisSlot.getDurability() == item.getSubTypeId()) {
 				count += 64 - thisSlot.getAmount();
 			}
 		}
