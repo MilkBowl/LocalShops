@@ -25,11 +25,8 @@ public class Econ {
         EconomyResponse balanceFromResp = Vault.getEconomy().getBalance(playerFrom);
         EconomyResponse balanceToResp = Vault.getEconomy().getBalance(playerTo);
         
-        log.info("PlayerFrom: " + playerFrom + " balanceFrom: " + balanceFromResp.amount + " PlayerTo: " + playerTo + " balanceTo: " + balanceToResp.amount + " Cost: " + cost);
-        
         EconomyResponse withdrawResp = Vault.getEconomy().withdrawPlayer(playerFrom, cost);
         if(!withdrawResp.transactionSuccess()) {
-            log.info("Failed to withdraw");
             return false;
         }
         
