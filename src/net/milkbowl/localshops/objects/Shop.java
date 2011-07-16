@@ -375,6 +375,14 @@ public abstract class Shop implements Comparator<Shop> {
 	 }
 
 	 public void addTransaction(Transaction trans) {
+	     switch(trans.type) {
+	     case Buy:
+	         log.info(String.format("%s to %s (%s)", trans.toString(), name, getShortUuidString()));
+	         break;
+	     case Sell:
+	         log.info(String.format("%s form %s (%s)", trans.toString(), name, getShortUuidString()));
+	         break;
+	     }
 		 if(transactions.remainingCapacity() >= 1) {
 			 transactions.add(trans);
 		 } else {

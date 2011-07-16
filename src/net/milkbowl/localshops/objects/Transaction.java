@@ -42,4 +42,17 @@ public class Transaction implements Cloneable {
         this.quantity = quantity;
         this.cost = cost;
     }
+    
+    public String toString() {
+        String rVal = null;
+        switch(type) {
+        case Buy:
+            rVal = String.format("%s sold %d %s for %.2f", playerName, quantity, itemName, cost);
+            break;
+        case Sell:
+            rVal = String.format("%s bought %d %s for %.2f", playerName, quantity, itemName, cost);
+            break;
+        }
+        return rVal;
+    }
 }
