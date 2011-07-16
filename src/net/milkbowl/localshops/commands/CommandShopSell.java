@@ -77,7 +77,7 @@ public class CommandShopSell extends Command {
                 if(LocalShops.getItemList().isDurable(itemStack)) {
                     item = Search.itemById(itemStack.getTypeId());
                     if (calcDurabilityPercentage(itemStack) > Config.getItemMaxDamage() && Config.getItemMaxDamage() != 0) {
-                        sender.sendMessage(ChatColor.DARK_AQUA + "Your " + ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " is too damaged to sell!");
+                        sender.sendMessage(ChatColor.DARK_AQUA + "Your " + ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " is too damaged to sell!");
                         sender.sendMessage(ChatColor.DARK_AQUA + "Items must be damanged less than " + ChatColor.WHITE + Config.getItemMaxDamage() + "%");
                         return true;
                     }
@@ -105,7 +105,7 @@ public class CommandShopSell extends Command {
                 if(LocalShops.getItemList().isDurable(itemStack)) {
                     item = Search.itemById(itemStack.getTypeId());
                     if (calcDurabilityPercentage(itemStack) > Config.getItemMaxDamage() && Config.getItemMaxDamage() != 0) {
-                        sender.sendMessage(ChatColor.DARK_AQUA + "Your " + ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " is too damaged to sell!");
+                        sender.sendMessage(ChatColor.DARK_AQUA + "Your " + ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " is too damaged to sell!");
                         sender.sendMessage(ChatColor.DARK_AQUA + "Items must be damanged less than " + ChatColor.WHITE + Config.getItemMaxDamage() + "%");
                         return true;
                     }
@@ -272,11 +272,11 @@ public class CommandShopSell extends Command {
         }
 
         Player player = (Player) sender;
-        ShopItem invItem = shop.getItem(item.name);
+        ShopItem invItem = shop.getItem(item.getName());
 
         // check if the shop is buying that item
-        if (!shop.containsItem(item) || shop.getItem(item.name).getSellPrice() == 0) {
-            player.sendMessage(ChatColor.DARK_AQUA + "Sorry, " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is not buying " + ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " right now.");
+        if (!shop.containsItem(item) || shop.getItem(item.getName()).getSellPrice() == 0) {
+            player.sendMessage(ChatColor.DARK_AQUA + "Sorry, " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is not buying " + ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " right now.");
             return false;
         }
 
@@ -298,7 +298,7 @@ public class CommandShopSell extends Command {
         // check if the shop has a max stock level set
         if (invItem.getMaxStock() != 0 && !shop.isUnlimitedStock()) {
             if (invItem.getStock() >= invItem.getMaxStock()) {
-                player.sendMessage(ChatColor.DARK_AQUA + "Sorry, " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is not buying any more " + ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " right now.");
+                player.sendMessage(ChatColor.DARK_AQUA + "Sorry, " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is not buying any more " + ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " right now.");
                 return false;
             }
 
@@ -354,13 +354,13 @@ public class CommandShopSell extends Command {
 
 
         if (!shop.isUnlimitedStock()) {
-            shop.addStock(item.name, amount);
+            shop.addStock(item.getName(), amount);
         }
 
         if (isShopController(shop)) {
-            player.sendMessage(ChatColor.DARK_AQUA + "You added " + ChatColor.WHITE + amount + " " + item.name + ChatColor.DARK_AQUA + " to the shop");
+            player.sendMessage(ChatColor.DARK_AQUA + "You added " + ChatColor.WHITE + amount + " " + item.getName() + ChatColor.DARK_AQUA + " to the shop");
         } else {
-            player.sendMessage(ChatColor.DARK_AQUA + "You sold " + ChatColor.WHITE + amount + " " + item.name + ChatColor.DARK_AQUA + " and gained " + ChatColor.WHITE + Vault.getEconomy().format(totalCost));
+            player.sendMessage(ChatColor.DARK_AQUA + "You sold " + ChatColor.WHITE + amount + " " + item.getName() + ChatColor.DARK_AQUA + " and gained " + ChatColor.WHITE + Vault.getEconomy().format(totalCost));
         }
 
         // log the transaction
@@ -369,14 +369,14 @@ public class CommandShopSell extends Command {
         if (startInv < 0) {
             startInv = 0;
         }
-        plugin.getShopManager().logItems(player.getName(), shop.getName(), "sell-item", item.name, amount, startInv, itemInv);
-        shop.addTransaction(new Transaction(Transaction.Type.Buy, player.getName(), item.name, amount, totalCost));
+        plugin.getShopManager().logItems(player.getName(), shop.getName(), "sell-item", item.getName(), amount, startInv, itemInv);
+        shop.addTransaction(new Transaction(Transaction.Type.Buy, player.getName(), item.getName(), amount, totalCost));
 
         removeItemsFromInventory(player.getInventory(), item.toStack(), amount);
         plugin.getShopManager().saveShop(shop);
 
         //update any sign in this shop with that value.
-        shop.updateSigns(item.name);
+        shop.updateSigns(item.getName());
 
         return true;
     }

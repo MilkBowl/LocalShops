@@ -99,7 +99,7 @@ public class CommandShopBuy extends Command {
 					count = countAvailableSpaceForItemInInventory(player.getInventory(), item);
 				} else {
 					// use shop stock
-					count = shop.getItem(item.name).getStock();
+					count = shop.getItem(item.getName()).getStock();
 				}
 
 				return shopBuy(shop, item, count);
@@ -122,11 +122,11 @@ public class CommandShopBuy extends Command {
 					count = countAvailableSpaceForItemInInventory(player.getInventory(), item);
 				} else {
 					// use shop stock
-					count = shop.getItem(item.name).getStock();
+					count = shop.getItem(item.getName()).getStock();
 				}
 				if (count < 1) {
 					//
-					sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_MINIMUM_ONE, new String[] { "%ITEMNAME%" }, new Object[] { item.name } ));
+					sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_MINIMUM_ONE, new String[] { "%ITEMNAME%" }, new Object[] { item.getName() } ));
 					return true;
 				}
 				return shopBuy(shop, item, count);
@@ -150,10 +150,10 @@ public class CommandShopBuy extends Command {
 					count = countAvailableSpaceForItemInInventory(player.getInventory(), item);
 				} else {
 					// use shop stock
-					count = shop.getItem(item.name).getStock();
+					count = shop.getItem(item.getName()).getStock();
 				}
 				if (count < 1) {
-					sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_MINIMUM_ONE, new String[] { "%ITEMNAME%" }, new Object[] { item.name } ));
+					sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_MINIMUM_ONE, new String[] { "%ITEMNAME%" }, new Object[] { item.getName() } ));
 					return true;
 				}
 				return shopBuy(shop, item, count);
@@ -176,10 +176,10 @@ public class CommandShopBuy extends Command {
 					count = countAvailableSpaceForItemInInventory(player.getInventory(), item);
 				} else {
 					// use shop stock
-					count = shop.getItem(item.name).getStock();
+					count = shop.getItem(item.getName()).getStock();
 				}
 				if (count < 1) {
-					sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_MINIMUM_ONE, new String[] { "%ITEMNAME%" }, new Object[] { item.name } ));
+					sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_MINIMUM_ONE, new String[] { "%ITEMNAME%" }, new Object[] { item.getName() } ));
 					return true;
 				}
 				return shopBuy(shop, item, count);
@@ -218,7 +218,7 @@ public class CommandShopBuy extends Command {
 				return true;
 			}
 			if (count < 1) {
-				sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_MINIMUM_ONE, new String[] { "%ITEMNAME%" }, new Object[] { item.name } ));
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_MINIMUM_ONE, new String[] { "%ITEMNAME%" }, new Object[] { item.getName() } ));
 				return true;
 			}
 			return shopBuy(shop, item, count);
@@ -253,7 +253,7 @@ public class CommandShopBuy extends Command {
 				return true;
 			}
 			if (count < 1) {
-				sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_MINIMUM_ONE, new String[] { "%ITEMNAME%" }, new Object[] { item.name } ));
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_MINIMUM_ONE, new String[] { "%ITEMNAME%" }, new Object[] { item.getName() } ));
 				return true;
 			}
 			return shopBuy(shop, item, count);
@@ -272,7 +272,7 @@ public class CommandShopBuy extends Command {
 				return true;
 			}
 			if (count < 1) {
-				sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_MINIMUM_ONE, new String[] { "%ITEMNAME%" }, new Object[] { item.name } ));
+				sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_MINIMUM_ONE, new String[] { "%ITEMNAME%" }, new Object[] { item.getName() } ));
 				return true;
 			}
 			return shopBuy(shop, item, count);
@@ -304,20 +304,20 @@ public class CommandShopBuy extends Command {
 		}
 
 		Player player = (Player) sender;
-		ShopItem invItem = shop.getItem(item.name);
+		ShopItem invItem = shop.getItem(item.getName());
 
 		// check if the shop is selling that item
 		if (invItem == null || invItem.getBuyPrice() == 0) {
-			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_NOT_SELLING, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.name }));
+			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_NOT_SELLING, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.getName() }));
 			return false;
 		} else if (invItem.getStock() == 0 && !shop.isUnlimitedStock()) {
-			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_SOLD_OUT, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.name }));
+			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_SOLD_OUT, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.getName() }));
 			return false;
 		}
 
 		// check if the item has a price, or if this is a shop owner
 		if (invItem.getBuyPrice() == 0 && !isShopController(shop)) {
-			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_NOT_SELLING, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.name }));
+			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_NOT_SELLING, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.getName() }));
 			return false;
 		}
 
@@ -346,10 +346,10 @@ public class CommandShopBuy extends Command {
 				totalCost = bundlesCanAford * itemPrice;
 				amount = bundlesCanAford * invItem.getBuySize();
 				if(bundlesCanAford == 0) {
-					player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PLAYER_AFFORD_NONE, new String[] { "%ITEMNAME%" }, new Object[] { item.name }));
+					player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PLAYER_AFFORD_NONE, new String[] { "%ITEMNAME%" }, new Object[] { item.getName() }));
 					return true;
 				} else {
-					player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PLAYER_AFFORD_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { bundlesCanAford, item.name }));
+					player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PLAYER_AFFORD_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { bundlesCanAford, item.getName() }));
 				}
 				if (!Econ.chargePlayer(player.getName(), totalCost)) {
 					player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
@@ -372,10 +372,10 @@ public class CommandShopBuy extends Command {
 				amount = bundlesCanAford * invItem.getBuySize();
 
 				if(bundlesCanAford == 0) {
-					player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PLAYER_AFFORD_NONE, new String[] { "%ITEMNAME%" }, new Object[] { item.name }));
+					player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PLAYER_AFFORD_NONE, new String[] { "%ITEMNAME%" }, new Object[] { item.getName() }));
 					return true;
 				} else {
-					player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PLAYER_AFFORD_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { bundlesCanAford, item.name }));
+					player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PLAYER_AFFORD_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { bundlesCanAford, item.getName() }));
 				}
 				if (!Econ.payPlayer(player.getName(), shop.getOwner(), totalCost)) {
 					player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
@@ -399,12 +399,12 @@ public class CommandShopBuy extends Command {
 		}
 
 		if (!shop.isUnlimitedStock()) {
-			shop.removeStock(item.name, amount);
+			shop.removeStock(item.getName(), amount);
 		}
 		if (isShopController(shop)) {
-			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_REMOVED_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { amount, item.name }));
+			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_REMOVED_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { amount, item.getName() }));
 		} else {
-			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PURCHASED_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%", "%COST%" }, new Object[] { amount, item.name, Vault.getEconomy().format(totalCost) }));
+			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PURCHASED_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%", "%COST%" }, new Object[] { amount, item.getName(), Vault.getEconomy().format(totalCost) }));
 		}
 
 		// log the transaction
@@ -413,8 +413,8 @@ public class CommandShopBuy extends Command {
 		if (shop.isUnlimitedStock()) {
 			startStock = 0;
 		}
-		plugin.getShopManager().logItems(player.getName(), shop.getName(), "buy-item", item.name, amount, startStock, stock);
-		shop.addTransaction(new Transaction(Transaction.Type.Sell, player.getName(), item.name, amount, totalCost));
+		plugin.getShopManager().logItems(player.getName(), shop.getName(), "buy-item", item.getName(), amount, startStock, stock);
+		shop.addTransaction(new Transaction(Transaction.Type.Sell, player.getName(), item.getName(), amount, totalCost));
 
 		givePlayerItem(item.toStack(), amount);
 		plugin.getShopManager().saveShop(shop);
@@ -437,7 +437,7 @@ public class CommandShopBuy extends Command {
 		int totalAmount = invItem.getStock();
 		
 		if (totalAmount == 0 && !unlimitedStock) {
-			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_HAS_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { totalAmount, invItem.getInfo().name }));
+			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_HAS_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { totalAmount, invItem.getType().name() }));
 			return totalAmount;
 		}
 
@@ -451,11 +451,11 @@ public class CommandShopBuy extends Command {
 		for (ItemStack thisSlot : player.getInventory().getContents()) {
 			if (thisSlot == null || thisSlot.getType() == Material.AIR) {
 				//Adjust number of items slots by the number an air block can hold
-				freeSpots += invItem.getInfo().getStackSize();
+				freeSpots += invItem.getMaxStock();
 				continue;
 			}
-			if (thisSlot.getType().equals(invItem.getInfo().getType()) && thisSlot.getDurability() == invItem.getInfo().getSubTypeId()) {
-				freeSpots += invItem.getInfo().getStackSize() - thisSlot.getAmount();
+			if (thisSlot.getType().equals(invItem.getType()) && thisSlot.getDurability() == invItem.getSubTypeId()) {
+				freeSpots += invItem.getMaxStock() - thisSlot.getAmount();
 			}
 		}
 		// Calculate the amount the player can store

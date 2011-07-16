@@ -78,7 +78,7 @@ public class CommandShopAdd extends Command {
                 if(LocalShops.getItemList().isDurable(itemStack)) {
                     item = Search.itemById(itemStack.getTypeId());
                     if (calcDurabilityPercentage(itemStack) > Config.getItemMaxDamage() && Config.getItemMaxDamage() != 0) {
-                        sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_TOO_DAM, new String[] { "%ITEMNAME%" }, new String[] { item.name }));
+                        sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_TOO_DAM, new String[] { "%ITEMNAME%" }, new String[] { item.getName() }));
                         sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_DMG_LESS_THAN, new String[] { "%DAMAGEVALUE%" }, new String[] { String.valueOf(Config.getItemMaxDamage()) }));
                         return true;
                     }
@@ -105,7 +105,7 @@ public class CommandShopAdd extends Command {
                 if(LocalShops.getItemList().isDurable(itemStack)) {
                     item = Search.itemById(itemStack.getTypeId());
                     if (calcDurabilityPercentage(itemStack) > Config.getItemMaxDamage() && Config.getItemMaxDamage() != 0) {
-                        sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_TOO_DAM, new String[] { "%ITEMNAME%" }, new String[] { item.name }));
+                        sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_TOO_DAM, new String[] { "%ITEMNAME%" }, new String[] { item.getName() }));
                         sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_DMG_LESS_THAN, new String[] { "%DAMAGEVALUE%" }, new String[] { String.valueOf(Config.getItemMaxDamage()) }));
                         return true;
                     }
@@ -295,14 +295,14 @@ public class CommandShopAdd extends Command {
             // Check if stock is unlimited
             if (shop.isUnlimitedStock()) {
                 // nicely message user
-                sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_UNLIM_STOCK, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.name }));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_UNLIM_STOCK, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.getName() }));
                 return true;
             }
 
             // Check if amount to be added is 0 (no point adding 0)
             if (amount == 0) {
                 // nicely message user
-                sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_ALREADY_HAS, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.name }));
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_ALREADY_HAS, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.getName() }));
                 return true;
             }
         }
@@ -315,27 +315,27 @@ public class CommandShopAdd extends Command {
 
         // Check stock settings, add stock if necessary
         if (shop.isUnlimitedStock()) {
-            sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_SUCCESS, new String[] { "%ITEMNAME%" }, new Object[] { item.name }));
+            sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_SUCCESS, new String[] { "%ITEMNAME%" }, new Object[] { item.getName() }));
         } else {
-            shop.addStock(item.name, amount);
-            shop.updateSigns(item.name);
-            sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_STOCK_SUCCESS, new String[] { "%ITEMNAME%", "%STOCK%" }, new Object[] { item.name, shop.getItem(item.name).getStock() }));
+            shop.addStock(item.getName(), amount);
+            shop.updateSigns(item.getName());
+            sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_STOCK_SUCCESS, new String[] { "%ITEMNAME%", "%STOCK%" }, new Object[] { item.getName(), shop.getItem(item.getName()).getStock() }));
         }
         
         if(amount == 0) {
-            sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_READY0, new String[] { "%ITEMNAME%" }, new Object[] { item.name }));
-            sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_READY1, new String[] { "%ITEMNAME%" }, new Object[] { item.name }));
-            sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_READY2, new String[] { "%ITEMNAME%" }, new Object[] { item.name }));
+            sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_READY0, new String[] { "%ITEMNAME%" }, new Object[] { item.getName() }));
+            sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_READY1, new String[] { "%ITEMNAME%" }, new Object[] { item.getName() }));
+            sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_READY2, new String[] { "%ITEMNAME%" }, new Object[] { item.getName() }));
         }
 
         // log the transaction
         if (player != null) {
-            int itemInv = shop.getItem(item.name).getStock();
+            int itemInv = shop.getItem(item.getName()).getStock();
             int startInv = itemInv - amount;
             if (startInv < 0) {
                 startInv = 0;
             }
-            plugin.getShopManager().logItems(player.getName(), shop.getName(), "add-item", item.name, amount, startInv, itemInv);
+            plugin.getShopManager().logItems(player.getName(), shop.getName(), "add-item", item.getName(), amount, startInv, itemInv);
 
             // take items from player only if shop doesn't have unlim stock
             if(!shop.isUnlimitedStock()) {

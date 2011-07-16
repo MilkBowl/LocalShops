@@ -79,7 +79,7 @@ public class CommandShopDestroy extends Command {
                 // return items to player (if a player)
                 if (sender instanceof Player) {
                     for (ShopItem item : shopItems) {
-                        givePlayerItem(item.getInfo().toStack(), item.getStock());
+                        givePlayerItem(item.toStack(), item.getStock());
                     }
                 }
             } else {

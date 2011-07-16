@@ -15,16 +15,15 @@ package net.milkbowl.localshops.objects;
 import java.util.Arrays;
 
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
+
 
 public class ItemInfo extends Item {
     
-    public String name = null;
-    public String[][] search = null;
+
+    public final String[][] search;
     
     public ItemInfo(String name, String[][] search, Material material, short subTypeId) {
-    	super(material, subTypeId);
-        this.name = name;
+    	super(material, subTypeId, name);
         this.search = search;
     }
     
@@ -37,15 +36,8 @@ public class ItemInfo extends Item {
         return String.format("%s, %s, %d:%d", name, Arrays.deepToString(search), material.getId(), subTypeId);
     }
     
-    public ItemStack toStack() {
-        return new ItemStack (this.material, 1, subTypeId);
-    }
-    
     public boolean equals(ItemInfo item){
-        if (this.material == item.material && this.subTypeId == item.subTypeId)
-            return true;
-        
-        return false;
+    	return super.equals(item);
     }
     
 }

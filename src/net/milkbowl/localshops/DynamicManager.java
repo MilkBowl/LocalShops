@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.milkbowl.localshops.objects.ItemInfo;
+import net.milkbowl.localshops.objects.Item;
 
 
 /**
@@ -26,13 +26,13 @@ import net.milkbowl.localshops.objects.ItemInfo;
 public class DynamicManager {
     @SuppressWarnings("unused")
     private LocalShops plugin = null;
-    private static Map<ItemInfo, Double> priceAdjMap = Collections.synchronizedMap(new HashMap<ItemInfo, Double>());
+    private static Map<Item, Double> priceAdjMap = Collections.synchronizedMap(new HashMap<Item, Double>());
         
     public DynamicManager(LocalShops plugin) {
         this.plugin = plugin;
     }
 
-    public static Map<ItemInfo, Double> getPriceAdjMap() {
+    public static Map<Item, Double> getPriceAdjMap() {
         return priceAdjMap;
     } 
 

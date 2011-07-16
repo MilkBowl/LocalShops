@@ -131,26 +131,26 @@ public class CommandShopRemove extends Command {
         }
 
         if(!shop.containsItem(item)) {
-            sender.sendMessage(ChatColor.DARK_AQUA + "The shop is not selling " + ChatColor.WHITE + item.name);
+            sender.sendMessage(ChatColor.DARK_AQUA + "The shop is not selling " + ChatColor.WHITE + item.getName());
             return true;
         }
 
-        sender.sendMessage(ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " removed from the shop. ");
+        sender.sendMessage(ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " removed from the shop. ");
         if (!shop.isUnlimitedStock()) {
-            int amount = shop.getItem(item.name).getStock();
+            int amount = shop.getItem(item.getName()).getStock();
 
             if (sender instanceof Player) {
                 Player player = (Player) sender;
                 // log the transaction
-                plugin.getShopManager().logItems(player.getName(), shop.getName(), "remove-item", item.name, amount, amount, 0);
+                plugin.getShopManager().logItems(player.getName(), shop.getName(), "remove-item", item.getName(), amount, amount, 0);
 
                 givePlayerItem(item.toStack(), amount);
                 player.sendMessage("" + ChatColor.WHITE + amount + ChatColor.DARK_AQUA + " have been returned to your inventory");
             }
         }
 
-        shop.removeItem(item.name);
-        shop.updateSigns(item.name);
+        shop.removeItem(item.getName());
+        shop.updateSigns(item.getName());
         plugin.getShopManager().saveShop(shop);        
 
         return true;

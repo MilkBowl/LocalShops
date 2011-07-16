@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
+import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.comparator.InventoryItemSortByName;
 import net.milkbowl.localshops.objects.ShopItem;
 import net.milkbowl.localshops.objects.MsgType;
@@ -149,7 +150,7 @@ public class CommandShopBrowse extends Command {
         ArrayList<String> inventoryMessage = new ArrayList<String>();
         for (ShopItem item : items) {
 
-            String subMessage = "   " + item.getInfo().name;
+            String subMessage = "   " + Search.itemById(item.getId(), item.getSubTypeId()).getName();
             int maxStock = 0;
 
             // NOT list

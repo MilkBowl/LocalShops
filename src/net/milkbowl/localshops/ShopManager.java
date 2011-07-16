@@ -738,7 +738,7 @@ public class ShopManager {
 			} else {
 				ItemInfo item = Search.itemByName(sign.getItemName());
 				//if We can't find the item in the shop ignore the sign
-				if (!(shop.containsItem(item))) {
+				if (!(shop.containsItem(item.getType(), item.getSubTypeId()))) {
 					continue;
 				} else {
 					shop.getSigns().add(sign);
@@ -829,7 +829,8 @@ public class ShopManager {
 
 		// Inventory
 		for (ShopItem item : shop.getItems()) {
-			ItemInfo info = item.getInfo();
+			int id = item.getId();
+			short subTypeId = item.getSubTypeId();
 			double buyPrice = item.getBuyPrice();
 			int buySize = item.getBuySize();
 			double sellPrice = item.getSellPrice();
@@ -838,7 +839,7 @@ public class ShopManager {
 			int maxStock = item.getMaxStock();
 			int dynamic = (item.isDynamic()? 1 : 0);
 
-			props.setProperty(String.format("%d:%d", info.getId(), info.getSubTypeId()), String.format("%f:%d,%f:%d,%d:%d,%d", buyPrice, buySize, sellPrice, sellSize, stock, maxStock, dynamic));
+			props.setProperty(String.format("%d:%d", id, subTypeId), String.format("%f:%d,%f:%d,%d:%d,%d", buyPrice, buySize, sellPrice, sellSize, stock, maxStock, dynamic));
 		}
 
 		//Sign Data saving

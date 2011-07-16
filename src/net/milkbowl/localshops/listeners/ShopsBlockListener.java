@@ -68,16 +68,16 @@ public class ShopsBlockListener extends BlockListener {
 		ItemInfo item = Search.itemByString(event.getLine(0));
 
 		if (item != null) {
-			if (shop.containsItem(item)) {
+			if (shop.containsItem(item.getType(), item.getSubTypeId())) {
 				// Create the sign object to work with
 				try {
 					if (event.getLine(1).equalsIgnoreCase("buy")) {
-						sign = new ShopSign(block, item.name, 1);
+						sign = new ShopSign(block, item.getName(), 1);
 					} else if (event.getLine(1).equalsIgnoreCase("sell")) {
-						sign = new ShopSign(block, item.name, 2);
+						sign = new ShopSign(block, item.getName(), 2);
 					} else {
 						// Add the sign to the Shop signlist and save the shop
-						sign = new ShopSign(block, item.name, 0);
+						sign = new ShopSign(block, item.getName(), 0);
 					}
 
 					// Set, save, get lines

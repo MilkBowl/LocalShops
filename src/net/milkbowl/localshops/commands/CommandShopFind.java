@@ -187,12 +187,12 @@ public class CommandShopFind extends Command {
 
         if (entries.size() > 0) {
             int count = 0;
-            sender.sendMessage(ChatColor.DARK_AQUA + "Showing " + ChatColor.WHITE + foundShops.size() + ChatColor.DARK_AQUA + " shops having " + ChatColor.WHITE + found.name);
+            sender.sendMessage(ChatColor.DARK_AQUA + "Showing " + ChatColor.WHITE + foundShops.size() + ChatColor.DARK_AQUA + " shops having " + ChatColor.WHITE + found.getName());
             for (Entry<UUID, Double> entry : entries) {
                 UUID uuid = entry.getKey();
                 double distance = entry.getValue();
                 Shop shop = plugin.getShopManager().getLocalShop(uuid);
-                ShopItem item = shop.getItem(found.name);
+                ShopItem item = shop.getItem(found.getName());
 
                 String sellPrice;
                 if (item.getBuyPrice() <= 0 || item.getBuySize() <= 0 || (item.getStock() == 0 && !shop.isUnlimitedStock())) {
@@ -222,7 +222,7 @@ public class CommandShopFind extends Command {
                 }
             }
         } else {
-            sender.sendMessage(ChatColor.DARK_AQUA + "No shops were found having " + ChatColor.WHITE + found.name);
+            sender.sendMessage(ChatColor.DARK_AQUA + "No shops were found having " + ChatColor.WHITE + found.getName());
         }
 
         return true;

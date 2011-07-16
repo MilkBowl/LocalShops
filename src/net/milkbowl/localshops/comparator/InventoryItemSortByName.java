@@ -22,7 +22,7 @@ public class InventoryItemSortByName implements Comparator<ShopItem> {
 
     @Override
     public int compare(ShopItem o1, ShopItem o2) {
-        return o1.getInfo().name.compareTo(o2.getInfo().name);
+        return o1.getName().compareTo(o2.getName());
     }
     
 }

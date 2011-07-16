@@ -81,8 +81,7 @@ public class GlobalShop extends Shop {
         Iterator<ShopItem> it = inventory.values().iterator();
         while(it.hasNext()) {
             ShopItem item = it.next();
-            ItemInfo info = item.getInfo();
-            log.info(String.format("   %6d:%-2d %-6.2f %-3d %-6.2f %-3d %-3d %-3d", info.getId(), info.subTypeId, item.getBuyPrice(), item.getBuySize(), item.getSellPrice(), item.getSellSize(), item.getStock(), item.getMaxStock()));
+            log.info(String.format("   %6d:%-2d %-6.2f %-3d %-6.2f %-3d %-3d %-3d", item.getId(), item.getSubTypeId(), item.getBuyPrice(), item.getBuySize(), item.getSellPrice(), item.getSellSize(), item.getStock(), item.getMaxStock()));
         }
     }
 

@@ -195,7 +195,7 @@ public class CommandShopSet extends Command {
 		// Check if Shop has item
 		if (!shop.containsItem(item)) {
 			// nicely message user
-			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.getName() }));
 			return true;
 		}
 
@@ -205,16 +205,16 @@ public class CommandShopSet extends Command {
 		}
 
 		// Set new values
-		shop.setItemSellPrice(item.name, price);
+		shop.setItemSellPrice(item.getName(), price);
 
 		// Save Shop
 		plugin.getShopManager().saveShop(shop);
 
 		// Send Result
-		sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is now buying " + ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + Vault.getEconomy().format(price));
+		sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is now buying " + ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + Vault.getEconomy().format(price));
 
 		//update any sign in this shop with that value.
-		shop.updateSigns(item.name);
+		shop.updateSigns(item.getName());
 
 		return true;
 	}
@@ -235,7 +235,7 @@ public class CommandShopSet extends Command {
 		// Check if Shop has item
 		if (!shop.containsItem(item)) {
 			// nicely message user
-			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.getName() }));
 			return true;
 		}
 
@@ -245,17 +245,17 @@ public class CommandShopSet extends Command {
 		}
 
 		// Set new values
-		shop.setItemSellAmount(item.name, size);
-		shop.setItemSellPrice(item.name, price);
+		shop.setItemSellAmount(item.getName(), size);
+		shop.setItemSellPrice(item.getName(), price);
 
 		// Save Shop
 		plugin.getShopManager().saveShop(shop);
 
 		// Send Result
-		sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is now buying "+ item.name + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + Vault.getEconomy().format(price) + ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + "Bundle: " + size + ChatColor.DARK_AQUA + "]");
+		sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is now buying "+ item.getName() + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + Vault.getEconomy().format(price) + ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + "Bundle: " + size + ChatColor.DARK_AQUA + "]");
 
 		//update any sign in this shop with that value.
-		shop.updateSigns(item.name);
+		shop.updateSigns(item.getName());
 
 		return true;
 	}
@@ -378,7 +378,7 @@ public class CommandShopSet extends Command {
 		// Check if Shop has item
 		if (!shop.containsItem(item)) {
 			// nicely message user
-			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.getName() }));
 			return true;
 		}
 
@@ -388,17 +388,17 @@ public class CommandShopSet extends Command {
 		}
 
 		// Set new values
-		shop.setItemBuyAmount(item.name, size);
-		shop.setItemBuyPrice(item.name, price);
+		shop.setItemBuyAmount(item.getName(), size);
+		shop.setItemBuyPrice(item.getName(), price);
 
 		// Save Shop
 		plugin.getShopManager().saveShop(shop);
 
 		// Send Result
-		sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is now selling "+ item.name + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + Vault.getEconomy().format(price) + ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + "Bundle: " + size + ChatColor.DARK_AQUA + "]");
+		sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is now selling "+ item.getName() + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + Vault.getEconomy().format(price) + ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + "Bundle: " + size + ChatColor.DARK_AQUA + "]");
 
 		//update any sign in this shop with that value.
-		shop.updateSigns(item.name);
+		shop.updateSigns(item.getName());
 		return true;
 	}
 
@@ -411,7 +411,7 @@ public class CommandShopSet extends Command {
 		// Check if Shop has item
 		if (!shop.containsItem(item)) {
 			// nicely message user
-			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.getName() }));
 			return true;
 		}
 
@@ -421,16 +421,16 @@ public class CommandShopSet extends Command {
 		}
 
 		// Set new values
-		shop.setItemBuyPrice(item.name, price);
+		shop.setItemBuyPrice(item.getName(), price);
 
 		// Save Shop
 		plugin.getShopManager().saveShop(shop);
 
 		// Send Result
-		sender.sendMessage(ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " now sells for "+ ChatColor.WHITE + Vault.getEconomy().format(price));
+		sender.sendMessage(ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " now sells for "+ ChatColor.WHITE + Vault.getEconomy().format(price));
 
 		//update any sign in this shop with that value.
-		shop.updateSigns(item.name);
+		shop.updateSigns(item.getName());
 		return true;
 	}
 
@@ -508,7 +508,7 @@ public class CommandShopSet extends Command {
 		// Check if Shop has item
 		if (!shop.containsItem(item)) {
 			// nicely message user
-			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.getName() }));
 			return true;
 		}
 
@@ -519,16 +519,16 @@ public class CommandShopSet extends Command {
 		}
 
 		// Set new values
-		shop.setItemMaxStock(item.name, max);
+		shop.setItemMaxStock(item.getName(), max);
 
 		//Update our signs for this item
-		shop.updateSigns(item.name);
+		shop.updateSigns(item.getName());
 
 		// Save Shop
 		plugin.getShopManager().saveShop(shop);
 
 		// Send Message
-		sender.sendMessage(item.name + " maximum stock is now " + max);
+		sender.sendMessage(item.getName() + " maximum stock is now " + max);
 
 		return true;
 	}
@@ -962,21 +962,21 @@ public class CommandShopSet extends Command {
 		// Check if Shop has item
 		if (!shop.containsItem(item)) {
 			// nicely message user
-			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.name }));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.getName() }));
 			return true;
 		}
 
 		//Set new value
-		shop.setItemDynamic(item.name);
+		shop.setItemDynamic(item.getName());
 
 		// Save Shop
 		plugin.getShopManager().saveShop(shop);
 
 		// Send Result
-		sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "Dynamic pricing for " + ChatColor.WHITE + item.name + ChatColor.DARK_AQUA + " is now " + shop.isItemDynamic(item.name));
+		sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "Dynamic pricing for " + ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " is now " + shop.isItemDynamic(item.getName()));
 
 		//update any sign in this shop with that value.
-		shop.updateSigns(item.name);
+		shop.updateSigns(item.getName());
 		return true;    
 	}
 

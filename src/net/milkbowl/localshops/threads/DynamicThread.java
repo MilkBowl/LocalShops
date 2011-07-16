@@ -22,8 +22,8 @@ import java.util.logging.Logger;
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.DynamicManager;
 import net.milkbowl.localshops.LocalShops;
+import net.milkbowl.localshops.objects.Item;
 import net.milkbowl.localshops.objects.ShopItem;
-import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.util.GenericFunctions;
 
@@ -48,21 +48,21 @@ public class DynamicThread extends Thread {
     }
 
     public void run() {
-        Map<ItemInfo, List<Integer>> itemStockMap = Collections.synchronizedMap(new HashMap<ItemInfo, List<Integer>>());
+        Map<Item, List<Integer>> itemStockMap = Collections.synchronizedMap(new HashMap<Item, List<Integer>>());
 
         //Dump all the shop stock data into the map.
         for ( Shop shop : plugin.getShopManager().getAllShops() ) {
             for ( ShopItem item : shop.getItems() ) {
-                if (itemStockMap.containsKey(item.getInfo()))
-                    itemStockMap.get(item.getInfo()).add(item.getStock());
+                if (itemStockMap.containsKey(item))
+                    itemStockMap.get(item).add(item.getStock());
                 else {
                     List<Integer> intList = new ArrayList<Integer>();
                     intList.add(item.getStock());
-                    itemStockMap.put(item.getInfo(), intList);
+                    itemStockMap.put(item, intList);
                 }
             }
         }
-        for(ItemInfo item : itemStockMap.keySet()) {
+        for(Item item : itemStockMap.keySet()) {
             List<Integer> stockList = GenericFunctions.limitOutliers(itemStockMap.get(item));
 
             //Get the overall stock change for a given item and then calculate the adjustment given the volatility

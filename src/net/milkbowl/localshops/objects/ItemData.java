@@ -255,8 +255,8 @@ public class ItemData {
 
             Collection<ShopItem> items = shop.getItems();
             for (ShopItem item : items) {
-                if (item.getInfo().name.matches(name)) {
-                    foundMatches.add(item.getInfo().name);
+                if (item.getName().matches(name)) {
+                    foundMatches.add(item.getName());
                 }
             }
 

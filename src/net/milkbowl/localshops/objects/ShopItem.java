@@ -12,11 +12,12 @@
 
 package net.milkbowl.localshops.objects;
 
+import org.bukkit.inventory.ItemStack;
+
 import net.milkbowl.localshops.DynamicManager;
 
 public class ShopItem extends Item {
 
-    private ItemInfo info;
     private int bundleSize = 1;
     private double buyPrice = 0;
     private double sellPrice = 0;
@@ -27,28 +28,23 @@ public class ShopItem extends Item {
 
 
     public ShopItem(ItemInfo info) {
-    	super (info.getType(), info.getSubTypeId());
-        this.info = info;
+    	super (info.getType(), info.getSubTypeId(), info.getName());
         bundleSize = 1;
         buyPrice = 0;
         sellPrice = 0;
         stock = 0;
         dynamic = false;
     }
+    
     //TODO: Cleanup Constructor
     public ShopItem(ItemInfo info, int buySize, double buyPrice, int sellSize, double sellPrice, int stock, int maxStock) {
-    	super(info.getType(), info.getSubTypeId());
-        this.info = info;
+    	super(info.getType(), info.getSubTypeId(), info.getName());
         this.bundleSize = buySize;
         this.buyPrice = buyPrice;
         this.sellPrice = sellPrice;
         this.stock = stock;
         this.maxStock = maxStock;
 
-    }
-
-    public ItemInfo getInfo() {
-        return info;
     }
 
     public void setSell(double sellPrice, int sellSize) {
@@ -99,8 +95,8 @@ public class ShopItem extends Item {
 
     public double getSellPrice() {
         //for dynamic items use the currently adjusted price
-        if (dynamic && DynamicManager.getPriceAdjMap().get(info) != null)
-            return sellPrice * DynamicManager.getPriceAdjMap().get(info);
+        if (dynamic && DynamicManager.getPriceAdjMap().get(this) != null)
+            return sellPrice * DynamicManager.getPriceAdjMap().get(this);
 
         return sellPrice;
     }
@@ -135,8 +131,8 @@ public class ShopItem extends Item {
 
     public double getBuyPrice() {
         //for dynamic items use the current dynamic price
-        if (dynamic && DynamicManager.getPriceAdjMap().get(info) != null)
-            return buyPrice * DynamicManager.getPriceAdjMap().get(info);
+        if (dynamic && DynamicManager.getPriceAdjMap().get(this) != null)
+            return buyPrice * DynamicManager.getPriceAdjMap().get(this);
 
         return buyPrice;
     }
@@ -162,17 +158,14 @@ public class ShopItem extends Item {
         this.baseStock = baseStock;
     }
     
-    public boolean equals(Object o) {
-        if(o instanceof ShopItem) {
-            ShopItem item = (ShopItem) o;
-            if(item.info == info) {
-                return true;
-            } else {
-                return true;
-            }
-        } else {
-            return false;
-        }
+    /**
+     * TODO: this should return ItemStack[] which conforms to MC stack size.
+     * And should be Overrided here.
+     * @return
+     */
+    @Override
+    public ItemStack toStack() {
+        return new ItemStack (this.material, 1, subTypeId);
     }
     
 }
