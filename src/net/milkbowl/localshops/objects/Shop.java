@@ -519,7 +519,7 @@ public abstract class Shop implements Comparator<Shop> {
 				 signLines[2] = sCol + numFormat.format(sellPrice) + sellBundle;
 
 			 if (!this.unlimitedStock)
-				 signLines[3] = dCol + "Stock: " + stoCol + stock;
+				 signLines[3] = dCol + "Stk: " + stoCol + stock;
 			 else
 				 signLines[3] = stoCol + "Unlimited";
 		 } else if (sign.getType() == ShopSign.SignType.BUY ) {
@@ -532,7 +532,7 @@ public abstract class Shop implements Comparator<Shop> {
 				 signLines[3] = dCol + "R-Clk to Buy";
 			 }
 			 if (!this.unlimitedStock)
-				 signLines[2] = dCol + "Stock: " + stoCol + stock;
+				 signLines[2] = dCol + "Stk: " + stoCol + stock;
 			 else
 				 signLines[2] = stoCol + "Unlimited";         
 		 } else if (sign.getType() == ShopSign.SignType.SELL ) {
