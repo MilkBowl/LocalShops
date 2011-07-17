@@ -59,6 +59,7 @@ public abstract class Shop implements Comparator<Shop> {
 	protected Set<String> users = Collections.synchronizedSet(new HashSet<String>());
 
 	private static final NumberFormat numFormat = new DecimalFormat("0.##");
+	private static final NumberFormat numShortFormat = new DecimalFormat("0.#");
 
 	// Logging
 	protected static final Logger log = Logger.getLogger("Minecraft");
@@ -475,8 +476,10 @@ public abstract class Shop implements Comparator<Shop> {
 		 double buyPrice = this.getItem(sign.getItemName()).getBuyPrice();
 		 double sellPrice = this.getItem(sign.getItemName()).getSellPrice();
 		 int maxStock = this.getItem(sign.getItemName()).getMaxStock();
+		 int availableBundles = stock / this.getItem(sign.getItemName()).getBundleSize();
 		 String buyBundle = "";	
 		 String sellBundle = "";
+		 String available = "";
 
 		 String bCol = GenericFunctions.parseColors(Config.getSignBuyColor());
 		 String sCol = GenericFunctions.parseColors(Config.getSignSellColor());
@@ -485,12 +488,14 @@ public abstract class Shop implements Comparator<Shop> {
 		 String stoCol = GenericFunctions.parseColors(Config.getSignStockColor());
 
 		 //Only set Bundle strings if they are greater than 1
-		 if (this.getItem(sign.getItemName()).getBuySize() > 1) {
-			 buyBundle = bunCol + "  [" + this.getItem(sign.getItemName()).getBuySize() + "]";
+		 if (this.getItem(sign.getItemName()).getBundleSize() > 1) {
+			 buyBundle = bunCol + "  [" + this.getItem(sign.getItemName()).getBundleSize() + "]";
+			 sellBundle = bunCol + "  [" + this.getItem(sign.getItemName()).getBundleSize() + "]";
 		 }
-		 if (this.getItem(sign.getItemName()).getSellSize() > 1) {
-			 sellBundle = bunCol + "  [" + this.getItem(sign.getItemName()).getSellSize() + "]";
-		 }
+		 if (availableBundles > 999) 
+			 available += numShortFormat.format(availableBundles / 1000D) + "k";
+		  else
+			 available += availableBundles + "";
 
 		 //Colorize the title and strip it of vowels if it's too long
 		 if (signLines[0].length() >= 12) {
@@ -507,7 +512,7 @@ public abstract class Shop implements Comparator<Shop> {
 		 } else if (sign.getType() == ShopSign.SignType.INFO ){
 			 if (buyPrice == 0 ) 
 				 signLines[1] = bCol + "-";
-			 else if (stock == 0 && !this.unlimitedStock)
+			 else if (availableBundles == 0 && !this.unlimitedStock)
 				 signLines[1] = dCol + "Understock";
 			 else 
 				 signLines[1] =  bCol + numFormat.format(buyPrice) + buyBundle;
@@ -519,20 +524,20 @@ public abstract class Shop implements Comparator<Shop> {
 				 signLines[2] = sCol + numFormat.format(sellPrice) + sellBundle;
 
 			 if (!this.unlimitedStock)
-				 signLines[3] = dCol + "Stk: " + stoCol + stock;
+				 signLines[3] = dCol + "Stk: " + stoCol + available;
 			 else
 				 signLines[3] = stoCol + "Unlimited";
 		 } else if (sign.getType() == ShopSign.SignType.BUY ) {
 			 if (buyPrice == 0 ) 
 				 signLines[1] = dCol + "Not Selling";
-			 else if (stock == 0 && !this.unlimitedStock) 
+			 else if (availableBundles == 0 && !this.unlimitedStock) 
 				 signLines[1] = dCol + "Understock";
 			 else  {
 				 signLines[1] = sCol + numFormat.format(buyPrice) + buyBundle;
 				 signLines[3] = dCol + "R-Clk to Buy";
 			 }
 			 if (!this.unlimitedStock)
-				 signLines[2] = dCol + "Stk: " + stoCol + stock;
+				 signLines[2] = dCol + "Stk: " + stoCol + available;
 			 else
 				 signLines[2] = stoCol + "Unlimited";         
 		 } else if (sign.getType() == ShopSign.SignType.SELL ) {
@@ -545,7 +550,7 @@ public abstract class Shop implements Comparator<Shop> {
 				 signLines[3] = dCol + "R-Clk to Sell";
 			 }
 			 if (!this.unlimitedStock)
-				 signLines[2] = dCol + "Stk: " + stoCol + stock;
+				 signLines[2] = dCol + "Stk: " + stoCol + available;
 			 else
 				 signLines[2] = stoCol + "Unlimited";   
 		 }

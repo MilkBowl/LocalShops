@@ -120,6 +120,10 @@ public class ShopItem extends Item {
         
         bundleSize = size;
     }
+    
+    public int getBundleSize() {
+    	return bundleSize;
+    }
 
     public int getBuySize() {
         return bundleSize;
