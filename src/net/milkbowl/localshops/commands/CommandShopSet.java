@@ -76,9 +76,7 @@ public class CommandShopSet extends Command {
 			return shopSetName();
 		} else if (command.matches("(?i)set\\s+dynamic.*")) {
 			return shopSetDynamic();
-		} else if (command.matches("(?i)set\\s+share.*")) {
-			return shopSetProfitSharing();
-		}else {
+		} else {
 			return shopSetHelp();
 		}
 	}
@@ -1055,58 +1053,6 @@ public class CommandShopSet extends Command {
 		return true;
 	}
 
-	private boolean shopSetProfitSharing() {
-		Shop shop = null;
-
-		// Get current shop
-		if (sender instanceof Player) {
-			// Get player & data
-			Player player = (Player) sender;
-
-			shop = getCurrentShop(player);
-			if (shop == null) {
-				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
-				return true;
-			}
-
-			// Check if Player can Modify
-			if (!isShopController(shop)) {
-				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_MUST_BE_SHOP_OWNER));
-				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
-				return true;
-			}
-		} else {
-			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
-			return true;
-		}
-
-		// set share <double>
-		Pattern pattern = Pattern.compile("(?i)set\\s+manager\\s+(\\d+)$");
-		Matcher matcher = pattern.matcher(command);
-		if (matcher.find()) {
-			try {
-				double sharePercent = Double.parseDouble(matcher.group(1));
-				shop.setSharePercent(sharePercent);
-				// Save Shop
-				plugin.getShopManager().saveShop(shop);
-
-				notifyPlayers(shop, new String[] { ChatColor.DARK_AQUA + "Managers will now receive " + sharePercent + "% of all profits." } );
-				return true;       
-			} catch (NumberFormatException e) {
-				// show set share usage
-				sender.sendMessage(" You are currently sharing: " + shop.getSharePercent() + "%" + " of your profits with your managers");
-				sender.sendMessage("   " + "/" + commandLabel + " set share <amount>");
-				return true;
-			}
-		}
-
-		// show set share usage
-		sender.sendMessage(" You are currently sharing: " + shop.getSharePercent() + "% of your profits with your managers");
-		sender.sendMessage("   " + "/" + commandLabel + " set share <amount>");
-		return true;
-	}
-
-
 	private boolean shopSetHelp() {
 		// Display list of set commands & return
 		sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "The following set commands are available: ");
@@ -1117,7 +1063,6 @@ public class CommandShopSet extends Command {
 		sender.sendMessage("   " + "/" + commandLabel + " set minbalance [amount]");
 		sender.sendMessage("   " + "/" + commandLabel + " set name [shop name]");
 		sender.sendMessage("   " + "/" + commandLabel + " set owner [player name]");
-		sender.sendMessage("   " + "/" + commandLabel + " set share <amount>");
 		if (((canUseCommand(PermType.ADMIN_LOCAL) && !isGlobal) || (canUseCommand(PermType.ADMIN_GLOBAL) && isGlobal))) {
 			sender.sendMessage("   " + "/" + commandLabel + " set unlimited money");
 			sender.sendMessage("   " + "/" + commandLabel + " set unlimited stock");
