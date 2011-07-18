@@ -447,16 +447,20 @@ public abstract class Shop implements Comparator<Shop> {
 		 double buyPrice = this.getItem(sign.getItemName()).getBuyPrice();
 		 double sellPrice = this.getItem(sign.getItemName()).getSellPrice();
 		 int maxStock = this.getItem(sign.getItemName()).getMaxStock();
-
+		 int available = stock / sign.getAmount();
+		 
 		 String bCol = GenericFunctions.parseColors(Config.getSignBuyColor());
 		 String sCol = GenericFunctions.parseColors(Config.getSignSellColor());
+		 String aCol = GenericFunctions.parseColors(Config.getSignBundleColor());
 		 String dCol = GenericFunctions.parseColors(Config.getSignDefaultColor());
 		 String stoCol = GenericFunctions.parseColors(Config.getSignStockColor());
 
+		 
 		 //Colorize the title and strip it of vowels if it's too long
 		 if (signLines[0].length() >= 12) {
 			 signLines[0] = GenericFunctions.stripVowels(signLines[0]);
 		 }
+		 
 		 signLines[0] = GenericFunctions.parseColors(Config.getSignNameColor()) + signLines[0];
 		 //If shop no longer carries this item - otherwise update it
 		 if(this.getItem(sign.getItemName()) == null) {
@@ -480,7 +484,7 @@ public abstract class Shop implements Comparator<Shop> {
 				 signLines[2] = sCol + numFormat.format(sellPrice);
 
 			 if (!this.unlimitedStock)
-				 signLines[3] = dCol + "Stk: " + stoCol;
+				 signLines[3] = dCol + "Stk: " + stoCol + available;
 			 else
 				 signLines[3] = stoCol + "Unlimited";
 		 } else if (sign.getType() == ShopSign.SignType.BUY ) {
@@ -490,12 +494,12 @@ public abstract class Shop implements Comparator<Shop> {
 				 signLines[1] = dCol + "Understock";
 			 else  {
 				 signLines[1] = sCol + numFormat.format(buyPrice);
-				 signLines[3] = dCol + "R-Clk to Buy";
+				 signLines[2] = dCol + "Buy: " + aCol + sign.getAmount();
 			 }
 			 if (!this.unlimitedStock)
-				 signLines[2] = dCol + "Stk: " + stoCol;
+				 signLines[3] = dCol + "Stk: " + stoCol + available;
 			 else
-				 signLines[2] = stoCol + "Unlimited";         
+				 signLines[3] = stoCol + "Unlimited";         
 		 } else if (sign.getType() == ShopSign.SignType.SELL ) {
 			 if (sellPrice == 0 ) 
 				 signLines[1] = dCol + "Not Buying";
@@ -503,12 +507,12 @@ public abstract class Shop implements Comparator<Shop> {
 				 signLines[1] = dCol + "Overstock";
 			 else {
 				 signLines[1] = sCol + numFormat.format(sellPrice);
-				 signLines[3] = dCol + "R-Clk to Sell";
+				 signLines[2] = dCol + "Sell: " + aCol + sign.getAmount();
 			 }
 			 if (!this.unlimitedStock)
-				 signLines[2] = dCol + "Stk: " + stoCol;
+				 signLines[3] = dCol + "Stk: " + stoCol + available;
 			 else
-				 signLines[2] = stoCol + "Unlimited";   
+				 signLines[3] = stoCol + "Unlimited";   
 		 }
 
 		 return signLines;

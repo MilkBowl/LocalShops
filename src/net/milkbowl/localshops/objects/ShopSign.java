@@ -101,6 +101,10 @@ public class ShopSign {
         this(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), itemName, 0, 1);
     }
     
+    public ShopSign(Block block, String itemName, int typeId, int amount) throws TypeNotFoundException {
+    	this(block.getWorld(), block.getX(), block.getY(), block.getZ(), itemName, typeId, amount);
+    }
+    
     public ShopSign(String signWorld, int x, int y, int z, String itemName, int typeId, int amount) throws TypeNotFoundException {
         this.signWorld = signWorld;
         this.x = x;

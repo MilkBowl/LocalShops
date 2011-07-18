@@ -71,13 +71,21 @@ public class ShopsBlockListener extends BlockListener {
 			if (shop.containsItem(item)) {
 				// Create the sign object to work with
 				try {
+					int amount = 1;
+					if (!event.getLine(2).isEmpty()) {
+						try {
+							amount = Integer.parseInt(event.getLine(2));
+						} catch (Exception e){
+							event.getPlayer().sendMessage("Error parsing amount on line 3 of sign, defaulting to 1");
+						}
+					}
 					if (event.getLine(1).equalsIgnoreCase("buy")) {
-						sign = new ShopSign(block, item.getName(), 1);
+						sign = new ShopSign(block, item.getName(), 1, amount);
 					} else if (event.getLine(1).equalsIgnoreCase("sell")) {
-						sign = new ShopSign(block, item.getName(), 2);
+						sign = new ShopSign(block, item.getName(), 2, amount);
 					} else {
 						// Add the sign to the Shop signlist and save the shop
-						sign = new ShopSign(block, item.getName(), 0);
+						sign = new ShopSign(block, item.getName(), 0, amount);
 					}
 
 					// Set, save, get lines
@@ -161,13 +169,13 @@ public class ShopsBlockListener extends BlockListener {
 		else {
 			blockList.addAll(findWallSigns(block));
 		}
-		
+
 		if (!shop.getOwner().equals(player.getName()) && !(shop.getManagers().contains(player.getName())) && !(Vault.getPermission().has(player, PermType.ADMIN_LOCAL.get()))) {
 			player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to remove signs in the shop");
 			event.setCancelled(true);
 			return;
 		} 
-		
+
 		//remove any Blocks in the blocklist
 		if (!blockList.isEmpty()) {
 			Iterator<ShopSign> iter = shop.getSigns().iterator();
@@ -179,7 +187,7 @@ public class ShopsBlockListener extends BlockListener {
 			}
 		} 
 	}
-	
+
 	private List<Block> findWallSigns(Block block) {
 		List<Block> foundSigns = new ArrayList<Block>(6);
 		for (BlockFace face : BlockFace.values()) {
