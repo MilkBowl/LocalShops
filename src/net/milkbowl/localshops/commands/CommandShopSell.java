@@ -135,7 +135,7 @@ public class CommandShopSell extends Command {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
             }
-            return shopSell(shop, item, 0);
+            return shopSell(shop, item, 1);
         }
 
         // sell int int
@@ -180,7 +180,7 @@ public class CommandShopSell extends Command {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
             }
-            return shopSell(shop, item, 0);
+            return shopSell(shop, item, 1);
         }
 
         // sell int:int int
@@ -257,7 +257,7 @@ public class CommandShopSell extends Command {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
             }
-            return shopSell(shop, item, 0);
+            return shopSell(shop, item, 1);
         }
 
         // Show sell help
@@ -270,7 +270,11 @@ public class CommandShopSell extends Command {
             sender.sendMessage("/shop sell can only be used for players!");
             return false;
         }
-
+        //Default to 1 if we try to sell less than 1
+        if (amount < 0) {
+            amount = 1;
+        } 
+        
         Player player = (Player) sender;
         ShopItem invItem = shop.getItem(item.getName());
 
@@ -279,17 +283,10 @@ public class CommandShopSell extends Command {
             player.sendMessage(ChatColor.DARK_AQUA + "Sorry, " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is not buying " + ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " right now.");
             return false;
         }
-
-        if (amount == 0) {
-            amount = shop.getItem(item).getSellSize();
-        }
-        // check how many items the player has
+        
         int playerInventory = countItemsInInventory(player.getInventory(), item.toStack());
-        if (amount < 0) {
-            amount = 0;
-        } 
+        // check if the amount to add is okay, and it the player has enough
 
-        // check if the amount to add is okay
         if (amount > playerInventory) {
             player.sendMessage(ChatColor.DARK_AQUA + "You only have " + ChatColor.WHITE + playerInventory + ChatColor.DARK_AQUA + " in your inventory that can be added.");
             amount = playerInventory;
@@ -316,9 +313,9 @@ public class CommandShopSell extends Command {
         Double totalSpent = 0.0;
         int totalItemsSold = 0;
         int remainingAmount = amount;
-        while(remainingAmount > invItem.getSellSize()) {
+        while(remainingAmount > 0) {
             // take item from the player
-            removeItemsFromInventory(player.getInventory(), item.toStack(), invItem.getBuySize());
+            removeItemsFromInventory(player.getInventory(), item.toStack(), 1);
             
             // try to pay the player for order
             if (shop.isUnlimitedMoney()) {
@@ -327,7 +324,7 @@ public class CommandShopSell extends Command {
                 if (!Econ.payPlayer(shop.getOwner(), player.getName(), invItem.getSellPrice())) {
                     // shop owner did not have enough money
                     // return item to player
-                    givePlayerItem(item.toStack(), invItem.getSellSize());
+                    givePlayerItem(item.toStack(), 1);
                     // break out of loop, its over!
                     break;
                 }
@@ -335,9 +332,9 @@ public class CommandShopSell extends Command {
             
             // Sub transaction worked, increment totals
             totalSpent += invItem.getSellPrice();
-            totalItemsSold += invItem.getSellSize();
+            totalItemsSold += 1;
             
-            remainingAmount -= invItem.getBuySize();
+            remainingAmount -= 1;
         }
 
         // Add total sold items to the shop
