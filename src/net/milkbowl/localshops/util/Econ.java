@@ -22,8 +22,8 @@ public class Econ {
 
     public static boolean payPlayer(String playerFrom, String playerTo, double cost) {
     	LocalShops plugin = (LocalShops) Bukkit.getServer().getPluginManager().getPlugin("LocalShops");
-        EconomyResponse balanceFromResp = Vault.getEconomy().getBalance(playerFrom);
-        EconomyResponse balanceToResp = Vault.getEconomy().getBalance(playerTo);
+        double balanceFrom = Vault.getEconomy().getBalance(playerFrom);
+        double balanceTo = Vault.getEconomy().getBalance(playerTo);
         
         EconomyResponse withdrawResp = Vault.getEconomy().withdrawPlayer(playerFrom, cost);
         if(!withdrawResp.transactionSuccess()) {
@@ -42,8 +42,8 @@ public class Econ {
         }
         
         if (withdrawResp.transactionSuccess() && depositResp.transactionSuccess()) {
-            plugin.getShopManager().logPayment(playerFrom, "payment", withdrawResp.amount, balanceFromResp.amount, withdrawResp.balance);
-            plugin.getShopManager().logPayment(playerTo, "payment", depositResp.amount, balanceToResp.amount, depositResp.balance);
+            plugin.getShopManager().logPayment(playerFrom, "payment", withdrawResp.amount, balanceFrom, withdrawResp.balance);
+            plugin.getShopManager().logPayment(playerTo, "payment", depositResp.amount, balanceTo, depositResp.balance);
             return true;
         } else {
             return false;
@@ -51,21 +51,18 @@ public class Econ {
     }
 
     public static double getBalance(String playerName) {
-        EconomyResponse balanceResp = Vault.getEconomy().getBalance(playerName);
-        return balanceResp.amount;
+        double balance = Vault.getEconomy().getBalance(playerName);
+        return balance;
     }
 
     public static boolean chargePlayer(String playerName, double chargeAmount) {
     	LocalShops plugin = (LocalShops) Bukkit.getServer().getPluginManager().getPlugin("LocalShops");
-        EconomyResponse balanceResp = Vault.getEconomy().getBalance(playerName);
-        if(!balanceResp.transactionSuccess()) {
-            return false;
-        }
+        double balance = Vault.getEconomy().getBalance(playerName);
         
         EconomyResponse withdrawResp = Vault.getEconomy().withdrawPlayer(playerName, chargeAmount);
         
         if(withdrawResp.transactionSuccess()) {
-            plugin.getShopManager().logPayment(playerName, "payment", withdrawResp.amount, balanceResp.balance, withdrawResp.balance);
+            plugin.getShopManager().logPayment(playerName, "payment", withdrawResp.amount, balance, withdrawResp.balance);
             return true;
         } else {
             return false;
