@@ -127,15 +127,22 @@ public class ShopsBlockListener extends BlockListener {
 		shop = plugin.getShopManager().getLocalShop(block.getLocation());
 
 		// If we weren't in a shop then exit event
-		if (shop == null) {
+		if (shop == null) 
 			return;
-		}
+
+		//cancel block place in a shop if the player is targeting a sign
+		Block targetBlock = event.getPlayer().getTargetBlock(null, 10);
+		if (targetBlock != null)
+			if (targetBlock.getType().equals(Material.SIGN_POST) || targetBlock.getType().equals(Material.WALL_SIGN))
+				event.setCancelled(true);
 
 		if (!shop.getOwner().equals(player.getName()) && !(shop.getManagers().contains(player.getName())) && !(Vault.getPermission().has(player, PermType.ADMIN_LOCAL.get()))) {
 			player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to place a sign or chest in the shop");
 			event.setCancelled(true);
 			return;
 		} 
+
+
 	}
 
 	public void onBlockBreak(BlockBreakEvent event) {
