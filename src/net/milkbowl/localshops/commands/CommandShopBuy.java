@@ -378,7 +378,7 @@ public class CommandShopBuy extends Command {
 				freeSpots += invItem.getMaxStock();
 				continue;
 			}else if (thisSlot.getType().equals(invItem.getType()) && thisSlot.getDurability() == invItem.getSubTypeId()) {
-				freeSpots += invItem.getMaxStock() - thisSlot.getAmount();
+				freeSpots += invItem.getMaxBundleSize() - thisSlot.getAmount();
 			}
 		}
 		//If player doesn't have enough slots free reduce the amount they can buy.
