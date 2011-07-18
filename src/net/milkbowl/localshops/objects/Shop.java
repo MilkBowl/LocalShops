@@ -322,11 +322,11 @@ public abstract class Shop implements Comparator<Shop> {
 	 }
 
 	 public int itemMaxStock(String itemName) {
-		 return inventory.get(itemName).maxStock;
+		 return inventory.get(itemName).getMaxStock();
 	 }
 
 	 public void setItemMaxStock(String itemName, int maxStock) {
-		 inventory.get(itemName).maxStock = maxStock;
+		 inventory.get(itemName).setMaxStock(maxStock);
 	 }
 
 	 public Queue<Transaction> getTransactions() {
