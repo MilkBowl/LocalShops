@@ -51,8 +51,7 @@ public class Econ {
     }
 
     public static double getBalance(String playerName) {
-        double balance = Vault.getEconomy().getBalance(playerName);
-        return balance;
+        return Vault.getEconomy().getBalance(playerName);
     }
 
     public static boolean chargePlayer(String playerName, double chargeAmount) {
