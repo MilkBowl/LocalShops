@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
+import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.objects.Item;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.PermType;
@@ -224,7 +225,7 @@ public abstract class Command {
 
 	protected int countItemsInInventory(PlayerInventory inventory, ItemStack item) {
 		int totalAmount = 0;
-		boolean isDurable = LocalShops.getItemList().isDurable(item);
+		boolean isDurable = Search.itemByStack(item).isDurable();
 
 		for (Integer i : inventory.all(item.getType()).keySet()) {
 			ItemStack thisStack = inventory.getItem(i);
@@ -255,12 +256,12 @@ public abstract class Command {
 		return damage;
 	}
 
-	protected int removeItemsFromInventory(PlayerInventory inventory, ItemStack item, int amount) {
+	protected int removeItemsFromInventory(PlayerInventory inventory, ItemStack itemStack, int amount) {
 
-		boolean isDurable = LocalShops.getItemList().isDurable(item);
+		boolean isDurable = Search.itemByStack(itemStack).isDurable();
 
 		// remove number of items from player adding stock
-		for (int i : inventory.all(item.getType()).keySet()) {
+		for (int i : inventory.all(itemStack.getType()).keySet()) {
 			if (amount == 0)
 				continue;
 			ItemStack thisStack = inventory.getItem(i);
@@ -269,7 +270,7 @@ public abstract class Command {
 				if (damage > Config.getItemMaxDamage() && Config.getItemMaxDamage() != 0)
 					continue;
 			} else {
-				if (thisStack.getDurability() != item.getDurability())
+				if (thisStack.getDurability() != itemStack.getDurability())
 					continue;
 			}
 

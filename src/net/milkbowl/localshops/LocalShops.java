@@ -23,7 +23,6 @@ import net.milkbowl.localshops.commands.ShopCommandExecutor;
 import net.milkbowl.localshops.listeners.ShopsBlockListener;
 import net.milkbowl.localshops.listeners.ShopsEntityListener;
 import net.milkbowl.localshops.listeners.ShopsPlayerListener;
-import net.milkbowl.localshops.objects.ItemData;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.ShopSign;
@@ -58,7 +57,6 @@ public class LocalShops extends JavaPlugin {
 	// Logging
 	private final Logger log = Logger.getLogger("Minecraft");
 
-	private static ItemData itemList = new ItemData();
 	private Map<String, PlayerData> playerData = Collections.synchronizedMap(new HashMap<String, PlayerData>());
 	public static Vault VAULT = null;
 
@@ -167,10 +165,6 @@ public class LocalShops extends JavaPlugin {
 
 	public Map<String, PlayerData> getPlayerData() {
 		return playerData;
-	}
-
-	public static ItemData getItemList() {
-		return itemList;
 	}
 
 	public ThreadManager getThreadManager() {
