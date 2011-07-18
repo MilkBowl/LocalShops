@@ -277,90 +277,49 @@ public class CommandShopSell extends Command {
         
         Player player = (Player) sender;
         ShopItem invItem = shop.getItem(item.getName());
-
+		int startStock = invItem.getStock();
         // check if the shop is buying that item
         if (!shop.containsItem(item) || shop.getItem(item.getName()).getSellPrice() == 0) {
             player.sendMessage(ChatColor.DARK_AQUA + "Sorry, " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is not buying " + ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " right now.");
             return false;
         }
         
-        int playerInventory = countItemsInInventory(player.getInventory(), item.toStack());
-        // check if the amount to add is okay, and it the player has enough
+        //get the amount we can actually sell to the shop
+        amount = getSellAmount(player, amount, invItem, shop);
+        if (amount <= 0)
+        	return false;
 
-        if (amount > playerInventory) {
-            player.sendMessage(ChatColor.DARK_AQUA + "You only have " + ChatColor.WHITE + playerInventory + ChatColor.DARK_AQUA + " in your inventory that can be added.");
-            amount = playerInventory;
-        }
-
-        // check if the shop has a max stock level set
-        if (invItem.getMaxStock() != 0 && !shop.isUnlimitedStock()) {
-            if (invItem.getStock() >= invItem.getMaxStock()) {
-                player.sendMessage(ChatColor.DARK_AQUA + "Sorry, " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is not buying any more " + ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " right now.");
-                return true;
-            }
-
-            if (amount > (invItem.getMaxStock() - invItem.getStock())) {
-                amount = invItem.getMaxStock() - invItem.getStock();
-            }
-        }
-        
-        // Check that Shop has enough for at least one stack
-        if(!shop.isUnlimitedMoney() && Econ.getBalance(shop.getOwner()) < invItem.getSellPrice()) {
-            player.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is broke!");
-            return true;
-        }
-        
-        Double totalSpent = 0.0;
-        int totalItemsSold = 0;
-        int remainingAmount = amount;
-        //TODO: instead of looping through we should check the number of items the player can sell & the shop can buy, 
-        // and then initiate a single transaction for the whole process.  Looping through it can potentially cause massive lag issues
-        // for large amount transactions if we do a loop.
-        while(remainingAmount > 0) {
-            // take item from the player
-            removeItemsFromInventory(player.getInventory(), item.toStack(), 1);
-            
-            // try to pay the player for order
-            if (shop.isUnlimitedMoney()) {
-                Econ.depositPlayer(player.getName(), invItem.getSellPrice());
-            } else if (!isShopController(shop)) {
-                if (!Econ.payPlayer(shop.getOwner(), player.getName(), invItem.getSellPrice())) {
-                    // shop owner did not have enough money
-                    // return item to player
-                    givePlayerItem(item.toStack(), 1);
-                    // break out of loop, its over!
-                    break;
-                }
-            }
-            
-            // Sub transaction worked, increment totals
-            totalSpent += invItem.getSellPrice();
-            totalItemsSold += 1;
-            
-            remainingAmount -= 1;
-        }
-
-        // Add total sold items to the shop
-        if (!shop.isUnlimitedStock()) {
-            shop.addStock(item.getName(), totalItemsSold);
-        }
+		double totalCost = amount * shop.getItem(item).getSellPrice();
+		
+		/**
+		 * Attempt the transaction - if it errors at this point then there is a serious issue.
+		 * 
+		 * No need for nested ifs.  If the shop is not unlimited money it shouldn't ever try to charge the player.
+		 * 
+		 * Also we should NEVER attempt loop transaction sales as they are incredibly inefficient.
+		 */
+		if (shop.isUnlimitedMoney() && !shop.getOwner().equals(player.getName()) && !Econ.depositPlayer(player.getName(), totalCost)) {
+			player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
+			return true;
+		} else if (!shop.getOwner().equals(player.getName()) && !Econ.payPlayer(shop.getOwner(), player.getName(), totalCost)) {
+			player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
+			return true;
+		}
+		if (!shop.isUnlimitedStock())
+			shop.addStock(item.getName(), amount);
+		
+		removeItemsFromInventory(player.getInventory(), item.toStack(), amount);
+		
+        plugin.getShopManager().logItems(player.getName(), shop.getName(), "sell-item", item.getName(), amount, startStock, invItem.getStock());
+        shop.addTransaction(new Transaction(Transaction.Type.Buy, player.getName(), item.getName(), amount, totalCost));
 
         // Message the player
         if (isShopController(shop)) {
-            player.sendMessage(ChatColor.DARK_AQUA + "You added " + ChatColor.WHITE + totalItemsSold + " " + item.getName() + ChatColor.DARK_AQUA + " to the shop");
+            player.sendMessage(ChatColor.DARK_AQUA + "You added " + ChatColor.WHITE + amount + " " + item.getName() + ChatColor.DARK_AQUA + " to the shop");
         } else {
-            player.sendMessage(ChatColor.DARK_AQUA + "You sold " + ChatColor.WHITE + totalItemsSold + " " + item.getName() + ChatColor.DARK_AQUA + " and gained " + ChatColor.WHITE + Vault.getEconomy().format(totalSpent));
+            player.sendMessage(ChatColor.DARK_AQUA + "You sold " + ChatColor.WHITE + amount + " " + item.getName() + ChatColor.DARK_AQUA + " and gained " + ChatColor.WHITE + Vault.getEconomy().format(amount));
         }
-
-        // log the transaction
-        int itemInv = invItem.getStock();
-        int startInv = itemInv - totalItemsSold;
-        if (startInv < 0) {
-            startInv = 0;
-        }
-        plugin.getShopManager().logItems(player.getName(), shop.getName(), "sell-item", item.getName(), totalItemsSold, startInv, itemInv);
-        shop.addTransaction(new Transaction(Transaction.Type.Buy, player.getName(), item.getName(), totalItemsSold, totalSpent));
-
+        
         // Save the changes to the Shop
         plugin.getShopManager().saveShop(shop);
 
@@ -369,4 +328,44 @@ public class CommandShopSell extends Command {
 
         return true;
     }
+    
+	private int getSellAmount(Player player, int amount, ShopItem invItem, Shop shop) {
+
+		int originalAmount = amount;
+		
+		//Reduce amount if the player doesn't even have enough to sell
+		int playerInventory = countItemsInInventory(player.getInventory(), invItem.toStack());
+		if (amount > playerInventory)
+			amount = playerInventory;
+		
+		//Return with special amount if this is the shop owner, 
+		//honestly the shop owner should be using /add, but this is for compatibility.
+		if (player.getName().equals(shop.getOwner()) && !shop.isUnlimitedStock())
+			return amount;
+		else if (player.getName().equals(shop.getOwner()) && shop.isUnlimitedStock())
+			return 0;
+		
+		
+		//Check how many the shop can buy
+		if (!(invItem.getMaxStock() == 0) && amount + invItem.getStock() > invItem.getMaxStock()) {
+			amount = invItem.getMaxStock() - invItem.getStock();
+			if (amount <= 0) {
+				player.sendMessage(ChatColor.DARK_AQUA + "Sorry, " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is not buying any more " + ChatColor.WHITE + invItem.getName() + ChatColor.DARK_AQUA + " right now.");
+				return amount;
+			}
+		}
+		
+		double totalPrice = invItem.getBuyPrice() * amount;
+		
+		//Reduce amount the player can sell if the owner doesn't have enough money, and shop is not unlimited stock.
+		if (!shop.isUnlimitedMoney() && totalPrice > Econ.getBalance(shop.getOwner())) {
+			amount = (int) Math.floor(Econ.getBalance(shop.getOwner()) / invItem.getSellPrice());
+		}
+		
+		//let our user know if there was any change in the amount
+		if (amount < originalAmount)
+			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_ORDER_REDUCED, new String[] { "%BUNDLESIZE%", "%AMOUNT%" }, new Object[] { 1, amount }));
+
+		return amount;
+	}
 }

@@ -322,6 +322,9 @@ public class CommandShopBuy extends Command {
 		}
 		
 		amount = getBuyAmount(player, amount, invItem, shop);
+        if (amount <= 0)
+        	return false;
+        
 		double totalCost = amount * shop.getItem(item).getBuyPrice();
 
 		/**
@@ -394,7 +397,7 @@ public class CommandShopBuy extends Command {
 		//Check player econ
 		double totalPrice = invItem.getBuyPrice() * amount;
 		if (totalPrice > Econ.getBalance(player.getName())) {
-			amount = (int) Math.floor(Econ.getBalance(player.getName()) / amount);
+			amount = (int) Math.floor(Econ.getBalance(player.getName()) / invItem.getBuyPrice());
 		}
 
 		if (amount < originalAmount)
