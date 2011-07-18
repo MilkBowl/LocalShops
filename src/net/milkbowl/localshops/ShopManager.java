@@ -752,8 +752,6 @@ public class ShopManager {
 				shop.getSigns().add(sign);
 				continue;
 			}
-			//Load the chunk so we don't try getting blocks that are non-existent
-			sign.getWorld().loadChunk(sign.getWorld().getChunkAt(sign.getLoc()));
 
 			//Check if the block is not a sign.
 			if ( !sign.isValid() ) {
