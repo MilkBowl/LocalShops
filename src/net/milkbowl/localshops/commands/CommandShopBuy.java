@@ -324,16 +324,10 @@ public class CommandShopBuy extends Command {
 		
 		//Get what the player can actually buy
 		amount = getBuyAmount(player, amount, invItem, shop.isUnlimitedStock());
-			
-
-		
-		int bundles = amount / invItem.getBuySize();
-		// recalculate # of items since may not fit cleanly into bundles
-		amount = bundles * invItem.getBuySize();
 		
 		//cost Related stuff
 		double itemPrice = invItem.getBuyPrice();
-		double totalCost = bundles * itemPrice;
+		double totalCost = amount * itemPrice;
 		boolean success = false;
 		
 		//TODO: Instead of attempting a sale on the original amount of items - we should check how much they can buy regardless of transaction and adjust the data down
@@ -344,7 +338,7 @@ public class CommandShopBuy extends Command {
 				double playerBalance = Econ.getBalance(player.getName());
 				int bundlesCanAford = (int) Math.floor(playerBalance / itemPrice);
 				totalCost = bundlesCanAford * itemPrice;
-				amount = bundlesCanAford * invItem.getBuySize();
+				amount = bundlesCanAford;
 				if(bundlesCanAford == 0) {
 					player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PLAYER_AFFORD_NONE, new String[] { "%ITEMNAME%" }, new Object[] { item.getName() }));
 					return true;
@@ -369,7 +363,7 @@ public class CommandShopBuy extends Command {
 				double playerBalance = Econ.getBalance(player.getName());
 				int bundlesCanAford = (int) Math.floor(playerBalance / itemPrice);
 				totalCost = bundlesCanAford * itemPrice;
-				amount = bundlesCanAford * invItem.getBuySize();
+				amount = bundlesCanAford;
 
 				if(bundlesCanAford == 0) {
 					player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PLAYER_AFFORD_NONE, new String[] { "%ITEMNAME%" }, new Object[] { item.getName() }));
@@ -430,7 +424,7 @@ public class CommandShopBuy extends Command {
 		int originalAmount = amount;
 		// if amount <= 0, assume single stack size
 		if (amount <= 0) {
-			amount = invItem.getBundleSize();
+			amount = 1;
 		}
 
 		//Get the total amount of stock in the shop
@@ -457,20 +451,10 @@ public class CommandShopBuy extends Command {
 				freeSpots += invItem.getMaxStock() - thisSlot.getAmount();
 			}
 		}
-		// Calculate the amount the player can store
-		if (amount > freeSpots) {
-			amount = freeSpots - (freeSpots % invItem.getBundleSize());
-		}
-		if (amount > totalStock && !unlimitedStock) {
-			//normalize the amount to the buy bundle size if it's greater than the number in the shop
-			amount = totalStock - (totalStock % invItem.getBundleSize());
-		} 
-		if (amount % invItem.getBundleSize() != 0) {
-			//Make sure we conform to shop bundle size
-			amount = amount - (amount % invItem.getBuySize());
-		}
+		amount = freeSpots;
+		
 		if (amount < originalAmount)
-			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_ORDER_REDUCED, new String[] { "%BUNDLESIZE%", "%AMOUNT%" }, new Object[] { invItem.getBundleSize(), amount }));
+			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_ORDER_REDUCED, new String[] { "%BUNDLESIZE%", "%AMOUNT%" }, new Object[] { 1, amount }));
 			
 		
 		return amount;

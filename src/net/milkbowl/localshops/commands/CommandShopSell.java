@@ -313,6 +313,9 @@ public class CommandShopSell extends Command {
         Double totalSpent = 0.0;
         int totalItemsSold = 0;
         int remainingAmount = amount;
+        //TODO: instead of looping through we should check the number of items the player can sell & the shop can buy, 
+        // and then initiate a single transaction for the whole process.  Looping through it can potentially cause massive lag issues
+        // for large amount transactions if we do a loop.
         while(remainingAmount > 0) {
             // take item from the player
             removeItemsFromInventory(player.getInventory(), item.toStack(), 1);
