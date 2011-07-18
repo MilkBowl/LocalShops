@@ -78,7 +78,7 @@ public class ShopSign {
 		this.y = y;
 		this.z = z;
 		this.item = itemName;
-		if (amount > 1 && !(typeId == 1))
+		if (amount > 1 && !(typeId == 0))
 			this.amount = amount;
 			
 		for(SignType t : SignType.values()) {
