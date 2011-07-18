@@ -308,7 +308,7 @@ public class ShopManager {
 					shop = loadShop(file);
 				} catch(Exception e) {
 					// log error
-					log.info(String.format("[%s] Error loading Shop file \"%s\", ignored.", plugin.getDescription().getName(), file.toString()));
+					log.info(String.format("[%s] Error loading Shop file \"%s\", ignored: %s", plugin.getDescription().getName(), file.toString(), e.getMessage()));
 				}
 			} else {
 				// Convert old format & delete the file...immediately save using the new format (will generate a new UUID for this shop)
