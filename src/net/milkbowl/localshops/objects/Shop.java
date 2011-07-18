@@ -484,7 +484,7 @@ public abstract class Shop implements Comparator<Shop> {
 				 signLines[2] = sCol + numFormat.format(sellPrice);
 
 			 if (!this.unlimitedStock)
-				 signLines[3] = dCol + "Stk: " + stoCol + available;
+				 signLines[3] = dCol + "Stk: " + stoCol + stock;
 			 else
 				 signLines[3] = stoCol + "Unlimited";
 		 } else if (sign.getType() == ShopSign.SignType.BUY ) {
