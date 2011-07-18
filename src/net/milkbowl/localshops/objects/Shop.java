@@ -444,8 +444,8 @@ public abstract class Shop implements Comparator<Shop> {
 
 		 //Store the variables we'll be using multiple times
 		 int stock = this.getItem(sign.getItemName()).getStock();
-		 double buyPrice = this.getItem(sign.getItemName()).getBuyPrice();
-		 double sellPrice = this.getItem(sign.getItemName()).getSellPrice();
+		 double buyPrice = this.getItem(sign.getItemName()).getBuyPrice() * sign.getAmount();
+		 double sellPrice = this.getItem(sign.getItemName()).getSellPrice() * sign.getAmount();
 		 int maxStock = this.getItem(sign.getItemName()).getMaxStock();
 		 int available = stock / sign.getAmount();
 		 
@@ -494,7 +494,7 @@ public abstract class Shop implements Comparator<Shop> {
 				 signLines[1] = dCol + "Understock";
 			 else  {
 				 signLines[1] = sCol + numFormat.format(buyPrice);
-				 signLines[2] = dCol + "Buy: " + aCol + sign.getAmount();
+				 signLines[2] = dCol + "BuyAmt: " + aCol + sign.getAmount();
 			 }
 			 if (!this.unlimitedStock)
 				 signLines[3] = dCol + "Stk: " + stoCol + available;
@@ -507,7 +507,7 @@ public abstract class Shop implements Comparator<Shop> {
 				 signLines[1] = dCol + "Overstock";
 			 else {
 				 signLines[1] = sCol + numFormat.format(sellPrice);
-				 signLines[2] = dCol + "Sell: " + aCol + sign.getAmount();
+				 signLines[2] = dCol + "SellAmt: " + aCol + sign.getAmount();
 			 }
 			 if (!this.unlimitedStock)
 				 signLines[3] = dCol + "Stk: " + stoCol + available;

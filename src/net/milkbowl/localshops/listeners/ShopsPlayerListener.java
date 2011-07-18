@@ -75,14 +75,14 @@ public class ShopsPlayerListener extends PlayerListener {
                 		continue;
                 	}
                     if (sign.getType().equals(ShopSign.SignType.BUY)) {
-                        ShopCommandExecutor.commandTypeMap.get("buy").getCommandInstance(plugin, "buy", event.getPlayer(), "buy " + sign.getItemName(), false).process();
+                        ShopCommandExecutor.commandTypeMap.get("buy").getCommandInstance(plugin, "buy", event.getPlayer(), "buy " + sign.getItemName()+ " " + sign.getAmount(), false).process();
                         //TODO: Remove when bukkit fixes inventory updating
                         try {
                             player.updateInventory();
                         } catch (Exception e) {}
                         return;
                     } else if (sign.getType().equals(ShopSign.SignType.SELL)) {
-                        ShopCommandExecutor.commandTypeMap.get("sell").getCommandInstance(plugin, "sell", event.getPlayer(), "sell " + sign.getItemName(), false).process();
+                        ShopCommandExecutor.commandTypeMap.get("sell").getCommandInstance(plugin, "sell", event.getPlayer(), "sell " + sign.getItemName() + " " + sign.getAmount(), false).process();
                         player.updateInventory();
                         return;
                     } else {
