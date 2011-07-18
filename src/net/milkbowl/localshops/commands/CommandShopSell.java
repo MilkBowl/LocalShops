@@ -305,7 +305,7 @@ public class CommandShopSell extends Command {
         }
         
         // Check that Shop has enough for at least one stack
-        if(Econ.getBalance(shop.getOwner()) < invItem.getSellPrice()) {
+        if(!shop.isUnlimitedMoney() && Econ.getBalance(shop.getOwner()) < invItem.getSellPrice()) {
             player.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is broke!");
             return true;
         }
