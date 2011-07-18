@@ -120,7 +120,7 @@ public class ShopItem extends Item {
     
     /**
      * TODO: this should return ItemStack[] which conforms to MC stack size.
-     * And should be Overrided here.
+     * And should be Overrided here for simplicity.
      * @return
      */
     @Override
@@ -130,10 +130,11 @@ public class ShopItem extends Item {
     
     public boolean equals (Object obj) {
     	if (obj instanceof ShopItem) {
-    		return obj == this;
+    		return this == obj;
     	} else if (obj instanceof Item || obj instanceof ItemInfo) {
     		return super.equals(obj);
-    	} else
+    	}
+    	else
     		return false;
     }
     
