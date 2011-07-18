@@ -693,6 +693,7 @@ public class ShopManager {
 					} else {
 						log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, and Error moving file to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString()));
 					}
+					return null;
 				}
 
 			} else if (key.matches("sign\\d+$")) {
@@ -778,6 +779,7 @@ public class ShopManager {
 			} else {
 				log.warning(String.format("[%s] Shop file %s has bad data!  Error moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.getName()));
 			}
+			return null;
 		}
 
 		return shop;
