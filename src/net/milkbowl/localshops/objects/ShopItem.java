@@ -128,4 +128,13 @@ public class ShopItem extends Item {
         return new ItemStack (this.material, 1, subTypeId);
     }
     
+    public boolean equals (Object obj) {
+    	if (obj instanceof ShopItem) {
+    		return obj == this;
+    	} else if (obj instanceof Item || obj instanceof ItemInfo) {
+    		return super.equals(obj);
+    	} else
+    		return false;
+    }
+    
 }

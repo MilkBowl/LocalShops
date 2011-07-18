@@ -36,8 +36,8 @@ public class ItemInfo extends Item {
         return String.format("%s, %s, %d:%d", name, Arrays.deepToString(search), material.getId(), subTypeId);
     }
     
-    public boolean equals(ItemInfo item){
-    	return super.equals(item);
+    public boolean equals(Object obj){
+    	return super.equals(obj);
     }
     
 }
