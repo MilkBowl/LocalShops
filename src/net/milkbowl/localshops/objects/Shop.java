@@ -171,18 +171,10 @@ public abstract class Shop implements Comparator<Shop> {
 	  * @return
 	  */
 	 
-	 //TODO: Shouldn't addItem take it's own Data Object passed in to 'add' to the shop?
 	 public boolean addItem(int itemNumber, short itemData, double buyPrice, double sellPrice, int stock, int maxStock, boolean dynamicItem) {
 
 		 ItemInfo item = Search.itemById(itemNumber, itemData);
-		 ShopRecord thisItem = new ShopRecord();
-		 
-		 thisItem.setBuy(buyPrice);
-		 thisItem.setSell(sellPrice);
-
-		 thisItem.setStock(stock);
-		 thisItem.setDynamic(dynamicItem);
-		 thisItem.maxStock = maxStock;
+		 ShopRecord thisItem = new ShopRecord(buyPrice, sellPrice, stock, maxStock, dynamicItem);
 
 		 inventory.put(item, thisItem);
 

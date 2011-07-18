@@ -22,20 +22,13 @@ public class ShopRecord {
     private int baseStock = 0;
     private boolean dynamic;
     public int maxStock;
-
-
-    public ShopRecord() {
-        buyPrice = 0;
-        sellPrice = 0;
-        stock = 0;
-        dynamic = false;
-    }
     
-    public ShopRecord(ItemInfo info, double buyPrice, double sellPrice, int stock, int maxStock) {
+    public ShopRecord(double buyPrice, double sellPrice, int stock, int maxStock, boolean dynamic) {
     	this.buyPrice = buyPrice;
     	this.sellPrice = sellPrice;
     	this.stock = stock;
     	this.maxStock = maxStock;
+    	this.dynamic = dynamic;
     }
 
     public void setSell(double sellPrice) {
