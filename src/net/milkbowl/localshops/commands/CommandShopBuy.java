@@ -320,11 +320,11 @@ public class CommandShopBuy extends Command {
 			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_NOT_SELLING, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.getName() }));
 			return false;
 		}
-		
+
 		amount = getBuyAmount(player, amount, invItem, shop);
-        if (amount <= 0)
-        	return false;
-        
+		if (amount <= 0)
+			return false;
+
 		double totalCost = amount * shop.getItem(item).getBuyPrice();
 
 		/**
@@ -332,33 +332,36 @@ public class CommandShopBuy extends Command {
 		 * 
 		 * No need for nested ifs.  If the shop is not unlimited money it shouldn't ever try to charge the player.
 		 */
-		if (shop.isUnlimitedMoney() && !shop.getOwner().equals(player.getName()) && !Econ.chargePlayer(player.getName(), totalCost)) {
-			player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
-			return true;
+		if (shop.isUnlimitedMoney() && !shop.getOwner().equals(player.getName())) {
+			if (!Econ.chargePlayer(player.getName(), totalCost)) {
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
+				return true;
+			}
 		} else if (!shop.getOwner().equals(player.getName()) && !Econ.payPlayer(player.getName(), shop.getOwner(), totalCost)) {
 			player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
 			return true;
 		}
+		
 		if (!shop.isUnlimitedStock())
 			shop.removeStock(item.getName(), amount);
-		
+
 		if (isShopController(shop)) {
 			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_REMOVED_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { amount, item.getName() }));
 		} else {
 			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PURCHASED_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%", "%COST%" }, new Object[] { amount, item.getName(), Vault.getEconomy().format(totalCost) }));
 		}
-		
+
 		//Do our give stock stuff here
-		
+
 		plugin.getShopManager().logItems(player.getName(), shop.getName(), "buy-item", item.getName(), amount, startStock, invItem.getStock());
 		shop.addTransaction(new Transaction(Transaction.Type.Sell, player.getName(), item.getName(), amount, totalCost));
-		
+
 		givePlayerItem(item.toStack(), amount);
 		plugin.getShopManager().saveShop(shop);
 
 		//update any sign in this shop with that value.
 		shop.updateSigns(shop.getSigns());
-		
+
 		return true;
 	}
 
@@ -370,40 +373,40 @@ public class CommandShopBuy extends Command {
 		//Lower our amount if the shop doesn't have enough stock to sell what was requested.
 		if (!shop.isUnlimitedStock() && amount > invItem.getStock())
 			amount = invItem.getStock();;
-		
-		// check how many items the user has room for
-		int freeSpots = 0;
-		for (ItemStack thisSlot : player.getInventory().getContents()) {
-			if (thisSlot == null || thisSlot.getType().equals(Material.AIR)) {
-				//Adjust number of items slots by the number an air block can hold
-				freeSpots += invItem.getMaxBundleSize();
-				continue;
-			}else if (thisSlot.getType().equals(invItem.getType()) && thisSlot.getDurability() == invItem.getSubTypeId()) {
-				freeSpots += invItem.getMaxBundleSize() - thisSlot.getAmount();
+
+			// check how many items the user has room for
+			int freeSpots = 0;
+			for (ItemStack thisSlot : player.getInventory().getContents()) {
+				if (thisSlot == null || thisSlot.getType().equals(Material.AIR)) {
+					//Adjust number of items slots by the number an air block can hold
+					freeSpots += invItem.getMaxBundleSize();
+					continue;
+				}else if (thisSlot.getType().equals(invItem.getType()) && thisSlot.getDurability() == invItem.getSubTypeId()) {
+					freeSpots += invItem.getMaxBundleSize() - thisSlot.getAmount();
+				}
 			}
-		}
-		//If player doesn't have enough slots free reduce the amount they can buy.
-		if (amount > freeSpots)
-			amount = freeSpots;
+			//If player doesn't have enough slots free reduce the amount they can buy.
+			if (amount > freeSpots)
+				amount = freeSpots;
 
 
-		//Return with special amount if this is the shop owner, 
-		//honestly the shop owner should be using /remove, but this is for compatibility.
-		if (player.getName().equals(shop.getOwner()) && !shop.isUnlimitedStock())
+			//Return with special amount if this is the shop owner, 
+			//honestly the shop owner should be using /remove, but this is for compatibility.
+			if (player.getName().equals(shop.getOwner()) && !shop.isUnlimitedStock())
+				return amount;
+			else if (player.getName().equals(shop.getOwner()) && shop.isUnlimitedStock())
+				return 0;
+
+			//Check player econ
+			double totalPrice = invItem.getBuyPrice() * amount;
+			if (totalPrice > Econ.getBalance(player.getName())) {
+				amount = (int) Math.floor(Econ.getBalance(player.getName()) / invItem.getBuyPrice());
+			}
+
+			if (amount < originalAmount)
+				player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_ORDER_REDUCED, new String[] { "%BUNDLESIZE%", "%AMOUNT%" }, new Object[] { 1, amount }));
+
+
 			return amount;
-		else if (player.getName().equals(shop.getOwner()) && shop.isUnlimitedStock())
-			return 0;
-		
-		//Check player econ
-		double totalPrice = invItem.getBuyPrice() * amount;
-		if (totalPrice > Econ.getBalance(player.getName())) {
-			amount = (int) Math.floor(Econ.getBalance(player.getName()) / invItem.getBuyPrice());
-		}
-
-		if (amount < originalAmount)
-			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_ORDER_REDUCED, new String[] { "%BUNDLESIZE%", "%AMOUNT%" }, new Object[] { 1, amount }));
-
-
-		return amount;
 	}
 }
