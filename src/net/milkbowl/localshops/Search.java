@@ -285,7 +285,7 @@ public class Search {
 		return null;
 	}
 	
-	public static ItemInfo itemById(Item item) {
+	public static ItemInfo itemByItem(Item item) {
 		for(ItemInfo i : items) {
 			if (item.equals(i))
 				return i;
