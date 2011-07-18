@@ -29,8 +29,8 @@ public class ItemInfo extends Item {
     }
     
     public ItemInfo (String name, String[][] search, Material material) {
-    	this(name, search, material, (short) 0);
-    	
+    	super(material, name);
+    	this.search = search;
     }
     
     public String toString() {
