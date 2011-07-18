@@ -58,7 +58,7 @@ public class ShopsWorldListener extends WorldListener {
             while (iter.hasNext()) {
                 ShopSign sign = iter.next();
                 //If event world and signWorld are the same, set the signworld and validate the sign.
-                if (sign.getWorld() == null && sign.getWorldName() == event.getWorld().getName())
+                if (sign.getWorld() == null && sign.getWorldName().equals(event.getWorld().getName()))
                 {
                     sign.setWorld(event.getWorld());
                     if (sign.isValid()) {

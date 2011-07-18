@@ -14,6 +14,7 @@ package net.milkbowl.localshops.objects;
 
 import net.milkbowl.localshops.exceptions.TypeNotFoundException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -131,6 +132,9 @@ public class ShopSign {
 
 	public Location getLoc() {
 		if (world == null) 
+			world = Bukkit.getServer().getWorld(signWorld);
+		
+		if (world == null)
 			return null;
 		else
 			return new Location(this.world, this.x, this.y, this.z);
