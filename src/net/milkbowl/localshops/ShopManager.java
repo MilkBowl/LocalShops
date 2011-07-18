@@ -650,11 +650,15 @@ public class ShopManager {
 				String[] buy = v[0].split(":");
 				double buyPrice = Double.parseDouble(buy[0]);
 				int buyStackSize = Integer.parseInt(buy[1]);
+				buyPrice = buyPrice / buyStackSize;
+				buyStackSize = 1;
 
 				String[] sell = v[1].split(":");
 				double sellPrice = Double.parseDouble(sell[0]);
 				int sellStackSize = Integer.parseInt(sell[1]);
-
+				sellPrice = sellPrice / sellStackSize;
+				sellStackSize = 1;
+				
 				String[] stock = v[2].split(":");
 				int currStock = Integer.parseInt(stock[0]);
 				int maxStock = Integer.parseInt(stock[1]);
