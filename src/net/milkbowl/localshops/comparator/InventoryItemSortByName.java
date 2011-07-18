@@ -14,14 +14,12 @@ package net.milkbowl.localshops.comparator;
 
 import java.util.Comparator;
 
-import net.milkbowl.localshops.objects.ShopItem;
+import net.milkbowl.localshops.objects.Item;
 
-
-
-public class InventoryItemSortByName implements Comparator<ShopItem> {
+public class InventoryItemSortByName implements Comparator<Item> {
 
     @Override
-    public int compare(ShopItem o1, ShopItem o2) {
+    public int compare(Item o1, Item o2) {
         return o1.getName().compareTo(o2.getName());
     }
     

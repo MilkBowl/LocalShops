@@ -6,8 +6,14 @@ import org.bukkit.inventory.ItemStack;
 public class Item {
 
 	protected final Material material;
-	protected final short subTypeId;
+	protected final Short subTypeId;
 	protected final String name;
+	
+	public Item(Material material, String name) {
+	    this.material = material;
+	    this.name = name;
+	    this.subTypeId = 0;
+	}
 
 	public Item (Material material, short subTypeId, String name) {
 		this.name = name;

@@ -20,7 +20,7 @@ import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.objects.Item;
-import net.milkbowl.localshops.objects.ShopItem;
+import net.milkbowl.localshops.objects.ShopRecord;
 import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.Transaction;
@@ -269,7 +269,7 @@ public class CommandShopSell extends Command {
 		} 
 
 		Player player = (Player) sender;
-		ShopItem invItem = shop.getItem(item.getName());
+		ShopRecord invItem = shop.getItem(item.getName());
 		int startStock = invItem.getStock();
 		// check if the shop is buying that item
 		if (!shop.containsItem(item) || invItem.getSellPrice() == 0) {
@@ -278,7 +278,7 @@ public class CommandShopSell extends Command {
 		}
 
 		//get the amount we can actually sell to the shop
-		amount = getSellAmount(player, amount, invItem, shop);
+		amount = getSellAmount(player, amount, item, shop);
 		if (amount <= 0)
 			return false;
 
@@ -323,14 +323,15 @@ public class CommandShopSell extends Command {
 		return true;
 	}
 
-	private int getSellAmount(Player player, int amount, ShopItem invItem, Shop shop) {
+	private int getSellAmount(Player player, int amount, Item item, Shop shop) {
 
 		int originalAmount = amount;
 
 		//Reduce amount if the player doesn't even have enough to sell
-		int playerInventory = countItemsInInventory(player.getInventory(), invItem.toStack());
-		if (amount > playerInventory)
+		int playerInventory = countItemsInInventory(player.getInventory(), item.toStack());
+		if (amount > playerInventory) {
 			amount = playerInventory;
+		}
 
 		//Return with special amount if this is the shop owner, 
 		//honestly the shop owner should be using /add, but this is for compatibility.
@@ -341,19 +342,19 @@ public class CommandShopSell extends Command {
 
 
 		//Check how many the shop can buy
-		if (!(invItem.getMaxStock() == 0) && amount + invItem.getStock() > invItem.getMaxStock()) {
-			amount = invItem.getMaxStock() - invItem.getStock();
+		if (!(shop.getItem(item).getMaxStock() == 0) && amount + shop.getItem(item).getStock() > shop.getItem(item).getMaxStock()) {
+			amount = shop.getItem(item).getMaxStock() - shop.getItem(item).getStock();
 			if (amount <= 0) {
-				player.sendMessage(ChatColor.DARK_AQUA + "Sorry, " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is not buying any more " + ChatColor.WHITE + invItem.getName() + ChatColor.DARK_AQUA + " right now.");
+				player.sendMessage(ChatColor.DARK_AQUA + "Sorry, " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is not buying any more " + ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " right now.");
 				return amount;
 			}
 		}
 
-		double totalPrice = invItem.getBuyPrice() * amount;
+		double totalPrice = shop.getItem(item).getBuyPrice() * amount;
 
 		//Reduce amount the player can sell if the owner doesn't have enough money, and shop is not unlimited stock.
 		if (!shop.isUnlimitedMoney() && totalPrice > Econ.getBalance(shop.getOwner())) {
-			amount = (int) Math.floor(Econ.getBalance(shop.getOwner()) / invItem.getSellPrice());
+			amount = (int) Math.floor(Econ.getBalance(shop.getOwner()) / shop.getItem(item).getSellPrice());
 		}
 
 		//let our user know if there was any change in the amount

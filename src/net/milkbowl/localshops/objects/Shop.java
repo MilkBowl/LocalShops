@@ -47,7 +47,7 @@ public abstract class Shop implements Comparator<Shop> {
 	protected boolean unlimitedMoney = false;
 	protected boolean unlimitedStock = false;
 	protected boolean dynamicPrices = false;
-	protected HashMap<String, ShopItem> inventory = new HashMap<String, ShopItem>();
+	protected HashMap<Item, ShopRecord> inventory = new HashMap<Item, ShopRecord>();
 	protected double minBalance = 0;
 	protected double sharePercent = 0;
 	protected ArrayBlockingQueue<Transaction> transactions;
@@ -116,11 +116,11 @@ public abstract class Shop implements Comparator<Shop> {
 		this.dynamicPrices = dynamicPrices;
 	}
 
-	public ShopItem getItem(String item) {
+	public ShopRecord getItem(String item) {
 		return inventory.get(item);
 	}
 
-	public ShopItem getItem(Item item) {
+	public ShopRecord getItem(Item item) {
 		return inventory.get(item);
 	}
 
@@ -175,7 +175,7 @@ public abstract class Shop implements Comparator<Shop> {
 	 public boolean addItem(int itemNumber, short itemData, double buyPrice, double sellPrice, int stock, int maxStock, boolean dynamicItem) {
 
 		 ItemInfo item = Search.itemById(itemNumber, itemData);
-		 ShopItem thisItem = new ShopItem(item);
+		 ShopRecord thisItem = new ShopRecord();
 		 
 		 thisItem.setBuy(buyPrice);
 		 thisItem.setSell(sellPrice);
@@ -184,7 +184,7 @@ public abstract class Shop implements Comparator<Shop> {
 		 thisItem.setDynamic(dynamicItem);
 		 thisItem.maxStock = maxStock;
 
-		 inventory.put(item.name, thisItem);
+		 inventory.put(item, thisItem);
 
 		 return true;
 	 }
@@ -231,8 +231,8 @@ public abstract class Shop implements Comparator<Shop> {
 		 return managers;
 	 }
 
-	 public List<ShopItem> getItems() {
-		 return new ArrayList<ShopItem>(inventory.values());
+	 public List<Item> getItems() {
+		 return new ArrayList<Item>(inventory.keySet());
 	 }
 
 	 public Set<String> getGroupSet() {
@@ -318,7 +318,7 @@ public abstract class Shop implements Comparator<Shop> {
 	  */
 	 public int numDynamicItems() {
 		 int num = 0;
-		 for (ShopItem item : this.getItems() ) {
+		 for (ShopRecord item : inventory.values() ) {
 			 if (item.isDynamic())
 				 num++;
 		 }

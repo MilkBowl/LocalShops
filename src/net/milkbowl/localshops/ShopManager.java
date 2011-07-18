@@ -35,7 +35,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.milkbowl.localshops.objects.GlobalShop;
-import net.milkbowl.localshops.objects.ShopItem;
+import net.milkbowl.localshops.objects.Item;
+import net.milkbowl.localshops.objects.ShopRecord;
 import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.LocalShop;
 import net.milkbowl.localshops.objects.Shop;
@@ -861,14 +862,15 @@ public class ShopManager {
             props.setProperty("groups", GenericFunctions.join(shop.getGroupSet(), ", "));
 
         // Inventory
-        for (ShopItem item : shop.getItems()) {
+        for (Item item : shop.getItems()) {
             int id = item.getId();
             short subTypeId = item.getSubTypeId();
-            double buyPrice = item.getBuyPrice();
-            double sellPrice = item.getSellPrice();
-            int stock = item.getStock();
-            int maxStock = item.getMaxStock();
-            int dynamic = (item.isDynamic() ? 1 : 0);
+            ShopRecord record = shop.getItem(item);
+            double buyPrice = record.getBuyPrice();
+            double sellPrice = record.getSellPrice();
+            int stock = record.getStock();
+            int maxStock = record.getMaxStock();
+            int dynamic = (record.isDynamic() ? 1 : 0);
             // TODO: Update and remove bundle storage completely?
             props.setProperty(String.format("%d:%d", id, subTypeId), String.format("%f:%d,%f:%d,%d:%d,%d", buyPrice, 1, sellPrice, 1, stock, maxStock, dynamic));
         }

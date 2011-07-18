@@ -19,7 +19,7 @@ import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.objects.Item;
-import net.milkbowl.localshops.objects.ShopItem;
+import net.milkbowl.localshops.objects.ShopRecord;
 import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.PermType;
@@ -305,7 +305,7 @@ public class CommandShopBuy extends Command {
 	}
 	private boolean shopBuy(Shop shop, Item item, int amount) {
 		Player player = (Player) sender;
-		ShopItem invItem = shop.getItem(item);
+		ShopRecord invItem = shop.getItem(item);
 		int startStock = invItem.getStock();
 		//initial order request.
 
@@ -322,7 +322,7 @@ public class CommandShopBuy extends Command {
 			return false;
 		}
 
-		amount = getBuyAmount(player, amount, invItem, shop);
+		amount = getBuyAmount(player, amount, item, shop);
 		if (amount <= 0)
 			return false;
 
@@ -366,24 +366,24 @@ public class CommandShopBuy extends Command {
 		return true;
 	}
 
-	private int getBuyAmount(Player player, int amount, ShopItem invItem, Shop shop) {
+	private int getBuyAmount(Player player, int amount, Item item, Shop shop) {
 
 		int originalAmount = amount;
 		//Get the total amount of stock in the shop
 
 		//Lower our amount if the shop doesn't have enough stock to sell what was requested.
-		if (!shop.isUnlimitedStock() && amount > invItem.getStock())
-			amount = invItem.getStock();;
+		if (!shop.isUnlimitedStock() && amount > shop.getItem(item).getStock())
+			amount = shop.getItem(item).getStock();;
 
 			// check how many items the user has room for
 			int freeSpots = 0;
 			for (ItemStack thisSlot : player.getInventory().getContents()) {
 				if (thisSlot == null || thisSlot.getType().equals(Material.AIR)) {
 					//Adjust number of items slots by the number an air block can hold
-					freeSpots += invItem.getMaxBundleSize();
+					freeSpots += item.getMaxBundleSize();
 					continue;
-				}else if (thisSlot.getType().equals(invItem.getType()) && thisSlot.getDurability() == invItem.getSubTypeId()) {
-					freeSpots += invItem.getMaxBundleSize() - thisSlot.getAmount();
+				}else if (thisSlot.getType().equals(item.getType()) && thisSlot.getDurability() == item.getSubTypeId()) {
+					freeSpots += item.getMaxBundleSize() - thisSlot.getAmount();
 				}
 			}
 			//If player doesn't have enough slots free reduce the amount they can buy.
@@ -399,9 +399,9 @@ public class CommandShopBuy extends Command {
 				return 0;
 
 			//Check player econ
-			double totalPrice = invItem.getBuyPrice() * amount;
+			double totalPrice = shop.getItem(item).getBuyPrice() * amount;
 			if (totalPrice > Econ.getBalance(player.getName())) {
-				amount = (int) Math.floor(Econ.getBalance(player.getName()) / invItem.getBuyPrice());
+				amount = (int) Math.floor(Econ.getBalance(player.getName()) / shop.getItem(item).getBuyPrice());
 			}
 
 			if (amount < originalAmount)

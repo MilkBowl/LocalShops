@@ -27,7 +27,7 @@ import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.comparator.EntryValueComparator;
 import net.milkbowl.localshops.objects.GlobalShop;
-import net.milkbowl.localshops.objects.ShopItem;
+import net.milkbowl.localshops.objects.ShopRecord;
 import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.LocalShop;
 import net.milkbowl.localshops.objects.Shop;
@@ -188,7 +188,7 @@ public class CommandShopFind extends Command {
                 UUID uuid = entry.getKey();
                 double distance = entry.getValue();
                 Shop shop = plugin.getShopManager().getLocalShop(uuid);
-                ShopItem item = shop.getItem(found.getName());
+                ShopRecord item = shop.getItem(found.getName());
 
                 String sellPrice;
                 if (item.getBuyPrice() <= 0 || (item.getStock() == 0 && !shop.isUnlimitedStock())) {

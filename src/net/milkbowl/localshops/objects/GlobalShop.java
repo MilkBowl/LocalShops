@@ -77,11 +77,12 @@ public class GlobalShop extends Shop {
         // Items
         log.info("Shop Inventory");
         log.info("   BP=Buy Price, BS=Buy Size, SP=Sell Price, SS=Sell Size, ST=Stock, MX=Max Stock");
-        log.info(String.format("   %-9s %-6s %-3s %-6s %-3s %-3s %-3s", "Id", "BP", "BS", "SP", "SS", "ST", "MX"));        
-        Iterator<ShopItem> it = inventory.values().iterator();
+        log.info(String.format("   %-9s %-6s %-3s %-6s %-3s %-3s %-3s", "Id", "BP", "BS", "SP", "SS", "ST", "MX"));
+        Iterator<Item> it = inventory.keySet().iterator();
         while(it.hasNext()) {
-            ShopItem item = it.next();
-            log.info(String.format("   %6d:%-2d %-6.2f %-6.2f %-3d %-3d", item.getId(), item.getSubTypeId(), item.getBuyPrice(), item.getSellPrice(), item.getStock(), item.getMaxStock()));
+            Item item = it.next();
+            ShopRecord record = inventory.get(item);
+            log.info(String.format("   %6d:%-2d %-6.2f %-6.2f %-3d %-3d", item.getId(), item.getSubTypeId(), record.getBuyPrice(), record.getSellPrice(), record.getStock(), record.getMaxStock()));
         }
     }
 

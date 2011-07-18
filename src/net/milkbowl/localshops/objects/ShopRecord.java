@@ -12,11 +12,9 @@
 
 package net.milkbowl.localshops.objects;
 
-import org.bukkit.inventory.ItemStack;
-
 import net.milkbowl.localshops.DynamicManager;
 
-public class ShopItem extends Item {
+public class ShopRecord {
 
     private double buyPrice = 0;
     private double sellPrice = 0;
@@ -26,16 +24,14 @@ public class ShopItem extends Item {
     public int maxStock;
 
 
-    public ShopItem(ItemInfo info) {
-    	super (info.getType(), info.getSubTypeId(), info.getName());
+    public ShopRecord() {
         buyPrice = 0;
         sellPrice = 0;
         stock = 0;
         dynamic = false;
     }
     
-    public ShopItem(ItemInfo info, double buyPrice, double sellPrice, int stock, int maxStock) {
-    	super(info.getType(), info.getSubTypeId(), info.getName());
+    public ShopRecord(ItemInfo info, double buyPrice, double sellPrice, int stock, int maxStock) {
     	this.buyPrice = buyPrice;
     	this.sellPrice = sellPrice;
     	this.stock = stock;
@@ -118,24 +114,12 @@ public class ShopItem extends Item {
         this.baseStock = baseStock;
     }
     
-    /**
-     * TODO: this should return ItemStack[] which conforms to MC stack size.
-     * And should be Overrided here for simplicity.
-     * @return
-     */
-    @Override
-    public ItemStack toStack() {
-        return new ItemStack (this.material, 1, subTypeId);
-    }
-    
     public boolean equals (Object obj) {
-    	if (obj instanceof ShopItem) {
+    	if (obj instanceof ShopRecord) {
     		return this == obj;
-    	} else if (obj instanceof Item || obj instanceof ItemInfo) {
-    		return super.equals(obj);
+    	} else {
+    	    return false;
     	}
-    	else
-    		return false;
     }
     
 }

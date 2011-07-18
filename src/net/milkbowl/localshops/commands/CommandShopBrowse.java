@@ -21,7 +21,8 @@ import java.util.regex.Pattern;
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.comparator.InventoryItemSortByName;
-import net.milkbowl.localshops.objects.ShopItem;
+import net.milkbowl.localshops.objects.Item;
+import net.milkbowl.localshops.objects.ShopRecord;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;
@@ -139,7 +140,7 @@ public class CommandShopBrowse extends Command {
      */
     private void printInventory(Shop shop, String buySellorList, int pageNumber) {
         String inShopName = shop.getName();
-        List<ShopItem> items = shop.getItems();
+        List<Item> items = shop.getItems();
         Collections.sort(items, new InventoryItemSortByName());
 
         boolean buy = buySellorList.equalsIgnoreCase("buy");
@@ -147,7 +148,7 @@ public class CommandShopBrowse extends Command {
         boolean list = buySellorList.equalsIgnoreCase("list");
 
         ArrayList<String> inventoryMessage = new ArrayList<String>();
-        for (ShopItem item : items) {
+        for (Item item : items) {
 
             String subMessage = "   " + item.getName();
             int maxStock = 0;
@@ -157,10 +158,10 @@ public class CommandShopBrowse extends Command {
                 double price = 0;
                 if (buy) {
                     // get buy price
-                    price = item.getBuyPrice();
+                    price = shop.getItem(item).getBuyPrice();
                 }
                 if (sell) {
-                    price = item.getSellPrice();
+                    price = shop.getItem(item).getSellPrice();
                 }
                 if (price == 0) {
                     continue;
@@ -168,8 +169,8 @@ public class CommandShopBrowse extends Command {
                 subMessage += ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + Vault.getEconomy().format(price) + ChatColor.DARK_AQUA + "]";
                 // get stack size
                 if (sell) {
-                    int stock = item.getStock();
-                    maxStock = item.getMaxStock();
+                    int stock = shop.getItem(item).getStock();
+                    maxStock = shop.getItem(item).getMaxStock();
 
                     if (stock >= maxStock && !(maxStock == 0)) {
                         continue;
@@ -178,7 +179,7 @@ public class CommandShopBrowse extends Command {
             }
 
             // get stock
-            int stock = item.getStock();
+            int stock = shop.getItem(item).getStock();
             if (buy) {
                 if (stock == 0 && !shop.isUnlimitedStock())
                     continue;
@@ -186,7 +187,7 @@ public class CommandShopBrowse extends Command {
             if (!shop.isUnlimitedStock()) {
                 subMessage += ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + "Stock: " + stock + ChatColor.DARK_AQUA + "]";
 
-                maxStock = item.getMaxStock();
+                maxStock = shop.getItem(item).getMaxStock();
                 if (maxStock > 0) {
                     subMessage += ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + "Max Stock: " + maxStock + ChatColor.DARK_AQUA + "]";
                 }
