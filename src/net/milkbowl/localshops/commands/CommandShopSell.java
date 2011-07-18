@@ -269,7 +269,7 @@ public class CommandShopSell extends Command {
 		} 
 
 		Player player = (Player) sender;
-		ShopRecord invItem = shop.getItem(item.getName());
+		ShopRecord invItem = shop.getItem(item);
 		int startStock = invItem.getStock();
 		// check if the shop is buying that item
 		if (!shop.containsItem(item) || invItem.getSellPrice() == 0) {

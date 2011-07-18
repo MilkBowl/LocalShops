@@ -137,7 +137,7 @@ public class CommandShopRemove extends Command {
 
         sender.sendMessage(ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " removed from the shop. ");
         if (!shop.isUnlimitedStock()) {
-            int amount = shop.getItem(item.getName()).getStock();
+            int amount = shop.getItem(item).getStock();
 
             if (sender instanceof Player) {
                 Player player = (Player) sender;

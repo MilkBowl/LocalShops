@@ -1,6 +1,6 @@
 name: LocalShops
 main: net.milkbowl.localshops.LocalShops
-version: 4.0.0dev9
+version: 4.0.0dev10
 author: Cereal, Sleaker
 depend: [Vault]
 softdepend: [MultiVerse, DimensionDoor, SimpleSkylands, Inception, WorldManager, MultiWorld, WormholeXTremeWorlds]

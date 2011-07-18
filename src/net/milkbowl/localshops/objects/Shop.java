@@ -125,7 +125,7 @@ public abstract class Shop implements Comparator<Shop> {
 	}
 
 	public boolean containsItem(Item item) {
-		return (inventory.values().contains(item));
+		return (inventory.containsKey(item));
 	}
 
 	public String getShortUuidString() {

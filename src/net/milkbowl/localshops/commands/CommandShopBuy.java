@@ -106,7 +106,7 @@ public class CommandShopBuy extends Command {
 					count = countAvailableSpaceForItemInInventory(player.getInventory(), item);
 				} else {
 					// use shop stock
-					count = shop.getItem(item.getName()).getStock();
+					count = shop.getItem(item).getStock();
 				}
 
 				return shopBuy(shop, item, count);
@@ -129,7 +129,7 @@ public class CommandShopBuy extends Command {
 					count = countAvailableSpaceForItemInInventory(player.getInventory(), item);
 				} else {
 					// use shop stock
-					count = shop.getItem(item.getName()).getStock();
+					count = shop.getItem(item).getStock();
 				}
 				if (count < 1) {
 					//
@@ -157,7 +157,7 @@ public class CommandShopBuy extends Command {
 					count = countAvailableSpaceForItemInInventory(player.getInventory(), item);
 				} else {
 					// use shop stock
-					count = shop.getItem(item.getName()).getStock();
+					count = shop.getItem(item).getStock();
 				}
 				if (count < 1) {
 					sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_MINIMUM_ONE, new String[] { "%ITEMNAME%" }, new Object[] { item.getName() } ));
@@ -183,7 +183,7 @@ public class CommandShopBuy extends Command {
 					count = countAvailableSpaceForItemInInventory(player.getInventory(), item);
 				} else {
 					// use shop stock
-					count = shop.getItem(item.getName()).getStock();
+					count = shop.getItem(item).getStock();
 				}
 				if (count < 1) {
 					sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_MINIMUM_ONE, new String[] { "%ITEMNAME%" }, new Object[] { item.getName() } ));

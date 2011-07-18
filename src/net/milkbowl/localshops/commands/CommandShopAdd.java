@@ -318,7 +318,7 @@ public class CommandShopAdd extends Command {
 		} else {
 			shop.addStock(item.getName(), amount);
 			shop.updateSigns(item.getName());
-			sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_STOCK_SUCCESS, new String[] { "%ITEMNAME%", "%STOCK%" }, new Object[] { item.getName(), shop.getItem(item.getName()).getStock() }));
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_STOCK_SUCCESS, new String[] { "%ITEMNAME%", "%STOCK%" }, new Object[] { item.getName(), shop.getItem(item).getStock() }));
 		}
 
 		if(amount == 0) {
@@ -329,7 +329,7 @@ public class CommandShopAdd extends Command {
 
 		// log the transaction
 		if (player != null) {
-			int itemInv = shop.getItem(item.getName()).getStock();
+			int itemInv = shop.getItem(item).getStock();
 			int startInv = itemInv - amount;
 			if (startInv < 0) {
 				startInv = 0;

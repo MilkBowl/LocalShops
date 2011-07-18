@@ -188,20 +188,20 @@ public class CommandShopFind extends Command {
                 UUID uuid = entry.getKey();
                 double distance = entry.getValue();
                 Shop shop = plugin.getShopManager().getLocalShop(uuid);
-                ShopRecord item = shop.getItem(found.getName());
+                ShopRecord shopRecord = shop.getItem(found);
 
                 String sellPrice;
-                if (item.getBuyPrice() <= 0 || (item.getStock() == 0 && !shop.isUnlimitedStock())) {
+                if (shopRecord.getBuyPrice() <= 0 || (shopRecord.getStock() == 0 && !shop.isUnlimitedStock())) {
                     sellPrice = "--";
                 } else {
-                    sellPrice = String.format("%.2f", (item.getBuyPrice()));
+                    sellPrice = String.format("%.2f", (shopRecord.getBuyPrice()));
                 }
 
                 String buyPrice;
-                if (item.getSellPrice() <= 0 || (item.getStock() > 0 && item.getStock() > item.getMaxStock() && !shop.isUnlimitedStock() )) {
+                if (shopRecord.getSellPrice() <= 0 || (shopRecord.getStock() > 0 && shopRecord.getStock() > shopRecord.getMaxStock() && !shop.isUnlimitedStock() )) {
                     buyPrice = "--";
                 } else {
-                    buyPrice = String.format("%.2f", (item.getSellPrice()));
+                    buyPrice = String.format("%.2f", (shopRecord.getSellPrice()));
                 }
 
                 if (buyPrice.equals("--") && sellPrice.equals("--")) {
