@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
+import net.milkbowl.localshops.objects.Item;
 import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.PermType;
@@ -141,18 +142,17 @@ public abstract class Command {
 		}
 	}
 
-	protected void givePlayerItem(ItemStack item, int amount) {
+	protected void givePlayerItem(Item item, int amount) {
 		Player player = (Player) sender;
-		//TODO: fix stack size code
-		//int maxStackSize = Search.itemById(item.getTypeId(), item.getDurability()).maxStackSize[0];
 
-		int maxStackSize = 64;
+		ItemStack stack = item.toStack();
+		int maxStackSize = item.getStackSize();
 		// fill all the existing stacks first
 		for (int i : player.getInventory().all(item.getType()).keySet()) {
 			if (amount == 0)
 				continue;
 			ItemStack thisStack = player.getInventory().getItem(i);
-			if (thisStack.getType().equals(item.getType()) && thisStack.getDurability() == item.getDurability()) {
+			if (thisStack.getType().equals(item.getType()) && thisStack.getDurability() == stack.getDurability()) {
 				if (thisStack.getAmount() < maxStackSize) {
 					int remainder = maxStackSize - thisStack.getAmount();
 					if (remainder <= amount) {
@@ -173,12 +173,12 @@ public abstract class Command {
 				if (amount == 0)
 					continue;
 				if (amount >= maxStackSize) {
-					item.setAmount(maxStackSize);
-					player.getInventory().setItem(i, item);
+					stack.setAmount(maxStackSize);
+					player.getInventory().setItem(i, stack);
 					amount -= maxStackSize;
 				} else {
-					item.setAmount(amount);
-					player.getInventory().setItem(i, item);
+				        stack.setAmount(amount);
+					player.getInventory().setItem(i, stack);
 					amount = 0;
 				}
 			}
@@ -186,13 +186,13 @@ public abstract class Command {
 
 		while (amount > 0) {
 			if (amount >= maxStackSize) {
-				item.setAmount(maxStackSize);
+			    stack.setAmount(maxStackSize);
 				amount -= maxStackSize;
 			} else {
-				item.setAmount(amount - maxStackSize);
+			    stack.setAmount(amount - maxStackSize);
 				amount = 0;
 			}
-			player.getWorld().dropItemNaturally(player.getLocation(), item);
+			player.getWorld().dropItemNaturally(player.getLocation(), stack);
 		}
 
 	}

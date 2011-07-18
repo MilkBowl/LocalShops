@@ -144,7 +144,7 @@ public class CommandShopRemove extends Command {
                 // log the transaction
                 plugin.getShopManager().logItems(player.getName(), shop.getName(), "remove-item", item.getName(), amount, amount, 0);
 
-                givePlayerItem(item.toStack(), amount);
+                givePlayerItem(item, amount);
                 player.sendMessage("" + ChatColor.WHITE + amount + ChatColor.DARK_AQUA + " have been returned to your inventory");
             }
         }

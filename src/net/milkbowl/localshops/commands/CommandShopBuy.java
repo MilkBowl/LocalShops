@@ -356,7 +356,7 @@ public class CommandShopBuy extends Command {
 		plugin.getShopManager().logItems(player.getName(), shop.getName(), "buy-item", item.getName(), amount, startStock, invItem.getStock());
 		shop.addTransaction(new Transaction(Transaction.Type.Sell, player.getName(), item.getName(), amount, totalCost));
 
-		givePlayerItem(item.toStack(), amount);
+		givePlayerItem(item, amount);
 		plugin.getShopManager().saveShop(shop);
 
 		//update any sign in this shop with that value.
