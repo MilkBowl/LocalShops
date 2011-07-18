@@ -31,7 +31,7 @@ public class ShopSign {
 	private World world = null;
 	private String signWorld = null;
 	private String item;
-	private int amount;
+	private int amount = 1;
 	private SignType type = null;
 	public static enum SignType {
 		INFO(0),
@@ -54,6 +54,9 @@ public class ShopSign {
 		this.y = y;
 		this.z = z;
 		this.item = itemName;
+		if (amount > 1 && !type.equals(SignType.INFO))
+			this.amount = amount;
+			
 		for(SignType t : SignType.values()) {
 			if(t.getId() == typeId) {
 				this.type = t;
@@ -64,8 +67,6 @@ public class ShopSign {
 			// ruh roh!
 			throw new TypeNotFoundException(String.format("Sign type %d not found.", typeId));
 		}
-		if (type.equals(SignType.INFO))
-			amount = 1;
 	}
 	
 

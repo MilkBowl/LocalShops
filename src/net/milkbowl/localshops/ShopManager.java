@@ -656,7 +656,7 @@ public class ShopManager {
 				int sellStackSize = Integer.parseInt(sell[1]);
 				sellPrice = sellPrice / sellStackSize;
 				sellStackSize = 1;
-				
+
 				String[] stock = v[2].split(":");
 				int currStock = Integer.parseInt(stock[0]);
 				int maxStock = Integer.parseInt(stock[1]);
@@ -697,39 +697,54 @@ public class ShopManager {
 
 			} else if (key.matches("sign\\d+$")) {
 
+				try {
+					String values = props.getProperty(key);
 
-				String values = props.getProperty(key);
+					String[] v = values.split(":");
+					String[] v2 = v[1].split(",");
 
-				String[] v = values.split(":");
-				String[] v2 = v[1].split(",");
+					String signWorld = v[0];
+					int x = Integer.parseInt(v2[0]);
+					int y = Integer.parseInt(v2[1]);
+					int z = Integer.parseInt(v2[2]);
+					String itemName = v2[3];
+					int signId = Integer.parseInt(v2[4]);
+					int amount = 1;
+					if (v2.length == 6)
+						amount = Integer.parseInt(v2[5]);
 
-				String signWorld = v[0];
-				int x = Integer.parseInt(v2[0]);
-				int y = Integer.parseInt(v2[1]);
-				int z = Integer.parseInt(v2[2]);
-				String itemName = v2[3];
-				int signId = Integer.parseInt(v2[4]);
-				int amount = 1;
-				if (v2.length == 6)
-					amount = Integer.parseInt(v2[5]);
-				
-				if (shop instanceof LocalShop) {
-					LocalShop lShop = (LocalShop) shop;
-					//Make sure the sign we're adding actually exists in the same world as the shop
-					if (!lShop.getWorld().equals(signWorld))
-						continue;
-					//Add the sign to the 
-					if (plugin.getServer().getWorld(signWorld) != null) {
-						signList.add(new ShopSign(plugin.getServer().getWorld(signWorld), x, y, z, itemName, signId, amount));
-					} else {
-						signList.add(new ShopSign(signWorld, x, y, z, itemName, signId, amount));
+					if (shop instanceof LocalShop) {
+						LocalShop lShop = (LocalShop) shop;
+						//Make sure the sign we're adding actually exists in the same world as the shop
+						if (!lShop.getWorld().equals(signWorld))
+							continue;
+						//Add the sign to the 
+						if (plugin.getServer().getWorld(signWorld) != null) {
+							signList.add(new ShopSign(plugin.getServer().getWorld(signWorld), x, y, z, itemName, signId, amount));
+						} else {
+							signList.add(new ShopSign(signWorld, x, y, z, itemName, signId, amount));
+						}
 					}
+				} catch (Exception e) {
+					//Just ignore the sign data for this if it fails to parse properly.
+					continue;
 				}
 			}
 		}
 
 		//After loading sign data, verify they exist in the world
 		for (ShopSign sign : signList) {
+			//Make sure we don't already have a sign at this location
+			boolean ignoreSign = false;
+			for (ShopSign s : shop.getSigns()) {
+				if (s.getLoc().equals(sign.getLoc())) {
+					ignoreSign = true;
+					break;
+				}
+			}
+			if (ignoreSign)
+				continue;
+			
 			//Add signs that can't be verified yet.
 			if (sign.getWorld() == null) {
 				shop.getSigns().add(sign);
