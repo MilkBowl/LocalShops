@@ -18,7 +18,6 @@ import net.milkbowl.localshops.DynamicManager;
 
 public class ShopItem extends Item {
 
-    private int bundleSize = 1;
     private double buyPrice = 0;
     private double sellPrice = 0;
     private int stock;
@@ -29,41 +28,26 @@ public class ShopItem extends Item {
 
     public ShopItem(ItemInfo info) {
     	super (info.getType(), info.getSubTypeId(), info.getName());
-        bundleSize = 1;
         buyPrice = 0;
         sellPrice = 0;
         stock = 0;
         dynamic = false;
     }
     
-    //TODO: Cleanup Constructor
-    public ShopItem(ItemInfo info, int buySize, double buyPrice, int sellSize, double sellPrice, int stock, int maxStock) {
+    public ShopItem(ItemInfo info, double buyPrice, double sellPrice, int stock, int maxStock) {
     	super(info.getType(), info.getSubTypeId(), info.getName());
-        this.bundleSize = buySize;
-        this.buyPrice = buyPrice;
-        this.sellPrice = sellPrice;
-        this.stock = stock;
-        this.maxStock = maxStock;
-
+    	this.buyPrice = buyPrice;
+    	this.sellPrice = sellPrice;
+    	this.stock = stock;
+    	this.maxStock = maxStock;
     }
 
-    public void setSell(double sellPrice, int sellSize) {
-        if(sellSize < 1) {
-            sellSize = 1;
-        }
-        
+    public void setSell(double sellPrice) {
         this.sellPrice = sellPrice;
-        this.bundleSize = sellSize;
-
     }
 
-    public void setBuy(double buyPrice, int buySize) {
-        if(buySize < 1) {
-            buySize = 1;
-        }
-        
+    public void setBuy(double buyPrice) {
         this.buyPrice = buyPrice;
-        this.bundleSize = buySize;
     }
 
     public int getMaxStock() {
@@ -99,34 +83,6 @@ public class ShopItem extends Item {
             return sellPrice * DynamicManager.getPriceAdjMap().get(this);
 
         return sellPrice;
-    }
-
-    public void setSellSize(int size) {
-        if(size < 1) {
-            size = 1;
-        }
-        
-        bundleSize = size;
-    }
-
-    public int getSellSize() {
-        return bundleSize;
-    }
-
-    public void setBuySize(int size) {
-        if(size < 1) {
-            size = 1;
-        }
-        
-        bundleSize = size;
-    }
-    
-    public int getBundleSize() {
-    	return bundleSize;
-    }
-
-    public int getBuySize() {
-        return bundleSize;
     }
 
     public void setBuyPrice(double price) {

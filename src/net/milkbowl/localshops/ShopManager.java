@@ -444,7 +444,6 @@ public class ShopManager {
 						return null;
 					}
 					int buyPrice = Integer.parseInt(buyInfo[0]);
-					int buySize = Integer.parseInt(buyInfo[1]);
 
 					String[] sellInfo = dataCols[1].split(":");
 					if (sellInfo.length < 2) {
@@ -456,7 +455,6 @@ public class ShopManager {
 						return null;
 					}
 					int sellPrice = Integer.parseInt(sellInfo[0]);
-					int sellSize = Integer.parseInt(sellInfo[1]);
 
 					String[] stockInfo = dataCols[2].split(":");
 					if (stockInfo.length < 2) {
@@ -470,7 +468,7 @@ public class ShopManager {
 					int stock = Integer.parseInt(stockInfo[0]);
 					int maxStock = Integer.parseInt(stockInfo[1]);
 
-					if(!shop.addItem(itemId, damageMod, buyPrice, buySize, sellPrice, sellSize, stock, maxStock)) {
+					if(!shop.addItem(itemId, damageMod, buyPrice, sellPrice, stock, maxStock)) {
 						if(isolateBrokenShopFile(file)) {
 							log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString(), itemId, damageMod));
 						} else {
@@ -667,7 +665,7 @@ public class ShopManager {
 
 				if (v.length > 3) {
 					dynamicItem = (Integer.parseInt(v[3]) == 1);
-					if (!shop.addItem(id, type, buyPrice, buyStackSize, sellPrice, sellStackSize, currStock, maxStock, dynamicItem)) {
+					if (!shop.addItem(id, type, buyPrice, sellPrice, currStock, maxStock, dynamicItem)) {
 						if(isolateBrokenShopFile(file)) {
 							log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString(), id, type));
 						} else {
@@ -675,7 +673,7 @@ public class ShopManager {
 						}
 						return null;
 					}
-				} else if(!shop.addItem(id, type, buyPrice, buyStackSize, sellPrice, sellStackSize, currStock, maxStock)) {                   
+				} else if(!shop.addItem(id, type, buyPrice, sellPrice, currStock, maxStock)) {                   
 					if(isolateBrokenShopFile(file)) {
 						log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Moving to \""+Config.getDirShopsBrokenPath()+"\"", plugin.getDescription().getName(), file.toString(), id, type));
 					} else {
@@ -836,14 +834,12 @@ public class ShopManager {
 			int id = item.getId();
 			short subTypeId = item.getSubTypeId();
 			double buyPrice = item.getBuyPrice();
-			int buySize = item.getBuySize();
 			double sellPrice = item.getSellPrice();
-			int sellSize = item.getSellSize();
 			int stock = item.getStock();
 			int maxStock = item.getMaxStock();
 			int dynamic = (item.isDynamic()? 1 : 0);
-
-			props.setProperty(String.format("%d:%d", id, subTypeId), String.format("%f:%d,%f:%d,%d:%d,%d", buyPrice, buySize, sellPrice, sellSize, stock, maxStock, dynamic));
+			//TODO: Update and remove bundle storage completely?
+			props.setProperty(String.format("%d:%d", id, subTypeId), String.format("%f:%d,%f:%d,%d:%d,%d", buyPrice, 1, sellPrice, 1, stock, maxStock, dynamic));
 		}
 
 		//Sign Data saving

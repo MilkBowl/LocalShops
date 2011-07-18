@@ -168,21 +168,13 @@ public class CommandShopBrowse extends Command {
                 }
                 subMessage += ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + Vault.getEconomy().format(price) + ChatColor.DARK_AQUA + "]";
                 // get stack size
-                int stack = 0;
-                if (buy) {
-                    stack = item.getBuySize();
-                }
                 if (sell) {
-                    stack = item.getSellSize();
                     int stock = item.getStock();
                     maxStock = item.getMaxStock();
 
                     if (stock >= maxStock && !(maxStock == 0)) {
                         continue;
                     }
-                }
-                if (stack > 1) {
-                    subMessage += ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + "Bundle: " + stack + ChatColor.DARK_AQUA + "]";
                 }
             }
 

@@ -59,7 +59,6 @@ public abstract class Shop implements Comparator<Shop> {
 	protected Set<String> users = Collections.synchronizedSet(new HashSet<String>());
 
 	private static final NumberFormat numFormat = new DecimalFormat("0.##");
-	private static final NumberFormat numShortFormat = new DecimalFormat("0.#");
 
 	// Logging
 	protected static final Logger log = Logger.getLogger("Minecraft");
@@ -186,33 +185,25 @@ public abstract class Shop implements Comparator<Shop> {
 	  */
 	 
 	 //TODO: Shouldn't addItem take it's own Data Object passed in to 'add' to the shop?
-	 public boolean addItem(int itemNumber, short itemData, double buyPrice, int buyStackSize, double sellPrice, int sellStackSize,  int stock, int maxStock, boolean dynamicItem) {
+	 public boolean addItem(int itemNumber, short itemData, double buyPrice, double sellPrice, int stock, int maxStock, boolean dynamicItem) {
 
 		 ItemInfo item = Search.itemById(itemNumber, itemData);
-		 if(item == null || sellStackSize < 1 || buyStackSize < 1) {
-			 return false;
-		 }
-
 		 ShopItem thisItem = new ShopItem(item);
-
-		 thisItem.setBuy(buyPrice, buyStackSize);
-		 thisItem.setSell(sellPrice, sellStackSize);
+		 
+		 thisItem.setBuy(buyPrice);
+		 thisItem.setSell(sellPrice);
 
 		 thisItem.setStock(stock);
 		 thisItem.setDynamic(dynamicItem);
 		 thisItem.maxStock = maxStock;
-
-		 if (inventory.containsKey(item.name)) {
-			 inventory.remove(item.name);
-		 }
 
 		 inventory.put(item.name, thisItem);
 
 		 return true;
 	 }
 
-	 public boolean addItem(int itemNumber, short itemData, double buyPrice, int buyStackSize, double sellPrice, int sellStackSize, int stock, int maxStock) {
-		 return addItem(itemNumber, itemData, buyPrice, buyStackSize, sellPrice, sellStackSize, stock, maxStock, false);
+	 public boolean addItem(int itemNumber, short itemData, double buyPrice, double sellPrice, int stock, int maxStock) {
+		 return addItem(itemNumber, itemData, buyPrice, sellPrice, stock, maxStock, false);
 	 }
 
 	 public void setManagers(String[] managers) {
@@ -309,17 +300,9 @@ public abstract class Shop implements Comparator<Shop> {
 		 inventory.get(itemName).setBuyPrice(price);
 	 }
 
-	 public void setItemBuyAmount(String itemName, int buySize) {
-		 inventory.get(itemName).setBuySize(buySize);
-	 }
-
 	 public void setItemSellPrice(String itemName, double price) {
 		 inventory.get(itemName).setSellPrice(price);
 	 }
-
-	 public void setItemSellAmount(String itemName, int sellSize) {
-		 inventory.get(itemName).setSellSize(sellSize);
-	 }    
 
 	 /**
 	  * Sets an item as dynamically adjustable
@@ -461,6 +444,7 @@ public abstract class Shop implements Comparator<Shop> {
 		 }
 	 }   
 
+	 //TODO: needs massive update.
 	 public String[] generateSignLines(ShopSign sign) {
 		 String[] signLines = {"", "", "", ""};
 		 //If this item no longer exists lets just return with blank lines
@@ -476,26 +460,11 @@ public abstract class Shop implements Comparator<Shop> {
 		 double buyPrice = this.getItem(sign.getItemName()).getBuyPrice();
 		 double sellPrice = this.getItem(sign.getItemName()).getSellPrice();
 		 int maxStock = this.getItem(sign.getItemName()).getMaxStock();
-		 int availableBundles = stock / this.getItem(sign.getItemName()).getBundleSize();
-		 String buyBundle = "";	
-		 String sellBundle = "";
-		 String available = "";
 
 		 String bCol = GenericFunctions.parseColors(Config.getSignBuyColor());
 		 String sCol = GenericFunctions.parseColors(Config.getSignSellColor());
-		 String bunCol = GenericFunctions.parseColors(Config.getSignBundleColor());
 		 String dCol = GenericFunctions.parseColors(Config.getSignDefaultColor());
 		 String stoCol = GenericFunctions.parseColors(Config.getSignStockColor());
-
-		 //Only set Bundle strings if they are greater than 1
-		 if (this.getItem(sign.getItemName()).getBundleSize() > 1) {
-			 buyBundle = bunCol + "  [" + this.getItem(sign.getItemName()).getBundleSize() + "]";
-			 sellBundle = bunCol + "  [" + this.getItem(sign.getItemName()).getBundleSize() + "]";
-		 }
-		 if (availableBundles > 999) 
-			 available += numShortFormat.format(availableBundles / 1000D) + "k";
-		  else
-			 available += availableBundles + "";
 
 		 //Colorize the title and strip it of vowels if it's too long
 		 if (signLines[0].length() >= 12) {
@@ -512,32 +481,32 @@ public abstract class Shop implements Comparator<Shop> {
 		 } else if (sign.getType() == ShopSign.SignType.INFO ){
 			 if (buyPrice == 0 ) 
 				 signLines[1] = bCol + "-";
-			 else if (availableBundles == 0 && !this.unlimitedStock)
+			 else if (stock == 0 && !this.unlimitedStock)
 				 signLines[1] = dCol + "Understock";
 			 else 
-				 signLines[1] =  bCol + numFormat.format(buyPrice) + buyBundle;
+				 signLines[1] =  bCol + numFormat.format(buyPrice);
 			 if (sellPrice == 0 ) 
 				 signLines[2] = stoCol + "-";
 			 else if (maxStock > 0 && stock >= maxStock && !this.unlimitedStock)
 				 signLines[2] = dCol + "Overstock";
 			 else 
-				 signLines[2] = sCol + numFormat.format(sellPrice) + sellBundle;
+				 signLines[2] = sCol + numFormat.format(sellPrice);
 
 			 if (!this.unlimitedStock)
-				 signLines[3] = dCol + "Stk: " + stoCol + available;
+				 signLines[3] = dCol + "Stk: " + stoCol;
 			 else
 				 signLines[3] = stoCol + "Unlimited";
 		 } else if (sign.getType() == ShopSign.SignType.BUY ) {
 			 if (buyPrice == 0 ) 
 				 signLines[1] = dCol + "Not Selling";
-			 else if (availableBundles == 0 && !this.unlimitedStock) 
+			 else if (stock == 0 && !this.unlimitedStock) 
 				 signLines[1] = dCol + "Understock";
 			 else  {
-				 signLines[1] = sCol + numFormat.format(buyPrice) + buyBundle;
+				 signLines[1] = sCol + numFormat.format(buyPrice);
 				 signLines[3] = dCol + "R-Clk to Buy";
 			 }
 			 if (!this.unlimitedStock)
-				 signLines[2] = dCol + "Stk: " + stoCol + available;
+				 signLines[2] = dCol + "Stk: " + stoCol;
 			 else
 				 signLines[2] = stoCol + "Unlimited";         
 		 } else if (sign.getType() == ShopSign.SignType.SELL ) {
@@ -546,11 +515,11 @@ public abstract class Shop implements Comparator<Shop> {
 			 else if (maxStock > 0 && stock >= maxStock && !this.unlimitedStock)
 				 signLines[1] = dCol + "Overstock";
 			 else {
-				 signLines[1] = sCol + numFormat.format(sellPrice) + sellBundle;
+				 signLines[1] = sCol + numFormat.format(sellPrice);
 				 signLines[3] = dCol + "R-Clk to Sell";
 			 }
 			 if (!this.unlimitedStock)
-				 signLines[2] = dCol + "Stk: " + stoCol + available;
+				 signLines[2] = dCol + "Stk: " + stoCol;
 			 else
 				 signLines[2] = stoCol + "Unlimited";   
 		 }

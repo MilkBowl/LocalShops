@@ -109,34 +109,9 @@ public class CommandShopSet extends Command {
 
 		// Command matching
 
-		// set sell int int int
-		Pattern pattern = Pattern.compile("(?i)set\\s+buy\\s+(\\d+)\\s+("+DECIMAL_REGEX+")\\s+(\\d+)");
+		// set buy int int
+		Pattern pattern = Pattern.compile("(?i)set\\s+buy\\s+(\\d+)\\s+("+DECIMAL_REGEX+")");
 		Matcher matcher = pattern.matcher(command);
-		if (matcher.find()) {
-			int id = Integer.parseInt(matcher.group(1));
-			ItemInfo item = Search.itemById(id);
-			double price = Double.parseDouble(matcher.group(2));
-			int size = Integer.parseInt(matcher.group(7));
-			return shopSetBuy(shop, item, price, size);
-		}
-
-		// set sell int:int int int
-		matcher.reset();
-		pattern = Pattern.compile("(?i)set\\s+buy\\s+(\\d+):(\\d+)\\s+("+DECIMAL_REGEX+")\\s+(\\d+)");
-		matcher = pattern.matcher(command);
-		if (matcher.find()) {
-			int id = Integer.parseInt(matcher.group(1));
-			short type = Short.parseShort(matcher.group(2));
-			ItemInfo item = Search.itemById(id, type);
-			double price = Double.parseDouble(matcher.group(3));
-			int size = Integer.parseInt(matcher.group(8));
-			return shopSetBuy(shop, item, price, size);
-		}
-
-		// set sell int int
-		matcher.reset();
-		pattern = Pattern.compile("(?i)set\\s+buy\\s+(\\d+)\\s+("+DECIMAL_REGEX+")");
-		matcher = pattern.matcher(command);
 		if (matcher.find()) {
 			int id = Integer.parseInt(matcher.group(1));
 			ItemInfo item = Search.itemById(id);
@@ -144,7 +119,7 @@ public class CommandShopSet extends Command {
 			return shopSetBuy(shop, item, price);
 		}
 
-		// set sell int:int int
+		// set buy int:int int
 		matcher.reset();
 		pattern = Pattern.compile("(?i)set\\s+buy\\s+(\\d+):(\\d+)\\s+("+DECIMAL_REGEX+")");
 		matcher = pattern.matcher(command);
@@ -156,19 +131,7 @@ public class CommandShopSet extends Command {
 			return shopSetBuy(shop, item, price);
 		}
 
-		// set sell (chars) int int
-		matcher.reset();
-		pattern = Pattern.compile("(?i)set\\s+buy\\s+(.*)\\s+("+DECIMAL_REGEX+")\\s+(\\d+)");
-		matcher = pattern.matcher(command);
-		if (matcher.find()) {
-			String name = matcher.group(1);
-			ItemInfo item = Search.itemByName(name);
-			double price = Double.parseDouble(matcher.group(2));
-			int size = Integer.parseInt(matcher.group(7));
-			return shopSetBuy(shop, item, price, size);
-		}
-
-		// set sell (chars) int
+		// set nuy (chars) int
 		matcher.reset();
 		pattern = Pattern.compile("(?i)set\\s+buy\\s+(.*)\\s+("+DECIMAL_REGEX+")");
 		matcher = pattern.matcher(command);
@@ -179,8 +142,8 @@ public class CommandShopSet extends Command {
 			return shopSetBuy(shop, item, price);
 		}
 
-		// show set sell usage
-		sender.sendMessage("   " + "/" + commandLabel + " set buy [item name] [price] <bundle size>");
+		// show buy sell usage
+		sender.sendMessage("   " + "/" + commandLabel + " set buy [item name] [price]");
 		return true;
 	}
 
@@ -217,47 +180,6 @@ public class CommandShopSet extends Command {
 		return true;
 	}
 
-	private boolean shopSetBuy(Shop shop, ItemInfo item, double price, int size) {
-		// Check for valid item
-		if (item == null) {
-			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
-			return true;
-		}
-
-		// Check for valid size
-		if(size < 1) {
-			sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_SET_BUNDLE_FAIL));
-			return true;
-		}
-
-		// Check if Shop has item
-		if (!shop.containsItem(item)) {
-			// nicely message user
-			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.getName() }));
-			return true;
-		}
-
-		// Warn about negative items
-		if (price < 0) {
-			sender.sendMessage("[WARNING] This shop will loose money with negative values!");
-		}
-
-		// Set new values
-		shop.setItemSellAmount(item.getName(), size);
-		shop.setItemSellPrice(item.getName(), price);
-
-		// Save Shop
-		plugin.getShopManager().saveShop(shop);
-
-		// Send Result
-		sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is now buying "+ item.getName() + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + Vault.getEconomy().format(price) + ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + "Bundle: " + size + ChatColor.DARK_AQUA + "]");
-
-		//update any sign in this shop with that value.
-		shop.updateSigns(item.getName());
-
-		return true;
-	}
-
 	private boolean shopSetSell() {
 		Shop shop = null;
 
@@ -285,34 +207,9 @@ public class CommandShopSet extends Command {
 
 		// Command matching
 
-		// set buy int int int
-		Pattern pattern = Pattern.compile("(?i)set\\s+sell\\s+(\\d+)\\s+("+DECIMAL_REGEX+")\\s+(\\d+)");
+		// set sell int int
+		Pattern pattern = Pattern.compile("(?i)set\\s+sell\\s+(\\d+)\\s+("+DECIMAL_REGEX+")");
 		Matcher matcher = pattern.matcher(command);
-		if (matcher.find()) {
-			int id = Integer.parseInt(matcher.group(1));
-			ItemInfo item = Search.itemById(id);
-			double price = Double.parseDouble(matcher.group(2));
-			int size = Integer.parseInt(matcher.group(7));
-			return shopSetSell(shop, item, price, size);
-		}
-
-		// set buy int:int int int
-		matcher.reset();
-		pattern = Pattern.compile("(?i)set\\s+sell\\s+(\\d+):(\\d+)\\s+("+DECIMAL_REGEX+")\\s+(\\d+)");
-		matcher = pattern.matcher(command);
-		if (matcher.find()) {
-			int id = Integer.parseInt(matcher.group(1));
-			short type = Short.parseShort(matcher.group(2));
-			ItemInfo item = Search.itemById(id, type);
-			double price = Double.parseDouble(matcher.group(3));
-			int size = Integer.parseInt(matcher.group(8));
-			return shopSetSell(shop, item, price, size);
-		}
-
-		// set buy int int
-		matcher.reset();
-		pattern = Pattern.compile("(?i)set\\s+sell\\s+(\\d+)\\s+("+DECIMAL_REGEX+")");
-		matcher = pattern.matcher(command);
 		if (matcher.find()) {
 			int id = Integer.parseInt(matcher.group(1));
 			ItemInfo item = Search.itemById(id);
@@ -320,7 +217,7 @@ public class CommandShopSet extends Command {
 			return shopSetSell(shop, item, price);
 		}
 
-		// set buy int:int int
+		// set sell int:int int
 		matcher.reset();
 		pattern = Pattern.compile("(?i)set\\s+sell\\s+(\\d+):(\\d+)\\s+("+DECIMAL_REGEX+")");
 		matcher = pattern.matcher(command);
@@ -332,19 +229,7 @@ public class CommandShopSet extends Command {
 			return shopSetSell(shop, item, price);
 		}
 
-		// set buy (chars) int int
-		matcher.reset();
-		pattern = Pattern.compile("(?i)set\\s+sell\\s+(.*)\\s+("+DECIMAL_REGEX+")\\s+(\\d+)");
-		matcher = pattern.matcher(command);
-		if (matcher.find()) {
-			String name = matcher.group(1);
-			ItemInfo item = Search.itemByName(name);
-			double price = Double.parseDouble(matcher.group(2));
-			int size = Integer.parseInt(matcher.group(7));
-			return shopSetSell(shop, item, price, size);
-		}
-
-		// set buy (chars) int
+		// set sell (chars) int
 		matcher.reset();
 		pattern = Pattern.compile("(?i)set\\s+sell\\s+(.*)\\s+("+DECIMAL_REGEX+")");
 		matcher = pattern.matcher(command);
@@ -355,48 +240,8 @@ public class CommandShopSet extends Command {
 			return shopSetSell(shop, item, price);
 		}
 
-		// show set buy usage
-		sender.sendMessage("   " + "/" + commandLabel + " set sell [item name] [price] <bundle size>");
-		return true;
-	}
-
-	private boolean shopSetSell(Shop shop, ItemInfo item, double price, int size) {
-		// Check for valid item
-		if (item == null) {
-			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
-			return true;
-		}
-
-		// Check for valid size
-		if(size < 1) {
-			sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_SET_BUNDLE_FAIL));
-			return true;
-		}
-
-		// Check if Shop has item
-		if (!shop.containsItem(item)) {
-			// nicely message user
-			sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[] { "%SHOPNAME%", "ITEMNAME" }, new String[] { shop.getName(), item.getName() }));
-			return true;
-		}
-
-		// Warn about negative items
-		if (price < 0) {
-			sender.sendMessage("[WARNING] This shop will loose money with negative values!");
-		}
-
-		// Set new values
-		shop.setItemBuyAmount(item.getName(), size);
-		shop.setItemBuyPrice(item.getName(), price);
-
-		// Save Shop
-		plugin.getShopManager().saveShop(shop);
-
-		// Send Result
-		sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is now selling "+ item.getName() + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + Vault.getEconomy().format(price) + ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + "Bundle: " + size + ChatColor.DARK_AQUA + "]");
-
-		//update any sign in this shop with that value.
-		shop.updateSigns(item.getName());
+		// show set sell usage
+		sender.sendMessage("   " + "/" + commandLabel + " set sell [item name] [price]");
 		return true;
 	}
 

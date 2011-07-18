@@ -195,17 +195,17 @@ public class CommandShopFind extends Command {
                 ShopItem item = shop.getItem(found.getName());
 
                 String sellPrice;
-                if (item.getBuyPrice() <= 0 || item.getBuySize() <= 0 || (item.getStock() == 0 && !shop.isUnlimitedStock())) {
+                if (item.getBuyPrice() <= 0 || (item.getStock() == 0 && !shop.isUnlimitedStock())) {
                     sellPrice = "--";
                 } else {
-                    sellPrice = String.format("%.2f", (item.getBuyPrice() / item.getBuySize()));
+                    sellPrice = String.format("%.2f", (item.getBuyPrice()));
                 }
 
                 String buyPrice;
-                if (item.getSellPrice() <= 0 || item.getSellSize() <= 0 || (item.getStock() > 0 && item.getStock() > item.getMaxStock() && !shop.isUnlimitedStock() )) {
+                if (item.getSellPrice() <= 0 || (item.getStock() > 0 && item.getStock() > item.getMaxStock() && !shop.isUnlimitedStock() )) {
                     buyPrice = "--";
                 } else {
-                    buyPrice = String.format("%.2f", (item.getSellPrice() / item.getSellSize()));
+                    buyPrice = String.format("%.2f", (item.getSellPrice()));
                 }
 
                 if (buyPrice.equals("--") && sellPrice.equals("--")) {
