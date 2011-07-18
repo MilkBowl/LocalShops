@@ -22,7 +22,6 @@ import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.comparator.InventoryItemSortByName;
 import net.milkbowl.localshops.objects.Item;
-import net.milkbowl.localshops.objects.ShopRecord;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;

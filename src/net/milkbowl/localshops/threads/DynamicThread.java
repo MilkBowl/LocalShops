@@ -23,7 +23,6 @@ import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.DynamicManager;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.objects.Item;
-import net.milkbowl.localshops.objects.ShopRecord;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.util.GenericFunctions;
 

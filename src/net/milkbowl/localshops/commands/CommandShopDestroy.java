@@ -20,7 +20,6 @@ import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.objects.Item;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.GlobalShop;
-import net.milkbowl.localshops.objects.ShopRecord;
 import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;

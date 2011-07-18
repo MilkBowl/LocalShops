@@ -18,7 +18,6 @@ import java.util.regex.Pattern;
 
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.objects.Item;
-import net.milkbowl.localshops.objects.ShopRecord;
 import net.milkbowl.localshops.objects.LocalShop;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.Shop;
