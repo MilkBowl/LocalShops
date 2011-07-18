@@ -55,7 +55,7 @@ public class ShopSign {
 		this.y = y;
 		this.z = z;
 		this.item = itemName;
-		if (amount > 1 && !type.equals(SignType.INFO))
+		if (amount > 1 && !(typeId == 1))
 			this.amount = amount;
 			
 		for(SignType t : SignType.values()) {
@@ -72,24 +72,29 @@ public class ShopSign {
 	
 
 	public ShopSign (World world, int x, int y, int z, String itemName, int typeId, int amount) throws TypeNotFoundException {
-		this(world.getName(), x, y, z, itemName, typeId, amount);
+		this.signWorld = world.getName();
+		this.world = world;
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.item = itemName;
+		if (amount > 1 && !(typeId == 1))
+			this.amount = amount;
+			
+		for(SignType t : SignType.values()) {
+			if(t.getId() == typeId) {
+				this.type = t;
+				break;
+			}
+		}
+		if(type == null) {
+			// ruh roh!
+			throw new TypeNotFoundException(String.format("Sign type %d not found.", typeId));
+		}
 	}
 	
 	public ShopSign(Block block, String itemName, int typeId, int amount) throws TypeNotFoundException {
-		this(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), itemName, typeId, amount);
-	}
-
-	public ShopSign (World world, String string) {
-		String[] split = string.split(",");
-		this.x = Integer.parseInt(split[0]);
-		this.y = Integer.parseInt(split[1]);
-		this.z = Integer.parseInt(split[2]);
-		this.item = split[3];
-		this.world = world;
-		this.signWorld = world.getName();
-		this.type = SignType.INFO;
-		if (type.equals(SignType.INFO))
-			amount = 1;
+		this(block.getWorld(), block.getX(), block.getY(), block.getZ(), itemName, typeId, amount);
 	}
 	
 
