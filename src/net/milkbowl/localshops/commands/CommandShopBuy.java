@@ -44,6 +44,12 @@ public class CommandShopBuy extends Command {
 	}
 
 	public boolean process() {
+		//Check for player immediately, we don't want to logic anything if this isn't a player..
+		if (!(sender instanceof Player)) {
+			sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PLAYERS_ONLY));
+			return false;
+		}
+
 		Shop shop = null;
 
 		// Get current shop
@@ -75,7 +81,7 @@ public class CommandShopBuy extends Command {
 					sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 					return true;
 				}
-				return shopBuy(shop, item, 0);
+				return shopBuy(shop, item, 1);
 			}
 
 			// buy all (player only command)
@@ -236,7 +242,7 @@ public class CommandShopBuy extends Command {
 				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 				return true;
 			}
-			return shopBuy(shop, item, 0);
+			return shopBuy(shop, item, 1);
 		}
 
 		// buy int:int int
@@ -289,157 +295,81 @@ public class CommandShopBuy extends Command {
 				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 				return true;
 			}
-			return shopBuy(shop, item, 0);
+			return shopBuy(shop, item, 1);
 		}
 
 		// Show sell help
 		sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_USAGE, new String[] { "%COMMANDLABEL%" }, new Object[] { commandLabel }));
 		return true;
 	}
-
 	private boolean shopBuy(Shop shop, ItemInfo item, int amount) {
-		if (!(sender instanceof Player)) {
-			sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PLAYERS_ONLY));
-			return false;
-		}
-
 		Player player = (Player) sender;
 		ShopItem invItem = shop.getItem(item.getName());
+		int startStock = invItem.getStock();
+		//initial order request.
 
 		// check if the shop is selling that item
+		// check if the item has a price, or if this is a shop owner
 		if (invItem == null || invItem.getBuyPrice() == 0) {
 			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_NOT_SELLING, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.getName() }));
 			return false;
 		} else if (invItem.getStock() == 0 && !shop.isUnlimitedStock()) {
 			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_SOLD_OUT, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.getName() }));
 			return false;
-		}
-
-		// check if the item has a price, or if this is a shop owner
-		if (invItem.getBuyPrice() == 0 && !isShopController(shop)) {
+		} else if (invItem.getBuyPrice() == 0 && !isShopController(shop)) {
 			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_NOT_SELLING, new String[] { "%SHOPNAME%", "%ITEMNAME%" }, new Object[] { shop.getName(), item.getName() }));
 			return false;
 		}
+		
+		amount = getBuyAmount(player, amount, invItem, shop);
+		double totalCost = amount * shop.getItem(item).getBuyPrice();
 
-		
-		//Get what the player can actually buy
-		amount = getBuyAmount(player, amount, invItem, shop.isUnlimitedStock());
-		
-		//cost Related stuff
-		double itemPrice = invItem.getBuyPrice();
-		double totalCost = amount * itemPrice;
-		boolean success = false;
-		
-		//TODO: Instead of attempting a sale on the original amount of items - we should check how much they can buy regardless of transaction and adjust the data down
-		if (shop.isUnlimitedMoney()) {
-			if (!Econ.chargePlayer(player.getName(), totalCost)) {
-				// player doesn't have enough money
-				// get player's balance and calculate how many it can buy
-				double playerBalance = Econ.getBalance(player.getName());
-				int bundlesCanAford = (int) Math.floor(playerBalance / itemPrice);
-				totalCost = bundlesCanAford * itemPrice;
-				amount = bundlesCanAford;
-				if(bundlesCanAford == 0) {
-					player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PLAYER_AFFORD_NONE, new String[] { "%ITEMNAME%" }, new Object[] { item.getName() }));
-					return true;
-				} else {
-					player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PLAYER_AFFORD_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { bundlesCanAford, item.getName() }));
-				}
-				if (!Econ.chargePlayer(player.getName(), totalCost)) {
-					player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
-					return true;
-				} else {
-					success = true;
-				}
-			} else {
-				success = true;
-			}
-		} 
-		// try to pay the shop owner
-		else if (!isShopController(shop)) {
-			if (!Econ.payPlayer(player.getName(), shop.getOwner(), totalCost)) {
-				// player doesn't have enough money
-				// get player's balance and calculate how many it can buy
-				double playerBalance = Econ.getBalance(player.getName());
-				int bundlesCanAford = (int) Math.floor(playerBalance / itemPrice);
-				totalCost = bundlesCanAford * itemPrice;
-				amount = bundlesCanAford;
-
-				if(bundlesCanAford == 0) {
-					player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PLAYER_AFFORD_NONE, new String[] { "%ITEMNAME%" }, new Object[] { item.getName() }));
-					return true;
-				} else {
-					player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PLAYER_AFFORD_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { bundlesCanAford, item.getName() }));
-				}
-				if (!Econ.payPlayer(player.getName(), shop.getOwner(), totalCost)) {
-					player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
-					return true;
-				} else {
-					success = true;
-				}
-			} else {
-				success = true;
-			}
+		/**
+		 * Attempt the transaction - if it errors at this point then there is a serious issue.
+		 * 
+		 * No need for nested ifs.  If the shop is not unlimited money it shouldn't ever try to charge the player.
+		 */
+		if (shop.isUnlimitedMoney() && !shop.getOwner().equals(player.getName()) && !Econ.chargePlayer(player.getName(), totalCost)) {
+			player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
+			return true;
+		} else if (!shop.getOwner().equals(player.getName()) && !Econ.payPlayer(player.getName(), shop.getOwner(), totalCost)) {
+			player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
+			return true;
 		}
-		//If successful transaction lets do profit sharing!
-		if (success && shop.getSharePercent() > 0 && shop.getManagers().size() > 0) {
-			double shareAmount = totalCost * (shop.getSharePercent() / 100) / shop.getManagers().size();
-			for (String manager : shop.getManagers()) {
-				if (shop.isUnlimitedMoney())
-					Vault.getEconomy().depositPlayer(manager, shareAmount);
-				else
-					Econ.payPlayer(shop.getOwner(), manager, shareAmount);
-			}
-		}
-
-		if (!shop.isUnlimitedStock()) {
+		if (!shop.isUnlimitedStock())
 			shop.removeStock(item.getName(), amount);
-		}
+		
 		if (isShopController(shop)) {
 			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_REMOVED_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { amount, item.getName() }));
 		} else {
 			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PURCHASED_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%", "%COST%" }, new Object[] { amount, item.getName(), Vault.getEconomy().format(totalCost) }));
 		}
-
-		// log the transaction
-		int stock = invItem.getStock();
-		int startStock = stock + amount;
-		if (shop.isUnlimitedStock()) {
-			startStock = 0;
-		}
-		plugin.getShopManager().logItems(player.getName(), shop.getName(), "buy-item", item.getName(), amount, startStock, stock);
+		
+		//Do our give stock stuff here
+		
+		plugin.getShopManager().logItems(player.getName(), shop.getName(), "buy-item", item.getName(), amount, startStock, invItem.getStock());
 		shop.addTransaction(new Transaction(Transaction.Type.Sell, player.getName(), item.getName(), amount, totalCost));
-
+		
 		givePlayerItem(item.toStack(), amount);
 		plugin.getShopManager().saveShop(shop);
 
 		//update any sign in this shop with that value.
 		shop.updateSigns(shop.getSigns());
-
+		
 		return true;
 	}
-	
-	private int getBuyAmount(Player player, int amount, ShopItem invItem, boolean unlimitedStock) {
-		
-		int originalAmount = amount;
-		// if amount <= 0, assume single stack size
-		if (amount <= 0) {
-			amount = 1;
-		}
 
+	private int getBuyAmount(Player player, int amount, ShopItem invItem, Shop shop) {
+
+		int originalAmount = amount;
 		//Get the total amount of stock in the shop
 		int totalStock = invItem.getStock();
-		
-		//If this is an unlimited shop set the total number of items to the amount being requested
-		if (unlimitedStock) {
-			totalStock = amount;
-		}
-		
-		if (totalStock == 0 && !unlimitedStock) {
-			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_HAS_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { totalStock, invItem.getType().name() }));
-			return totalStock;
-		}
 
+		//Lower our amount if the shop doesn't have enough stock to sell what was requested.
+		if (amount > totalStock)
+			amount = totalStock;
+
+		
 		// check how many items the user has room for
 		int freeSpots = 0;
 		for (ItemStack thisSlot : player.getInventory().getContents()) {
@@ -451,12 +381,32 @@ public class CommandShopBuy extends Command {
 				freeSpots += invItem.getMaxStock() - thisSlot.getAmount();
 			}
 		}
-		amount = freeSpots;
+		//If player doesn't have enough slots free reduce the amount they can buy.
+		if (amount > freeSpots)
+			amount = freeSpots;
+
+		//If this is an unlimited shop set the total number of items to the amount being requested
+		if (shop.isUnlimitedStock()) {
+			totalStock = amount;
+		}
+
+		//Return with special amount if this is the shop owner, 
+		//honestly the shop owner should be using /remove, but this is for compatibility.
+		if (player.getName().equals(shop.getOwner()) && !shop.isUnlimitedStock())
+			return amount;
+		else if (player.getName().equals(shop.getOwner()) && shop.isUnlimitedStock())
+			return 0;
 		
+		//Check player econ
+		double totalPrice = invItem.getBuyPrice() * amount;
+		if (totalPrice > Econ.getBalance(player.getName())) {
+			amount = (int) Math.floor(Econ.getBalance(player.getName()) / amount);
+		}
+
 		if (amount < originalAmount)
 			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_ORDER_REDUCED, new String[] { "%BUNDLESIZE%", "%AMOUNT%" }, new Object[] { 1, amount }));
-			
-		
+
+
 		return amount;
 	}
 }
