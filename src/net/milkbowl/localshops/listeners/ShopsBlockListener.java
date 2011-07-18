@@ -68,7 +68,7 @@ public class ShopsBlockListener extends BlockListener {
 		ItemInfo item = Search.itemByString(event.getLine(0));
 
 		if (item != null) {
-			if (shop.containsItem(item.getType(), item.getSubTypeId())) {
+			if (shop.containsItem(item)) {
 				// Create the sign object to work with
 				try {
 					if (event.getLine(1).equalsIgnoreCase("buy")) {

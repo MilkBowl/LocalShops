@@ -744,7 +744,7 @@ public class ShopManager {
 			} else {
 				ItemInfo item = Search.itemByName(sign.getItemName());
 				//if We can't find the item in the shop ignore the sign
-				if (!(shop.containsItem(item.getType(), item.getSubTypeId()))) {
+				if (!(shop.containsItem(item))) {
 					continue;
 				} else {
 					shop.getSigns().add(sign);

@@ -19,7 +19,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
@@ -33,7 +32,6 @@ import net.milkbowl.localshops.ShopManager;
 import net.milkbowl.localshops.util.GenericFunctions;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
@@ -126,19 +124,8 @@ public abstract class Shop implements Comparator<Shop> {
 		return inventory.get(item.name);
 	}
 
-	public boolean containsItem(Material item, short subType) {
-		Iterator<ShopItem> it = inventory.values().iterator();
-		while(it.hasNext()) {
-			ShopItem invItem = it.next();
-			if(invItem.material.equals(item) && invItem.getSubTypeId() == subType) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public boolean containsItem(ItemInfo item) {
-		return containsItem(item.getType(), item.getSubTypeId());
+	public boolean containsItem(Item item) {
+		return (inventory.values().contains(item));
 	}
 
 	public String getShortUuidString() {
