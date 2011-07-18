@@ -363,19 +363,17 @@ public class CommandShopBuy extends Command {
 
 		int originalAmount = amount;
 		//Get the total amount of stock in the shop
-		int totalStock = invItem.getStock();
 
 		//Lower our amount if the shop doesn't have enough stock to sell what was requested.
-		if (amount > totalStock)
-			amount = totalStock;
-
+		if (!shop.isUnlimitedStock() && amount > invItem.getStock())
+			amount = invItem.getStock();;
 		
 		// check how many items the user has room for
 		int freeSpots = 0;
 		for (ItemStack thisSlot : player.getInventory().getContents()) {
 			if (thisSlot == null || thisSlot.getType().equals(Material.AIR)) {
 				//Adjust number of items slots by the number an air block can hold
-				freeSpots += invItem.getMaxStock();
+				freeSpots += invItem.getMaxBundleSize();
 				continue;
 			}else if (thisSlot.getType().equals(invItem.getType()) && thisSlot.getDurability() == invItem.getSubTypeId()) {
 				freeSpots += invItem.getMaxBundleSize() - thisSlot.getAmount();
@@ -385,10 +383,6 @@ public class CommandShopBuy extends Command {
 		if (amount > freeSpots)
 			amount = freeSpots;
 
-		//If this is an unlimited shop set the total number of items to the amount being requested
-		if (shop.isUnlimitedStock()) {
-			totalStock = amount;
-		}
 
 		//Return with special amount if this is the shop owner, 
 		//honestly the shop owner should be using /remove, but this is for compatibility.
