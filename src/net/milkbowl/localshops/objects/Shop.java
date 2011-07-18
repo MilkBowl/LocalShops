@@ -116,14 +116,10 @@ public abstract class Shop implements Comparator<Shop> {
 		this.dynamicPrices = dynamicPrices;
 	}
 
-	public ShopRecord getItem(String item) {
-		return inventory.get(item);
-	}
-
 	public ShopRecord getItem(Item item) {
 		return inventory.get(item);
 	}
-
+	
 	public boolean containsItem(Item item) {
 		return (inventory.containsKey(item));
 	}
@@ -427,18 +423,26 @@ public abstract class Shop implements Comparator<Shop> {
 	 public String[] generateSignLines(ShopSign sign) {
 		 String[] signLines = {"", "", "", ""};
 		 //If this item no longer exists lets just return with blank lines
-		 if (this.getItem(sign.getItemName()) == null) {
+		 ItemInfo item = Search.itemByName(sign.getItemName());
+		 ShopRecord shopRecord = null;
+		 if (item == null) {
+			 this.signSet.remove(sign);
 			 return signLines;
-		 } else 
+		 } else if (this.getItem(item) == null) {
+			 this.signSet.remove(sign);
+			 return signLines;
+		 } else {
+			 shopRecord = this.getItem(item);
 			 signLines[0] = sign.getItemName();
+		 }
 
 		 //create our string array and set the 1st element to our item name
 
 		 //Store the variables we'll be using multiple times
-		 int stock = this.getItem(sign.getItemName()).getStock();
-		 double buyPrice = this.getItem(sign.getItemName()).getBuyPrice() * sign.getAmount();
-		 double sellPrice = this.getItem(sign.getItemName()).getSellPrice() * sign.getAmount();
-		 int maxStock = this.getItem(sign.getItemName()).getMaxStock();
+		 int stock = shopRecord.getStock();
+		 double buyPrice = shopRecord.getBuyPrice() * sign.getAmount();
+		 double sellPrice = shopRecord.getSellPrice() * sign.getAmount();
+		 int maxStock = shopRecord.getMaxStock();
 		 int available = stock / sign.getAmount();
 		 
 		 String bCol = GenericFunctions.parseColors(Config.getSignBuyColor());
@@ -454,14 +458,8 @@ public abstract class Shop implements Comparator<Shop> {
 		 }
 		 
 		 signLines[0] = GenericFunctions.parseColors(Config.getSignNameColor()) + signLines[0];
-		 //If shop no longer carries this item - otherwise update it
-		 if(this.getItem(sign.getItemName()) == null) {
-			 signLines[0] = "";
-			 signLines[1] = "";
-			 signLines[2] = "";
-			 signLines[3] = "";
-			 this.signSet.remove(sign);
-		 } else if (sign.getType() == ShopSign.SignType.INFO ){
+
+		if (sign.getType() == ShopSign.SignType.INFO ){
 			 if (buyPrice == 0 ) 
 				 signLines[1] = bCol + "-";
 			 else if (stock == 0 && !this.unlimitedStock)
