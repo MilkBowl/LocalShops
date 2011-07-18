@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 public class Item {
 
 	protected final Material material;
-	protected final Short subTypeId;
+	protected final short subTypeId;
 	protected final String name;
 	
 	public Item(Material material, String name) {
@@ -15,7 +15,7 @@ public class Item {
 	    this.subTypeId = 0;
 	}
 
-	public Item (Material material, short subTypeId, String name) {
+	public Item(Material material, short subTypeId, String name) {
 		this.name = name;
 		this.material = material;
 		this.subTypeId = subTypeId;
@@ -53,11 +53,7 @@ public class Item {
 	}
 
 	public boolean isDurable() {
-		if(material.getMaxDurability() > 0) {
-		    return true;
-		} else {
-		    return false;
-		}
+		return (material.getMaxDurability() > 0);
 	}
 
 	public ItemStack toStack() {
