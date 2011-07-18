@@ -709,6 +709,10 @@ public class ShopManager {
 				int z = Integer.parseInt(v2[2]);
 				String itemName = v2[3];
 				int signId = Integer.parseInt(v2[4]);
+				int amount = 1;
+				if (v2.length == 6)
+					amount = Integer.parseInt(v2[5]);
+				
 				if (shop instanceof LocalShop) {
 					LocalShop lShop = (LocalShop) shop;
 					//Make sure the sign we're adding actually exists in the same world as the shop
@@ -716,9 +720,9 @@ public class ShopManager {
 						continue;
 					//Add the sign to the 
 					if (plugin.getServer().getWorld(signWorld) != null) {
-						signList.add(new ShopSign(plugin.getServer().getWorld(signWorld), x, y, z, itemName, signId));
+						signList.add(new ShopSign(plugin.getServer().getWorld(signWorld), x, y, z, itemName, signId, amount));
 					} else {
-						signList.add(new ShopSign(signWorld, x, y, z, itemName, signId));
+						signList.add(new ShopSign(signWorld, x, y, z, itemName, signId, amount));
 					}
 				}
 			}
@@ -846,7 +850,7 @@ public class ShopManager {
 		Iterator<ShopSign> iter = shop.getSigns().iterator();
 		for (int index = 1; iter.hasNext(); index++ ) {
 			ShopSign sign = iter.next();
-			props.setProperty("sign"+index, String.format("%s:%d,%d,%d,%s,%d", sign.getWorldName(), sign.getX(), sign.getY(), sign.getZ(), sign.getItemName(), sign.getType().getId()));
+			props.setProperty("sign"+index, String.format("%s:%d,%d,%d,%s,%d,%d", sign.getWorldName(), sign.getX(), sign.getY(), sign.getZ(), sign.getItemName(), sign.getType().getId(), sign.getAmount()));
 		}
 
 		String fileName = Config.getDirShopsActivePath() + shop.getUuid().toString() + ".shop";

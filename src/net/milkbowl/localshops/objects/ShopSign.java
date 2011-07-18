@@ -31,6 +31,7 @@ public class ShopSign {
     private World world = null;
     private String signWorld = null;
     private String item;
+    private int amount;
     private SignType type = null;
     public static enum SignType {
         INFO(0),
@@ -48,12 +49,13 @@ public class ShopSign {
         }
     }
 
-    public ShopSign(World world, int x, int y, int z, String itemName, int typeId) throws TypeNotFoundException {
+    public ShopSign (World world, int x, int y, int z, String itemName, int typeId, int amount) throws TypeNotFoundException {
         this.x = x;
         this.y = y;
         this.z = z;
         this.item = itemName;
         this.world = world;
+        this.amount = amount;
         this.signWorld = world.getName();
         for(SignType t : SignType.values()) {
             if(t.getId() == typeId) {
@@ -67,8 +69,13 @@ public class ShopSign {
         }
     }
     
+    
+    public ShopSign(World world, int x, int y, int z, String itemName, int typeId) throws TypeNotFoundException {
+    	this (world, x, y, z, itemName, typeId, 1);
+    }
+    
     public ShopSign (World world, int x, int y, int z, String itemName) throws TypeNotFoundException {
-        this(world, x, y, z, itemName, SignType.INFO.getId());
+        this(world, x, y, z, itemName, SignType.INFO.getId(), 1);
     }
 
     public ShopSign (World world, String string) {
@@ -83,18 +90,18 @@ public class ShopSign {
     }
 
     public ShopSign (Block block, String itemName) throws TypeNotFoundException {
-        this(block.getWorld(), block.getX(), block.getY(), block.getZ(), itemName);
+        this(block.getWorld(), block.getX(), block.getY(), block.getZ(), itemName, 1);
     }
     
     public ShopSign (Block block, String itemName, int typeId) throws TypeNotFoundException {
-        this(block.getWorld(), block.getX(), block.getY(), block.getZ(), itemName, typeId);
+        this(block.getWorld(), block.getX(), block.getY(), block.getZ(), itemName, typeId, 1);
     }
     
     public ShopSign (Location loc, String itemName) throws TypeNotFoundException {
-        this(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), itemName, 0);
+        this(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), itemName, 0, 1);
     }
     
-    public ShopSign(String signWorld, int x, int y, int z, String itemName, int typeId) throws TypeNotFoundException {
+    public ShopSign(String signWorld, int x, int y, int z, String itemName, int typeId, int amount) throws TypeNotFoundException {
         this.signWorld = signWorld;
         this.x = x;
         this.y = y;
@@ -111,10 +118,14 @@ public class ShopSign {
             throw new TypeNotFoundException(String.format("Sign type %d not found.", typeId));
         }
     }
+    
+    public ShopSign(String signWorld, int x, int y, int z, String itemName, int typeId) throws TypeNotFoundException {
+    	this(signWorld, x, y, z, itemName, typeId, 1);
+    }
 
     
     public ShopSign(String signWorld, int x, int y, int z, String itemName) throws TypeNotFoundException {
-        this(signWorld, x, y, z, itemName, SignType.INFO.getId());
+        this(signWorld, x, y, z, itemName, SignType.INFO.getId(), 1);
     }
 
     public String toString() {
@@ -130,6 +141,8 @@ public class ShopSign {
         string.append(item);
         string.append(",");
         string.append(type.getId());
+        string.append(",");
+        string.append(amount);
         return string.toString();
     }
 
@@ -183,7 +196,12 @@ public class ShopSign {
         return type;
     }
     
-    public boolean equals (ShopSign sign) {
+    public int getAmount() {
+		return amount;
+	}
+
+
+	public boolean equals (ShopSign sign) {
         if (this.getWorldName().equals(sign.getWorldName()) && this.x == sign.x && this.y == sign.y && this.z == sign.z && this.item.equals(sign.item)) 
             return true;
         
