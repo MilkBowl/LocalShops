@@ -322,7 +322,8 @@ public class ItemData {
                 itemType == Material.DIAMOND_LEGGINGS ||
                 itemType == Material.DIAMOND_PICKAXE ||
                 itemType == Material.DIAMOND_SPADE ||
-                itemType == Material.DIAMOND_SWORD) {
+                itemType == Material.DIAMOND_SWORD ||
+                itemType == Material.SHEARS) {
             return true;
         }
         return false;

@@ -120,8 +120,8 @@ public abstract class Shop implements Comparator<Shop> {
 		return inventory.get(item);
 	}
 
-	public ShopItem getItem(ItemInfo item) {
-		return inventory.get(item.name);
+	public ShopItem getItem(Item item) {
+		return inventory.get(item);
 	}
 
 	public boolean containsItem(Item item) {

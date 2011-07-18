@@ -73,11 +73,7 @@ public class CommandShopFind extends Command {
                 return true;
             }
             ItemInfo found = null;
-            if (LocalShops.getItemList().isDurable(itemStack)) {
-                found = Search.itemById(itemStack.getTypeId());
-            } else {
-                found = Search.itemById(itemStack.getTypeId(), itemStack.getDurability());
-            }
+            found = Search.itemByStack(itemStack);
             if (found == null) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;

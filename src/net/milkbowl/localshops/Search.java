@@ -19,14 +19,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
+import net.milkbowl.localshops.objects.Item;
 import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.util.GenericFunctions;
 
 
 public class Search { 
 
-	private static List<ItemInfo> items = Collections.synchronizedList(new ArrayList<ItemInfo>());
+	private static final List<ItemInfo> items = Collections.synchronizedList(new ArrayList<ItemInfo>());
 	static {
 		// Stack modes (the three values at the end of each item) are in the following order:
 		// Vanilla, Enhanced, Unlimited
@@ -268,8 +270,27 @@ public class Search {
 		return itemByType(Material.getMaterial(typeId), subType);
 	}
 	
-	public static ItemInfo itemByType(Material type) {
-		return itemByType(type, (short) 0);
+	public static ItemInfo itemByStack(ItemStack itemStack) {
+		if (itemStack == null) {
+			return null;
+		}
+		
+		for (ItemInfo item : items) {
+			if (itemStack.getType().equals(item.getType()) && item.isDurable())
+				return item;
+			else if (itemStack.getType().equals(item.getType()) && item.getSubTypeId() == itemStack.getDurability())
+				return item;
+		}
+		
+		return null;
+	}
+	
+	public static ItemInfo itemById(Item item) {
+		for(ItemInfo i : items) {
+			if (item.equals(i))
+				return i;
+		}
+		return null;
 	}
 
 	public static ItemInfo itemByType(Material type, short subType) {

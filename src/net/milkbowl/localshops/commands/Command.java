@@ -19,7 +19,6 @@ import java.util.logging.Logger;
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.objects.Item;
-import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.PlayerData;
@@ -289,8 +288,7 @@ public abstract class Command {
 
 	}
 
-
-	protected int countAvailableSpaceForItemInInventory(PlayerInventory inventory, ItemInfo item) {
+	protected int countAvailableSpaceForItemInInventory(PlayerInventory inventory, Item item) {
 		int count = 0;
 		for (ItemStack thisSlot : inventory.getContents()) {
 			if (thisSlot == null || thisSlot.getType() == Material.AIR) {

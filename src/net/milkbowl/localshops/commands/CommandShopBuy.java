@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.Search;
+import net.milkbowl.localshops.objects.Item;
 import net.milkbowl.localshops.objects.ShopItem;
 import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.MsgType;
@@ -76,7 +77,7 @@ public class CommandShopBuy extends Command {
 				if (itemStack == null) {
 					return false;
 				}
-				ItemInfo item = Search.itemById(itemStack.getTypeId(), itemStack.getDurability());
+				ItemInfo item = Search.itemByStack(itemStack);
 				if (item == null) {
 					sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 					return true;
@@ -145,7 +146,7 @@ public class CommandShopBuy extends Command {
 			if (matcher.find()) {
 				int id = Integer.parseInt(matcher.group(1));
 				short type = Short.parseShort(matcher.group(2));
-				ItemInfo item = Search.itemById(id, type);
+				Item item = Search.itemById(id, type);
 				if (item == null) {
 					sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 					return true;
@@ -171,7 +172,7 @@ public class CommandShopBuy extends Command {
 			matcher = pattern.matcher(command);
 			if (matcher.find()) {
 				String itemName = matcher.group(1);
-				ItemInfo item = Search.itemByName(itemName);
+				Item item = Search.itemByName(itemName);
 				if (item == null) {
 					sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 					return true;
@@ -203,7 +204,7 @@ public class CommandShopBuy extends Command {
 		Matcher matcher = pattern.matcher(command);
 		if (matcher.find()) {
 			int id = Integer.parseInt(matcher.group(1));
-			ItemInfo item = Search.itemById(id);
+			Item item = Search.itemById(id);
 			if (item == null) {
 				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 				return true;
@@ -218,7 +219,7 @@ public class CommandShopBuy extends Command {
 		if (matcher.find()) {
 			int id = Integer.parseInt(matcher.group(1));
 			int count = Integer.parseInt(matcher.group(2));
-			ItemInfo item = Search.itemById(id);
+			Item item = Search.itemById(id);
 			if (item == null) {
 				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 				return true;
@@ -237,7 +238,7 @@ public class CommandShopBuy extends Command {
 		if (matcher.find()) {
 			int id = Integer.parseInt(matcher.group(1));
 			short type = Short.parseShort(matcher.group(2));
-			ItemInfo item = Search.itemById(id, type);
+			Item item = Search.itemById(id, type);
 			if (item == null) {
 				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 				return true;
@@ -252,7 +253,7 @@ public class CommandShopBuy extends Command {
 		if (matcher.find()) {
 			int id = Integer.parseInt(matcher.group(1));
 			short type = Short.parseShort(matcher.group(2));
-			ItemInfo item = Search.itemById(id, type);
+			Item item = Search.itemById(id, type);
 			int count = Integer.parseInt(matcher.group(3));
 			if (item == null) {
 				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
@@ -290,7 +291,7 @@ public class CommandShopBuy extends Command {
 		matcher = pattern.matcher(command);
 		if (matcher.find()) {
 			String itemName = matcher.group(1);
-			ItemInfo item = Search.itemByName(itemName);
+			Item item = Search.itemByName(itemName);
 			if (item == null) {
 				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 				return true;
@@ -302,9 +303,9 @@ public class CommandShopBuy extends Command {
 		sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_USAGE, new String[] { "%COMMANDLABEL%" }, new Object[] { commandLabel }));
 		return true;
 	}
-	private boolean shopBuy(Shop shop, ItemInfo item, int amount) {
+	private boolean shopBuy(Shop shop, Item item, int amount) {
 		Player player = (Player) sender;
-		ShopItem invItem = shop.getItem(item.getName());
+		ShopItem invItem = shop.getItem(item);
 		int startStock = invItem.getStock();
 		//initial order request.
 
@@ -325,7 +326,7 @@ public class CommandShopBuy extends Command {
 		if (amount <= 0)
 			return false;
 
-		double totalCost = amount * shop.getItem(item).getBuyPrice();
+		double totalCost = amount * invItem.getBuyPrice();
 
 		/**
 		 * Attempt the transaction - if it errors at this point then there is a serious issue.

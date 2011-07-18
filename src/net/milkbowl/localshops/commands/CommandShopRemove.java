@@ -73,7 +73,7 @@ public class CommandShopRemove extends Command {
                 if (itemStack == null) {
                     return false;
                 }
-                ItemInfo item = Search.itemById(itemStack.getTypeId(), itemStack.getDurability());
+                ItemInfo item = Search.itemByStack(itemStack);
                 if(item == null) {
                     sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                     return false;

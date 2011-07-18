@@ -21,6 +21,7 @@ public class ItemInfo extends Item {
     
 
     public final String[][] search;
+
     
     public ItemInfo(String name, String[][] search, Material material, short subTypeId) {
     	super(material, subTypeId, name);

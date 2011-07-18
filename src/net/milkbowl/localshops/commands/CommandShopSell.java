@@ -19,8 +19,8 @@ import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.Search;
+import net.milkbowl.localshops.objects.Item;
 import net.milkbowl.localshops.objects.ShopItem;
-import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.Transaction;
@@ -72,22 +72,21 @@ public class CommandShopSell extends Command {
 					sender.sendMessage("You must be holding an item, or specify an item.");
 					return true;
 				}
-				ItemInfo item = null;
+				Item item = null;
 				int amount = countItemsInInventory(player.getInventory(), itemStack);
-				if(LocalShops.getItemList().isDurable(itemStack)) {
-					item = Search.itemById(itemStack.getTypeId());
+				item = Search.itemByStack(itemStack);
+				
+				if(item == null) {
+					sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
+					return true;
+				} else if(item.isDurable()) {
+					//Durability checks
 					if (calcDurabilityPercentage(itemStack) > Config.getItemMaxDamage() && Config.getItemMaxDamage() != 0) {
 						sender.sendMessage(ChatColor.DARK_AQUA + "Your " + ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " is too damaged to sell!");
 						sender.sendMessage(ChatColor.DARK_AQUA + "Items must be damanged less than " + ChatColor.WHITE + Config.getItemMaxDamage() + "%");
 						return true;
 					}
-				} else {
-					item = Search.itemById(itemStack.getTypeId(), itemStack.getDurability());
-				}
-				if(item == null) {
-					sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
-					return true;
-				}
+				} 
 				return shopSell(shop, item, amount);
 			}
 
@@ -97,25 +96,19 @@ public class CommandShopSell extends Command {
 			matcher = pattern.matcher(command);
 			if (matcher.find()) {
 				ItemStack itemStack = player.getItemInHand();
-				if (itemStack == null) {
-					return true;
-				}
-				ItemInfo item = null;
+				
+				Item item = Search.itemByStack(itemStack);;
 				int amount = itemStack.getAmount();
-				if(LocalShops.getItemList().isDurable(itemStack)) {
-					item = Search.itemById(itemStack.getTypeId());
+				if(item == null) {
+					sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
+					return true;
+				}else if(item.isDurable()) {
 					if (calcDurabilityPercentage(itemStack) > Config.getItemMaxDamage() && Config.getItemMaxDamage() != 0) {
 						sender.sendMessage(ChatColor.DARK_AQUA + "Your " + ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " is too damaged to sell!");
 						sender.sendMessage(ChatColor.DARK_AQUA + "Items must be damanged less than " + ChatColor.WHITE + Config.getItemMaxDamage() + "%");
 						return true;
 					}
-				} else {
-					item = Search.itemById(itemStack.getTypeId(), itemStack.getDurability());
-				}
-				if(item == null) {
-					sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
-					return true;
-				}
+				}				
 				return shopSell(shop, item, amount);
 			}
 		} else {
@@ -130,7 +123,7 @@ public class CommandShopSell extends Command {
 		Matcher matcher = pattern.matcher(command);
 		if (matcher.find()) {
 			int id = Integer.parseInt(matcher.group(1));
-			ItemInfo item = Search.itemById(id);
+			Item item = Search.itemById(id);
 			if(item == null) {
 				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 				return true;
@@ -145,7 +138,7 @@ public class CommandShopSell extends Command {
 		if (matcher.find()) {
 			int id = Integer.parseInt(matcher.group(1));
 			int count = Integer.parseInt(matcher.group(2));
-			ItemInfo item = Search.itemById(id);
+			Item item = Search.itemById(id);
 			if(item == null) {
 				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 				return true;
@@ -160,7 +153,7 @@ public class CommandShopSell extends Command {
 		if (matcher.find()) {
 			int id = Integer.parseInt(matcher.group(1));
 			int count = Integer.parseInt(matcher.group(2));
-			ItemInfo item = Search.itemById(id);
+			Item item = Search.itemById(id);
 			if(item == null) {
 				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 				return true;
@@ -175,7 +168,7 @@ public class CommandShopSell extends Command {
 		if (matcher.find()) {
 			int id = Integer.parseInt(matcher.group(1));
 			short type = Short.parseShort(matcher.group(2));
-			ItemInfo item = Search.itemById(id, type);
+			Item item = Search.itemById(id, type);
 			if(item == null) {
 				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 				return true;
@@ -190,7 +183,7 @@ public class CommandShopSell extends Command {
 		if (matcher.find()) {
 			int id = Integer.parseInt(matcher.group(1));
 			short type = Short.parseShort(matcher.group(2));
-			ItemInfo item = Search.itemById(id, type);
+			Item item = Search.itemById(id, type);
 			int count = Integer.parseInt(matcher.group(3));
 			if(item == null) {
 				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
@@ -206,7 +199,7 @@ public class CommandShopSell extends Command {
 		if (matcher.find()) {
 			int id = Integer.parseInt(matcher.group(1));
 			short type = Short.parseShort(matcher.group(2));
-			ItemInfo item = Search.itemById(id, type);
+			Item item = Search.itemById(id, type);
 			int count = Integer.parseInt(matcher.group(3));
 			if(item == null) {
 				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
@@ -221,7 +214,7 @@ public class CommandShopSell extends Command {
 		matcher = pattern.matcher(command);
 		if (matcher.find()) {
 			String itemName = matcher.group(1);
-			ItemInfo item = Search.itemByName(itemName);
+			Item item = Search.itemByName(itemName);
 			int count = Integer.parseInt(matcher.group(2));
 			if(item == null) {
 				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
@@ -237,7 +230,7 @@ public class CommandShopSell extends Command {
 		if (matcher.find()) {
 			Player player = (Player) sender;
 			String itemName = matcher.group(1);
-			ItemInfo item = Search.itemByName(itemName);
+			Item item = Search.itemByName(itemName);
 			if(item == null) {
 				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 				return true;
@@ -252,7 +245,7 @@ public class CommandShopSell extends Command {
 		matcher = pattern.matcher(command);
 		if (matcher.find()) {
 			String itemName = matcher.group(1);
-			ItemInfo item = Search.itemByName(itemName);
+			Item item = Search.itemByName(itemName);
 			if(item == null) {
 				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
 				return true;
@@ -265,7 +258,7 @@ public class CommandShopSell extends Command {
 		return true;
 	}
 
-	private boolean shopSell(Shop shop, ItemInfo item, int amount) {
+	private boolean shopSell(Shop shop, Item item, int amount) {
 		if(!(sender instanceof Player)) {
 			sender.sendMessage("/shop sell can only be used for players!");
 			return false;
@@ -279,7 +272,7 @@ public class CommandShopSell extends Command {
 		ShopItem invItem = shop.getItem(item.getName());
 		int startStock = invItem.getStock();
 		// check if the shop is buying that item
-		if (!shop.containsItem(item) || shop.getItem(item.getName()).getSellPrice() == 0) {
+		if (!shop.containsItem(item) || invItem.getSellPrice() == 0) {
 			player.sendMessage(ChatColor.DARK_AQUA + "Sorry, " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is not buying " + ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " right now.");
 			return false;
 		}
@@ -289,7 +282,7 @@ public class CommandShopSell extends Command {
 		if (amount <= 0)
 			return false;
 
-		double totalCost = amount * shop.getItem(item).getSellPrice();
+		double totalCost = amount * invItem.getSellPrice();
 
 		/**
 		 * Attempt the transaction - if it errors at this point then there is a serious issue.

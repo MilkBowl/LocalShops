@@ -76,14 +76,14 @@ public class CommandShopAdd extends Command {
                 ItemInfo item = null;
                 int amount = itemStack.getAmount();
                 if(LocalShops.getItemList().isDurable(itemStack)) {
-                    item = Search.itemById(itemStack.getTypeId());
+                	item = Search.itemByStack(itemStack);
                     if (calcDurabilityPercentage(itemStack) > Config.getItemMaxDamage() && Config.getItemMaxDamage() != 0) {
                         sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_TOO_DAM, new String[] { "%ITEMNAME%" }, new String[] { item.getName() }));
                         sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_DMG_LESS_THAN, new String[] { "%DAMAGEVALUE%" }, new String[] { String.valueOf(Config.getItemMaxDamage()) }));
                         return true;
                     }
                 } else {
-                    item = Search.itemById(itemStack.getTypeId(), itemStack.getDurability());
+                    item = Search.itemByStack(itemStack);
                 }
                 if(item == null) {
                     sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
@@ -102,20 +102,20 @@ public class CommandShopAdd extends Command {
                     return false;
                 }
                 ItemInfo item = null;
-                if(LocalShops.getItemList().isDurable(itemStack)) {
-                    item = Search.itemById(itemStack.getTypeId());
+                item = Search.itemByStack(itemStack);
+                if(item == null) {
+                    sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
+                    return false;
+                }
+                
+                if (item.isDurable()) {
                     if (calcDurabilityPercentage(itemStack) > Config.getItemMaxDamage() && Config.getItemMaxDamage() != 0) {
                         sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_TOO_DAM, new String[] { "%ITEMNAME%" }, new String[] { item.getName() }));
                         sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_DMG_LESS_THAN, new String[] { "%DAMAGEVALUE%" }, new String[] { String.valueOf(Config.getItemMaxDamage()) }));
                         return true;
                     }
-                } else {
-                    item = Search.itemById(itemStack.getTypeId(), itemStack.getDurability());
-                }
-                if(item == null) {
-                    sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
-                    return false;
-                }
+                } 
+                
                 int amount = countItemsInInventory(player.getInventory(), itemStack);
                 return shopAdd(shop, item, amount);
             }
