@@ -430,48 +430,47 @@ public class CommandShopBuy extends Command {
 		int originalAmount = amount;
 		// if amount <= 0, assume single stack size
 		if (amount <= 0) {
-			amount = invItem.getBuySize();
+			amount = invItem.getBundleSize();
 		}
 
 		//Get the total amount of stock in the shop
-		int totalAmount = invItem.getStock();
+		int totalStock = invItem.getStock();
 		
-		if (totalAmount == 0 && !unlimitedStock) {
-			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_HAS_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { totalAmount, invItem.getType().name() }));
-			return totalAmount;
-		}
-
 		//If this is an unlimited shop set the total number of items to the amount being requested
 		if (unlimitedStock) {
-			totalAmount = amount;
+			totalStock = amount;
 		}
 		
+		if (totalStock == 0 && !unlimitedStock) {
+			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_HAS_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { totalStock, invItem.getType().name() }));
+			return totalStock;
+		}
+
 		// check how many items the user has room for
 		int freeSpots = 0;
 		for (ItemStack thisSlot : player.getInventory().getContents()) {
-			if (thisSlot == null || thisSlot.getType() == Material.AIR) {
+			if (thisSlot == null || thisSlot.getType().equals(Material.AIR)) {
 				//Adjust number of items slots by the number an air block can hold
 				freeSpots += invItem.getMaxStock();
 				continue;
-			}
-			if (thisSlot.getType().equals(invItem.getType()) && thisSlot.getDurability() == invItem.getSubTypeId()) {
+			}else if (thisSlot.getType().equals(invItem.getType()) && thisSlot.getDurability() == invItem.getSubTypeId()) {
 				freeSpots += invItem.getMaxStock() - thisSlot.getAmount();
 			}
 		}
 		// Calculate the amount the player can store
 		if (amount > freeSpots) {
-			amount = freeSpots - (freeSpots % invItem.getBuySize());
+			amount = freeSpots - (freeSpots % invItem.getBundleSize());
 		}
-		if (amount > totalAmount && !unlimitedStock) {
+		if (amount > totalStock && !unlimitedStock) {
 			//normalize the amount to the buy bundle size if it's greater than the number in the shop
-			amount = totalAmount - (totalAmount % invItem.getBuySize());
+			amount = totalStock - (totalStock % invItem.getBundleSize());
 		} 
-		if (amount % invItem.getBuySize() != 0) {
+		if (amount % invItem.getBundleSize() != 0) {
 			//Make sure we conform to shop bundle size
 			amount = amount - (amount % invItem.getBuySize());
 		}
 		if (amount < originalAmount)
-			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_ORDER_REDUCED, new String[] { "%BUNDLESIZE%", "%AMOUNT%" }, new Object[] { invItem.getBuySize(), amount }));
+			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_ORDER_REDUCED, new String[] { "%BUNDLESIZE%", "%AMOUNT%" }, new Object[] { invItem.getBundleSize(), amount }));
 			
 		
 		return amount;
