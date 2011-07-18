@@ -344,7 +344,7 @@ public class CommandShopBuy extends Command {
 		}
 		
 		if (!shop.isUnlimitedStock())
-			shop.removeStock(item.getName(), amount);
+			shop.removeStock(item, amount);
 
 		if (isShopController(shop)) {
 			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_REMOVED_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { amount, item.getName() }));

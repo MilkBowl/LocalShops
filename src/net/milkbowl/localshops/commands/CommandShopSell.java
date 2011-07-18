@@ -300,7 +300,7 @@ public class CommandShopSell extends Command {
 			return true;
 		}
 		if (!shop.isUnlimitedStock())
-			shop.addStock(item.getName(), amount);
+			shop.addStock(item, amount);
 
 		removeItemsFromInventory(player.getInventory(), item.toStack(), amount);
 
@@ -318,7 +318,7 @@ public class CommandShopSell extends Command {
 		plugin.getShopManager().saveShop(shop);
 
 		//update any sign in this shop with that value.
-		shop.updateSigns(item.getName());
+		shop.updateSigns(item);
 
 		return true;
 	}

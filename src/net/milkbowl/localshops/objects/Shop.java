@@ -256,27 +256,27 @@ public abstract class Shop implements Comparator<Shop> {
 		this.sharePercent = sharePercent;
 	}
 
-	public boolean addStock(String itemName, int amount) {
-		 if (!inventory.containsKey(itemName)) {
+	public boolean addStock(Item item, int amount) {
+		 if (!inventory.containsKey(item)) {
 			 return false;
 		 }
-		 inventory.get(itemName).addStock(amount);
+		 inventory.get(item).addStock(amount);
 		 return true;
 	 }
 
-	 public boolean removeStock(String itemName, int amount) {
-		 if (!inventory.containsKey(itemName))
+	 public boolean removeStock(Item item, int amount) {
+		 if (!inventory.containsKey(item))
 			 return false;
-		 inventory.get(itemName).removeStock(amount);
+		 inventory.get(item).removeStock(amount);
 		 return true;
 	 }
 
-	 public void setItemBuyPrice(String itemName, double price) {
-		 inventory.get(itemName).setBuyPrice(price);
+	 public void setItemBuyPrice(Item item, double price) {
+		 inventory.get(item).setBuyPrice(price);
 	 }
 
-	 public void setItemSellPrice(String itemName, double price) {
-		 inventory.get(itemName).setSellPrice(price);
+	 public void setItemSellPrice(Item item, double price) {
+		 inventory.get(item).setSellPrice(price);
 	 }
 
 	 /**
@@ -284,8 +284,8 @@ public abstract class Shop implements Comparator<Shop> {
 	  * 
 	  * @param String itemName to set
 	  */
-	 public void setItemDynamic(String itemName) {
-		 inventory.get(itemName).setDynamic(!inventory.get(itemName).isDynamic());
+	 public void setItemDynamic(Item item) {
+		 inventory.get(item).setDynamic(!inventory.get(item).isDynamic());
 	 }
 
 	 /**
@@ -294,8 +294,8 @@ public abstract class Shop implements Comparator<Shop> {
 	  * @param String itemName to check
 	  * @return Boolean dynamic
 	  */
-	 public boolean isItemDynamic(String itemName) {
-		 return inventory.get(itemName).isDynamic();
+	 public boolean isItemDynamic(Item item) {
+		 return inventory.get(item).isDynamic();
 	 }
 
 
@@ -313,16 +313,16 @@ public abstract class Shop implements Comparator<Shop> {
 		 return num;   
 	 }
 
-	 public void removeItem(String itemName) {
-		 inventory.remove(itemName);
+	 public void removeItem(Item item) {
+		 inventory.remove(item);
 	 }
 
-	 public int itemMaxStock(String itemName) {
-		 return inventory.get(itemName).getMaxStock();
+	 public int itemMaxStock(Item item) {
+		 return inventory.get(item).getMaxStock();
 	 }
 
-	 public void setItemMaxStock(String itemName, int maxStock) {
-		 inventory.get(itemName).setMaxStock(maxStock);
+	 public void setItemMaxStock(Item item, int maxStock) {
+		 inventory.get(item).setMaxStock(maxStock);
 	 }
 
 	 public Queue<Transaction> getTransactions() {
@@ -401,10 +401,10 @@ public abstract class Shop implements Comparator<Shop> {
 		 updateSign(block.getLocation());
 	 }
 
-	 public void updateSigns(String itemName) {  
+	 public void updateSigns(Item item) {  
 		 int index = 0;
 		 for (ShopSign sign : this.signSet) {
-			 if (sign.getItemName().equalsIgnoreCase(itemName)) {
+			 if (sign.getItemName().equalsIgnoreCase(item.getName())) {
 				 updateSign(sign, index);
 				 index++;
 			 }

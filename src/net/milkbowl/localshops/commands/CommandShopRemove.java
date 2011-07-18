@@ -149,8 +149,8 @@ public class CommandShopRemove extends Command {
             }
         }
 
-        shop.removeItem(item.getName());
-        shop.updateSigns(item.getName());
+        shop.removeItem(item);
+        shop.updateSigns(item);
         plugin.getShopManager().saveShop(shop);        
 
         return true;

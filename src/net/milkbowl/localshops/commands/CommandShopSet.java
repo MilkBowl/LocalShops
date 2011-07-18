@@ -166,7 +166,7 @@ public class CommandShopSet extends Command {
 		}
 
 		// Set new values
-		shop.setItemSellPrice(item.getName(), price);
+		shop.setItemSellPrice(item, price);
 
 		// Save Shop
 		plugin.getShopManager().saveShop(shop);
@@ -175,7 +175,7 @@ public class CommandShopSet extends Command {
 		sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is now buying " + ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + Vault.getEconomy().format(price));
 
 		//update any sign in this shop with that value.
-		shop.updateSigns(item.getName());
+		shop.updateSigns(item);
 
 		return true;
 	}
@@ -264,7 +264,7 @@ public class CommandShopSet extends Command {
 		}
 
 		// Set new values
-		shop.setItemBuyPrice(item.getName(), price);
+		shop.setItemBuyPrice(item, price);
 
 		// Save Shop
 		plugin.getShopManager().saveShop(shop);
@@ -273,7 +273,7 @@ public class CommandShopSet extends Command {
 		sender.sendMessage(ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " now sells for "+ ChatColor.WHITE + Vault.getEconomy().format(price));
 
 		//update any sign in this shop with that value.
-		shop.updateSigns(item.getName());
+		shop.updateSigns(item);
 		return true;
 	}
 
@@ -362,10 +362,10 @@ public class CommandShopSet extends Command {
 		}
 
 		// Set new values
-		shop.setItemMaxStock(item.getName(), max);
+		shop.setItemMaxStock(item, max);
 
 		//Update our signs for this item
-		shop.updateSigns(item.getName());
+		shop.updateSigns(item);
 
 		// Save Shop
 		plugin.getShopManager().saveShop(shop);
@@ -810,16 +810,16 @@ public class CommandShopSet extends Command {
 		}
 
 		//Set new value
-		shop.setItemDynamic(item.getName());
+		shop.setItemDynamic(item);
 
 		// Save Shop
 		plugin.getShopManager().saveShop(shop);
 
 		// Send Result
-		sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "Dynamic pricing for " + ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " is now " + shop.isItemDynamic(item.getName()));
+		sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "Dynamic pricing for " + ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " is now " + shop.isItemDynamic(item));
 
 		//update any sign in this shop with that value.
-		shop.updateSigns(item.getName());
+		shop.updateSigns(item);
 		return true;    
 	}
 
