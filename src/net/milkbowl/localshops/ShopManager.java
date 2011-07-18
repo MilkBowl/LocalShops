@@ -736,9 +736,15 @@ public class ShopManager {
 
 		//After loading sign data, verify they exist in the world
 		for (ShopSign sign : signList) {
+		    if(sign == null) {
+		        continue;
+		    }
 			//Make sure we don't already have a sign at this location
 			boolean ignoreSign = false;
 			for (ShopSign s : shop.getSigns()) {
+			    if(s == null) {
+			        continue;
+			    }
 				if (s.getLoc().equals(sign.getLoc())) {
 					ignoreSign = true;
 					break;
