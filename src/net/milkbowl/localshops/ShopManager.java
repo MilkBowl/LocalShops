@@ -749,8 +749,9 @@ public class ShopManager {
             for (ShopSign s : shop.getSigns()) {
                 if (s == null) {
                     continue;
-                }
-                if (s.getLoc().equals(sign.getLoc())) {
+                } else if (s.getLoc() == null) {
+                	continue;
+                } else if (s.getLoc().equals(sign.getLoc())) {
                     ignoreSign = true;
                     break;
                 }
