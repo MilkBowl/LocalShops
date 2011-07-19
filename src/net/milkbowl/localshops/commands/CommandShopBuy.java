@@ -63,11 +63,14 @@ public class CommandShopBuy extends Command {
 				return true;
 			}
 
-			// Check Permissions
+			// Check Permissions then check access list
 			if ((!canUseCommand(PermType.BUY) && !isGlobal) || (!canUseCommand(PermType.GLOBAL_BUY) && isGlobal)) {
 				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
 				return true;
-			}
+			} else if (!shop.hasAccess(player)) {
+            	sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
+            	return true;
+            }
 
 			// buy (player only command)
 			Pattern pattern = Pattern.compile("(?i)buy$");
