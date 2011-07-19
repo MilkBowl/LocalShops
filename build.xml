@@ -4,6 +4,8 @@
     <path id="classpath">
         <fileset dir="lib" includes="**/*.jar"/>
     </path>
+
+    <target name="jar" depends="main" />
 	
     <target name="main" depends="clean, compile, compress" description="Main target">
         <echo>Building the .jar file.</echo>
