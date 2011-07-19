@@ -35,10 +35,10 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.logging.Logger;
 
 import net.milkbowl.localshops.Config;
+import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.ShopManager;
 import net.milkbowl.localshops.util.GenericFunctions;
-import net.milkbowl.vault.Vault;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -437,7 +437,7 @@ public abstract class Shop implements Comparator<Shop> {
 			return true;
 		else if (users.contains(player.getName()))
 			return true;
-		else if (groups.contains(Vault.getPermission().getPlayerGroups(player.getWorld().getName(), player.getName())))
+		else if (groups.contains(LocalShops.getPerm().getPlayerGroups(player.getWorld().getName(), player.getName())))
 			return true;
 		else
 			return false;

@@ -21,6 +21,7 @@
 package net.milkbowl.localshops;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
@@ -35,14 +36,15 @@ import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.ShopSign;
 import net.milkbowl.localshops.threads.ThreadManager;
-import net.milkbowl.vault.Vault;
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -59,14 +61,17 @@ public class LocalShops extends JavaPlugin {
 	// Managers
 	private ShopManager shopManager = new ShopManager(this);
 	private DynamicManager dynamicManager = new DynamicManager(this);
-	public ThreadManager threadManager = new ThreadManager(this);
+	private ThreadManager threadManager = new ThreadManager(this);
 	private ResourceManager resManager = null;
+	
+	// Services
+	private static Economy econ = null;
+	private static Permission perm = null;
 
 	// Logging
 	private final Logger log = Logger.getLogger("Minecraft");
 
 	private Map<String, PlayerData> playerData = Collections.synchronizedMap(new HashMap<String, PlayerData>());
-	public static Vault VAULT = null;
 
 	public void onLoad() {
 		Config.load();
@@ -134,17 +139,27 @@ public class LocalShops extends JavaPlugin {
 
 		// Start Scheduler thread
 		threadManager.schedulerStart();
-
-		// Obtain Vault
-		Plugin x = this.getServer().getPluginManager().getPlugin("Vault");
-		if(x != null & x instanceof Vault) {
-			VAULT = (Vault) x;
-			log.info(String.format("[%s] Hooked into %s %s", getDescription().getName(), VAULT.getDescription().getName(), VAULT.getDescription().getVersion()));
-		} else {
-			log.warning(String.format("[%s] Vault was NOT found! Disabling plugin.", getDescription().getName()));
-			getPluginLoader().disablePlugin(this);
-			return;
-		}
+		
+		// Get services
+		retrieveServices();
+	}
+	
+	public void retrieveServices() {
+            Collection<RegisteredServiceProvider<Economy>> econs = this.getServer().getServicesManager().getRegistrations(net.milkbowl.vault.economy.Economy.class);
+            for(RegisteredServiceProvider<Economy> econ : econs) {
+                Economy e = econ.getProvider();
+                log.info(String.format("[%s] Found Service (Economy) %s", getDescription().getName(), e.getName()));
+            }
+            Collection<RegisteredServiceProvider<Permission>> perms = this.getServer().getServicesManager().getRegistrations(net.milkbowl.vault.permission.Permission.class);
+            for(RegisteredServiceProvider<Permission> perm : perms) {
+                Permission p = perm.getProvider();
+                log.info(String.format("[%s] Found Service (Permission) %s", getDescription().getName(), p.getName()));
+            }
+            
+            econ = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class).getProvider();
+            log.info(String.format("[%s] Using Economy Provider %s", getDescription().getName(), econ.getName()));
+            perm = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class).getProvider();
+            log.info(String.format("[%s] Using Permission Provider %s", getDescription().getName(), perm.getName()));
 	}
 
 	public void onDisable() {
@@ -165,6 +180,14 @@ public class LocalShops extends JavaPlugin {
 
 		// update the console that we've stopped
 		log.info(resManager.getString(MsgType.MAIN_DISABLE, new String[] { }, new Object[] { }));
+	}
+	
+	public static Economy getEcon() {
+	    return econ;
+	}
+	
+	public static Permission getPerm() {
+	    return perm;
 	}
 
 	public ShopManager getShopManager() {

@@ -30,7 +30,6 @@ import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.Transaction;
-import net.milkbowl.vault.Vault;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -79,10 +78,10 @@ public class NotificationThread extends Thread {
                     for(Transaction trans : transactions) {
                         switch (trans.type) {
                         case Buy:
-                            messages.add(String.format(ChatColor.WHITE + "   %s " + ChatColor.GOLD + "sold " + ChatColor.WHITE + "%d %s" + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + "%s", trans.playerName, trans.quantity, trans.itemName, Vault.getEconomy().format(trans.cost)));
+                            messages.add(String.format(ChatColor.WHITE + "   %s " + ChatColor.GOLD + "sold " + ChatColor.WHITE + "%d %s" + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + "%s", trans.playerName, trans.quantity, trans.itemName, LocalShops.getEcon().format(trans.cost)));
                             break;
                         case Sell:
-                            messages.add(String.format(ChatColor.WHITE + "   %s " + ChatColor.GREEN + "purchased " + ChatColor.WHITE + "%d %s" + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + " %s", trans.playerName, trans.quantity, trans.itemName, Vault.getEconomy().format(trans.cost)));
+                            messages.add(String.format(ChatColor.WHITE + "   %s " + ChatColor.GREEN + "purchased " + ChatColor.WHITE + "%d %s" + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + " %s", trans.playerName, trans.quantity, trans.itemName, LocalShops.getEcon().format(trans.cost)));
                             break;
 
                         default:
@@ -144,7 +143,7 @@ public class NotificationThread extends Thread {
                     
                     // Create messages :D
                     messages.add(String.format(ChatColor.WHITE + "%d " + ChatColor.DARK_AQUA + "transactions for " + ChatColor.WHITE + "%s", transactions.size(), shop.getName()));
-                    messages.add(String.format(ChatColor.WHITE + "Totals: " + ChatColor.GREEN + "Gained %s, " + ChatColor.GOLD + "Lost %s", Vault.getEconomy().format(buyCostTotal), Vault.getEconomy().format(sellCostTotal)));
+                    messages.add(String.format(ChatColor.WHITE + "Totals: " + ChatColor.GREEN + "Gained %s, " + ChatColor.GOLD + "Lost %s", LocalShops.getEcon().format(buyCostTotal), LocalShops.getEcon().format(sellCostTotal)));
                     String g = "";
                     for(String item : itemSellCost.keySet()) {
                         if(g.equals("")) {
