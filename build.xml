@@ -48,6 +48,10 @@
 			<attribute name="Built-By" value="${user.name}" />
 		</manifest>
         </jar>
+        <zip destfile="LocalShops.zip">
+        	<fileset dir="." includes="LocalShops.jar"/>
+        	<fileset dir="lib" includes="Vault.jar"/>
+        </zip>
     	<delete dir="bin" />
   </target>
 </project>
