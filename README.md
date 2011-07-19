@@ -2,12 +2,18 @@
 ### http://forums.bukkit.org/threads/17131/
 
 ## Installing
-Simple copy LocalShops.jar to your <bukkit-directory>/plugins/ and then start
+Simple copy LocalShops.jar and Vault.jar to your <bukkit-directory>/plugins/ and then start
 Bukkit!  Most configuration of the plugin can be done via in-game commands.
 For those adventurous or for changes requiring editing of the config file, it
 is required to edit the config while the plugin is not running.  The best way
 is to stop Bukkit, edit the file, and then start Bukkit.  It is not supported
 to edit while the plugin is running!
+
+
+## Vault
+Vault provides an abstraction layer for common Permissions and Economic plugins
+using the Bukkit Services API to provide ease of use for server administrators,
+and plugin developers alike.  Vault is required for LocalShops.
 
 
 ## Permissions
@@ -66,6 +72,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 LocalShops provides an Ant build script (build.xml) which should be used when
 building LocalShops.  Other methods may work, but are not supported or
 documented.  To learn more about Ant, visit http://ant.apache.org.
+
+
+## Jenkins
+MilkBowl has an automated build server at http://ci.milkbowl.net which builds
+LocalShops as necessary.
 
 
 ## Dependencies
