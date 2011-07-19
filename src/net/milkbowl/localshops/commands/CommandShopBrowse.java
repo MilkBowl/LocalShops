@@ -61,6 +61,11 @@ public class CommandShopBrowse extends Command {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
                 return true;
             }
+            
+            if (!shop.hasAccess(player)) {
+            	sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
+            	return true;
+            }
 
         } else {
             sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));

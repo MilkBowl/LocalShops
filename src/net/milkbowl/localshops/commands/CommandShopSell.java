@@ -57,12 +57,15 @@ public class CommandShopSell extends Command {
 				return true;
 			}
 
-			// Check Permissions
+			// Check Permissions then check access list
 			if ((!canUseCommand(PermType.SELL) && !isGlobal) || (!canUseCommand(PermType.GLOBAL_SELL) && isGlobal)) {
 				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
 				return true;
-			}
-
+			} else if (!shop.hasAccess(player)) {
+            	sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
+            	return true;
+            }
+            
 			// sell all (player only command)
 			Pattern pattern = Pattern.compile("(?i)sell\\s+all$");
 			Matcher matcher = pattern.matcher(command);
