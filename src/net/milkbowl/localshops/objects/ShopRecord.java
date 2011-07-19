@@ -18,10 +18,10 @@ public class ShopRecord {
 
     private double buyPrice = 0;
     private double sellPrice = 0;
-    private int stock;
+    private int stock = 0;
     private int baseStock = 0;
-    private boolean dynamic;
-    private int maxStock;
+    private boolean dynamic = false;
+    private int maxStock = 0;
     
     public ShopRecord(double buyPrice, double sellPrice, int stock, int maxStock, boolean dynamic) {
     	this.buyPrice = buyPrice;
