@@ -10,8 +10,10 @@
     <target name="jar" depends="main" />
 	
     <target name="main" depends="clean, compile, compress" description="Main target">
-    	<echo>Retreiving Vault</echo>
-    	  <get src="http://ci.milkbowl.net/job/Vault/lastSuccessfulBuild/artifact/Vault.jar" dest="lib/Vault.jar" verbose="true" usetimestamp="true"/>
+        <echo>Retreiving Bukkit</echo>
+        <get src="http://ci.bukkit.org/job/dev-Bukkit/lastSuccessfulBuild/artifact/target/bukkit-0.0.1-SNAPSHOT.jar" dest="lib/bukkit.jar" verbose="true" usetimestamp="true" />
+       	<echo>Retreiving Vault</echo>
+    	<get src="http://ci.milkbowl.net/job/Vault/lastSuccessfulBuild/artifact/Vault.jar" dest="lib/Vault.jar" verbose="true" usetimestamp="true"/>
         <echo>Building the .jar file.</echo>
     </target>
 	
