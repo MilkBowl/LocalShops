@@ -32,7 +32,6 @@
         <jar jarfile="LocalShops.jar" basedir="bin" includes="net/**/*, plugin.yml, props/*">
 		<manifest>
 			<attribute name="Built-By" value="${user.name}" />
-			<attribute name="Class-Path" value="../lib/Vault-0.jar"/>
 		</manifest>
         </jar>
     	<delete dir="bin" />
