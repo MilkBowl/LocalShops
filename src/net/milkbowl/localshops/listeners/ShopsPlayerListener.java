@@ -66,7 +66,7 @@ public class ShopsPlayerListener extends PlayerListener {
         Location eventBlockLoc = event.getClickedBlock().getLocation();
         LocalShop shop = plugin.getShopManager().getLocalShop(eventBlockLoc);
         //If user Right clicks a sign try to buy/sell from it.
-        if (((event.getClickedBlock().getType().equals(Material.WALL_SIGN) || event.getClickedBlock().getType().equals(Material.SIGN_POST)) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && (player.getItemInHand().getType().equals(Material.AIR) || player.getItemInHand().equals(Material.STICK)) && shop != null) {
+        if (((event.getClickedBlock().getType().equals(Material.WALL_SIGN) || event.getClickedBlock().getType().equals(Material.SIGN_POST)) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK))  && shop != null) {
             for (ShopSign sign : shop.getSigns()) {
             	if (sign == null)
             		continue;
@@ -96,7 +96,7 @@ public class ShopsPlayerListener extends PlayerListener {
 
         } 
         // If our user is select & is not holding an item, selection time
-        if (plugin.getPlayerData().get(playerName).isSelecting() && player.getItemInHand().getType() == Material.AIR) {
+        if (plugin.getPlayerData().get(playerName).isSelecting() && (player.getItemInHand().getType() == Material.AIR || player.getItemInHand().getType() == Material.STICK)) {
         	PlayerData pData = plugin.getPlayerData().get(playerName);
             Location loc = event.getClickedBlock().getLocation();
             int x = loc.getBlockX();
