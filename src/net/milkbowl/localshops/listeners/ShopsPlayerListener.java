@@ -12,6 +12,8 @@
 
 package net.milkbowl.localshops.listeners;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -46,7 +48,20 @@ public class ShopsPlayerListener extends PlayerListener {
     private LocalShops plugin;
 
     // Logging
-    private static final Logger log = Logger.getLogger("Minecraft");    
+    private static final Logger log = Logger.getLogger("Minecraft");
+    
+    // List of items that can be consumed by right click
+    private static final Set<Material> consumables = new HashSet<Material>();
+    static {
+        consumables.add(Material.APPLE);
+        consumables.add(Material.GOLDEN_APPLE);
+        consumables.add(Material.MUSHROOM_SOUP);
+        consumables.add(Material.PORK);
+        consumables.add(Material.BREAD);
+        consumables.add(Material.COOKED_FISH);
+        consumables.add(Material.RAW_FISH);
+        consumables.add(Material.COOKIE);
+    }
 
     public ShopsPlayerListener(LocalShops plugin) {
         this.plugin = plugin;
@@ -67,6 +82,13 @@ public class ShopsPlayerListener extends PlayerListener {
         LocalShop shop = plugin.getShopManager().getLocalShop(eventBlockLoc);
         //If user Right clicks a sign try to buy/sell from it.
         if (((event.getClickedBlock().getType().equals(Material.WALL_SIGN) || event.getClickedBlock().getType().equals(Material.SIGN_POST)) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK))  && shop != null) {
+            // Ignore consumables & send message to a player
+            if(consumables.contains(player.getItemInHand().getType())) {
+                event.setCancelled(true);
+                player.sendMessage(ChatColor.DARK_AQUA + "Oops!  You can't eat while working with shops!");
+                return;
+            }
+            
             for (ShopSign sign : shop.getSigns()) {
             	if (sign == null)
             		continue;
