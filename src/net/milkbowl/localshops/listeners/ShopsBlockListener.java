@@ -115,11 +115,6 @@ public class ShopsBlockListener extends BlockListener {
 
 		Block block = event.getBlock();
 
-		// If not a sign ignore event.
-		if ( (!(block.getType().equals(Material.SIGN_POST)) && !(block.getType().equals(Material.WALL_SIGN)) ) || event.isCancelled()) {
-			return;
-		}
-
 		LocalShop shop = null;
 		Player player = event.getPlayer();
 
@@ -132,7 +127,7 @@ public class ShopsBlockListener extends BlockListener {
 
 		//cancel block place in a shop if the player is targeting a sign and we aren't trying to place a sign
 		Block targetBlock = event.getPlayer().getTargetBlock(null, 10);
-		if (targetBlock != null && (!event.getBlock().getType().equals(Material.WALL_SIGN) && !event.getBlock().getType().equals(Material.SIGN_POST)))
+		if (targetBlock != null)
 			if (targetBlock.getType().equals(Material.SIGN_POST) || targetBlock.getType().equals(Material.WALL_SIGN))
 				event.setCancelled(true);
 
