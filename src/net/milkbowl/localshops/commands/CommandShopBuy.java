@@ -359,7 +359,7 @@ public class CommandShopBuy extends Command {
 		if (isShopController(shop)) {
 			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_REMOVED_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%" }, new Object[] { amount, item.getName() }));
 		} else {
-			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PURCHASED_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%", "%COST%" }, new Object[] { amount, item.getName(), plugin.getEcon().format(totalCost) }));
+			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PURCHASED_QTY, new String[] { "%AMOUNT%", "%ITEMNAME%", "%COST%" }, new Object[] { amount, item.getName(), LocalShops.getEcon().format(totalCost) }));
 		}
 
 		//Do our give stock stuff here

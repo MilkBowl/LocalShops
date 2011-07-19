@@ -177,7 +177,7 @@ public class CommandShopBrowse extends Command {
                 if (price == 0) {
                     continue;
                 }
-                subMessage += ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + plugin.getEcon().format(price) + ChatColor.DARK_AQUA + "]";
+                subMessage += ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + LocalShops.getEcon().format(price) + ChatColor.DARK_AQUA + "]";
                 // get stack size
                 if (sell) {
                     int stock = shop.getItem(item).getStock();
