@@ -6,3 +6,5 @@
 /bin
 /LocalShops.jar
 .externalToolBuilders
+manifest.mf
+nbproject/
