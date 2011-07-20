@@ -20,6 +20,7 @@
 
 package net.milkbowl.localshops.objects;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -82,12 +83,12 @@ public class LocalShop extends Shop {
         log.info(String.format("   %-16s %.2f", "Minimum Balance:", minBalance));
         log.info(String.format("   %-16s %s", "Unlimited Money:", unlimitedMoney ? "Yes" : "No"));
         log.info(String.format("   %-16s %s", "Unlimited Stock:", unlimitedStock ? "Yes" : "No"));
-        /* 
-         * TODO: Redo Shop Location output
-        log.info(String.format("   %-16s %s", "Location A:", locationA.toString()));
-        log.info(String.format("   %-16s %s", "Location B:", locationB.toString()));
-        */
-        log.info(String.format("   %-16s %s", "World:", world));
+        log.info(String.format("   %-16s %.2f", "Groups:", GenericFunctions.join(groups, ", ")));
+        log.info(String.format("   %-16s %.2f", "Users:", GenericFunctions.join(users, ", ")));
+        log.info("Shop Locations");
+        for(ShopLocation l : shopLocations) {
+           log.info(String.format("   %s %s %s", world, Arrays.toString(l.getLocation1()), Arrays.toString(l.getLocation2())));
+        }
 
         // Items
         log.info("Shop Inventory");
