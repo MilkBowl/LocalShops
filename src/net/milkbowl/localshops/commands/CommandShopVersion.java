@@ -22,6 +22,7 @@ package net.milkbowl.localshops.commands;
 
 
 import net.milkbowl.localshops.LocalShops;
+import org.bukkit.ChatColor;
 
 import org.bukkit.command.CommandSender;
 
@@ -36,8 +37,11 @@ public class CommandShopVersion extends Command {
         super(plugin, commandLabel, sender, command);
     }
 
+   @Override
     public boolean process() {
         sender.sendMessage(String.format("LocalShops Version %s", plugin.getDescription().getVersion()));
+        sender.sendMessage(ChatColor.DARK_AQUA + "Permission: " + ChatColor.WHITE + LocalShops.getPerm().getName());
+        sender.sendMessage(ChatColor.DARK_AQUA + "sEconomy: " + ChatColor.WHITE + LocalShops.getEcon().getName());
         return true;
     }
 }
