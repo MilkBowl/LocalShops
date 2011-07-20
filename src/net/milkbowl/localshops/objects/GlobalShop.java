@@ -80,8 +80,8 @@ public class GlobalShop extends Shop {
         log.info(String.format("   %-16s %.2f", "Minimum Balance:", minBalance));
         log.info(String.format("   %-16s %s", "Unlimited Money:", unlimitedMoney ? "Yes" : "No"));
         log.info(String.format("   %-16s %s", "Unlimited Stock:", unlimitedStock ? "Yes" : "No"));
-        log.info(String.format("   %-16s %.2f", "Groups:", GenericFunctions.join(groups, ", ")));
-        log.info(String.format("   %-16s %.2f", "Users:", GenericFunctions.join(users, ", ")));
+        log.info(String.format("   %-16s %s", "Groups:", GenericFunctions.join(groups, ", ")));
+        log.info(String.format("   %-16s %s", "Users:", GenericFunctions.join(users, ", ")));
         log.info(String.format("   %-16s %s", "Worlds:", GenericFunctions.join(worlds, ", ")));
 
         // Items

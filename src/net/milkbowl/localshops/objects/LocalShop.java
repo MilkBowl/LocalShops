@@ -83,8 +83,8 @@ public class LocalShop extends Shop {
         log.info(String.format("   %-16s %.2f", "Minimum Balance:", minBalance));
         log.info(String.format("   %-16s %s", "Unlimited Money:", unlimitedMoney ? "Yes" : "No"));
         log.info(String.format("   %-16s %s", "Unlimited Stock:", unlimitedStock ? "Yes" : "No"));
-        log.info(String.format("   %-16s %.2f", "Groups:", GenericFunctions.join(groups, ", ")));
-        log.info(String.format("   %-16s %.2f", "Users:", GenericFunctions.join(users, ", ")));
+        log.info(String.format("   %-16s %s", "Groups:", GenericFunctions.join(groups, ", ")));
+        log.info(String.format("   %-16s %s", "Users:", GenericFunctions.join(users, ", ")));
         log.info("Shop Locations");
         for(ShopLocation l : shopLocations) {
            log.info(String.format("   %s %s %s", world, Arrays.toString(l.getLocation1()), Arrays.toString(l.getLocation2())));
