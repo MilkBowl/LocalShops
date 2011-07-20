@@ -628,13 +628,17 @@ public class ShopManager {
         shop.setDynamicPrices(dynamic);
         shop.setSharePercent(sharePercent);
 
-        // Only set our Users & Groups if they are not empty
-        if (!groups.equals(""))
-            for (String group : groups)
-                shop.addGroup(group);
-        if (!users.equals(""))
-            for (String user : users)
+        // Only set our Users & Groups if they are not empty strings
+        for (String group : groups) {
+            if(!group.equals("")) {
+                    shop.addGroup(group);
+            }
+        }
+        for (String user : users) {
+            if (!user.equals("")) {
                 shop.addUser(user);
+            }
+        }
 
         // Make sure minimum balance isn't negative
         if (minBalance < 0) {
