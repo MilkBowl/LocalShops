@@ -825,7 +825,11 @@ public class ShopManager {
 
         // Local Shops
         for (Shop shop : shops.values()) {
-            saveShop(shop);
+            try {
+                saveShop(shop);
+            } catch(Exception e) {
+                log.log(Level.WARNING, "Exception while saving shop " + shop.getUuid().toString(), e);
+            }
         }
         return true;
     }
