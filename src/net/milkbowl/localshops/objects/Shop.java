@@ -180,6 +180,9 @@ public abstract class Shop implements Comparator<Shop> {
 	public boolean addItem(int itemNumber, short itemData, double buyPrice, double sellPrice, int stock, int maxStock, boolean dynamicItem) {
 
 		ItemInfo item = Search.itemById(itemNumber, itemData);
+                if(item == null) {
+                    return false;
+                }
 		ShopRecord thisItem = new ShopRecord(buyPrice, sellPrice, stock, maxStock, dynamicItem);
 
 		inventory.put(item, thisItem);
