@@ -215,7 +215,7 @@ public class Search {
 		items.add(new ItemInfo("Paintings", new String[][] { { "paint" } }, Material.PAINTING));
 		items.add(new ItemInfo("Golden Apple", new String[][] { { "appl", "go" } }, Material.GOLDEN_APPLE));
 		items.add(new ItemInfo("Sign", new String[][] { { "sign" } }, Material.SIGN));
-		items.add(new ItemInfo("Wooden Door", new String[][] {  { "door", "wood" }, { "door" } }, Material.WOODEN_DOOR));
+		items.add(new ItemInfo("Wooden Door", new String[][] {  { "door", "wood" }, { "door" } }, Material.WOOD_DOOR));
 		items.add(new ItemInfo("Bucket", new String[][] { { "buck" }, { "bukk" } }, Material.BUCKET));
 		items.add(new ItemInfo("Water Bucket", new String[][] { { "water", "buck" } }, Material.WATER_BUCKET));
 		items.add(new ItemInfo("Lava Bucket", new String[][] { { "lava", "buck" } }, Material.LAVA_BUCKET));
