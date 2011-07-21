@@ -23,6 +23,7 @@ package net.milkbowl.localshops.commands;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -177,7 +178,11 @@ public class CommandShopBrowse extends Command {
                 if (price == 0) {
                     continue;
                 }
-                subMessage += ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + LocalShops.getEcon().format(price) + ChatColor.DARK_AQUA + "]";
+                try {
+                    subMessage += ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + LocalShops.getEcon().format(price) + ChatColor.DARK_AQUA + "]";
+                } catch (NumberFormatException e) {
+                    log.log(Level.WARNING, "NumberFormatException occurred on " + price, e);
+                }
                 // get stack size
                 if (sell) {
                     int stock = shop.getItem(item).getStock();
