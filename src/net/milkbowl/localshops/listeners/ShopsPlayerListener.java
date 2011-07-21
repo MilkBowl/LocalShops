@@ -22,7 +22,7 @@ package net.milkbowl.localshops.listeners;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.milkbowl.localshops.Config;
@@ -30,7 +30,6 @@ import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.commands.ShopCommandExecutor;
 import net.milkbowl.localshops.objects.LocalShop;
 import net.milkbowl.localshops.objects.PlayerData;
-import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopSign;
 import net.milkbowl.localshops.util.GenericFunctions;
 
@@ -44,7 +43,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 
 /**
@@ -103,7 +105,7 @@ public class ShopsPlayerListener extends PlayerListener {
                 if (sign.getLoc().equals(eventBlockLoc)) {
                 	//Check for null sign-type? We should NEVER have this issue
                 	if (sign.getType() == null) {
-                		log.warning("[LocalShops] - Null Shop Sign detected, report error. Sign info: " + sign.toString());
+                		log.log(Level.WARNING, "[LocalShops] - Null Shop Sign detected, report error. Sign info: {0}", sign.toString());
                 		continue;
                 	}
                     if (sign.getType().equals(ShopSign.SignType.BUY)) {
@@ -168,6 +170,7 @@ public class ShopsPlayerListener extends PlayerListener {
 
     }
 
+    @Override
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         String playerName = player.getName();
@@ -182,9 +185,10 @@ public class ShopsPlayerListener extends PlayerListener {
         y = xyz.getBlockY();
         z = xyz.getBlockZ();
 
-        checkPlayerPosition(player, x, y, z);        
+        plugin.checkPlayerPosition(player, x, y, z);
     }
 
+    @Override
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         String playerName = player.getName();
@@ -194,6 +198,7 @@ public class ShopsPlayerListener extends PlayerListener {
         }
     }
 
+    @Override
     public void onPlayerKick(PlayerKickEvent event) {
         Player player = event.getPlayer();
         String playerName = player.getName();
@@ -201,6 +206,18 @@ public class ShopsPlayerListener extends PlayerListener {
         if (!plugin.getPlayerData().containsKey(playerName)) {
             plugin.getPlayerData().remove(playerName);
         }
+    }
+
+    @Override
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        Player player = event.getPlayer();
+        String playerName = player.getName();
+
+        if (!plugin.getPlayerData().containsKey(playerName)) {
+            plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
+        }
+
+        plugin.checkPlayerPosition(player, event.getTo());
     }
 
     @Override
@@ -212,58 +229,30 @@ public class ShopsPlayerListener extends PlayerListener {
             plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
         }
 
-        checkPlayerPosition(player, event.getTo());
+        plugin.checkPlayerPosition(player, event.getTo());
     }
 
-    public void checkPlayerPosition(Player player) {
-        checkPlayerPosition(player, player.getLocation());
-    }
+    @Override
+    public void onPlayerPortal(PlayerPortalEvent event) {
+        Player player = event.getPlayer();
+        String playerName = player.getName();
 
-    public void checkPlayerPosition(Player player, int[] xyz) {
-        if (xyz.length == 3) {
-            checkPlayerPosition(player, xyz[0], xyz[1], xyz[2]);
-        } else {
-            log.info(String.format("[%s] Bad Position", plugin.getDescription().getName()));
+        if (!plugin.getPlayerData().containsKey(playerName)) {
+            plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
         }
 
+        plugin.checkPlayerPosition(player, event.getTo());
     }
 
-    public void checkPlayerPosition(Player player, int x, int y, int z) {
-        PlayerData pData = plugin.getPlayerData().get(player.getName());
+    @Override
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        Player player = event.getPlayer();
+        String playerName = player.getName();
 
-        Shop shop = plugin.getShopManager().getLocalShop(player.getWorld().getName(), x, y, z);
-
-        if(shop == null) {
-            // not in a shop...
-            for(UUID uuid : pData.shopList) {
-                notifyPlayerLeftShop(player, uuid);
-            }
-            pData.shopList.clear();
-            return;
+        if (!plugin.getPlayerData().containsKey(playerName)) {
+            plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
         }
 
-        if(!pData.shopList.contains(shop.getUuid())) {
-            // Player was not in the shop, and now is...
-            pData.shopList.add(shop.getUuid());
-            notifyPlayerEnterShop(player, shop.getUuid());
-        }
+        plugin.checkPlayerPosition(player, event.getRespawnLocation());
     }
-
-    public void checkPlayerPosition(Player player, Location loc) {
-        checkPlayerPosition(player, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-    }
-
-    private void notifyPlayerLeftShop(Player player, UUID shopUuid) {
-        // TODO Add formatting
-        Shop shop = plugin.getShopManager().getLocalShop(shopUuid);
-        player.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] You have left the shop " + ChatColor.WHITE + shop.getName());
-    }
-
-    private void notifyPlayerEnterShop(Player player, UUID shopUuid) {
-        // TODO Add formatting
-        Shop shop = plugin.getShopManager().getLocalShop(shopUuid);
-        player.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] You have entered the shop " + ChatColor.WHITE + shop.getName());
-
-    }
-
 }

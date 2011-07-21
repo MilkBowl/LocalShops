@@ -140,7 +140,7 @@ public class CommandShopCreate extends Command {
             shop = lShop;
             log.info(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_LOG, new String[] { "%TYPE%", "%SHOP%" }, new Object[] { "Local", lShop }));
             for (Player p : plugin.getServer().getOnlinePlayers()) {
-                plugin.playerListener.checkPlayerPosition(p);
+                plugin.checkPlayerPosition(p);
             }
         }
 

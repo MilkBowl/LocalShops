@@ -42,6 +42,7 @@ public class ShopsEntityListener extends EntityListener {
     }
 
 
+    @Override
     public void onEntityExplode(EntityExplodeEvent event) {
         if (event.isCancelled()) {
             return;

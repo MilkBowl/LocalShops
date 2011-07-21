@@ -26,18 +26,23 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import net.milkbowl.localshops.commands.ShopCommandExecutor;
 import net.milkbowl.localshops.listeners.ShopsBlockListener;
 import net.milkbowl.localshops.listeners.ShopsEntityListener;
 import net.milkbowl.localshops.listeners.ShopsPlayerListener;
+import net.milkbowl.localshops.listeners.ShopsVehicleListener;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.PlayerData;
+import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopSign;
 import net.milkbowl.localshops.threads.ThreadManager;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
@@ -57,6 +62,7 @@ public class LocalShops extends JavaPlugin {
 	public ShopsPlayerListener playerListener = new ShopsPlayerListener(this);
 	public ShopsBlockListener blockListener = new ShopsBlockListener(this);
 	public ShopsEntityListener entityListener = new ShopsEntityListener(this);
+        public ShopsVehicleListener vehicleListener = new ShopsVehicleListener(this);
 
 	// Managers
 	private ShopManager shopManager = new ShopManager(this);
@@ -69,10 +75,11 @@ public class LocalShops extends JavaPlugin {
 	private static Permission perm = null;
 
 	// Logging
-	private final Logger log = Logger.getLogger("Minecraft");
+	private static final Logger log = Logger.getLogger("Minecraft");
 
 	private Map<String, PlayerData> playerData = Collections.synchronizedMap(new HashMap<String, PlayerData>());
 
+        @Override
 	public void onLoad() {
 		Config.load();
 	}
@@ -93,10 +100,14 @@ public class LocalShops extends JavaPlugin {
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
 		pm.registerEvent(Event.Type.PLAYER_KICK, playerListener, Priority.Monitor, this);
+                pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Monitor, this);
+                pm.registerEvent(Event.Type.PLAYER_PORTAL, playerListener, Priority.Monitor, this);
+                pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Monitor, this);
 		pm.registerEvent(Event.Type.SIGN_CHANGE, blockListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.ENTITY_EXPLODE, entityListener, Priority.Normal, this);
+                pm.registerEvent(Event.Type.VEHICLE_MOVE, vehicleListener, Priority.Monitor, this);
 
 		// Register Commands
 		CommandExecutor cmdExec = new ShopCommandExecutor(this);
@@ -124,7 +135,7 @@ public class LocalShops extends JavaPlugin {
 
 		// check which shops players are inside
 		for (Player player : this.getServer().getOnlinePlayers()) {
-			playerListener.checkPlayerPosition(player);
+			checkPlayerPosition(player);
 		}
 
 		// Start reporting thread
@@ -228,4 +239,55 @@ public class LocalShops extends JavaPlugin {
 		}
 
 	}
+
+    public void checkPlayerPosition(Player player, int x, int y, int z) {
+        PlayerData pData = getPlayerData().get(player.getName());
+
+        Shop shop = getShopManager().getLocalShop(player.getWorld().getName(), x, y, z);
+
+        if(shop == null) {
+            // not in a shop...
+            for(UUID uuid : pData.shopList) {
+                notifyPlayerLeftShop(player, uuid);
+            }
+            pData.shopList.clear();
+            return;
+        }
+
+        if(!pData.shopList.contains(shop.getUuid())) {
+            // Player was not in the shop, and now is...
+            pData.shopList.add(shop.getUuid());
+            notifyPlayerEnterShop(player, shop.getUuid());
+        }
+    }
+
+    public void checkPlayerPosition(Player player) {
+        checkPlayerPosition(player, player.getLocation());
+    }
+
+    public void checkPlayerPosition(Player player, int[] xyz) {
+        if (xyz.length == 3) {
+            checkPlayerPosition(player, xyz[0], xyz[1], xyz[2]);
+        } else {
+            log.info(String.format("[%s] Bad Position", getDescription().getName()));
+        }
+
+    }
+
+    public void checkPlayerPosition(Player player, Location loc) {
+        checkPlayerPosition(player, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+    }
+
+    private void notifyPlayerLeftShop(Player player, UUID shopUuid) {
+        // TODO Add formatting
+        Shop shop = getShopManager().getLocalShop(shopUuid);
+        player.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] You have left the shop " + ChatColor.WHITE + shop.getName());
+    }
+
+    private void notifyPlayerEnterShop(Player player, UUID shopUuid) {
+        // TODO Add formatting
+        Shop shop = getShopManager().getLocalShop(shopUuid);
+        player.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] You have entered the shop " + ChatColor.WHITE + shop.getName());
+
+    }
 }
