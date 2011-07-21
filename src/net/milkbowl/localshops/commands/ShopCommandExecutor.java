@@ -125,7 +125,7 @@ public class ShopCommandExecutor implements CommandExecutor {
                 boolean cVal = cmd.process();
                 if (cVal && cInfo.checkPlayerPositions) {
                     for (Player player : plugin.getServer().getOnlinePlayers()) {
-                        plugin.playerListener.checkPlayerPosition(player);
+                        plugin.checkPlayerPosition(player);
                     }
                 }
 
