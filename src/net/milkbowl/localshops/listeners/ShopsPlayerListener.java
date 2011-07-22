@@ -216,14 +216,15 @@ public class ShopsPlayerListener extends PlayerListener {
 
     @Override
     public void onPlayerMove(PlayerMoveEvent event) {
-        Player player = event.getPlayer();
-        String playerName = player.getName();
+        //We only check if a player has entered a shop if he has changed a full block.
+        if (event.getTo().getBlockX() == event.getFrom().getBlockX() && event.getTo().getBlockY() == event.getFrom().getBlockY() && event.getTo().getBlockZ() == event.getFrom().getBlockZ())
+        	return;
 
-        if (!plugin.getPlayerData().containsKey(playerName)) {
-            plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
+        if (!plugin.getPlayerData().containsKey(event.getPlayer().getName())) {
+            plugin.getPlayerData().put(event.getPlayer().getName(), new PlayerData(plugin, event.getPlayer().getName()));
         }
 
-        plugin.checkPlayerPosition(player);
+        plugin.checkPlayerPosition(event.getPlayer());
     }
 
     @Override
