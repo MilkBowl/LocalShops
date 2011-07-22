@@ -40,17 +40,17 @@ public class ShopsVehicleListener extends VehicleListener {
 
     @Override
     public void onVehicleMove(VehicleMoveEvent event) {
+        //We only check if a player has entered a shop if he has changed a full block.
+        if (event.getTo().getBlockX() == event.getFrom().getBlockX() && event.getTo().getBlockY() == event.getFrom().getBlockY() && event.getTo().getBlockZ() == event.getFrom().getBlockZ()) {
+        	return;
+        }
+        
         Player player = null;
         Entity entity = event.getVehicle().getPassenger();
         if(entity instanceof Player) {
             player = (Player) entity;
         } else {
             return;
-        }
-        String playerName = player.getName();
-
-        if (!plugin.getPlayerData().containsKey(playerName)) {
-            plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
         }
 
         plugin.checkPlayerPosition(player);

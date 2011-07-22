@@ -187,9 +187,7 @@ public class ShopsPlayerListener extends PlayerListener {
         Player player = event.getPlayer();
         String playerName = player.getName();
 
-        if (!plugin.getPlayerData().containsKey(playerName)) {
-            plugin.getPlayerData().remove(playerName);
-        }
+        plugin.getPlayerData().remove(playerName);
     }
 
     @Override
@@ -197,31 +195,19 @@ public class ShopsPlayerListener extends PlayerListener {
         Player player = event.getPlayer();
         String playerName = player.getName();
 
-        if (!plugin.getPlayerData().containsKey(playerName)) {
-            plugin.getPlayerData().remove(playerName);
-        }
+        plugin.getPlayerData().remove(playerName);
     }
 
     @Override
     public void onPlayerTeleport(PlayerTeleportEvent event) {
-        Player player = event.getPlayer();
-        String playerName = player.getName();
-
-        if (!plugin.getPlayerData().containsKey(playerName)) {
-            plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
-        }
-
-        plugin.checkPlayerPosition(player, event.getTo());
+        plugin.checkPlayerPosition(event.getPlayer(), event.getTo());
     }
 
     @Override
     public void onPlayerMove(PlayerMoveEvent event) {
         //We only check if a player has entered a shop if he has changed a full block.
-        if (event.getTo().getBlockX() == event.getFrom().getBlockX() && event.getTo().getBlockY() == event.getFrom().getBlockY() && event.getTo().getBlockZ() == event.getFrom().getBlockZ())
+        if (event.getTo().getBlockX() == event.getFrom().getBlockX() && event.getTo().getBlockY() == event.getFrom().getBlockY() && event.getTo().getBlockZ() == event.getFrom().getBlockZ()) {
         	return;
-
-        if (!plugin.getPlayerData().containsKey(event.getPlayer().getName())) {
-            plugin.getPlayerData().put(event.getPlayer().getName(), new PlayerData(plugin, event.getPlayer().getName()));
         }
 
         plugin.checkPlayerPosition(event.getPlayer());
@@ -229,25 +215,11 @@ public class ShopsPlayerListener extends PlayerListener {
 
     @Override
     public void onPlayerPortal(PlayerPortalEvent event) {
-        Player player = event.getPlayer();
-        String playerName = player.getName();
-
-        if (!plugin.getPlayerData().containsKey(playerName)) {
-            plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
-        }
-
-        plugin.checkPlayerPosition(player);
+        plugin.checkPlayerPosition(event.getPlayer());
     }
 
     @Override
     public void onPlayerRespawn(PlayerRespawnEvent event) {
-        Player player = event.getPlayer();
-        String playerName = player.getName();
-
-        if (!plugin.getPlayerData().containsKey(playerName)) {
-            plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
-        }
-
-        plugin.checkPlayerPosition(player);
+        plugin.checkPlayerPosition(event.getPlayer());
     }
 }
