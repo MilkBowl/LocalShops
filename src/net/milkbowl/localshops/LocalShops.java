@@ -240,10 +240,10 @@ public class LocalShops extends JavaPlugin {
 
 	}
 
-    public void checkPlayerPosition(Player player) {
+    public void checkPlayerPosition(Player player, Location location) {
         PlayerData pData = getPlayerData().get(player.getName());
 
-        Shop shop = getShopManager().getLocalShop(player.getLocation());
+        Shop shop = getShopManager().getLocalShop(location);
 
         if(shop == null) {
             // not in a shop...
@@ -259,6 +259,10 @@ public class LocalShops extends JavaPlugin {
             pData.shopList.add(shop.getUuid());
             notifyPlayerEnterShop(player, shop.getUuid());
         }
+    }
+
+    public void checkPlayerPosition(Player player) {
+        checkPlayerPosition(player, player.getLocation());
     }
 
     private void notifyPlayerLeftShop(Player player, UUID shopUuid) {

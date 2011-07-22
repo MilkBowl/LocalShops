@@ -211,7 +211,7 @@ public class ShopsPlayerListener extends PlayerListener {
             plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
         }
 
-        plugin.checkPlayerPosition(player);
+        plugin.checkPlayerPosition(player, event.getTo());
     }
 
     @Override
