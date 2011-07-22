@@ -200,6 +200,13 @@ public class ShopsPlayerListener extends PlayerListener {
 
     @Override
     public void onPlayerTeleport(PlayerTeleportEvent event) {
+        Player player = event.getPlayer();
+        String playerName = player.getName();
+
+        if (!plugin.getPlayerData().containsKey(playerName)) {
+            plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
+        }
+
         plugin.checkPlayerPosition(event.getPlayer(), event.getTo());
     }
 
