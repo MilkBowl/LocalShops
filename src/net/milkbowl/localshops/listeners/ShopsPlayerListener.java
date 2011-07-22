@@ -179,13 +179,7 @@ public class ShopsPlayerListener extends PlayerListener {
             plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
         }
 
-        int x, y, z;
-        Location xyz = player.getLocation();
-        x = xyz.getBlockX();
-        y = xyz.getBlockY();
-        z = xyz.getBlockZ();
-
-        plugin.checkPlayerPosition(player, x, y, z);
+        plugin.checkPlayerPosition(player);
     }
 
     @Override
@@ -217,7 +211,7 @@ public class ShopsPlayerListener extends PlayerListener {
             plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
         }
 
-        plugin.checkPlayerPosition(player, event.getTo());
+        plugin.checkPlayerPosition(player);
     }
 
     @Override
@@ -229,7 +223,7 @@ public class ShopsPlayerListener extends PlayerListener {
             plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
         }
 
-        plugin.checkPlayerPosition(player, event.getTo());
+        plugin.checkPlayerPosition(player);
     }
 
     @Override
@@ -241,7 +235,7 @@ public class ShopsPlayerListener extends PlayerListener {
             plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
         }
 
-        plugin.checkPlayerPosition(player, event.getTo());
+        plugin.checkPlayerPosition(player);
     }
 
     @Override
@@ -253,6 +247,6 @@ public class ShopsPlayerListener extends PlayerListener {
             plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
         }
 
-        plugin.checkPlayerPosition(player, event.getRespawnLocation());
+        plugin.checkPlayerPosition(player);
     }
 }

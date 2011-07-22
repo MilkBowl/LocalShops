@@ -53,6 +53,6 @@ public class ShopsVehicleListener extends VehicleListener {
             plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
         }
 
-        plugin.checkPlayerPosition(player, event.getTo());
+        plugin.checkPlayerPosition(player);
     }
 }
