@@ -25,6 +25,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import net.milkbowl.localshops.Config;
@@ -69,8 +71,11 @@ public class DynamicThread extends Thread {
                 }
             }
         }
-        for(Item item : itemStockMap.keySet()) {
-            List<Integer> stockList = GenericFunctions.limitOutliers(itemStockMap.get(item));
+
+        for(Entry<Item, List<Integer>> entry : itemStockMap.entrySet()) {
+            Item item = entry.getKey();
+
+            List<Integer> stockList = GenericFunctions.limitOutliers(entry.getValue());
 
             //Get the overall stock change for a given item and then calculate the adjustment given the volatility
             int deltaStock = GenericFunctions.getSum(stockList) - Config.getGlobalBaseStock();
