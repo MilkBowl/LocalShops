@@ -144,25 +144,31 @@ public class NotificationThread extends Thread {
                     // Create messages :D
                     messages.add(String.format(ChatColor.WHITE + "%d " + ChatColor.DARK_AQUA + "transactions for " + ChatColor.WHITE + "%s", transactions.size(), shop.getName()));
                     messages.add(String.format(ChatColor.WHITE + "Totals: " + ChatColor.GREEN + "Gained %s, " + ChatColor.GOLD + "Lost %s", LocalShops.getEcon().format(buyCostTotal), LocalShops.getEcon().format(sellCostTotal)));
-                    String g = "";
+                    StringBuffer g = null;
                     for(String item : itemSellCost.keySet()) {
-                        if(g.equals("")) {
-                            g += ChatColor.GREEN + item;
+                        if(g == null) {
+                            g = new StringBuffer();
+                            g.append(ChatColor.GREEN);
+                            g.append(item);
                         } else {
-                            g += " " + item;
+                            g.append(" ");
+                            g.append(item);
                         }
                     }
-                    String l = "";
+                    StringBuffer l = null;
                     for(String item : itemBuyCost.keySet()) {
-                        if(l.equals("")) {
-                            l += ChatColor.GOLD + item;
+                        if(l == null) {
+                            l = new StringBuffer();
+                            l.append(ChatColor.GOLD);
+                            l.append(item);
                         } else {
-                            l += " " + item;
+                            l.append(" ");
+                            l.append(item);
                         }
                     }
                     
-                    messages.add(String.format(ChatColor.WHITE + "   Sold: %s", g));
-                    messages.add(String.format(ChatColor.WHITE + "   Bought: %s", l));
+                    messages.add(String.format(ChatColor.WHITE + "   Sold: %s", g.toString()));
+                    messages.add(String.format(ChatColor.WHITE + "   Bought: %s", l.toString()));
                 }
                 
                 // Register task to send messages ;)
