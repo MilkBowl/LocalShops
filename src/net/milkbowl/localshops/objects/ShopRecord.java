@@ -119,12 +119,24 @@ public class ShopRecord {
         this.baseStock = baseStock;
     }
     
+    @Override
     public boolean equals (Object obj) {
     	if (obj instanceof ShopRecord) {
     		return this == obj;
     	} else {
     	    return false;
     	}
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 61 * hash + (int) (Double.doubleToLongBits(this.buyPrice) ^ (Double.doubleToLongBits(this.buyPrice) >>> 32));
+        hash = 61 * hash + (int) (Double.doubleToLongBits(this.sellPrice) ^ (Double.doubleToLongBits(this.sellPrice) >>> 32));
+        hash = 61 * hash + this.stock;
+        hash = 61 * hash + (this.dynamic ? 1 : 0);
+        hash = 61 * hash + this.maxStock;
+        return hash;
     }
     
 }

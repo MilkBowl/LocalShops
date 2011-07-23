@@ -17,36 +17,38 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.objects;
 
 import java.util.Arrays;
 
 import org.bukkit.Material;
 
-
 public class ItemInfo extends Item {
-    
 
     public final String[][] search;
 
-    
     public ItemInfo(String name, String[][] search, Material material, short subTypeId) {
-    	super(material, subTypeId, name);
+        super(material, subTypeId, name);
         this.search = search;
     }
-    
-    public ItemInfo (String name, String[][] search, Material material) {
-    	super(material, name);
-    	this.search = search;
+
+    public ItemInfo(String name, String[][] search, Material material) {
+        super(material, name);
+        this.search = search;
     }
-    
+
+    @Override
     public String toString() {
         return String.format("%s, %s, %d:%d", name, Arrays.deepToString(search), material.getId(), subTypeId);
     }
-    
-    public boolean equals(Object obj){
-    	return super.equals(obj);
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
-    
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

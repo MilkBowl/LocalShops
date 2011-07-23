@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.objects;
 
 import org.bukkit.Material;
@@ -25,59 +24,68 @@ import org.bukkit.inventory.ItemStack;
 
 public class Item {
 
-	protected final Material material;
-	protected final short subTypeId;
-	protected final String name;
-	
-	public Item(Material material, String name) {
-	    this.material = material;
-	    this.name = name;
-	    this.subTypeId = 0;
-	}
+    protected final Material material;
+    protected final short subTypeId;
+    protected final String name;
 
-	public Item(Material material, short subTypeId, String name) {
-		this.name = name;
-		this.material = material;
-		this.subTypeId = subTypeId;
-	}
+    public Item(Material material, String name) {
+        this.material = material;
+        this.name = name;
+        this.subTypeId = 0;
+    }
 
-	public Material getType() {
-		return material;
-	}
+    public Item(Material material, short subTypeId, String name) {
+        this.name = name;
+        this.material = material;
+        this.subTypeId = subTypeId;
+    }
 
-	public short getSubTypeId() {
-		return subTypeId;
-	}
+    public Material getType() {
+        return material;
+    }
 
-	public int getStackSize() {
-		return material.getMaxStackSize();
-	}
+    public short getSubTypeId() {
+        return subTypeId;
+    }
 
-	public int getId() {
-		return material.getId();
-	}
+    public int getStackSize() {
+        return material.getMaxStackSize();
+    }
 
-	public String getName() {
-		return name;
-	}
+    public int getId() {
+        return material.getId();
+    }
 
-	public int getMaxBundleSize() {
-		return material.getMaxStackSize();
-	}
+    public String getName() {
+        return name;
+    }
 
-	public boolean equals (Object obj) {
-		if (obj instanceof Item)
-			return (this.material == ((Item) obj).material && this.subTypeId == ((Item) obj).subTypeId);
-		else
-			return false;
-	}
+    public int getMaxBundleSize() {
+        return material.getMaxStackSize();
+    }
 
-	public boolean isDurable() {
-		return (material.getMaxDurability() > 0);
-	}
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 17 * hash + (this.material != null ? this.material.hashCode() : 0);
+        hash = 17 * hash + this.subTypeId;
+        return hash;
+    }
 
-	public ItemStack toStack() {
-		return new ItemStack (this.material, 1, subTypeId);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Item) {
+            return (this.material == ((Item) obj).material && this.subTypeId == ((Item) obj).subTypeId);
+        } else {
+            return false;
+        }
+    }
 
+    public boolean isDurable() {
+        return (material.getMaxDurability() > 0);
+    }
+
+    public ItemStack toStack() {
+        return new ItemStack(this.material, 1, subTypeId);
+    }
 }
