@@ -361,7 +361,8 @@ public abstract class Command {
 		PlayerData pData = plugin.getPlayerData().get(player.getName());
 		//Null check our pData
 		if (pData == null) {
-			plugin.getPlayerData().put(player.getName(), new PlayerData(plugin, player.getName()));
+                    pData = new PlayerData(plugin, player.getName());
+			plugin.getPlayerData().put(player.getName(), pData);
 		}
 		if (pData.isSelecting()) {
 			if (GenericFunctions.calculateCuboidSize(pData.getPositionA(), pData.getPositionB(), Config.getShopSizeMaxWidth(), Config.getShopSizeMaxHeight()) == null) {
