@@ -53,15 +53,12 @@ public class Transaction {
     
     @Override
     public String toString() {
-        String rVal = null;
         switch(type) {
         case Buy:
-            rVal = String.format("%s sold %d %s for %.2f", playerName, quantity, itemName, cost);
-            break;
+            return String.format("%s sold %d %s for %.2f", playerName, quantity, itemName, cost);
         case Sell:
-            rVal = String.format("%s bought %d %s for %.2f", playerName, quantity, itemName, cost);
-            break;
+            return String.format("%s bought %d %s for %.2f", playerName, quantity, itemName, cost);
         }
-        return rVal;
+        return "Transaction - Unknown Type";
     }
 }
