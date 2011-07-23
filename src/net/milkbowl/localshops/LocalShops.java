@@ -65,7 +65,7 @@ public class LocalShops extends JavaPlugin {
     public ShopsVehicleListener vehicleListener = new ShopsVehicleListener(this);
     // Managers
     private ShopManager shopManager = new ShopManager(this);
-    private DynamicManager dynamicManager = new DynamicManager(this);
+    private DynamicManager dynamicManager = new DynamicManager();
     private ThreadManager threadManager = new ThreadManager(this);
     private ResourceManager resManager = null;
     // Services

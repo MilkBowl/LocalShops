@@ -33,12 +33,7 @@ import net.milkbowl.localshops.objects.Item;
  */
 public class DynamicManager {
     @SuppressWarnings("unused")
-    private LocalShops plugin = null;
     private static Map<Item, Double> priceAdjMap = Collections.synchronizedMap(new HashMap<Item, Double>());
-        
-    public DynamicManager(LocalShops plugin) {
-        this.plugin = plugin;
-    }
 
     public static Map<Item, Double> getPriceAdjMap() {
         return priceAdjMap;
