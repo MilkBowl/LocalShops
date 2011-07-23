@@ -29,8 +29,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Config {
+
+    // Logger
+    private static final Logger log = Logger.getLogger("Minecraft");
     
     // File paths
     private static final String dirPath = "plugins/LocalShops/";
@@ -40,9 +45,6 @@ public class Config {
     private static final String fileTransactionLog = "transactions.log";
     
     private static String locale = "en";
-    
-    // Properties file
-    private static Properties properties = null;
 
     // Shop Size settings
     private static int shopSizeDefWidth = 5;
@@ -99,6 +101,8 @@ public class Config {
     private static String signStockColor = "%BLUE%";
     
     public static void save() {
+        Properties properties = new Properties();
+        
     	properties.setProperty("language-code", locale);
         properties.setProperty("charge-for-shop", String.valueOf(shopChargeCreate));
         properties.setProperty("charge-for-shop", String.valueOf(shopChargeCreate));
@@ -141,30 +145,36 @@ public class Config {
         properties.setProperty("global-shops", String.valueOf(globalShopsEnabled));
         
         properties.setProperty("chat-max-lines", String.valueOf(chatMaxLines));
-        
+
+        FileOutputStream stream = null;
         try {
-            properties.store(new FileOutputStream(Config.dirPath + "localshops.properties", false), null);
+            stream = new FileOutputStream(Config.dirPath + "localshops.properties", false);
+            properties.store(stream, null);
+            stream.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.log(Level.WARNING, "IOException writing config file: localshops.properties", e);
         }
     }
     
     public static void load() {
         new File(Config.dirPath).mkdir();
-        
+
         boolean save = false;
-        properties = new Properties();
+        Properties properties = new Properties();
+        FileInputStream stream = null;
         File file = new File(Config.dirPath + "localshops.properties");
-        if(file.exists()) {
+        if (file.exists()) {
             try {
-                properties.load(new FileInputStream(Config.dirPath + "localshops.properties"));
+                stream = new FileInputStream(Config.dirPath + "localshops.properties");
+                properties.load(stream);
             } catch (IOException e) {
+                log.log(Level.INFO, "Config file 'localshops.properties' was not found.  Generating 'localshops.properties'.");
                 save = true;
             }
         } else {
             save = true;
         }
-        
+
         locale = properties.getProperty("language-code", locale).toLowerCase();
         shopChargeCreate = Boolean.parseBoolean(properties.getProperty("charge-for-shop", String.valueOf(shopChargeCreate)));
         shopChargeCreate = Boolean.parseBoolean(properties.getProperty("charge-for-shop", String.valueOf(shopChargeCreate)));
@@ -184,7 +194,7 @@ public class Config {
         signBundleColor = properties.getProperty("sign-bundle-color", signBundleColor);
         signDefaultColor = properties.getProperty("sign-default-color", signDefaultColor);
         signStockColor = properties.getProperty("sign-stock-color", signStockColor);
-        
+
         globalBaseStock = Integer.parseInt(properties.getProperty("global-base-stock", String.valueOf(globalBaseStock)));
         globalVolatility = Double.parseDouble(properties.getProperty("global-volatility", String.valueOf(globalVolatility)));
         /*
@@ -193,28 +203,36 @@ public class Config {
         dynamicMaxPriceChange = Integer.parseInt(properties.getProperty("dynamic-max-price-change", String.valueOf(dynamicMaxPriceChange)));
         dynamicMinPriceChange = Integer.parseInt(properties.getProperty("dynamic-min-price-change", String.valueOf(dynamicMinPriceChange)));
         dynamicChance = Integer.parseInt(properties.getProperty("dynamic-chance", String.valueOf(dynamicChance)));
-        */
-        
+         */
+
         playerMaxShops = Integer.parseInt(properties.getProperty("shops-per-player", String.valueOf(playerMaxShops)));
-        
+
         itemMaxDamage = Integer.parseInt(properties.getProperty("max-damage", String.valueOf(itemMaxDamage)));
-        if(itemMaxDamage < 0) {
+        if (itemMaxDamage < 0) {
             itemMaxDamage = 0;
         }
-        
+
         srvLogTransactions = Boolean.parseBoolean(properties.getProperty("log-transactions", String.valueOf(srvLogTransactions)));
         srvUuid = UUID.fromString(properties.getProperty("uuid", UUID.randomUUID().toString()));
         srvReport = Boolean.parseBoolean(properties.getProperty("report-stats", String.valueOf(srvReport)));
         srvDebug = Boolean.parseBoolean(properties.getProperty("debug", String.valueOf(srvDebug)));
-        
-        
+
+
         findMaxDistance = Integer.parseInt(properties.getProperty("find-max-distance", String.valueOf(findMaxDistance)));
-        
+
         globalShopsEnabled = Boolean.parseBoolean(properties.getProperty("global-shops", String.valueOf(globalShopsEnabled)));
-        
+
         chatMaxLines = Integer.parseInt(properties.getProperty("chat-max-lines", String.valueOf(chatMaxLines)));
-        
-        if(save) {
+
+        if (stream != null) {
+            try {
+                stream.close();
+            } catch (IOException e) {
+                log.log(Level.WARNING, "Could not close config file: localshops.properties", e);
+            }
+        }
+
+        if (save) {
             save();
         }
     }
