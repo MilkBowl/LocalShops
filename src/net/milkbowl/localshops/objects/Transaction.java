@@ -23,7 +23,7 @@ package net.milkbowl.localshops.objects;
 /*
  * represents a transaction object
  */
-public class Transaction implements Cloneable {
+public class Transaction {
 
     // Transactions are in perspective of the shop
     public static enum Type {
@@ -51,6 +51,7 @@ public class Transaction implements Cloneable {
         this.cost = cost;
     }
     
+    @Override
     public String toString() {
         String rVal = null;
         switch(type) {
