@@ -219,14 +219,14 @@ public class LocalShops extends JavaPlugin {
 
     //Workaround for Bukkits inability to update multiple Signs in the same Tick
     public void scheduleUpdate(ShopSign sign, int delay) {
-        getServer().getScheduler().scheduleSyncDelayedTask(this, new updateSignState(sign), delay);
+        getServer().getScheduler().scheduleSyncDelayedTask(this, new UpdateSignState(sign), delay);
     }
 
-    public class updateSignState implements Runnable {
+    private static class UpdateSignState implements Runnable {
 
         private ShopSign sign = null;
 
-        public updateSignState(ShopSign sign) {
+        public UpdateSignState(ShopSign sign) {
             this.sign = sign;
         }
 
