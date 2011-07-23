@@ -111,9 +111,7 @@ public class ShopsPlayerListener extends PlayerListener {
                     if (sign.getType().equals(ShopSign.SignType.BUY)) {
                         ShopCommandExecutor.commandTypeMap.get("buy").getCommandInstance(plugin, "buy", event.getPlayer(), "buy " + sign.getItemName()+ " " + sign.getAmount(), false).process();
                         //TODO: Remove when bukkit fixes inventory updating
-                        try {
-                            player.updateInventory();
-                        } catch (Exception e) {}
+                        player.updateInventory();
                         return;
                     } else if (sign.getType().equals(ShopSign.SignType.SELL)) {
                         ShopCommandExecutor.commandTypeMap.get("sell").getCommandInstance(plugin, "sell", event.getPlayer(), "sell " + sign.getItemName() + " " + sign.getAmount(), false).process();
