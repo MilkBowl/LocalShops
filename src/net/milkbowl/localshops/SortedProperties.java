@@ -17,25 +17,30 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
-import java.util.Vector;
 
 public class SortedProperties extends Properties {
+
     private static final long serialVersionUID = 1L;
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public Enumeration keys() {
+    /**
+     * Overrides, called by the store method.
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public synchronized Enumeration<Object> keys() {
         Enumeration keysEnum = super.keys();
-        Vector<String> keyList = new Vector<String>();
+        List keyList = new ArrayList();
         while (keysEnum.hasMoreElements()) {
-            keyList.add((String) keysEnum.nextElement());
+            keyList.add(keysEnum.nextElement());
         }
         Collections.sort(keyList);
-        return keyList.elements();
+        return Collections.enumeration(keyList);
     }
 }
