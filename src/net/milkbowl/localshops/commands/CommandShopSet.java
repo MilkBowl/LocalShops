@@ -182,7 +182,7 @@ public class CommandShopSet extends Command {
 		sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is now buying " + ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + LocalShops.getEcon().format(price));
 
 		//update any sign in this shop with that value.
-		shop.updateSigns(item);
+		plugin.getShopManager().updateSigns(shop, item);
 
 		return true;
 	}
@@ -280,7 +280,7 @@ public class CommandShopSet extends Command {
 		sender.sendMessage(ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " now sells for "+ ChatColor.WHITE + LocalShops.getEcon().format(price));
 
 		//update any sign in this shop with that value.
-		shop.updateSigns(item);
+		plugin.getShopManager().updateSigns(shop, item);
 		return true;
 	}
 
@@ -372,7 +372,7 @@ public class CommandShopSet extends Command {
 		shop.setItemMaxStock(item, max);
 
 		//Update our signs for this item
-		shop.updateSigns(item);
+		plugin.getShopManager().updateSigns(shop, item);
 
 		// Save Shop
 		plugin.getShopManager().saveShop(shop);
@@ -438,8 +438,9 @@ public class CommandShopSet extends Command {
 			shop.setUnlimitedStock(!shop.isUnlimitedStock());
 			sender.sendMessage(plugin.getResourceManager().getChatPrefix() + ChatColor.DARK_AQUA + " Unlimited stock was set to " + ChatColor.WHITE + shop.isUnlimitedStock());
 			//Update signs after setting unlimited stock
-			for (ShopSign sign : shop.getSigns() )
-				shop.updateSign(sign);
+			for (ShopSign sign : shop.getSigns() ) {
+				plugin.getShopManager().updateSign(shop, sign);
+                        }
 
 			plugin.getShopManager().saveShop(shop);
 			return true;
@@ -826,7 +827,7 @@ public class CommandShopSet extends Command {
 		sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "Dynamic pricing for " + ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " is now " + shop.isItemDynamic(item));
 
 		//update any sign in this shop with that value.
-		shop.updateSigns(item);
+		plugin.getShopManager().updateSigns(shop, item);
 		return true;    
 	}
 

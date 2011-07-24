@@ -384,47 +384,6 @@ public abstract class Shop implements Comparator<Shop>, Serializable {
 		return signSet;
 	}
 
-	public void updateSign(ShopSign sign, int delay) {
-		String[] signLines = generateSignLines(sign);
-
-		BlockState signState = sign.getLoc().getBlock().getState();
-		//Set the lines
-		((Sign) signState).setLine(0, signLines[0]);
-		((Sign) signState).setLine(1, signLines[1]);
-		((Sign) signState).setLine(2, signLines[2]);
-		((Sign) signState).setLine(3, signLines[3]);
-
-		ShopManager.plugin.scheduleUpdate(sign, 2*delay);
-
-	}
-
-	public void updateSign(ShopSign sign) {
-		updateSign(sign, 0);
-	}
-
-	public void updateSign(Location loc) {
-		for (ShopSign sign : this.signSet) {
-			if (sign.getLoc().equals(loc)) {
-				updateSign(sign);
-				break;
-			}   
-		}
-	}
-
-	public void updateSign(Block block) {
-		updateSign(block.getLocation());
-	}
-
-	public void updateSigns(Item item) {  
-		int index = 0;
-		for (ShopSign sign : this.signSet) {
-			if (sign.getItemName().equalsIgnoreCase(item.getName())) {
-				updateSign(sign, index);
-				index++;
-			}
-		}
-	}
-
     /**
      * Only checks if a player is on the shop access list, or an owner, manager, or admin.
      * This IS NOT used for checking permission to use a command, ONLY for checking access list.
@@ -450,14 +409,6 @@ public abstract class Shop implements Comparator<Shop>, Serializable {
             return false;
         }
     }
-
-	public void updateSigns(Set<ShopSign> signSet) {
-		int index = 0;
-		for (ShopSign sign : signSet) {
-			updateSign(sign, index);
-			index++;
-		}
-	}   
 
 	//TODO: needs massive update.
 	public String[] generateSignLines(ShopSign sign) {

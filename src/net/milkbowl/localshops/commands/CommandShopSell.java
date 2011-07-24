@@ -328,7 +328,7 @@ public class CommandShopSell extends Command {
 		plugin.getShopManager().saveShop(shop);
 
 		//update any sign in this shop with that value.
-		shop.updateSigns(item);
+		plugin.getShopManager().updateSigns(shop, item);
 
 		return true;
 	}

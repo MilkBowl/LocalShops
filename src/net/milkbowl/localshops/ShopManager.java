@@ -54,9 +54,12 @@ import net.milkbowl.localshops.util.GenericFunctions;
 
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Sign;
 
 public class ShopManager {
-    public static LocalShops plugin = null;
+    private LocalShops plugin;
     private Map<UUID, Shop> shops = Collections.synchronizedMap(new HashMap<UUID, Shop>());
     private Map<String, Set<UUID>> localShops = Collections.synchronizedMap(new HashMap<String, Set<UUID>>());
     private Map<String, UUID> worldShops = Collections.synchronizedMap(new HashMap<String, UUID>());
@@ -64,7 +67,6 @@ public class ShopManager {
     // Logging
     private static final Logger log = Logger.getLogger("Minecraft");
 
-    @SuppressWarnings("static-access")
     public ShopManager(LocalShops plugin) {
         this.plugin = plugin;
     }
@@ -788,7 +790,7 @@ public class ShopManager {
                     continue;
                 } else {
                     shop.getSigns().add(sign);
-                    shop.updateSign(sign);
+                    updateSign(shop, sign);
                 }
             }
         }
@@ -1014,15 +1016,66 @@ public class ShopManager {
         return true;
     }
 
+    public void updateSign(Shop shop, ShopSign sign, int delay) {
+        String[] signLines = shop.generateSignLines(sign);
+
+        BlockState signState = sign.getLoc().getBlock().getState();
+        //Set the lines
+        ((Sign) signState).setLine(0, signLines[0]);
+        ((Sign) signState).setLine(1, signLines[1]);
+        ((Sign) signState).setLine(2, signLines[2]);
+        ((Sign) signState).setLine(3, signLines[3]);
+
+        plugin.scheduleUpdate(sign, 2 * delay);
+
+    }
+
+    public void updateSign(Shop shop, ShopSign sign) {
+        updateSign(shop, sign, 0);
+    }
+
+    public void updateSign(Shop shop, Location loc) {
+        for (ShopSign sign : shop.getSigns()) {
+            if (sign.getLoc().equals(loc)) {
+                updateSign(shop, sign);
+                break;
+            }
+        }
+    }
+
+    public void updateSign(Shop shop, Block block) {
+        updateSign(shop, block.getLocation());
+    }
+
+    public void updateSigns(Shop shop, Item item) {
+        int index = 0;
+        for (ShopSign sign : shop.getSigns()) {
+            if (sign.getItemName().equalsIgnoreCase(item.getName())) {
+                updateSign(shop, sign, index);
+                index++;
+            }
+        }
+    }
+
+	public void updateSigns(Shop shop, Set<ShopSign> signSet) {
+		int index = 0;
+		for (ShopSign sign : shop.getSigns()) {
+			updateSign(shop, sign, index);
+			index++;
+		}
+	}
+
     /**
      * @return null
      */
     public Callable<Object> updateSigns() {
         for (UUID key : shops.keySet()) {
             Shop shop = shops.get(key);
-            if (shop.isDynamicPrices())
-                for (ShopSign sign : shop.getSigns())
-                    shop.updateSign(sign);
+            if (shop.isDynamicPrices()) {
+                for (ShopSign sign : shop.getSigns()) {
+                    updateSign(shop, sign);
+                }
+            }
         }
         return null;
     }

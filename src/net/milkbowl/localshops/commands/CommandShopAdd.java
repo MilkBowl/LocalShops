@@ -325,7 +325,7 @@ public class CommandShopAdd extends Command {
 			sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_SUCCESS, new String[] { "%ITEMNAME%" }, new Object[] { item.getName() }));
 		} else {
 			shop.addStock(item, amount);
-			shop.updateSigns(item);
+			plugin.getShopManager().updateSigns(shop, item);
 			sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_ADD_STOCK_SUCCESS, new String[] { "%ITEMNAME%", "%STOCK%" }, new Object[] { item.getName(), shop.getItem(item).getStock() }));
 		}
 
