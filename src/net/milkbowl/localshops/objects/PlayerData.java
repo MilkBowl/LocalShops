@@ -83,8 +83,9 @@ public class PlayerData {
         String playerWorld = plugin.getServer().getPlayer(playerName).getWorld().getName();
 
         if (shop instanceof GlobalShop) {
-            if ( ((GlobalShop) shop).containsWorld(playerWorld))
-                ;
+            if ( ((GlobalShop) shop).containsWorld(playerWorld)) {
+                return true;
+            }
         } else if (shop instanceof LocalShop) {
             if (shopList.contains(shop.getUuid())) {
                 if ( ((LocalShop) shop).getWorld().equals(playerWorld) ) {
