@@ -20,6 +20,7 @@
 
 package net.milkbowl.localshops.objects;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 
-public abstract class Shop implements Comparator<Shop> {
+public abstract class Shop implements Comparator<Shop>, Serializable {
 	// Attributes
 	protected UUID uuid = null;
 	protected String name = null;
@@ -60,16 +61,16 @@ public abstract class Shop implements Comparator<Shop> {
 	protected HashMap<Item, ShopRecord> inventory = new HashMap<Item, ShopRecord>();
 	protected double minBalance = 0;
 	protected double sharePercent = 0;
-	protected ArrayBlockingQueue<Transaction> transactions;
+	transient protected ArrayBlockingQueue<Transaction> transactions;
 	protected boolean notification = true;
 	protected Set<ShopSign> signSet = Collections.synchronizedSet(new HashSet<ShopSign>());
 	protected Set<String> groups = Collections.synchronizedSet(new HashSet<String>());
 	protected Set<String> users = Collections.synchronizedSet(new HashSet<String>());
 
-	private static final NumberFormat numFormat = new DecimalFormat("0.##");
+	transient private static final NumberFormat numFormat = new DecimalFormat("0.##");
 
 	// Logging
-	protected static final Logger log = Logger.getLogger("Minecraft");
+	transient protected static final Logger log = Logger.getLogger("Minecraft");
 
 	public Shop(UUID uuid) {
 		this.uuid = uuid;

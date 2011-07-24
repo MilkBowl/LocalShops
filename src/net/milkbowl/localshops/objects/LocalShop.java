@@ -37,7 +37,7 @@ public class LocalShop extends Shop {
     //TODO: Store Location information in List to match World Information indices
     protected Set<ShopLocation> shopLocations = Collections.synchronizedSet(new HashSet<ShopLocation>(1));
     protected Set<Location> chests = null;
-    String world;
+    protected String world;
     
     public LocalShop(UUID uuid) {
         super(uuid);

@@ -20,13 +20,14 @@
 
 package net.milkbowl.localshops.comparator;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import net.milkbowl.localshops.objects.Shop;
 
 
 
-public class ShopSortByName implements Comparator<Shop> {
+public class ShopSortByName implements Comparator<Shop>, Serializable {
 
     @Override
     public int compare(Shop o1, Shop o2) {

@@ -20,11 +20,12 @@
 
 package net.milkbowl.localshops.comparator;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import net.milkbowl.localshops.objects.Item;
 
-public class InventoryItemSortByName implements Comparator<Item> {
+public class InventoryItemSortByName implements Comparator<Item>, Serializable {
 
     @Override
     public int compare(Item o1, Item o2) {

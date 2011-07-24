@@ -20,11 +20,12 @@
 
 package net.milkbowl.localshops.comparator;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Map;
 
 @SuppressWarnings("rawtypes")
-public class EntryValueComparator implements Comparator {
+public class EntryValueComparator implements Comparator, Serializable {
     public int compare(Object o1, Object o2) {
         return compare((Map.Entry) o1, (Map.Entry) o2);
     }
