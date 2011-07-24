@@ -77,7 +77,7 @@ public class ShopsWorldListener extends WorldListener {
                         iter.remove();
                 }
             }
-            shop.updateSigns(addSet);
+            plugin.getShopManager().updateSigns(shop, addSet);
             shop.getSigns().addAll(addSet);
             
         }
