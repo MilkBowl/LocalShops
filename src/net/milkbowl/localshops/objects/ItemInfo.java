@@ -29,12 +29,12 @@ public class ItemInfo extends Item {
 
     public ItemInfo(String name, String[][] search, Material material, short subTypeId) {
         super(material, subTypeId, name);
-        this.search = search;
+        this.search = search.clone();
     }
 
     public ItemInfo(String name, String[][] search, Material material) {
         super(material, name);
-        this.search = search;
+        this.search = search.clone();
     }
 
     @Override
