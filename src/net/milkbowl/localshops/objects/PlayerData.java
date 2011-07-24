@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.objects;
 
 import java.util.ArrayList;
@@ -30,11 +29,10 @@ import net.milkbowl.localshops.LocalShops;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-
 public class PlayerData {
     // Objects
-    private LocalShops plugin = null;
 
+    private LocalShops plugin = null;
     // Attributes
     public List<UUID> shopList = Collections.synchronizedList(new ArrayList<UUID>());
     public String playerName = null;
@@ -83,12 +81,12 @@ public class PlayerData {
         String playerWorld = plugin.getServer().getPlayer(playerName).getWorld().getName();
 
         if (shop instanceof GlobalShop) {
-            if ( ((GlobalShop) shop).containsWorld(playerWorld)) {
+            if (((GlobalShop) shop).containsWorld(playerWorld)) {
                 return true;
             }
         } else if (shop instanceof LocalShop) {
             if (shopList.contains(shop.getUuid())) {
-                if ( ((LocalShop) shop).getWorld().equals(playerWorld) ) {
+                if (((LocalShop) shop).getWorld().equals(playerWorld)) {
                     return true;
                 }
             }
@@ -103,9 +101,9 @@ public class PlayerData {
     public List<UUID> playerShopsList(String playerName) {
         return shopList;
     }
-    
+
     public UUID getCurrentShop() {
-        if(shopList.size() == 1) {
+        if (shopList.size() == 1) {
             return shopList.get(0);
         } else {
             return null;

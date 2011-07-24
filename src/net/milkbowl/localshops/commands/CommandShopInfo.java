@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.commands;
 
 import java.util.Iterator;
@@ -35,7 +34,6 @@ import net.milkbowl.localshops.util.GenericFunctions;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
 
 public class CommandShopInfo extends Command {
 
@@ -87,32 +85,31 @@ public class CommandShopInfo extends Command {
         int managerCount = shop.getManagers().size();
 
         sender.sendMessage(String.format(ChatColor.DARK_AQUA + "Shop Info about " + ChatColor.WHITE + "\"%s\"" + ChatColor.DARK_AQUA + " ID: " + ChatColor.WHITE + "%s", shop.getName(), shop.getShortUuidString()));
-        if(shop.getCreator().equalsIgnoreCase(shop.getOwner())) {
-            if(managerCount == 0) {
+        if (shop.getCreator().equalsIgnoreCase(shop.getOwner())) {
+            if (managerCount == 0) {
                 sender.sendMessage(String.format("  Owned & Created by %s with no managers.", shop.getCreator()));
             } else {
                 sender.sendMessage(String.format("  Owned & Created by %s with %d managers.", shop.getCreator(), managerCount));
             }
         } else {
-            if(managerCount == 0) {
+            if (managerCount == 0) {
                 sender.sendMessage(String.format("  Owned by %s, created by %s with no managers.", shop.getOwner(), shop.getCreator()));
             } else {
                 sender.sendMessage(String.format("  Owned by %s created by %s with %d managers.", shop.getOwner(), shop.getCreator(), managerCount));
-            }            
+            }
         }
-        if(managerCount > 0) {
+        if (managerCount > 0) {
             sender.sendMessage(String.format("  Managed by %s", GenericFunctions.join(shop.getManagers(), " ")));
         }
 
-        if(command.matches("info\\s+full")) {
+        if (command.matches("info\\s+full")) {
             sender.sendMessage(String.format("  Full Id: %s", shop.getUuid().toString()));
         }
 
-        if(shop instanceof LocalShop) {
+        if (shop instanceof LocalShop) {
             LocalShop lShop = (LocalShop) shop;
             //TODO: Fix Me - needs to dump all locations for the shop not just one.
-            for (ShopLocation shopLoc : lShop.getShopLocations())
-            {
+            for (ShopLocation shopLoc : lShop.getShopLocations()) {
                 sender.sendMessage(String.format("  Located %s", shopLoc.toString()));
             }
         }
@@ -123,14 +120,14 @@ public class CommandShopInfo extends Command {
         int worth = 0;
 
         Iterator<Item> it = shop.getItems().iterator();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             Item i = it.next();
-            if(shop.getItem(i).getBuyPrice() > 0) {
+            if (shop.getItem(i).getBuyPrice() > 0) {
                 sellCount++;
                 worth += (shop.getItem(i).getStock() * shop.getItem(i).getBuyPrice());
             }
 
-            if(shop.getItem(i).getSellPrice() > 0) {
+            if (shop.getItem(i).getSellPrice() > 0) {
                 buyCount++;
             }
         }
@@ -141,7 +138,7 @@ public class CommandShopInfo extends Command {
         // Shop stock is worth %d coins
         sender.sendMessage(String.format("  Inventory worth %s", plugin.getEcon().format(worth)));
 
-        if(shop.isUnlimitedMoney() || shop.isUnlimitedStock()) {
+        if (shop.isUnlimitedMoney() || shop.isUnlimitedStock()) {
             sender.sendMessage(String.format("  Shop %s unlimited money and %s unlimited stock.", shop.isUnlimitedMoney() ? "has" : "doesn't have", shop.isUnlimitedStock() ? "has" : "doesn't have"));
         }
 

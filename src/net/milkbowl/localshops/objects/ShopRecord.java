@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.objects;
 
 import net.milkbowl.localshops.DynamicManager;
@@ -30,13 +29,13 @@ public class ShopRecord {
     private int baseStock = 0;
     private boolean dynamic = false;
     private int maxStock = 0;
-    
+
     public ShopRecord(double buyPrice, double sellPrice, int stock, int maxStock, boolean dynamic) {
-    	this.buyPrice = buyPrice;
-    	this.sellPrice = sellPrice;
-    	this.stock = stock;
-    	this.maxStock = maxStock;
-    	this.dynamic = dynamic;
+        this.buyPrice = buyPrice;
+        this.sellPrice = sellPrice;
+        this.stock = stock;
+        this.maxStock = maxStock;
+        this.dynamic = dynamic;
     }
 
     public void setSell(double sellPrice) {
@@ -52,10 +51,10 @@ public class ShopRecord {
     }
 
     public void setMaxStock(int maxStock) {
-		this.maxStock = maxStock;
-	}
+        this.maxStock = maxStock;
+    }
 
-	public void setStock(int stock) {
+    public void setStock(int stock) {
         this.stock = stock;
     }
 
@@ -80,8 +79,9 @@ public class ShopRecord {
 
     public double getSellPrice() {
         //for dynamic items use the currently adjusted price
-        if (dynamic && DynamicManager.getPriceAdjMap().get(this) != null)
+        if (dynamic && DynamicManager.getPriceAdjMap().get(this) != null) {
             return sellPrice * DynamicManager.getPriceAdjMap().get(this);
+        }
 
         return sellPrice;
     }
@@ -92,8 +92,9 @@ public class ShopRecord {
 
     public double getBuyPrice() {
         //for dynamic items use the current dynamic price
-        if (dynamic && DynamicManager.getPriceAdjMap().get(this) != null)
+        if (dynamic && DynamicManager.getPriceAdjMap().get(this) != null) {
             return buyPrice * DynamicManager.getPriceAdjMap().get(this);
+        }
 
         return buyPrice;
     }
@@ -110,7 +111,7 @@ public class ShopRecord {
     public void setDynamic(boolean dynamic) {
         this.dynamic = dynamic;
     }
-    
+
     public int getBaseStock() {
         return this.baseStock;
     }
@@ -118,14 +119,14 @@ public class ShopRecord {
     public void setBaseStock(int baseStock) {
         this.baseStock = baseStock;
     }
-    
+
     @Override
-    public boolean equals (Object obj) {
-    	if (obj instanceof ShopRecord) {
-    		return this == obj;
-    	} else {
-    	    return false;
-    	}
+    public boolean equals(Object obj) {
+        if (obj instanceof ShopRecord) {
+            return this == obj;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -138,5 +139,4 @@ public class ShopRecord {
         hash = 61 * hash + this.maxStock;
         return hash;
     }
-    
 }

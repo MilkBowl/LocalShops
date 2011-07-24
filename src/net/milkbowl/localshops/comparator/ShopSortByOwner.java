@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.comparator;
 
 import java.io.Serializable;
@@ -25,14 +24,12 @@ import java.util.Comparator;
 
 import net.milkbowl.localshops.objects.Shop;
 
-
-
 public class ShopSortByOwner implements Comparator<Shop>, Serializable {
+
     private static final long serialVersionUID = 30000L;
 
     @Override
     public int compare(Shop o1, Shop o2) {
         return o1.getOwner().compareTo(o2.getOwner());
     }
-
 }

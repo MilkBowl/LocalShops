@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.commands;
 
 import java.util.ArrayList;
@@ -39,7 +38,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
 public class CommandShopBrowse extends Command {
 
     public CommandShopBrowse(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
@@ -57,7 +55,7 @@ public class CommandShopBrowse extends Command {
         if (sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            
+
             shop = getCurrentShop(player);
             if (shop == null || (isGlobal && !Config.getGlobalShopsEnabled())) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
@@ -69,10 +67,10 @@ public class CommandShopBrowse extends Command {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
                 return true;
             }
-            
+
             if (!plugin.getShopManager().hasAccess(shop, player)) {
-            	sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
-            	return true;
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
+                return true;
             }
 
         } else {
@@ -128,19 +126,18 @@ public class CommandShopBrowse extends Command {
 
         return false;
     }
-    
+
     /**
      * Prints shop inventory with default page # = 1
      * 
      * @param shop
      * @param player
      * @param buySellorList
-     
+
     private void printInventory(Shop shop, String buySellorList) {
-        printInventory(shop, buySellorList, 1);
+    printInventory(shop, buySellorList, 1);
     }
-    */
-    
+     */
     /**
      * Prints shop inventory list. Takes buy, sell, or list as arguments for
      * which format to print.
@@ -197,8 +194,9 @@ public class CommandShopBrowse extends Command {
             // get stock
             int stock = shop.getItem(item).getStock();
             if (buy) {
-                if (stock == 0 && !shop.isUnlimitedStock())
+                if (stock == 0 && !shop.isUnlimitedStock()) {
                     continue;
+                }
             }
             if (!shop.isUnlimitedStock()) {
                 subMessage += ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + "Stock: " + stock + ChatColor.DARK_AQUA + "]";
@@ -226,7 +224,7 @@ public class CommandShopBrowse extends Command {
 
         sender.sendMessage(message);
 
-        if(inventoryMessage.size() <= (pageNumber - 1) * Config.getChatMaxLines()) {
+        if (inventoryMessage.size() <= (pageNumber - 1) * Config.getChatMaxLines()) {
             sender.sendMessage(String.format("%s does not have this many pages!", shop.getName()));
             return;
         }
@@ -243,9 +241,8 @@ public class CommandShopBrowse extends Command {
             message = ChatColor.DARK_AQUA + "To " + buySell + " an item on the list type: " + ChatColor.WHITE + "/" + commandLabel + " " + buySell + " ItemName [amount]";
             sender.sendMessage(message);
         } else {
-            sender.sendMessage(ChatColor.DARK_AQUA + "Type " + ChatColor.WHITE + "/" + commandLabel + " browse buy"  + ChatColor.DARK_AQUA + " or " + ChatColor.WHITE + "/" + commandLabel + " browse sell");
+            sender.sendMessage(ChatColor.DARK_AQUA + "Type " + ChatColor.WHITE + "/" + commandLabel + " browse buy" + ChatColor.DARK_AQUA + " or " + ChatColor.WHITE + "/" + commandLabel + " browse sell");
             sender.sendMessage(ChatColor.DARK_AQUA + "to see details about price and quantity.");
         }
     }
-
 }

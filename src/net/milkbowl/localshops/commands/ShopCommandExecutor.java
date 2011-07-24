@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.commands;
 
 import java.util.HashMap;
@@ -33,12 +32,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
 public class ShopCommandExecutor implements CommandExecutor {
 
     private final LocalShops plugin;
     private static final Logger log = Logger.getLogger("Minecraft");
     public static final Map<String, CommandTypeInfo> commandTypeMap = new HashMap<String, CommandTypeInfo>();
+
     static {
         commandTypeMap.put("admin", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandAdminSet.class, false, false, false));
         commandTypeMap.put("add", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopAdd.class, true, true, false));
@@ -67,7 +66,7 @@ public class ShopCommandExecutor implements CommandExecutor {
         commandTypeMap.put("unlink", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopUnlink.class, false, true, true));
         commandTypeMap.put("version", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopVersion.class, true, true, false));
     }
-    
+
     public ShopCommandExecutor(LocalShops plugin) {
         this.plugin = plugin;
     }
@@ -77,13 +76,13 @@ public class ShopCommandExecutor implements CommandExecutor {
         String type = null;
         boolean global = false;
         String user = "CONSOLE";
-        
+
         if (sender instanceof Player) {
             user = ((Player) sender).getName();
         }
 
         String cmdString = null;
-        if(commandLabel.equalsIgnoreCase("lsadmin")) {
+        if (commandLabel.equalsIgnoreCase("lsadmin")) {
             cmdString = GenericFunctions.join(args, " ");
             type = "admin";
         } else if (commandLabel.equalsIgnoreCase("buy")) {
@@ -104,13 +103,13 @@ public class ShopCommandExecutor implements CommandExecutor {
             if (args.length > 0) {
                 cmdString = GenericFunctions.join(args, " ");
                 type = args[0].toLowerCase();
-            } else if (command.getName().equalsIgnoreCase("gshop")){
+            } else if (command.getName().equalsIgnoreCase("gshop")) {
                 return (new CommandShopHelp(plugin, commandLabel, sender, args, true)).process();
             } else {
                 return (new CommandShopHelp(plugin, commandLabel, sender, args, false)).process();
             }
-            
-            if(commandLabel.equalsIgnoreCase("gshop")) {
+
+            if (commandLabel.equalsIgnoreCase("gshop")) {
                 global = true;
             }
         }
@@ -129,10 +128,10 @@ public class ShopCommandExecutor implements CommandExecutor {
                     }
                 }
 
-                if(global) {
-                    log.info(plugin.getResourceManager().getString(MsgType.CMD_ISSUED_GLOBAL, new String[] { "%NAME%", "%COMMAND%" }, new Object[] { user, cmdString } ));
+                if (global) {
+                    log.info(plugin.getResourceManager().getString(MsgType.CMD_ISSUED_GLOBAL, new String[]{"%NAME%", "%COMMAND%"}, new Object[]{user, cmdString}));
                 } else {
-                    log.info(plugin.getResourceManager().getString(MsgType.CMD_ISSUED_LOCAL, new String[] { "%NAME%", "%COMMAND%" }, new Object[] { user, cmdString } ));
+                    log.info(plugin.getResourceManager().getString(MsgType.CMD_ISSUED_LOCAL, new String[]{"%NAME%", "%COMMAND%"}, new Object[]{user, cmdString}));
                 }
 
                 return cVal;

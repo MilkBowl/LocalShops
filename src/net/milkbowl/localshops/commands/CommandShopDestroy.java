@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.commands;
 
 import java.util.Collection;
@@ -35,7 +34,6 @@ import net.milkbowl.localshops.objects.Shop;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
 
 public class CommandShopDestroy extends Command {
 
@@ -60,7 +58,7 @@ public class CommandShopDestroy extends Command {
 
         Player player = (Player) sender;
         String playerName = player.getName();
-        
+
         // get the shop the player is currently in
         if (plugin.getPlayerData().get(playerName).shopList.size() == 1 && !isGlobal) {
             UUID shopUuid = plugin.getPlayerData().get(playerName).shopList.get(0);
@@ -97,9 +95,9 @@ public class CommandShopDestroy extends Command {
 
         } else if (isGlobal) {
             GlobalShop shop = plugin.getShopManager().getGlobalShop(player.getWorld());
-            
+
             // Check if shop exists
-            if(shop == null) {
+            if (shop == null) {
                 player.sendMessage(ChatColor.DARK_AQUA + "You must be inside a shop to use /" + commandLabel + " destroy");
                 return true;
             }
@@ -109,7 +107,7 @@ public class CommandShopDestroy extends Command {
                 player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or manager to destroy a global shop");
                 return false;
             }
-            
+
             // Delete Shop
             if (plugin.getShopManager().deleteShop(shop)) {
                 player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " has been destroyed");
@@ -120,5 +118,4 @@ public class CommandShopDestroy extends Command {
 
         return true;
     }
-
 }

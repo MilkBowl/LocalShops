@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  */
-
 package net.milkbowl.localshops.listeners;
 
 import net.milkbowl.localshops.LocalShops;
@@ -32,6 +31,7 @@ import org.bukkit.event.vehicle.VehicleMoveEvent;
  * @author mhumes
  */
 public class ShopsVehicleListener extends VehicleListener {
+
     private LocalShops plugin = null;
 
     public ShopsVehicleListener(LocalShops plugin) {
@@ -42,12 +42,12 @@ public class ShopsVehicleListener extends VehicleListener {
     public void onVehicleMove(VehicleMoveEvent event) {
         //We only check if a player has entered a shop if he has changed a full block.
         if (event.getTo().getBlockX() == event.getFrom().getBlockX() && event.getTo().getBlockY() == event.getFrom().getBlockY() && event.getTo().getBlockZ() == event.getFrom().getBlockZ()) {
-        	return;
+            return;
         }
-        
+
         Player player = null;
         Entity entity = event.getVehicle().getPassenger();
-        if(entity instanceof Player) {
+        if (entity instanceof Player) {
             player = (Player) entity;
         } else {
             return;

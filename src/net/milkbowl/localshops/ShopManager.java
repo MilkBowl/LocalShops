@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops;
 
 import java.io.BufferedReader;
@@ -60,11 +59,11 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 public class ShopManager {
+
     private LocalShops plugin;
     private Map<UUID, Shop> shops = Collections.synchronizedMap(new HashMap<UUID, Shop>());
     private Map<String, Set<UUID>> localShops = Collections.synchronizedMap(new HashMap<String, Set<UUID>>());
     private Map<String, UUID> worldShops = Collections.synchronizedMap(new HashMap<String, UUID>());
-
     // Logging
     private static final Logger log = Logger.getLogger("Minecraft");
 
@@ -82,7 +81,6 @@ public class ShopManager {
      * @param partialUuid
      * @return shop object if found, otherwise null
      */
-
     public Shop getShop(String partialUuid) {
         Iterator<Shop> it = shops.values().iterator();
         while (it.hasNext()) {
@@ -193,13 +191,15 @@ public class ShopManager {
 
         for (Shop shop : shops.values()) {
             // ignore global shops
-            if (shop instanceof GlobalShop)
+            if (shop instanceof GlobalShop) {
                 continue;
+            }
 
             LocalShop lShop = (LocalShop) shop;
             // ignore shops on different worlds
-            if (!lShop.getWorld().equals(worldName))
+            if (!lShop.getWorld().equals(worldName)) {
                 continue;
+            }
 
             for (ShopLocation sLoc : lShop.getShopLocations()) {
                 /**
@@ -213,16 +213,17 @@ public class ShopManager {
                  * on all 3 planes on at least one point.
                  * 
                  */
-                if (xyzA[1] > sLoc.getLocation2()[1] || xyzB[1] < sLoc.getLocation1()[1])
+                if (xyzA[1] > sLoc.getLocation2()[1] || xyzB[1] < sLoc.getLocation1()[1]) {
                     continue;
-                else if (xyzA[0] > sLoc.getLocation2()[0] || xyzB[0] < sLoc.getLocation1()[0])
+                } else if (xyzA[0] > sLoc.getLocation2()[0] || xyzB[0] < sLoc.getLocation1()[0]) {
                     continue;
-                else if (xyzA[2] > sLoc.getLocation2()[2] || xyzB[2] < sLoc.getLocation1()[2])
+                } else if (xyzA[2] > sLoc.getLocation2()[2] || xyzB[2] < sLoc.getLocation1()[2]) {
                     continue;
-                // If All three checks are false, this cube converges on all 3
+                } // If All three checks are false, this cube converges on all 3
                 // planes
-                else
+                else {
                     return false;
+                }
             }
         }
 
@@ -567,10 +568,11 @@ public class ShopManager {
         double sharePercent;
         try {
             sharePercent = Double.parseDouble(props.getProperty("share-percent", "0"));
-            if (sharePercent < 0)
+            if (sharePercent < 0) {
                 sharePercent = 0;
-            else if (sharePercent > 100)
+            } else if (sharePercent > 100) {
                 sharePercent = 100;
+            }
         } catch (NumberFormatException e) {
             sharePercent = 0;
         }
@@ -633,8 +635,8 @@ public class ShopManager {
 
         // Only set our Users & Groups if they are not empty strings
         for (String group : groups) {
-            if(!group.equals("")) {
-                    shop.addGroup(group);
+            if (!group.equals("")) {
+                shop.addGroup(group);
             }
         }
         for (String user : users) {
@@ -731,15 +733,17 @@ public class ShopManager {
                     String itemName = v2[3];
                     int signId = Integer.parseInt(v2[4]);
                     int amount = 1;
-                    if (v2.length == 6)
+                    if (v2.length == 6) {
                         amount = Integer.parseInt(v2[5]);
+                    }
 
                     if (shop instanceof LocalShop) {
                         LocalShop lShop = (LocalShop) shop;
                         // Make sure the sign we're adding actually exists in
                         // the same world as the shop
-                        if (!lShop.getWorld().equals(signWorld))
+                        if (!lShop.getWorld().equals(signWorld)) {
                             continue;
+                        }
                         // Add the sign to the
                         if (plugin.getServer().getWorld(signWorld) != null) {
                             signList.add(new ShopSign(plugin.getServer().getWorld(signWorld), x, y, z, itemName, signId, amount));
@@ -766,14 +770,15 @@ public class ShopManager {
                 if (s == null) {
                     continue;
                 } else if (s.getLoc() == null) {
-                	continue;
+                    continue;
                 } else if (s.getLoc().equals(sign.getLoc())) {
                     ignoreSign = true;
                     break;
                 }
             }
-            if (ignoreSign)
+            if (ignoreSign) {
                 continue;
+            }
 
             // Add signs that can't be verified yet.
             if (sign.getWorld() == null) {
@@ -830,7 +835,7 @@ public class ShopManager {
         for (Shop shop : shops.values()) {
             try {
                 saveShop(shop);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 log.log(Level.WARNING, "Exception while saving shop " + shop.getUuid().toString(), e);
             }
         }
@@ -875,10 +880,12 @@ public class ShopManager {
         props.setProperty("creator", shop.getCreator());
 
         // Users & Groups
-        if (!shop.getUserSet().isEmpty())
+        if (!shop.getUserSet().isEmpty()) {
             props.setProperty("users", GenericFunctions.join(shop.getUserSet(), ", "));
-        if (!shop.getGroupSet().isEmpty())
+        }
+        if (!shop.getGroupSet().isEmpty()) {
             props.setProperty("groups", GenericFunctions.join(shop.getGroupSet(), ", "));
+        }
 
         // Inventory
         for (Item item : shop.getItems()) {
@@ -953,8 +960,9 @@ public class ShopManager {
     }
 
     public boolean logTransaciton(String playerName, String shopName, String action, String itemName, int numberOfItems, int startNumberOfItems, int endNumberOfItems, double moneyTransfered, double startingbalance, double endingbalance) {
-        if (!Config.getSrvLogTransactions())
+        if (!Config.getSrvLogTransactions()) {
             return false;
+        }
 
         String filePath = Config.getFileTransactionLog();
 
@@ -970,20 +978,24 @@ public class ShopManager {
             Date date = new Date();
             fileOutput += dateFormat.format(date) + ": ";
             fileOutput += "Action: ";
-            if (action != null)
+            if (action != null) {
                 fileOutput += action;
+            }
             fileOutput += ": ";
             fileOutput += "Player: ";
-            if (playerName != null)
+            if (playerName != null) {
                 fileOutput += playerName;
+            }
             fileOutput += ": ";
             fileOutput += "Shop: ";
-            if (shopName != null)
+            if (shopName != null) {
                 fileOutput += shopName;
+            }
             fileOutput += ": ";
             fileOutput += "Item Type: ";
-            if (itemName != null)
+            if (itemName != null) {
                 fileOutput += itemName;
+            }
             fileOutput += ": ";
             fileOutput += "Number Transfered: ";
             fileOutput += numberOfItems;
@@ -1058,13 +1070,13 @@ public class ShopManager {
         }
     }
 
-	public void updateSigns(Shop shop, Set<ShopSign> signSet) {
-		int index = 0;
-		for (ShopSign sign : shop.getSigns()) {
-			updateSign(shop, sign, index);
-			index++;
-		}
-	}
+    public void updateSigns(Shop shop, Set<ShopSign> signSet) {
+        int index = 0;
+        for (ShopSign sign : shop.getSigns()) {
+            updateSign(shop, sign, index);
+            index++;
+        }
+    }
 
     /**
      * Only checks if a player is on the shop access list, or an owner, manager, or admin.
@@ -1084,7 +1096,7 @@ public class ShopManager {
             return true;
         } else {
             for (String group : plugin.getPerm().getPlayerGroups(player.getWorld().getName(), player.getName())) {
-                if(shop.getGroupSet().contains(group)) {
+                if (shop.getGroupSet().contains(group)) {
                     return true;
                 }
             }
@@ -1106,5 +1118,4 @@ public class ShopManager {
         }
         return null;
     }
-
 }

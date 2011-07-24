@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.commands;
 
 import java.util.Iterator;
@@ -35,7 +34,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
 /**
  * @author sleaker
  *
@@ -51,7 +49,7 @@ public class CommandShopUnlink extends Command {
     }
 
     public boolean process() {
-        
+
         if (isGlobal) {
             // Check Permissions
             if (!canUseCommand(PermType.ADMIN_GLOBAL)) {
@@ -63,7 +61,7 @@ public class CommandShopUnlink extends Command {
             Matcher matcher = pattern.matcher(command);
             if (matcher.find()) {
                 worldName = matcher.group(2);
-            } else if(sender instanceof Player) {
+            } else if (sender instanceof Player) {
                 Player player = (Player) sender;
                 worldName = player.getWorld().getName();
             } else {
@@ -85,7 +83,7 @@ public class CommandShopUnlink extends Command {
             return true;
         } else {
             Player player = null;
-            if ( sender instanceof Player) {
+            if (sender instanceof Player) {
                 player = (Player) sender;
             } else {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
@@ -96,7 +94,7 @@ public class CommandShopUnlink extends Command {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
                 return true;
             }
-            if (!canUseCommand(PermType.ADMIN_LOCAL) && !lShop.getManagers().contains(player.getName()) && ! lShop.getOwner().equals(player.getName())) {
+            if (!canUseCommand(PermType.ADMIN_LOCAL) && !lShop.getManagers().contains(player.getName()) && !lShop.getOwner().equals(player.getName())) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
                 return true;
             } else if (!(lShop.getShopLocations().size() > 1)) {
@@ -116,7 +114,7 @@ public class CommandShopUnlink extends Command {
                         break;
                     }
                 }
-                
+
             }
             // Show unlink help
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " unlink " + ChatColor.DARK_AQUA + "- Unlink location from the shop you're in");

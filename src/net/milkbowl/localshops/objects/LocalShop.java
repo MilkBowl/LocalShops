@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.objects;
 
 import java.util.Arrays;
@@ -31,16 +30,15 @@ import net.milkbowl.localshops.util.GenericFunctions;
 
 import org.bukkit.Location;
 
-
 public class LocalShop extends Shop {
+
     private static final long serialVersionUID = 30000L;
-    
     // Location Information
     //TODO: Store Location information in List to match World Information indices
     protected Set<ShopLocation> shopLocations = Collections.synchronizedSet(new HashSet<ShopLocation>(1));
     protected Set<Location> chests = null;
     protected String world;
-    
+
     public LocalShop(UUID uuid) {
         super(uuid);
     }
@@ -58,21 +56,18 @@ public class LocalShop extends Shop {
         return shopLocations;
     }
 
-    
-     public String getWorld() {
+    public String getWorld() {
         return world;
     }
-
 
     public void setWorld(String world) {
         this.world = world;
     }
 
-
     public String toString() {
         return String.format("Shop \"%s\" with %d items - %s", this.name, inventory.size(), uuid.toString());
     }
-    
+
     public void log() {
         // Details
         log.info("Shop Information");
@@ -88,16 +83,16 @@ public class LocalShop extends Shop {
         log.info(String.format("   %-16s %s", "Groups:", GenericFunctions.join(groups, ", ")));
         log.info(String.format("   %-16s %s", "Users:", GenericFunctions.join(users, ", ")));
         log.info("Shop Locations");
-        for(ShopLocation l : shopLocations) {
-           log.info(String.format("   %s %s %s", world, Arrays.toString(l.getLocation1()), Arrays.toString(l.getLocation2())));
+        for (ShopLocation l : shopLocations) {
+            log.info(String.format("   %s %s %s", world, Arrays.toString(l.getLocation1()), Arrays.toString(l.getLocation2())));
         }
 
         // Items
         log.info("Shop Inventory");
         log.info("   BP=Buy Price, BS=Buy Size, SP=Sell Price, SS=Sell Size, ST=Stock, MX=Max Stock");
-        log.info(String.format("   %-9s %-6s %-3s %-6s %-3s %-3s %-3s", "Id", "BP", "BS", "SP", "SS", "ST", "MX"));        
+        log.info(String.format("   %-9s %-6s %-3s %-6s %-3s %-3s %-3s", "Id", "BP", "BS", "SP", "SS", "ST", "MX"));
         Iterator<Item> it = inventory.keySet().iterator();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             Item item = it.next();
             ShopRecord record = inventory.get(item);
             log.info(String.format("   %6d:%-2d %-6.2f %-6.2f %-3d %-3d", item.getId(), item.getSubTypeId(), record.getBuyPrice(), record.getSellPrice(), record.getStock(), record.getMaxStock()));
@@ -115,8 +110,9 @@ public class LocalShop extends Shop {
             if (world.equals(worldName)) {
                 int[] loc1 = shopLoc.getLocation1();
                 int[] loc2 = shopLoc.getLocation2();
-                if (x >= loc1[0] && x <= loc2[0] && y >= loc1[1] && y <= loc2[1] && z >= loc1[2] && z <= loc2[2])
+                if (x >= loc1[0] && x <= loc2[0] && y >= loc1[1] && y <= loc2[1] && z >= loc1[2] && z <= loc2[2]) {
                     return true;
+                }
             }
         }
         return false;

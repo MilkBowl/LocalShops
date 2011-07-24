@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.commands;
 
 import java.util.regex.Matcher;
@@ -34,7 +33,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
 
 public class CommandShopRemove extends Command {
 
@@ -53,7 +51,7 @@ public class CommandShopRemove extends Command {
         if (sender instanceof Player) {
             // Get player & data
             Player player = (Player) sender;
-            
+
             shop = getCurrentShop(player);
             if (shop == null) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
@@ -64,12 +62,12 @@ public class CommandShopRemove extends Command {
             if (!canUseCommand(PermType.REMOVE)) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
                 return false;
-            }            
+            }
 
             // Check if Player can Modify
             if (!isShopController(shop)) {
                 player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_MUST_BE_SHOP_OWNER));
-                player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CURR_OWNER_IS, new String[] { "%OWNER%" }, new String[] { shop.getOwner() }));
+                player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CURR_OWNER_IS, new String[]{"%OWNER%"}, new String[]{shop.getOwner()}));
                 return true;
             }
 
@@ -82,7 +80,7 @@ public class CommandShopRemove extends Command {
                     return false;
                 }
                 ItemInfo item = Search.itemByStack(itemStack);
-                if(item == null) {
+                if (item == null) {
                     sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                     return false;
                 }
@@ -124,21 +122,21 @@ public class CommandShopRemove extends Command {
             String itemName = matcher.group(1);
             ItemInfo item = Search.itemByName(itemName);
             return shopRemove(shop, item);
-        }        
+        }
 
 
         // Show usage
         sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " remove [itemname]" + ChatColor.DARK_AQUA + " - Stop selling item in shop.");
         return true;
     }
-    
+
     private boolean shopRemove(Shop shop, ItemInfo item) {
         if (item == null) {
             sender.sendMessage(ChatColor.DARK_AQUA + "Item not found.");
             return false;
         }
 
-        if(!shop.containsItem(item)) {
+        if (!shop.containsItem(item)) {
             sender.sendMessage(ChatColor.DARK_AQUA + "The shop is not selling " + ChatColor.WHITE + item.getName());
             return true;
         }
@@ -159,7 +157,7 @@ public class CommandShopRemove extends Command {
 
         shop.removeItem(item);
         plugin.getShopManager().updateSigns(shop, item);
-        plugin.getShopManager().saveShop(shop);        
+        plugin.getShopManager().saveShop(shop);
 
         return true;
     }

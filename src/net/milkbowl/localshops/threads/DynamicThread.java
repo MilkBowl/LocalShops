@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.threads;
 
 import java.util.ArrayList;
@@ -47,8 +46,8 @@ import org.bukkit.Bukkit;
  * 
  */
 public class DynamicThread extends Thread {
-    private LocalShops plugin = null;
 
+    private LocalShops plugin = null;
     protected static final Logger log = Logger.getLogger("Minecraft");
 
     public DynamicThread(ThreadGroup tgroup, String tname, LocalShops plugin) {
@@ -60,11 +59,11 @@ public class DynamicThread extends Thread {
         Map<Item, List<Integer>> itemStockMap = Collections.synchronizedMap(new HashMap<Item, List<Integer>>());
 
         //Dump all the shop stock data into the map.
-        for ( Shop shop : plugin.getShopManager().getAllShops() ) {
-            for ( Item item : shop.getItems() ) {
-                if (itemStockMap.containsKey(item))
+        for (Shop shop : plugin.getShopManager().getAllShops()) {
+            for (Item item : shop.getItems()) {
+                if (itemStockMap.containsKey(item)) {
                     itemStockMap.get(item).add(shop.getItem(item).getStock());
-                else {
+                } else {
                     List<Integer> intList = new ArrayList<Integer>();
                     intList.add(shop.getItem(item).getStock());
                     itemStockMap.put(item, intList);
@@ -72,7 +71,7 @@ public class DynamicThread extends Thread {
             }
         }
 
-        for(Entry<Item, List<Integer>> entry : itemStockMap.entrySet()) {
+        for (Entry<Item, List<Integer>> entry : itemStockMap.entrySet()) {
             Item item = entry.getKey();
 
             List<Integer> stockList = GenericFunctions.limitOutliers(entry.getValue());
@@ -85,5 +84,4 @@ public class DynamicThread extends Thread {
 
         Bukkit.getServer().getScheduler().callSyncMethod(plugin, plugin.getShopManager().updateSigns());
     }
-
 }

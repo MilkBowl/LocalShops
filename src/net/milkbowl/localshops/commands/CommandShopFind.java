@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.commands;
 
 import java.util.List;
@@ -48,7 +47,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-
 public class CommandShopFind extends Command {
 
     public CommandShopFind(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
@@ -60,7 +58,7 @@ public class CommandShopFind extends Command {
     }
 
     public boolean process() {
-        if(Config.getFindMaxDistance() == 0) {
+        if (Config.getFindMaxDistance() == 0) {
             sender.sendMessage(String.format("[%s] Shop finding has been disabled on this server.", plugin.getDescription().getName()));
             return true;
         }
@@ -147,7 +145,7 @@ public class CommandShopFind extends Command {
             double distance = 0;
 
             // Check if global or local
-            if(shop instanceof LocalShop) {
+            if (shop instanceof LocalShop) {
                 LocalShop lShop = (LocalShop) shop;
 
                 // Check that its the current world
@@ -158,12 +156,14 @@ public class CommandShopFind extends Command {
                     //If there's only 1 shop don't try to find the minimum distance.
                     if (lShop.getShopLocations().size() > 1) {
                         double tempDist = GenericFunctions.calculateDistance(playerLoc, shopLoc.getCenter(player.getWorld()));
-                        if ( (distance != 0 && distance > tempDist) || distance == 0 )
+                        if ((distance != 0 && distance > tempDist) || distance == 0) {
                             distance = tempDist;
-                    } else
+                        }
+                    } else {
                         distance = GenericFunctions.calculateDistance(playerLoc, shopLoc.getCenter(player.getWorld()));
+                    }
                 }
-            } else if(shop instanceof GlobalShop) {
+            } else if (shop instanceof GlobalShop) {
                 GlobalShop gShop = (GlobalShop) shop;
 
                 // Check that its the current world
@@ -180,11 +180,11 @@ public class CommandShopFind extends Command {
             } else if (!shop.containsItem(found)) {
                 // Check shop has item & is either buying or selling it
                 continue;
-            } else
-                // This shop is valid, add to list
+            } else // This shop is valid, add to list
+            {
                 foundShops.put(shop.getUuid(), distance);
+            }
         }
-
         @SuppressWarnings("unchecked")
         SortedSet<Entry<UUID, Double>> entries = new TreeSet<Entry<UUID, Double>>(new EntryValueComparator());
         entries.addAll(foundShops.entrySet());
@@ -206,7 +206,7 @@ public class CommandShopFind extends Command {
                 }
 
                 String buyPrice;
-                if (shopRecord.getSellPrice() <= 0 || (shopRecord.getStock() > 0 && shopRecord.getStock() > shopRecord.getMaxStock() && !shop.isUnlimitedStock() )) {
+                if (shopRecord.getSellPrice() <= 0 || (shopRecord.getStock() > 0 && shopRecord.getStock() > shopRecord.getMaxStock() && !shop.isUnlimitedStock())) {
                     buyPrice = "--";
                 } else {
                     buyPrice = String.format("%.2f", (shopRecord.getSellPrice()));
@@ -231,5 +231,4 @@ public class CommandShopFind extends Command {
 
         return true;
     }
-
 }

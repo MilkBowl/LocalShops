@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.objects;
 
 /*
@@ -27,22 +26,21 @@ public class Transaction {
 
     // Transactions are in perspective of the shop
     public static enum Type {
+
         Buy(1),
         Sell(2);
-        
         int id;
-        
+
         Type(int id) {
             this.id = id;
         }
     }
-    
     public final Type type;
     public final String playerName;
     public final String itemName;
     public final int quantity;
     public final double cost;
-    
+
     public Transaction(Type type, String playerName, String itemName, int quantity, double cost) {
         this.type = type;
         this.playerName = playerName;
@@ -50,14 +48,14 @@ public class Transaction {
         this.quantity = quantity;
         this.cost = cost;
     }
-    
+
     @Override
     public String toString() {
-        switch(type) {
-        case Buy:
-            return String.format("%s sold %d %s for %.2f", playerName, quantity, itemName, cost);
-        case Sell:
-            return String.format("%s bought %d %s for %.2f", playerName, quantity, itemName, cost);
+        switch (type) {
+            case Buy:
+                return String.format("%s sold %d %s for %.2f", playerName, quantity, itemName, cost);
+            case Sell:
+                return String.format("%s bought %d %s for %.2f", playerName, quantity, itemName, cost);
         }
         return "Transaction - Unknown Type";
     }

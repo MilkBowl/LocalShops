@@ -58,6 +58,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class LocalShops extends JavaPlugin {
     // Listeners & Objects
+
     public ShopsPlayerListener playerListener = new ShopsPlayerListener(this);
     public ShopsBlockListener blockListener = new ShopsBlockListener(this);
     public ShopsEntityListener entityListener = new ShopsEntityListener(this);

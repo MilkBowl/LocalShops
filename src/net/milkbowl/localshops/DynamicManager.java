@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops;
 
 import java.util.Collections;
@@ -26,17 +25,16 @@ import java.util.Map;
 
 import net.milkbowl.localshops.objects.Item;
 
-
 /**
  * @author sleaker
  *
  */
 public class DynamicManager {
+
     @SuppressWarnings("unused")
     private static Map<Item, Double> priceAdjMap = Collections.synchronizedMap(new HashMap<Item, Double>());
 
     public static Map<Item, Double> getPriceAdjMap() {
         return priceAdjMap;
-    } 
-
+    }
 }

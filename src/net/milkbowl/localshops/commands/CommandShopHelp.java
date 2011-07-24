@@ -17,9 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.commands;
-
 
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
@@ -28,13 +26,12 @@ import net.milkbowl.localshops.objects.PermType;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-
 public class CommandShopHelp extends Command {
 
     public CommandShopHelp(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command, isGlobal);
     }
-    
+
     public CommandShopHelp(LocalShops plugin, String commandLabel, CommandSender sender, String[] command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command, isGlobal);
     }
@@ -66,7 +63,7 @@ public class CommandShopHelp extends Command {
         if (canUseCommand(PermType.MOVE) && !isGlobal) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " move [ShopID]" + ChatColor.DARK_AQUA + " - Move a shop to your location.");
         }
-            sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " search|searchall [itemname]" + ChatColor.DARK_AQUA + " - Search for an item by name.");
+        sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " search|searchall [itemname]" + ChatColor.DARK_AQUA + " - Search for an item by name.");
         if (canUseCommand(PermType.SELECT) && !isGlobal) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " select" + ChatColor.DARK_AQUA + " - Select two corners for custom shop size.");
         }

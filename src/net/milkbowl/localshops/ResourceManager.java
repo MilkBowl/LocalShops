@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops;
 
 import java.util.Locale;
@@ -29,79 +28,77 @@ import net.milkbowl.localshops.util.GenericFunctions;
 
 import org.bukkit.plugin.PluginDescriptionFile;
 
-
 public class ResourceManager {
 
-	// Objects
-	private PluginDescriptionFile pdf;
-	private ResourceBundle bundle;
+    // Objects
+    private PluginDescriptionFile pdf;
+    private ResourceBundle bundle;
+    private final Logger log = Logger.getLogger("Minecraft");
 
-	private final Logger log = Logger.getLogger("Minecraft");
+    public ResourceManager(PluginDescriptionFile p, Locale l) {
+        pdf = p;
+        if (l == null) {
+            bundle = ResourceBundle.getBundle("props/Messages");
+        } else {
+            try {
+                bundle = ResourceBundle.getBundle("props/Messages", l);
+            } catch (Exception e) {
+                bundle = ResourceBundle.getBundle("props/Messages");
+                log.warning(getString(MsgType.MAIN_ERROR_LOAD_LOCALE, new String[]{"%LOCALE%"}, new String[]{l.getLanguage()}));
+            }
+        }
+    }
 
-	public ResourceManager(PluginDescriptionFile p, Locale l) {
-		pdf = p;
-		if(l == null ) {
-			bundle = ResourceBundle.getBundle("props/Messages");
-		} else {
-			try {
-				bundle = ResourceBundle.getBundle("props/Messages", l);
-			} catch (Exception e) {
-				bundle = ResourceBundle.getBundle("props/Messages");
-				log.warning(getString(MsgType.MAIN_ERROR_LOAD_LOCALE, new String[] {"%LOCALE%"}, new String[] {l.getLanguage()}));
-			}
-		}
-	}
+    // Get locale
+    public Locale getLocale() {
+        return bundle.getLocale();
+    }
 
-	// Get locale
-	public Locale getLocale() {
-		return bundle.getLocale();
-	}
+    // Get String
+    public String getString(MsgType key) {
+        return parsePluginData(GenericFunctions.parseColors(parseBase(bundle.getString(key.getMsg()))));
+    }
 
-	// Get String
-	public String getString(MsgType key) {
-		return parsePluginData(GenericFunctions.parseColors(parseBase(bundle.getString(key.getMsg()))));
-	}
+    // Get String w/ Data Values (replace key array and replace value array MUST match lengths!
+    public String getString(MsgType key, String[] replaceKeys, Object[] replaceValues) {
+        if (replaceKeys.length != replaceValues.length) {
+            return null;
+        }
 
-	// Get String w/ Data Values (replace key array and replace value array MUST match lengths!
-	public String getString(MsgType key, String[] replaceKeys, Object[] replaceValues) {
-		if(replaceKeys.length != replaceValues.length) {
-			return null;
-		}
+        String s = getString(key);
+        for (int i = 0; i < replaceKeys.length; i++) {
+            s = s.replaceAll(replaceKeys[i], replaceValues[i].toString());
+        }
 
-		String s = getString(key);
-		for(int i = 0; i < replaceKeys.length; i++) {
-			s = s.replaceAll(replaceKeys[i], replaceValues[i].toString());
-		}
+        //Parse any other values leftover - ORDER IS IMPORTANT!
+        s = parseBase(s);
+        s = GenericFunctions.parseColors(s);
+        s = parsePluginData(s);
 
-		//Parse any other values leftover - ORDER IS IMPORTANT!
-		s = parseBase(s);
-		s = GenericFunctions.parseColors(s);
-		s = parsePluginData(s);
+        return s;
+    }
 
-		return s;
-	}
+    // Parse Plugin Data
+    private String parsePluginData(String s) {
+        s = s.replaceAll("%PLUGIN_NAME%", pdf.getName());
+        s = s.replaceAll("%PLUGIN_VERSION%", pdf.getVersion());
+        s = s.replaceAll("%PLUGIN_AUTHORS%", GenericFunctions.join(pdf.getAuthors(), ", "));
 
-	// Parse Plugin Data
-	private String parsePluginData(String s) {
-		s = s.replaceAll("%PLUGIN_NAME%", pdf.getName());
-		s = s.replaceAll("%PLUGIN_VERSION%", pdf.getVersion());
-		s = s.replaceAll("%PLUGIN_AUTHORS%", GenericFunctions.join(pdf.getAuthors(), ", "));
+        return s;
+    }
 
-		return s;
-	}
+    // Parse Base
+    private String parseBase(String s) {
+        s = s.replaceAll("%CHAT_PREFIX%", bundle.getString(MsgType.BASE_CHAT_PREFIX.getMsg()));
+        s = s.replaceAll("%BASESHOP%", bundle.getString(MsgType.BASE_SHOP.getMsg()));
+        s = s.replaceAll("%TRUE%", bundle.getString(MsgType.BASE_TRUE.getMsg()));
+        s = s.replaceAll("%FALSE%", bundle.getString(MsgType.BASE_FALSE.getMsg()));
 
-	// Parse Base
-	private String parseBase(String s) {
-		s = s.replaceAll("%CHAT_PREFIX%", bundle.getString(MsgType.BASE_CHAT_PREFIX.getMsg()));
-		s = s.replaceAll("%BASESHOP%", bundle.getString(MsgType.BASE_SHOP.getMsg()));
-		s = s.replaceAll("%TRUE%", bundle.getString(MsgType.BASE_TRUE.getMsg()));
-		s = s.replaceAll("%FALSE%", bundle.getString(MsgType.BASE_FALSE.getMsg()));
+        return s;
+    }
 
-		return s;
-	}
-
-	// Get Chat Prefix
-	public String getChatPrefix() {
-		return getString(MsgType.BASE_CHAT_PREFIX);
-	}
+    // Get Chat Prefix
+    public String getChatPrefix() {
+        return getString(MsgType.BASE_CHAT_PREFIX);
+    }
 }

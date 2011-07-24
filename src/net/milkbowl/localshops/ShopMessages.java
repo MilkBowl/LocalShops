@@ -17,13 +17,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 public class ShopMessages {
+
     static String chatPrefix = ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] ";
     static String shopAlreadyExists = "$CHATPREFIX $AQUA Could not create shop. $WHITE" + " $SHOPNAME $AQUA already exists.";
 
@@ -54,5 +54,4 @@ public class ShopMessages {
         return tempString;
 
     }
-
 }

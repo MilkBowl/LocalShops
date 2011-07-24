@@ -132,7 +132,7 @@ public class ShopsBlockListener extends BlockListener {
         if (shop == null) {
             return;
         }
-        
+
         // Cancel any block place for non-managers/owners/admins while in a shop
         if (!player.getName().equals(shop.getOwner()) && !shop.getManagers().contains(player.getName()) && !(plugin.getPerm().has(player, PermType.ADMIN_LOCAL.get()))) {
             event.setCancelled(true);
@@ -140,7 +140,7 @@ public class ShopsBlockListener extends BlockListener {
         }
 
         // Cancel any block place that is targetted at a sign while in a shop
-        if(event.getBlockAgainst().getType() == Material.SIGN || event.getBlockAgainst().getType() == Material.SIGN_POST) {
+        if (event.getBlockAgainst().getType() == Material.SIGN || event.getBlockAgainst().getType() == Material.SIGN_POST) {
             event.setCancelled(true);
             return;
         }

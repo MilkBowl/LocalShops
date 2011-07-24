@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.listeners;
 
 import java.util.HashSet;
@@ -48,20 +47,19 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-
 /**
  * Handle events for all Player related events
  * 
  * @author Jonbas
  */
 public class ShopsPlayerListener extends PlayerListener {
-    private LocalShops plugin;
 
+    private LocalShops plugin;
     // Logging
     private static final Logger log = Logger.getLogger("Minecraft");
-    
     // List of items that can be consumed by right click
     private static final Set<Material> consumables = new HashSet<Material>();
+
     static {
         consumables.add(Material.APPLE);
         consumables.add(Material.GOLDEN_APPLE);
@@ -80,8 +78,9 @@ public class ShopsPlayerListener extends PlayerListener {
     @SuppressWarnings("deprecation")
     @Override
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.isCancelled())
+        if (event.isCancelled()) {
             return;
+        }
 
         Player player = event.getPlayer();
         String playerName = player.getName();
@@ -91,25 +90,26 @@ public class ShopsPlayerListener extends PlayerListener {
         Location eventBlockLoc = event.getClickedBlock().getLocation();
         LocalShop shop = plugin.getShopManager().getLocalShop(eventBlockLoc);
         //If user Right clicks a sign try to buy/sell from it.
-        if (((event.getClickedBlock().getType().equals(Material.WALL_SIGN) || event.getClickedBlock().getType().equals(Material.SIGN_POST)) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK))  && shop != null) {
+        if (((event.getClickedBlock().getType().equals(Material.WALL_SIGN) || event.getClickedBlock().getType().equals(Material.SIGN_POST)) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && shop != null) {
             // Ignore consumables & send message to a player
-            if(consumables.contains(player.getItemInHand().getType())) {
+            if (consumables.contains(player.getItemInHand().getType())) {
                 event.setCancelled(true);
                 player.sendMessage(ChatColor.DARK_AQUA + "Oops!  You can't eat while working with shops!");
                 return;
             }
-            
+
             for (ShopSign sign : shop.getSigns()) {
-            	if (sign == null)
-            		continue;
+                if (sign == null) {
+                    continue;
+                }
                 if (sign.getLoc().equals(eventBlockLoc)) {
-                	//Check for null sign-type? We should NEVER have this issue
-                	if (sign.getType() == null) {
-                		log.log(Level.WARNING, "[LocalShops] - Null Shop Sign detected, report error. Sign info: {0}", sign.toString());
-                		continue;
-                	}
+                    //Check for null sign-type? We should NEVER have this issue
+                    if (sign.getType() == null) {
+                        log.log(Level.WARNING, "[LocalShops] - Null Shop Sign detected, report error. Sign info: {0}", sign.toString());
+                        continue;
+                    }
                     if (sign.getType().equals(ShopSign.SignType.BUY)) {
-                        ShopCommandExecutor.commandTypeMap.get("buy").getCommandInstance(plugin, "buy", event.getPlayer(), "buy " + sign.getItemName()+ " " + sign.getAmount(), false).process();
+                        ShopCommandExecutor.commandTypeMap.get("buy").getCommandInstance(plugin, "buy", event.getPlayer(), "buy " + sign.getItemName() + " " + sign.getAmount(), false).process();
                         //TODO: Remove when bukkit fixes inventory updating
                         player.updateInventory();
                         return;
@@ -124,10 +124,10 @@ public class ShopsPlayerListener extends PlayerListener {
                 }
             }
 
-        } 
+        }
         // If our user is select & is not holding an item, selection time
         if (plugin.getPlayerData().get(playerName).isSelecting() && (player.getItemInHand().getType() == Material.AIR || player.getItemInHand().getType() == Material.STICK)) {
-        	PlayerData pData = plugin.getPlayerData().get(playerName);
+            PlayerData pData = plugin.getPlayerData().get(playerName);
             Location loc = event.getClickedBlock().getLocation();
             int x = loc.getBlockX();
             int y = loc.getBlockY();
@@ -136,31 +136,32 @@ public class ShopsPlayerListener extends PlayerListener {
             if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
                 String size = null;
                 pData.setPositionA(loc);
-                if (pData.getPositionB() != null)
+                if (pData.getPositionB() != null) {
                     size = GenericFunctions.calculateCuboidSize(pData.getPositionA(), pData.getPositionB(), Config.getShopSizeMaxWidth(), Config.getShopSizeMaxHeight());
-                if(size != null) {
+                }
+                if (size != null) {
                     player.sendMessage(ChatColor.DARK_AQUA + "First Position " + ChatColor.LIGHT_PURPLE + x + " " + y + " " + z + ChatColor.DARK_AQUA + " size " + ChatColor.LIGHT_PURPLE + size);
                 } else {
                     player.sendMessage(ChatColor.DARK_AQUA + "First Position " + ChatColor.LIGHT_PURPLE + x + " " + y + " " + z);
                 }
 
-                if(pData.getPositionA() != null && pData.getPositionB() == null) {
+                if (pData.getPositionA() != null && pData.getPositionB() == null) {
                     player.sendMessage(ChatColor.DARK_AQUA + "Now, right click to select the far upper corner for the shop.");
-                } else if(pData.getPositionA() != null && pData.getPositionB() != null) {
+                } else if (pData.getPositionA() != null && pData.getPositionB() != null) {
                     player.sendMessage(ChatColor.DARK_AQUA + "Type " + ChatColor.WHITE + "/shop create [Shop Name]" + ChatColor.DARK_AQUA + ", if you're happy with your selection, otherwise keep selecting!");
                 }
             } else if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 pData.setPositionB(loc);
                 String size = GenericFunctions.calculateCuboidSize(pData.getPositionA(), pData.getPositionB(), Config.getShopSizeMaxWidth(), Config.getShopSizeMaxHeight());
-                if(size != null) {
+                if (size != null) {
                     player.sendMessage(ChatColor.DARK_AQUA + "Second Position " + ChatColor.LIGHT_PURPLE + x + " " + y + " " + z + ChatColor.DARK_AQUA + " size " + ChatColor.LIGHT_PURPLE + size);
                 } else {
                     player.sendMessage(ChatColor.DARK_AQUA + "Second Position " + ChatColor.LIGHT_PURPLE + x + " " + y + " " + z);
                 }
 
-                if(pData.getPositionB() != null && pData.getPositionA() == null) {
+                if (pData.getPositionB() != null && pData.getPositionA() == null) {
                     player.sendMessage(ChatColor.DARK_AQUA + "Now, left click to select the bottom corner for a shop.");
-                } else if(pData.getPositionA() != null && pData.getPositionB() != null) {
+                } else if (pData.getPositionA() != null && pData.getPositionB() != null) {
                     player.sendMessage(ChatColor.DARK_AQUA + "Type " + ChatColor.WHITE + "/shop create [Shop Name]" + ChatColor.DARK_AQUA + ", if you're happy with your selection, otherwise keep selecting!");
                 }
             }
@@ -212,7 +213,7 @@ public class ShopsPlayerListener extends PlayerListener {
     public void onPlayerMove(PlayerMoveEvent event) {
         //We only check if a player has entered a shop if he has changed a full block.
         if (event.getTo().getBlockX() == event.getFrom().getBlockX() && event.getTo().getBlockY() == event.getFrom().getBlockY() && event.getTo().getBlockZ() == event.getFrom().getBlockZ()) {
-        	return;
+            return;
         }
 
         plugin.checkPlayerPosition(event.getPlayer());

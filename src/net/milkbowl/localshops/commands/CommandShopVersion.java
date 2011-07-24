@@ -17,27 +17,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.commands;
-
 
 import net.milkbowl.localshops.LocalShops;
 import org.bukkit.ChatColor;
 
 import org.bukkit.command.CommandSender;
 
-
 public class CommandShopVersion extends Command {
 
     public CommandShopVersion(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command);
     }
-    
+
     public CommandShopVersion(LocalShops plugin, String commandLabel, CommandSender sender, String[] command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command);
     }
 
-   @Override
+    @Override
     public boolean process() {
         sender.sendMessage(String.format("LocalShops Version %s", plugin.getDescription().getVersion()));
         sender.sendMessage(ChatColor.DARK_AQUA + "Permission: " + ChatColor.WHITE + plugin.getPerm().getName());

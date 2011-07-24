@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.commands;
 
 import java.util.UUID;
@@ -35,7 +34,6 @@ import net.milkbowl.localshops.objects.ShopLocation;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
 
 public class CommandShopCreate extends Command {
 
@@ -55,34 +53,35 @@ public class CommandShopCreate extends Command {
         ShopLocation shopLoc = null;
         // Get current shop
         if (sender instanceof Player) {
-            player = (Player) sender;      
+            player = (Player) sender;
 
             creator = player.getName();
             world = player.getWorld().getName();
             shopLoc = getNewShopLoc(player);
-            
-            if (shopLoc == null)
-            	return false;
-            
+
+            if (shopLoc == null) {
+                return false;
+            }
+
             //Check permissions
             if (!canCreateShop(creator)) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_MAX_NUM_SHOPS));
                 return false;
             }
-            
-            if(!plugin.getShopManager().shopPositionOk(shopLoc.getLocation1(), shopLoc.getLocation2(), world) && !isGlobal) {
+
+            if (!plugin.getShopManager().shopPositionOk(shopLoc.getLocation1(), shopLoc.getLocation2(), world) && !isGlobal) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_SHOP_EXISTS));
                 return false;
             }
-            
+
             if (isGlobal && plugin.getShopManager().getGlobalShopByWorld(world) != null) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_WORLD_HAS_GLOBAL));
                 return false;
             }
-            
+
             if (Config.getShopChargeCreate()) {
                 if (!canUseCommand(PermType.CREATE_FREE)) {
-                    if(!plugin.getEcon().withdrawPlayer(player.getName(), Config.getShopChargeCreateCost()).transactionSuccess()) {
+                    if (!plugin.getEcon().withdrawPlayer(player.getName(), Config.getShopChargeCreateCost()).transactionSuccess()) {
                         sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_INSUFFICIENT_FUNDS));
                         return false;
                     }
@@ -114,10 +113,10 @@ public class CommandShopCreate extends Command {
         if (matcher.find()) {
             name = matcher.group(1);
         }
-        
+
         Shop shop = null;
-        
-        if(isGlobal) {
+
+        if (isGlobal) {
             GlobalShop gShop = new GlobalShop(UUID.randomUUID());
             gShop.setCreator(creator);
             gShop.setOwner(creator);
@@ -127,7 +126,7 @@ public class CommandShopCreate extends Command {
             gShop.addWorld(world);
             plugin.getShopManager().addShop(gShop);
             shop = gShop;
-            log.info(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_LOG, new String[] { "%TYPE%", "%SHOP%" }, new Object[] { "Global", gShop }));
+            log.info(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_LOG, new String[]{"%TYPE%", "%SHOP%"}, new Object[]{"Global", gShop}));
         } else {
             LocalShop lShop = new LocalShop(UUID.randomUUID());
             lShop.setCreator(creator);
@@ -137,21 +136,21 @@ public class CommandShopCreate extends Command {
             lShop.getShopLocations().add(shopLoc);
             plugin.getShopManager().addShop(lShop);
             shop = lShop;
-            log.info(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_LOG, new String[] { "%TYPE%", "%SHOP%" }, new Object[] { "Local", lShop }));
+            log.info(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_LOG, new String[]{"%TYPE%", "%SHOP%"}, new Object[]{"Local", lShop}));
             for (Player p : plugin.getServer().getOnlinePlayers()) {
                 plugin.checkPlayerPosition(p);
             }
         }
 
         // Disable selecting for player (if player)
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             plugin.getPlayerData().get(player.getName()).setSelecting(false);
         }
 
         // write the file
         if (plugin.getShopManager().saveShop(shop)) {
             //Command.Shop.Create.Success=%CHAT_PREFIX%%WHITE%%SHOPNAME%%DARK_AQUA% was created successfully.  CMD_SHP_CREATE_SUCCESS
-            sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_SUCCESS, new String[] { "%SHOPNAME%" }, new Object[] { shop.getName() }));
+            sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_SUCCESS, new String[]{"%SHOPNAME%"}, new Object[]{shop.getName()}));
             return true;
         } else {
             sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_FAIL));

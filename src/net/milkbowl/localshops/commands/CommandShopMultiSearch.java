@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.commands;
 
 import java.util.regex.Matcher;
@@ -30,13 +29,12 @@ import net.milkbowl.localshops.objects.ItemInfo;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-
 public class CommandShopMultiSearch extends Command {
 
     public CommandShopMultiSearch(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command);
     }
-    
+
     public CommandShopMultiSearch(LocalShops plugin, String commandLabel, CommandSender sender, String[] command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command);
     }
@@ -50,16 +48,18 @@ public class CommandShopMultiSearch extends Command {
             if (found == null || found.length == 0) {
                 sender.sendMessage(String.format("No items found matching \"%s\"", name));
             } else {
-            	int show = found.length;
-            	if (show > 5)
-            		show = 5;
-            	
-            	sender.sendMessage("Showing " + show + " of " + found.length + " results.");
-            	for (int i = 0; i < show - 1; i++) 
-            		sender.sendMessage(found[i].toString());
-            	
+                int show = found.length;
+                if (show > 5) {
+                    show = 5;
+                }
+
+                sender.sendMessage("Showing " + show + " of " + found.length + " results.");
+                for (int i = 0; i < show - 1; i++) {
+                    sender.sendMessage(found[i].toString());
+                }
+
             }
-            return true;            
+            return true;
         }
 
         // Show search stuff

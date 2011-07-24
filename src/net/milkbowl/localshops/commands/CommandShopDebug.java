@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.commands;
 
 import java.util.UUID;
@@ -33,12 +32,11 @@ import net.milkbowl.localshops.objects.Shop;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
 public class CommandShopDebug extends Command {
 
     public CommandShopDebug(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
         super(plugin, commandLabel, sender, command, isGlobal);
-        
+
     }
 
     public CommandShopDebug(LocalShops plugin, String commandLabel, CommandSender sender, String[] command, boolean isGlobal) {
@@ -49,30 +47,30 @@ public class CommandShopDebug extends Command {
         if (isGlobal) {
             GlobalShop shop = null;
             String worldName = null;
-            
+
             Pattern pattern = Pattern.compile("(?i)debug\\s+(.*)$");
             Matcher matcher = pattern.matcher(command);
             if (matcher.find()) {
                 worldName = matcher.group(1);
-            } else if(sender instanceof Player) {
+            } else if (sender instanceof Player) {
                 Player player = (Player) sender;
                 worldName = player.getWorld().getName();
             } else {
                 worldName = plugin.getServer().getWorlds().get(0).getName();
             }
-            
-            if(worldName == null) {
+
+            if (worldName == null) {
                 sender.sendMessage("Could not find a world!");
             }
-            
+
             shop = plugin.getShopManager().getGlobalShopByWorld(worldName);
-            if(shop == null) {
-                sender.sendMessage("Could not find the global shop for world \""+worldName+"\"!");
+            if (shop == null) {
+                sender.sendMessage("Could not find the global shop for world \"" + worldName + "\"!");
                 return true;
             }
-            
+
             shop.log();
-            
+
             return true;
         } else {
             Shop shop = null;
@@ -122,5 +120,4 @@ public class CommandShopDebug extends Command {
             }
         }
     }
-
 }

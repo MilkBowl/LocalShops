@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.commands;
 
 import java.lang.reflect.Constructor;
@@ -27,8 +26,8 @@ import net.milkbowl.localshops.LocalShops;
 
 import org.bukkit.command.CommandSender;
 
-
 public class CommandTypeInfo {
+
     public Class<?> commandClass;
     public boolean global;
     public boolean local;
@@ -49,7 +48,7 @@ public class CommandTypeInfo {
     }
 
     public Command getCommandInstance(LocalShops plugin, String commandLabel, CommandSender sender, String command, boolean isGlobal) {
-        try {            
+        try {
             // Define Constructor parameter types
             Class<?> paramTypes[] = new Class[5];
             paramTypes[0] = LocalShops.class;

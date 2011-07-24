@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.listeners;
 
 import java.util.HashSet;
@@ -33,55 +32,52 @@ import net.milkbowl.localshops.objects.ShopSign;
 import org.bukkit.event.world.WorldListener;
 import org.bukkit.event.world.WorldLoadEvent;
 
-
 /**
  * @author sleaker
  *
  */
 public class ShopsWorldListener extends WorldListener {
-    private LocalShops plugin;
 
+    private LocalShops plugin;
 
     public ShopsWorldListener(LocalShops plugin) {
         this.plugin = plugin;
     }
-    
-    public void onWorldLoad (WorldLoadEvent event) {
+
+    public void onWorldLoad(WorldLoadEvent event) {
         //Loop through all shops
         for (Shop shop : plugin.getShopManager().getAllShops()) {
             //If the event world is different than the shop world skip
             String worldName = event.getWorld().getName();
             //ignore global shops
-            if(shop instanceof GlobalShop) {
-                    continue;
-            } else if(shop instanceof LocalShop) {
-                if(!((LocalShop) shop).getWorld().equals(worldName)) {
+            if (shop instanceof GlobalShop) {
+                continue;
+            } else if (shop instanceof LocalShop) {
+                if (!((LocalShop) shop).getWorld().equals(worldName)) {
                     continue;
                 }
             }
-            
+
             //Get an iterator from the shops signMap and loop through
             Set<ShopSign> addSet = new HashSet<ShopSign>();
             Iterator<ShopSign> iter = shop.getSigns().iterator();
             while (iter.hasNext()) {
                 ShopSign sign = iter.next();
                 //If event world and signWorld are the same, set the signworld and validate the sign.
-                if (sign.getWorld() == null && sign.getWorldName().equals(event.getWorld().getName()))
-                {
+                if (sign.getWorld() == null && sign.getWorldName().equals(event.getWorld().getName())) {
                     sign.setWorld(event.getWorld());
                     if (sign.isValid()) {
                         addSet.add(sign);
                         iter.remove();
-                    }
-                    else
+                    } else {
                         iter.remove();
+                    }
                 }
             }
             plugin.getShopManager().updateSigns(shop, addSet);
             shop.getSigns().addAll(addSet);
-            
+
         }
-        
+
     }
-    
 }

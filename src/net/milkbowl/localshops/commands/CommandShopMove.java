@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.commands;
 
 import java.util.regex.Matcher;
@@ -49,13 +48,13 @@ public class CommandShopMove extends Command {
 
     public boolean process() {
 
-        if(isGlobal) {
+        if (isGlobal) {
             sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "You cannot move a global shop!");
             return false;
-        } else if(!canUseCommand(PermType.MOVE)) {
+        } else if (!canUseCommand(PermType.MOVE)) {
             sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
             return false;
-        } else if(!(sender instanceof Player)) {
+        } else if (!(sender instanceof Player)) {
             sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_CONSOLE_NOT_IMPLEMENTED));
             return false;
         }
@@ -72,7 +71,7 @@ public class CommandShopMove extends Command {
 
             // check to see if that shop exists
             LocalShop thisShop = plugin.getShopManager().getLocalShop(id);
-            if(thisShop == null) {
+            if (thisShop == null) {
                 sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "Could not find shop: " + ChatColor.WHITE + id);
                 return false;
             } else if (!thisShop.getOwner().equalsIgnoreCase(player.getName())) {
@@ -92,7 +91,7 @@ public class CommandShopMove extends Command {
             if (pData.isSelecting()) {
                 if (GenericFunctions.calculateCuboidSize(pData.getPositionA(), pData.getPositionB(), Config.getShopSizeMaxWidth(), Config.getShopSizeMaxHeight()) == null) {
                     String size = Config.getShopSizeMaxWidth() + "x" + Config.getShopSizeMaxHeight() + "x" + Config.getShopSizeMaxWidth();
-                    player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_SELECTION_PROB_SIZE, new String[] { "%SIZE%" }, new Object[] { size }));
+                    player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_SELECTION_PROB_SIZE, new String[]{"%SIZE%"}, new Object[]{size}));
                     return false;
                 }
 
@@ -100,8 +99,9 @@ public class CommandShopMove extends Command {
                 if (pData.getPositionA() == null || pData.getPositionB() == null) {
                     player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_SELECTION_PROB_ONLY_ONE_POINT));
                     return false;
-                } else
+                } else {
                     shopLoc = new ShopLocation(pData.getPositionA(), pData.getPositionB());
+                }
 
             } else {
                 // otherwise calculate the shop from the player's location
@@ -127,11 +127,11 @@ public class CommandShopMove extends Command {
 
             }
 
-            if(!plugin.getShopManager().shopPositionOk(shopLoc.getLocation1(), shopLoc.getLocation2(), world)) {
+            if (!plugin.getShopManager().shopPositionOk(shopLoc.getLocation1(), shopLoc.getLocation2(), world)) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_SHOP_EXISTS));
                 return false;
             } else if (Config.getShopChargeMove() && !canUseCommand(PermType.MOVE_FREE)) {
-                if(!plugin.getEcon().withdrawPlayer(player.getName(), Config.getShopChargeMoveCost()).transactionSuccess()) {
+                if (!plugin.getEcon().withdrawPlayer(player.getName(), Config.getShopChargeMoveCost()).transactionSuccess()) {
                     // return, this player did not have enough money
                     player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "You need " + plugin.getEcon().format(Config.getShopChargeMoveCost()) + " to move a shop.");
                     return false;
@@ -154,7 +154,7 @@ public class CommandShopMove extends Command {
                 player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "There was an error, could not move shop.");
                 return false;
             }
-        }            
+        }
 
 
         // Show usage
@@ -162,5 +162,4 @@ public class CommandShopMove extends Command {
         sender.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "Use " + ChatColor.WHITE + "/" + commandLabel + " info" + ChatColor.DARK_AQUA + " to obtain the id.");
         return true;
     }
-
 }

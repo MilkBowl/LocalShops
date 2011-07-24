@@ -344,13 +344,13 @@ public class CommandShopBuy extends Command {
          * No need for nested ifs.  If the shop is not unlimited money it shouldn't ever try to charge the player.
          */
         if (shop.isUnlimitedMoney() && !shop.getOwner().equals(player.getName())) {
-            if(plugin.getEcon().withdrawPlayer(player.getName(), totalCost).transactionSuccess()) {
+            if (plugin.getEcon().withdrawPlayer(player.getName(), totalCost).transactionSuccess()) {
                 player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
                 return true;
             }
         } else {
-            if(!shop.getOwner().equals(player.getName())) {
-                if(!plugin.getEcon().depositPlayer(player.getName(), totalCost).transactionSuccess()) {
+            if (!shop.getOwner().equals(player.getName())) {
+                if (!plugin.getEcon().depositPlayer(player.getName(), totalCost).transactionSuccess()) {
                     player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
                     return true;
                 }

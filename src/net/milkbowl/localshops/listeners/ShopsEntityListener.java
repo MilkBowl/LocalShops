@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.listeners;
 
 import net.milkbowl.localshops.LocalShops;
@@ -28,19 +27,17 @@ import org.bukkit.block.Block;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityListener;
 
-
 /**
  * @author sleaker
  *
  */
 public class ShopsEntityListener extends EntityListener {
-    private LocalShops plugin;
 
+    private LocalShops plugin;
 
     public ShopsEntityListener(LocalShops plugin) {
         this.plugin = plugin;
     }
-
 
     @Override
     public void onEntityExplode(EntityExplodeEvent event) {
@@ -51,7 +48,7 @@ public class ShopsEntityListener extends EntityListener {
         //Check see if explosion happens inside a shop - if it does, cancel the event.
         for (Block block : event.blockList()) {
             Location blockLoc = block.getLocation();
-            
+
             //Search for shop at block location
             Shop shop = plugin.getShopManager().getLocalShop(blockLoc);
             //If no shop found at the location skip to the next block

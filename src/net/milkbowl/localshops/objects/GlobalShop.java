@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  */
-
 package net.milkbowl.localshops.objects;
 
 import java.util.ArrayList;
@@ -28,42 +27,42 @@ import java.util.UUID;
 
 import net.milkbowl.localshops.util.GenericFunctions;
 
-
 public class GlobalShop extends Shop {
+
     private static final long serialVersionUID = 30000L;
-    
     protected List<String> worlds = Collections.synchronizedList(new ArrayList<String>(1));
-    
+
     public GlobalShop(UUID uuid) {
         super(uuid);
     }
-    
+
     public void addWorld(String worldName) {
-        if (!worlds.contains(worldName))
+        if (!worlds.contains(worldName)) {
             worlds.add(worldName);
+        }
     }
-    
+
     public void removeWorld(String worldName) {
         worlds.remove(worldName);
     }
-    
+
     public boolean containsWorld(String worldName) {
         return worlds.contains(worldName);
     }
-    
+
     public void clearWorlds() {
         worlds.clear();
     }
-    
+
     public List<String> getWorlds() {
         List<String> list = new ArrayList<String>();
-        for(String s : worlds) {
+        for (String s : worlds) {
             list.add(s);
         }
-        
+
         return Collections.unmodifiableList(list);
     }
-    
+
     @Override
     public String toString() {
         return String.format("Shop \"%s\" in worlds \"%s\" %d items - %s", this.name, GenericFunctions.join(worlds, ", "), inventory.size(), uuid.toString());
@@ -91,11 +90,10 @@ public class GlobalShop extends Shop {
         log.info("   BP=Buy Price, BS=Buy Size, SP=Sell Price, SS=Sell Size, ST=Stock, MX=Max Stock");
         log.info(String.format("   %-9s %-6s %-3s %-6s %-3s %-3s %-3s", "Id", "BP", "BS", "SP", "SS", "ST", "MX"));
         Iterator<Item> it = inventory.keySet().iterator();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             Item item = it.next();
             ShopRecord record = inventory.get(item);
             log.info(String.format("   %6d:%-2d %-6.2f %-6.2f %-3d %-3d", item.getId(), item.getSubTypeId(), record.getBuyPrice(), record.getSellPrice(), record.getStock(), record.getMaxStock()));
         }
     }
-
 }
