@@ -62,7 +62,7 @@ public class ShopManager {
     private Map<String, UUID> worldShops = Collections.synchronizedMap(new HashMap<String, UUID>());
 
     // Logging
-    private final Logger log = Logger.getLogger("Minecraft");
+    private static final Logger log = Logger.getLogger("Minecraft");
 
     @SuppressWarnings("static-access")
     public ShopManager(LocalShops plugin) {
