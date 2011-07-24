@@ -49,6 +49,8 @@ import org.bukkit.entity.Player;
 
 
 public abstract class Shop implements Comparator<Shop>, Serializable {
+    private static final long serialVersionUID = 30000L;
+    
 	// Attributes
 	protected UUID uuid = null;
 	protected String name = null;

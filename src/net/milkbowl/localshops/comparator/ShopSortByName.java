@@ -28,6 +28,7 @@ import net.milkbowl.localshops.objects.Shop;
 
 
 public class ShopSortByName implements Comparator<Shop>, Serializable {
+    private static final long serialVersionUID = 30000L;
 
     @Override
     public int compare(Shop o1, Shop o2) {

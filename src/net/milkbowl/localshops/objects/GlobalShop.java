@@ -30,6 +30,8 @@ import net.milkbowl.localshops.util.GenericFunctions;
 
 
 public class GlobalShop extends Shop {
+    private static final long serialVersionUID = 30000L;
+    
     protected List<String> worlds = Collections.synchronizedList(new ArrayList<String>(1));
     
     public GlobalShop(UUID uuid) {

@@ -33,6 +33,8 @@ import org.bukkit.Location;
 
 
 public class LocalShop extends Shop {
+    private static final long serialVersionUID = 30000L;
+    
     // Location Information
     //TODO: Store Location information in List to match World Information indices
     protected Set<ShopLocation> shopLocations = Collections.synchronizedSet(new HashSet<ShopLocation>(1));

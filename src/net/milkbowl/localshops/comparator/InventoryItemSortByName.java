@@ -26,6 +26,7 @@ import java.util.Comparator;
 import net.milkbowl.localshops.objects.Item;
 
 public class InventoryItemSortByName implements Comparator<Item>, Serializable {
+    private static final long serialVersionUID = 30000L;
 
     @Override
     public int compare(Item o1, Item o2) {
