@@ -381,7 +381,7 @@ public class ShopManager {
                 }
 
                 if (cols[0].equalsIgnoreCase("world")) { // World
-                    ((LocalShop) shop).setWorld(cols[1]);
+                    shop.setWorld(cols[1]);
                 } else if (cols[0].equalsIgnoreCase("owner")) { // Owner
                     shop.setOwner(cols[1]);
                 } else if (cols[0].equalsIgnoreCase("managers")) { // Managers
@@ -496,7 +496,7 @@ public class ShopManager {
                 }
                 line = br.readLine();
             }
-            ((LocalShop) shop).getShopLocations().add(new ShopLocation(x1, y1, z1, x2, y2, z2));
+            shop.getShopLocations().add(new ShopLocation(x1, y1, z1, x2, y2, z2));
             br.close();
 
             File dir = new File(Config.getDirShopsConvertedPath());
