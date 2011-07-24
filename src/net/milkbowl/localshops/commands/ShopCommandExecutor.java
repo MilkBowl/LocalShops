@@ -37,8 +37,8 @@ import org.bukkit.entity.Player;
 public class ShopCommandExecutor implements CommandExecutor {
 
     private final LocalShops plugin;
-    private final Logger log = Logger.getLogger("Minecraft");
-    public static Map<String, CommandTypeInfo> commandTypeMap = new HashMap<String, CommandTypeInfo>();
+    private static final Logger log = Logger.getLogger("Minecraft");
+    public static final Map<String, CommandTypeInfo> commandTypeMap = new HashMap<String, CommandTypeInfo>();
     static {
         commandTypeMap.put("admin", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandAdminSet.class, false, false, false));
         commandTypeMap.put("add", new CommandTypeInfo(net.milkbowl.localshops.commands.CommandShopAdd.class, true, true, false));
