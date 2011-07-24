@@ -147,7 +147,7 @@ public class GenericFunctions {
     public static double getMedian(List<Integer> list) {
         Collections.sort(list);
 
-        if(list.size() % 2 == 1) {
+        if(list.size() % 2 != 0) {
             return list.get((list.size()+1)/2-1);
         } else {
             double lower = list.get(list.size()/2-1);
