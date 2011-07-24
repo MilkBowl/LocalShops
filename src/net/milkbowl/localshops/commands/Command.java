@@ -48,7 +48,7 @@ public abstract class Command {
     protected String commandLabel = null;
     protected CommandSender sender = null;
     protected String command = null;
-    protected static String DECIMAL_REGEX = "(\\d+\\.\\d+)|(\\d+\\.)|(\\.\\d+)|(\\d+)";
+    protected static final String DECIMAL_REGEX = "(\\d+\\.\\d+)|(\\d+\\.)|(\\.\\d+)|(\\d+)";
     protected static final Logger log = Logger.getLogger("Minecraft");
     protected boolean isGlobal = false;
 
