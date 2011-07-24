@@ -32,7 +32,6 @@ import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopLocation;
-import net.milkbowl.localshops.util.Econ;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -83,7 +82,7 @@ public class CommandShopCreate extends Command {
             
             if (Config.getShopChargeCreate()) {
                 if (!canUseCommand(PermType.CREATE_FREE)) {
-                    if (!Econ.chargePlayer(player.getName(), Config.getShopChargeCreateCost())) {
+                    if(!plugin.getEcon().withdrawPlayer(player.getName(), Config.getShopChargeCreateCost()).transactionSuccess()) {
                         sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_INSUFFICIENT_FUNDS));
                         return false;
                     }

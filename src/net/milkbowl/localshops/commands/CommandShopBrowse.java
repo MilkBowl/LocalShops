@@ -70,7 +70,7 @@ public class CommandShopBrowse extends Command {
                 return true;
             }
             
-            if (!shop.hasAccess(player)) {
+            if (!plugin.getShopManager().hasAccess(shop, player)) {
             	sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
             	return true;
             }
@@ -80,7 +80,7 @@ public class CommandShopBrowse extends Command {
             return true;
         }
 
-        if (shop.getItems().size() == 0) {
+        if (shop.getItems().isEmpty()) {
             sender.sendMessage(String.format("%s currently does not stock any items.", shop.getName()));
             return true;
         }
@@ -179,7 +179,7 @@ public class CommandShopBrowse extends Command {
                     continue;
                 }
                 try {
-                    subMessage += ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + LocalShops.getEcon().format(price) + ChatColor.DARK_AQUA + "]";
+                    subMessage += ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + plugin.getEcon().format(price) + ChatColor.DARK_AQUA + "]";
                 } catch (NumberFormatException e) {
                     log.log(Level.WARNING, "NumberFormatException occurred on " + price, e);
                 }

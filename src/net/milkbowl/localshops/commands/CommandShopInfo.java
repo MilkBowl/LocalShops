@@ -139,7 +139,7 @@ public class CommandShopInfo extends Command {
         sender.sendMessage(String.format("  Selling %d items & buying %d items", sellCount, buyCount));
 
         // Shop stock is worth %d coins
-        sender.sendMessage(String.format("  Inventory worth %s", LocalShops.getEcon().format(worth)));
+        sender.sendMessage(String.format("  Inventory worth %s", plugin.getEcon().format(worth)));
 
         if(shop.isUnlimitedMoney() || shop.isUnlimitedStock()) {
             sender.sendMessage(String.format("  Shop %s unlimited money and %s unlimited stock.", shop.isUnlimitedMoney() ? "has" : "doesn't have", shop.isUnlimitedStock() ? "has" : "doesn't have"));

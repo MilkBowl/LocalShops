@@ -95,17 +95,17 @@ public abstract class Command {
 
             // check if admin first
             if (isGlobal) {
-                if (LocalShops.getPerm().has(player, PermType.ADMIN_GLOBAL.get())) {
+                if (plugin.getPerm().has(player, PermType.ADMIN_GLOBAL.get())) {
                     return true;
                 }
             } else {
                 //Make sure this isn't a server command before allowing access.
-                if (LocalShops.getPerm().has(player, PermType.ADMIN_LOCAL.get()) && !(this instanceof net.milkbowl.localshops.commands.CommandAdminSet)) {
+                if (plugin.getPerm().has(player, PermType.ADMIN_LOCAL.get()) && !(this instanceof net.milkbowl.localshops.commands.CommandAdminSet)) {
                     return true;
                 }
             }
             // fail back to provided permissions second
-            if (!LocalShops.getPerm().has(player, type.get())) {
+            if (!plugin.getPerm().has(player, type.get())) {
                 return false;
             }
             return true;
@@ -360,7 +360,7 @@ public abstract class Command {
         }
 
         for (String groupName : shop.getGroupSet()) {
-            if (LocalShops.getPerm().playerInGroup(player.getWorld().getName(), player.getName(), groupName)) {
+            if (plugin.getPerm().playerInGroup(player.getWorld().getName(), player.getName(), groupName)) {
                 return true;
             }
         }

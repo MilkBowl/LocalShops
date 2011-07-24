@@ -32,7 +32,6 @@ import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.Transaction;
-import net.milkbowl.localshops.util.Econ;
 
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -73,7 +72,7 @@ public class CommandShopBuy extends Command {
             if ((!canUseCommand(PermType.BUY) && !isGlobal) || (!canUseCommand(PermType.GLOBAL_BUY) && isGlobal)) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
                 return true;
-            } else if (!shop.hasAccess(player)) {
+            } else if (!plugin.getShopManager().hasAccess(shop, player)) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
                 return true;
             }
@@ -345,13 +344,17 @@ public class CommandShopBuy extends Command {
          * No need for nested ifs.  If the shop is not unlimited money it shouldn't ever try to charge the player.
          */
         if (shop.isUnlimitedMoney() && !shop.getOwner().equals(player.getName())) {
-            if (!Econ.chargePlayer(player.getName(), totalCost)) {
+            if(plugin.getEcon().withdrawPlayer(player.getName(), totalCost).transactionSuccess()) {
                 player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
                 return true;
             }
-        } else if (!shop.getOwner().equals(player.getName()) && !Econ.payPlayer(player.getName(), shop.getOwner(), totalCost)) {
-            player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
-            return true;
+        } else {
+            if(!shop.getOwner().equals(player.getName())) {
+                if(!plugin.getEcon().depositPlayer(player.getName(), totalCost).transactionSuccess()) {
+                    player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
+                    return true;
+                }
+            }
         }
 
         if (!shop.isUnlimitedStock()) {
@@ -361,7 +364,7 @@ public class CommandShopBuy extends Command {
         if (isShopController(shop)) {
             player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_REMOVED_QTY, new String[]{"%AMOUNT%", "%ITEMNAME%"}, new Object[]{amount, item.getName()}));
         } else {
-            player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PURCHASED_QTY, new String[]{"%AMOUNT%", "%ITEMNAME%", "%COST%"}, new Object[]{amount, item.getName(), LocalShops.getEcon().format(totalCost)}));
+            player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PURCHASED_QTY, new String[]{"%AMOUNT%", "%ITEMNAME%", "%COST%"}, new Object[]{amount, item.getName(), plugin.getEcon().format(totalCost)}));
         }
 
         //Do our give stock stuff here
@@ -416,8 +419,8 @@ public class CommandShopBuy extends Command {
 
         //Check player econ
         double totalPrice = shop.getItem(item).getBuyPrice() * amount;
-        if (totalPrice > Econ.getBalance(player.getName())) {
-            amount = (int) Math.floor(Econ.getBalance(player.getName()) / shop.getItem(item).getBuyPrice());
+        if (totalPrice > plugin.getEcon().getBalance(player.getName())) {
+            amount = (int) Math.floor(plugin.getEcon().getBalance(player.getName()) / shop.getItem(item).getBuyPrice());
         }
 
         if (amount < originalAmount) {

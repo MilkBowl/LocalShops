@@ -57,6 +57,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 
 public class ShopManager {
     private LocalShops plugin;
@@ -1064,6 +1065,32 @@ public class ShopManager {
 			index++;
 		}
 	}
+
+    /**
+     * Only checks if a player is on the shop access list, or an owner, manager, or admin.
+     * This IS NOT used for checking permission to use a command, ONLY for checking access list.
+     *
+     * @param player
+     * @return
+     */
+    public boolean hasAccess(Shop shop, Player player) {
+        if (shop.getOwner().equals(player.getName())) {
+            return true;
+        } else if (shop.getManagers().contains(player.getName())) {
+            return true;
+        } else if (shop.getUserSet().isEmpty() && shop.getGroupSet().isEmpty()) {
+            return true;
+        } else if (shop.getUserSet().contains(player.getName())) {
+            return true;
+        } else {
+            for (String group : plugin.getPerm().getPlayerGroups(player.getWorld().getName(), player.getName())) {
+                if(shop.getGroupSet().contains(group)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 
     /**
      * @return null

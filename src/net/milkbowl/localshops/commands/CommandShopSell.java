@@ -32,7 +32,6 @@ import net.milkbowl.localshops.objects.ShopRecord;
 import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.Transaction;
-import net.milkbowl.localshops.util.Econ;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -68,7 +67,7 @@ public class CommandShopSell extends Command {
 			if ((!canUseCommand(PermType.SELL) && !isGlobal) || (!canUseCommand(PermType.GLOBAL_SELL) && isGlobal)) {
 				sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
 				return true;
-			} else if (!shop.hasAccess(player)) {
+			} else if (!plugin.getShopManager().hasAccess(shop, player)) {
             	sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
             	return true;
             }
@@ -301,13 +300,24 @@ public class CommandShopSell extends Command {
 		 * Also we should NEVER attempt loop transaction sales as they are incredibly inefficient.
 		 */
 		if (shop.isUnlimitedMoney() && !shop.getOwner().equals(player.getName())) {
-			if (!Econ.depositPlayer(player.getName(), totalCost)) {
+                            if(!plugin.getEcon().depositPlayer(player.getName(), totalCost).transactionSuccess()) {
 				player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
 				return true;
-			}
-		} else if (!shop.getOwner().equals(player.getName()) && !Econ.payPlayer(shop.getOwner(), player.getName(), totalCost)) {
-			player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
-			return true;
+                            }
+		} else {
+                    if (!shop.getOwner().equals(player.getName())) {
+                        if(plugin.getEcon().withdrawPlayer(shop.getOwner(), totalCost).transactionSuccess()) {
+                            if(!plugin.getEcon().depositPlayer(player.getName(), totalCost).transactionSuccess()) {
+                                // Refund owner, send message
+                                plugin.getEcon().depositPlayer(shop.getOwner(), totalCost);
+                                player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
+                                return true;
+                            }
+                        } else {
+                            player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
+                            return true;
+                        }
+                    }
 		}
 		if (!shop.isUnlimitedStock())
 			shop.addStock(item, amount);
@@ -321,7 +331,7 @@ public class CommandShopSell extends Command {
 		if (isShopController(shop)) {
 			player.sendMessage(ChatColor.DARK_AQUA + "You added " + ChatColor.WHITE + amount + " " + item.getName() + ChatColor.DARK_AQUA + " to the shop");
 		} else {
-			player.sendMessage(ChatColor.DARK_AQUA + "You sold " + ChatColor.WHITE + amount + " " + item.getName() + ChatColor.DARK_AQUA + " and gained " + ChatColor.WHITE + LocalShops.getEcon().format(totalCost));
+			player.sendMessage(ChatColor.DARK_AQUA + "You sold " + ChatColor.WHITE + amount + " " + item.getName() + ChatColor.DARK_AQUA + " and gained " + ChatColor.WHITE + plugin.getEcon().format(totalCost));
 		}
 
 		// Save the changes to the Shop
@@ -363,13 +373,14 @@ public class CommandShopSell extends Command {
 		double totalPrice = shop.getItem(item).getBuyPrice() * amount;
 
 		//Reduce amount the player can sell if the owner doesn't have enough money, and shop is not unlimited stock.
-		if (!shop.isUnlimitedMoney() && totalPrice > Econ.getBalance(shop.getOwner())) {
-			amount = (int) Math.floor(Econ.getBalance(shop.getOwner()) / shop.getItem(item).getSellPrice());
+		if (!shop.isUnlimitedMoney() && totalPrice > plugin.getEcon().getBalance(shop.getOwner())) {
+			amount = (int) Math.floor(plugin.getEcon().getBalance(shop.getOwner()) / shop.getItem(item).getSellPrice());
 		}
 
 		//let our user know if there was any change in the amount
-		if (amount < originalAmount)
+		if (amount < originalAmount) {
 			player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_ORDER_REDUCED, new String[] { "%BUNDLESIZE%", "%AMOUNT%" }, new Object[] { 1, amount }));
+                }
 
 		return amount;
 	}

@@ -134,7 +134,7 @@ public class ShopsBlockListener extends BlockListener {
         }
         
         // Cancel any block place for non-managers/owners/admins while in a shop
-        if (!player.getName().equals(shop.getOwner()) && !shop.getManagers().contains(player.getName()) && !(LocalShops.getPerm().has(player, PermType.ADMIN_LOCAL.get()))) {
+        if (!player.getName().equals(shop.getOwner()) && !shop.getManagers().contains(player.getName()) && !(plugin.getPerm().has(player, PermType.ADMIN_LOCAL.get()))) {
             event.setCancelled(true);
             return;
         }
@@ -179,7 +179,7 @@ public class ShopsBlockListener extends BlockListener {
             blockList.addAll(findWallSigns(block));
         }
 
-        if (!shop.getOwner().equals(player.getName()) && !(shop.getManagers().contains(player.getName())) && !(LocalShops.getPerm().has(player, PermType.ADMIN_LOCAL.get()))) {
+        if (!shop.getOwner().equals(player.getName()) && !(shop.getManagers().contains(player.getName())) && !(plugin.getPerm().has(player, PermType.ADMIN_LOCAL.get()))) {
             player.sendMessage(ChatColor.DARK_AQUA + "You must be the shop owner or a manager to remove signs in the shop");
             event.setCancelled(true);
             return;

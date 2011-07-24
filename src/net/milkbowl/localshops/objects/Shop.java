@@ -384,32 +384,6 @@ public abstract class Shop implements Comparator<Shop>, Serializable {
 		return signSet;
 	}
 
-    /**
-     * Only checks if a player is on the shop access list, or an owner, manager, or admin.
-     * This IS NOT used for checking permission to use a command, ONLY for checking access list.
-     *
-     * @param player
-     * @return
-     */
-    public boolean hasAccess(Player player) {
-        if (owner.equals(player.getName())) {
-            return true;
-        } else if (managers.contains(player.getName())) {
-            return true;
-        } else if (users.isEmpty() && groups.isEmpty()) {
-            return true;
-        } else if (users.contains(player.getName())) {
-            return true;
-        } else {
-            for (String group : LocalShops.getPerm().getPlayerGroups(player.getWorld().getName(), player.getName())) {
-                if(groups.contains(group)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
 	//TODO: needs massive update.
 	public String[] generateSignLines(ShopSign sign) {
 		String[] signLines = {"", "", "", ""};

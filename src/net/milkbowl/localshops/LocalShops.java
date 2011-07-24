@@ -58,7 +58,6 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class LocalShops extends JavaPlugin {
     // Listeners & Objects
-
     public ShopsPlayerListener playerListener = new ShopsPlayerListener(this);
     public ShopsBlockListener blockListener = new ShopsBlockListener(this);
     public ShopsEntityListener entityListener = new ShopsEntityListener(this);
@@ -69,8 +68,8 @@ public class LocalShops extends JavaPlugin {
     private ThreadManager threadManager = new ThreadManager(this);
     private ResourceManager resManager = null;
     // Services
-    private static Economy econ = null;
-    private static Permission perm = null;
+    private Economy econ = null;
+    private Permission perm = null;
     // Logging
     private static final Logger log = Logger.getLogger("Minecraft");
     private Map<String, PlayerData> playerData = Collections.synchronizedMap(new HashMap<String, PlayerData>());
@@ -189,11 +188,11 @@ public class LocalShops extends JavaPlugin {
         log.info(resManager.getString(MsgType.MAIN_DISABLE, new String[]{}, new Object[]{}));
     }
 
-    public static Economy getEcon() {
+    public Economy getEcon() {
         return econ;
     }
 
-    public static Permission getPerm() {
+    public Permission getPerm() {
         return perm;
     }
 

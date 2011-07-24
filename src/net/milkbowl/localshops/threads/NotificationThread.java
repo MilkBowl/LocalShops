@@ -78,10 +78,10 @@ public class NotificationThread extends Thread {
                     for(Transaction trans : transactions) {
                         switch (trans.type) {
                         case Buy:
-                            messages.add(String.format(ChatColor.WHITE + "   %s " + ChatColor.GOLD + "sold " + ChatColor.WHITE + "%d %s" + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + "%s", trans.playerName, trans.quantity, trans.itemName, LocalShops.getEcon().format(trans.cost)));
+                            messages.add(String.format(ChatColor.WHITE + "   %s " + ChatColor.GOLD + "sold " + ChatColor.WHITE + "%d %s" + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + "%s", trans.playerName, trans.quantity, trans.itemName, plugin.getEcon().format(trans.cost)));
                             break;
                         case Sell:
-                            messages.add(String.format(ChatColor.WHITE + "   %s " + ChatColor.GREEN + "purchased " + ChatColor.WHITE + "%d %s" + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + " %s", trans.playerName, trans.quantity, trans.itemName, LocalShops.getEcon().format(trans.cost)));
+                            messages.add(String.format(ChatColor.WHITE + "   %s " + ChatColor.GREEN + "purchased " + ChatColor.WHITE + "%d %s" + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + " %s", trans.playerName, trans.quantity, trans.itemName, plugin.getEcon().format(trans.cost)));
                             break;
 
                         default:
@@ -143,7 +143,7 @@ public class NotificationThread extends Thread {
                     
                     // Create messages :D
                     messages.add(String.format(ChatColor.WHITE + "%d " + ChatColor.DARK_AQUA + "transactions for " + ChatColor.WHITE + "%s", transactions.size(), shop.getName()));
-                    messages.add(String.format(ChatColor.WHITE + "Totals: " + ChatColor.GREEN + "Gained %s, " + ChatColor.GOLD + "Lost %s", LocalShops.getEcon().format(buyCostTotal), LocalShops.getEcon().format(sellCostTotal)));
+                    messages.add(String.format(ChatColor.WHITE + "Totals: " + ChatColor.GREEN + "Gained %s, " + ChatColor.GOLD + "Lost %s", plugin.getEcon().format(buyCostTotal), plugin.getEcon().format(sellCostTotal)));
                     StringBuffer g = null;
                     for(String item : itemSellCost.keySet()) {
                         if(g == null) {

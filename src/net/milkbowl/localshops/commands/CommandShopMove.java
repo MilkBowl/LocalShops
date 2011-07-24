@@ -30,7 +30,6 @@ import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.ShopLocation;
-import net.milkbowl.localshops.util.Econ;
 import net.milkbowl.localshops.util.GenericFunctions;
 
 import org.bukkit.ChatColor;
@@ -132,9 +131,9 @@ public class CommandShopMove extends Command {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_SHOP_EXISTS));
                 return false;
             } else if (Config.getShopChargeMove() && !canUseCommand(PermType.MOVE_FREE)) {
-                if (!Econ.chargePlayer(player.getName(), Config.getShopChargeMoveCost())) {
+                if(!plugin.getEcon().withdrawPlayer(player.getName(), Config.getShopChargeMoveCost()).transactionSuccess()) {
                     // return, this player did not have enough money
-                    player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "You need " + LocalShops.getEcon().format(Config.getShopChargeMoveCost()) + " to move a shop.");
+                    player.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.DARK_AQUA + "You need " + plugin.getEcon().format(Config.getShopChargeMoveCost()) + " to move a shop.");
                     return false;
                 }
             }

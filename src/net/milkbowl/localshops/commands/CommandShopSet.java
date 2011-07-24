@@ -49,6 +49,7 @@ public class CommandShopSet extends Command {
 		super(plugin, commandLabel, sender, command, isGlobal);
 	}
 
+    @Override
 	public boolean process() {
 		// Check Permissions
 		if (!canUseCommand(PermType.SET)) {
@@ -179,7 +180,7 @@ public class CommandShopSet extends Command {
 		plugin.getShopManager().saveShop(shop);
 
 		// Send Result
-		sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is now buying " + ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + LocalShops.getEcon().format(price));
+		sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is now buying " + ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " for " + ChatColor.WHITE + plugin.getEcon().format(price));
 
 		//update any sign in this shop with that value.
 		plugin.getShopManager().updateSigns(shop, item);
@@ -277,7 +278,7 @@ public class CommandShopSet extends Command {
 		plugin.getShopManager().saveShop(shop);
 
 		// Send Result
-		sender.sendMessage(ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " now sells for "+ ChatColor.WHITE + LocalShops.getEcon().format(price));
+		sender.sendMessage(ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " now sells for "+ ChatColor.WHITE + plugin.getEcon().format(price));
 
 		//update any sign in this shop with that value.
 		plugin.getShopManager().updateSigns(shop, item);
@@ -687,7 +688,7 @@ public class CommandShopSet extends Command {
 			// Save Shop
 			plugin.getShopManager().saveShop(shop);
 
-			sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " now has a minimum balance of "+ ChatColor.WHITE + LocalShops.getEcon().format(min));
+			sender.sendMessage(ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " now has a minimum balance of "+ ChatColor.WHITE + plugin.getEcon().format(min));
 			return true;
 		}
 
