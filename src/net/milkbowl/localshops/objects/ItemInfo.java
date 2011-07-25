@@ -41,14 +41,4 @@ public class ItemInfo extends Item {
     public String toString() {
         return String.format("%s, %s, %d:%d", name, Arrays.deepToString(search), material.getId(), subTypeId);
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
 }
