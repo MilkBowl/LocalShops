@@ -37,6 +37,7 @@ import java.util.logging.Logger;
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.util.GenericFunctions;
+import org.bukkit.Location;
 
 public abstract class Shop implements Comparator<Shop>, Serializable {
 
@@ -469,4 +470,8 @@ public abstract class Shop implements Comparator<Shop>, Serializable {
 
         return signLines;
     }
+
+    abstract public boolean containsPoint(Location loc);
+
+    abstract public boolean containsPoint(String worldName, int x, int y, int z);
 }

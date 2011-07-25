@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.UUID;
 
 import net.milkbowl.localshops.util.GenericFunctions;
+import org.bukkit.Location;
 
 public class GlobalShop extends Shop {
 
@@ -95,5 +96,15 @@ public class GlobalShop extends Shop {
             ShopRecord record = inventory.get(item);
             log.info(String.format("   %6d:%-2d %-6.2f %-6.2f %-3d %-3d", item.getId(), item.getSubTypeId(), record.getBuyPrice(), record.getSellPrice(), record.getStock(), record.getMaxStock()));
         }
+    }
+
+    @Override
+    public boolean containsPoint(Location loc) {
+        return containsWorld(loc.getWorld().getName());
+    }
+
+    @Override
+    public boolean containsPoint(String worldName, int x, int y, int z) {
+        return containsWorld(worldName);
     }
 }

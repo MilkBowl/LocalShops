@@ -83,13 +83,10 @@ public class CommandShopDebug extends Command {
                 Matcher matcher = pattern.matcher(command);
                 if (matcher.find()) {
                     // Get Current Shop
-                    UUID shopUuid = pData.getCurrentShop();
-                    if (shopUuid != null) {
-                        shop = plugin.getShopManager().getLocalShop(shopUuid);
-                    }
+                    shop = plugin.getShopManager().getLocalShop(player.getLocation());
                     if (shop == null) {
                         sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
-                        return false;
+                        return true;
                     }
                 }
             } else {

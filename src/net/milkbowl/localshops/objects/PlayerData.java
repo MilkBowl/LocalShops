@@ -62,52 +62,11 @@ public class PlayerData {
         xyzB = xyz.clone();
     }
 
-    public boolean addPlayerToShop(Shop shop) {
-        String playerWorld = plugin.getServer().getPlayer(playerName).getWorld().getName();
-
-        if (shop instanceof LocalShop) {
-            if (!playerIsInShop(shop) && ((LocalShop) shop).getWorld().equals(playerWorld)) {
-                shopList.add(shop.getUuid());
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
     public boolean playerIsInShop(Shop shop) {
-        String playerWorld = plugin.getServer().getPlayer(playerName).getWorld().getName();
-
-        if (shop instanceof GlobalShop) {
-            if (((GlobalShop) shop).containsWorld(playerWorld)) {
-                return true;
-            }
-        } else if (shop instanceof LocalShop) {
-            if (shopList.contains(shop.getUuid())) {
-                if (((LocalShop) shop).getWorld().equals(playerWorld)) {
-                    return true;
-                }
-            }
+        if (shop.containsPoint(plugin.getServer().getPlayer(playerName).getLocation())) {
+            return true;
         }
         return false;
-    }
-
-    public void removePlayerFromShop(Player player, UUID uuid) {
-        shopList.remove(uuid);
-    }
-
-    public List<UUID> playerShopsList(String playerName) {
-        return shopList;
-    }
-
-    public UUID getCurrentShop() {
-        if (shopList.size() == 1) {
-            return shopList.get(0);
-        } else {
-            return null;
-        }
     }
 
     /*

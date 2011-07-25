@@ -320,13 +320,11 @@ public abstract class Command {
     }
 
     protected boolean notifyPlayers(Shop shop, String[] messages) {
-        Iterator<PlayerData> it = plugin.getPlayerData().values().iterator();
-        while (it.hasNext()) {
-            PlayerData p = it.next();
-            if (p.shopList.contains(shop.getUuid())) {
-                Player thisPlayer = plugin.getServer().getPlayer(p.playerName);
+        Player[] players = plugin.getServer().getOnlinePlayers();
+        for(Player p : players) {
+            if(shop.containsPoint(p.getLocation())) {
                 for (String message : messages) {
-                    thisPlayer.sendMessage(message);
+                    p.sendMessage(message);
                 }
             }
         }
@@ -335,16 +333,11 @@ public abstract class Command {
 
     protected Shop getCurrentShop(Player player) {
         Shop shop = null;
-        UUID shopUuid = null;
-        PlayerData pData = plugin.getPlayerData().get(player.getName());
         // Get Current Shop
         if (isGlobal) {
             shop = plugin.getShopManager().getGlobalShop(player.getWorld());
         } else if (!isGlobal) {
-            shopUuid = pData.getCurrentShop();
-            if (shopUuid != null) {
-                shop = plugin.getShopManager().getLocalShop(shopUuid);
-            }
+            shop = plugin.getShopManager().getLocalShop(player.getLocation());
         }
 
         return shop;

@@ -105,6 +105,10 @@ public class LocalShop extends Shop {
         }
     }
 
+    public boolean containsPoint(Location loc) {
+        return containsPoint(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+    }
+
     public boolean containsPoint(String worldName, int x, int y, int z) {
         for (ShopLocation shopLoc : shopLocations) {
             if (world.equals(worldName)) {
