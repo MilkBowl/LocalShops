@@ -88,4 +88,9 @@ public class Item {
     public ItemStack toStack() {
         return new ItemStack(this.material, 1, subTypeId);
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s[%d:%d]", name, material.getId(), subTypeId);
+    }
 }
