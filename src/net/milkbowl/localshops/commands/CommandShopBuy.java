@@ -350,7 +350,7 @@ public class CommandShopBuy extends Command {
             }
         } else {
             if (!shop.getOwner().equals(player.getName())) {
-                if (!plugin.getEcon().depositPlayer(player.getName(), totalCost).transactionSuccess()) {
+                if (!plugin.getEcon().depositPlayer(shop.getOwner(), totalCost).transactionSuccess()) {
                     player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
                     return true;
                 }
