@@ -64,6 +64,7 @@ public enum MsgType {
     CMD_ADM_SET_CFG_SHOP_NOTIFICATION("Command.Admin.SetConfig.ShopNotification"),
     CMD_ADM_SET_CFG_CHAT_MAX_LINES("Command.Admin.SetConfig.ChatMaxLines"),
     CMD_ADM_SET_CFG_LOG_TRANSACTIONS("Command.Admin.SetConfig.LogTransactions"),
+    CMD_ADM_SET_CFG_MOVE_EVENTS("Command.Admin.SetConfig.MoveEvents"),
     CMD_SHP_ADD_TOO_DAM("Command.Shop.Add.TooDamaged"),
     CMD_SHP_ADD_DMG_LESS_THAN("Command.Shop.Add.DamageLessThan"),
     CMD_SHP_ADD_USAGE("Command.Shop.Add.Usage"),

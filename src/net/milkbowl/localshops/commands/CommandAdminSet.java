@@ -579,6 +579,35 @@ public class CommandAdminSet extends Command {
             return true;
         }
 
+        // Get move events
+        matcher.reset();
+        pattern = Pattern.compile("(?i)(move-events)$");
+        matcher = pattern.matcher(command);
+        if (matcher.find()) {
+            String key = matcher.group(1);
+            sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_ADM_SET_CFG_MOVE_EVENTS));
+            sender.sendMessage(key + "=" + (Config.getSrvMoveEvents() ? plugin.getResourceManager().getString(MsgType.BASE_TRUE) : plugin.getResourceManager().getString(MsgType.BASE_FALSE)));
+            return true;
+        }
+
+
+        // Set move events
+        matcher.reset();
+        pattern = Pattern.compile("(?i)(move-events)\\s+(.*)");
+        matcher = pattern.matcher(command);
+        if (matcher.find()) {
+            String key = matcher.group(1);
+            String value = matcher.group(2);
+            try {
+                boolean x = value.equalsIgnoreCase(plugin.getResourceManager().getString(MsgType.BASE_TRUE));
+                Config.setSrvMoveEvents(x);
+                sender.sendMessage(key + "=" + value);
+            } catch (Exception e) {
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_INVALID_VALUE));
+            }
+            return true;
+        }
+
         // Default return
         return adminHelp();
     }
@@ -596,6 +625,7 @@ public class CommandAdminSet extends Command {
         sender.sendMessage("   " + "/" + commandLabel + " max-height <value>");
         sender.sendMessage("   " + "/" + commandLabel + " max-width <value>");
         sender.sendMessage("   " + "/" + commandLabel + " move-cost <value>");
+        sender.sendMessage("   " + "/" + commandLabel + " move-events <value>");
         sender.sendMessage("   " + "/" + commandLabel + " report-stats <value>");
         sender.sendMessage("   " + "/" + commandLabel + " shop-cost <value>");
         sender.sendMessage("   " + "/" + commandLabel + " shop-height <value>");
