@@ -48,6 +48,7 @@ public class CommandShopBrowse extends Command {
         super(plugin, commandLabel, sender, command, isGlobal);
     }
 
+    @Override
     public boolean process() {
         Shop shop = null;
 
@@ -178,7 +179,7 @@ public class CommandShopBrowse extends Command {
                 try {
                     subMessage += ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + plugin.getEcon().format(price) + ChatColor.DARK_AQUA + "]";
                 } catch (NumberFormatException e) {
-                    log.log(Level.WARNING, "NumberFormatException occurred on " + price, e);
+                    log.log(Level.WARNING, "NumberFormatException occurred on " + price + " from Shop " + shop.getUuid().toString() + " on Item " + item.toString(), e);
                 }
                 // get stack size
                 if (sell) {
