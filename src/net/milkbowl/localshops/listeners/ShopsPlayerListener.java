@@ -178,7 +178,9 @@ public class ShopsPlayerListener extends PlayerListener {
             plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
         }
 
-        plugin.checkPlayerPosition(player);
+        if(Config.getSrvMoveEvents()) {
+            plugin.checkPlayerPosition(player);
+        }
     }
 
     @Override
