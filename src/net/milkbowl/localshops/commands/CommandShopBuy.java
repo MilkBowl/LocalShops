@@ -341,16 +341,24 @@ public class CommandShopBuy extends Command {
         /**
          * Attempt the transaction - if it errors at this point then there is a serious issue.
          *
-         * No need for nested ifs.  If the shop is not unlimited money it shouldn't ever try to charge the player.
+         *
+         * Also we should NEVER attempt loop transaction sales as they are incredibly inefficient.
          */
         if (shop.isUnlimitedMoney() && !shop.getOwner().equals(player.getName())) {
-            if (plugin.getEcon().withdrawPlayer(player.getName(), totalCost).transactionSuccess()) {
+            if (!plugin.getEcon().withdrawPlayer(player.getName(), totalCost).transactionSuccess()) {
                 player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
                 return true;
             }
         } else {
             if (!shop.getOwner().equals(player.getName())) {
-                if (!plugin.getEcon().depositPlayer(shop.getOwner(), totalCost).transactionSuccess()) {
+                if (plugin.getEcon().depositPlayer(shop.getOwner(), totalCost).transactionSuccess()) {
+                    if (!plugin.getEcon().withdrawPlayer(player.getName(), totalCost).transactionSuccess()) {
+                        // Refund owner, send message
+                        plugin.getEcon().withdrawPlayer(shop.getOwner(), totalCost);
+                        player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
+                        return true;
+                    }
+                } else {
                     player.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_UNEXPECTED_MONEY_ISSUE));
                     return true;
                 }
