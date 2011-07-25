@@ -66,6 +66,7 @@ public class Config {
     private static boolean srvReport = true;
     private static String srvReportUrl = "http://stats.cereal.sh/";
     private static int srvReportInterval = 21600;
+    private static boolean srvMoveEvents = true;
     // Dynamic Shop Price Change variables
     private static int globalBaseStock = 0;
     private static double globalVolatility = 25.0;
@@ -112,13 +113,7 @@ public class Config {
         properties.setProperty("sign-bundle-color", signBundleColor);
         properties.setProperty("sign-default-color", signDefaultColor);
         properties.setProperty("sign-stock-color", signStockColor);
-        /*
-         * Disabled - for future use with event system
-        properties.setProperty("dynamic-interval", String.valueOf(dynamicInterval));
-        properties.setProperty("dynamic-max-price-change", String.valueOf(dynamicMaxPriceChange));
-        properties.setProperty("dynamic-min-price-change", String.valueOf(dynamicMinPriceChange));
-        properties.setProperty("dynamic-chance", String.valueOf(dynamicChance));
-         */
+
         properties.setProperty("max-damage", String.valueOf(itemMaxDamage));
 
         properties.setProperty("log-transactions", String.valueOf(srvLogTransactions));
@@ -131,6 +126,8 @@ public class Config {
         properties.setProperty("global-shops", String.valueOf(globalShopsEnabled));
 
         properties.setProperty("chat-max-lines", String.valueOf(chatMaxLines));
+
+        properties.setProperty("move-events", String.valueOf(srvMoveEvents));
 
         FileOutputStream stream = null;
         try {
@@ -183,13 +180,6 @@ public class Config {
 
         globalBaseStock = Integer.parseInt(properties.getProperty("global-base-stock", String.valueOf(globalBaseStock)));
         globalVolatility = Double.parseDouble(properties.getProperty("global-volatility", String.valueOf(globalVolatility)));
-        /*
-         * Disabled - save for future use with event system
-        dynamicInterval = Integer.parseInt(properties.getProperty("dynamic-interval", String.valueOf(dynamicInterval)));
-        dynamicMaxPriceChange = Integer.parseInt(properties.getProperty("dynamic-max-price-change", String.valueOf(dynamicMaxPriceChange)));
-        dynamicMinPriceChange = Integer.parseInt(properties.getProperty("dynamic-min-price-change", String.valueOf(dynamicMinPriceChange)));
-        dynamicChance = Integer.parseInt(properties.getProperty("dynamic-chance", String.valueOf(dynamicChance)));
-         */
 
         playerMaxShops = Integer.parseInt(properties.getProperty("shops-per-player", String.valueOf(playerMaxShops)));
 
@@ -202,6 +192,7 @@ public class Config {
         srvUuid = UUID.fromString(properties.getProperty("uuid", UUID.randomUUID().toString()));
         srvReport = Boolean.parseBoolean(properties.getProperty("report-stats", String.valueOf(srvReport)));
         srvDebug = Boolean.parseBoolean(properties.getProperty("debug", String.valueOf(srvDebug)));
+        srvMoveEvents = Boolean.parseBoolean(properties.getProperty("move-events", String.valueOf(srvMoveEvents)));
 
 
         findMaxDistance = Integer.parseInt(properties.getProperty("find-max-distance", String.valueOf(findMaxDistance)));
@@ -492,6 +483,10 @@ public class Config {
         return srvDebug;
     }
 
+    public static boolean getSrvMoveEvents() {
+        return srvMoveEvents;
+    }
+
     /**
      * Get server UUID
      * @return
@@ -522,6 +517,10 @@ public class Config {
      */
     public static void setSrvDebug(boolean debug) {
         srvDebug = debug;
+    }
+
+    public static void setSrvMoveEvents(boolean moveEvents) {
+        srvMoveEvents = moveEvents;
     }
 
     @Deprecated

@@ -91,19 +91,22 @@ public class LocalShops extends JavaPlugin {
 
         // Register our events
         PluginManager pm = getServer().getPluginManager();
-        pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Monitor, this);
+        if(Config.getSrvMoveEvents()) {
+            // Only register movement based events if move-events is enabled
+            pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Monitor, this);
+            pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Monitor, this);
+            pm.registerEvent(Event.Type.PLAYER_PORTAL, playerListener, Priority.Monitor, this);
+            pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Monitor, this);
+            pm.registerEvent(Event.Type.VEHICLE_MOVE, vehicleListener, Priority.Monitor, this);
+        }
         pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
         pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
         pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
         pm.registerEvent(Event.Type.PLAYER_KICK, playerListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.PLAYER_PORTAL, playerListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Monitor, this);
         pm.registerEvent(Event.Type.SIGN_CHANGE, blockListener, Priority.Normal, this);
         pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Priority.Normal, this);
         pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Normal, this);
         pm.registerEvent(Event.Type.ENTITY_EXPLODE, entityListener, Priority.Normal, this);
-        pm.registerEvent(Event.Type.VEHICLE_MOVE, vehicleListener, Priority.Monitor, this);
 
         // Register Commands
         CommandExecutor cmdExec = new ShopCommandExecutor(this);
