@@ -20,8 +20,6 @@
 package net.milkbowl.localshops.commands;
 
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.UUID;
 
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.objects.Item;
@@ -29,8 +27,6 @@ import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.GlobalShop;
 import net.milkbowl.localshops.objects.LocalShop;
 import net.milkbowl.localshops.objects.PermType;
-import net.milkbowl.localshops.objects.PlayerData;
-import net.milkbowl.localshops.objects.Shop;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -46,6 +42,7 @@ public class CommandShopDestroy extends Command {
         super(plugin, commandLabel, sender, command, isGlobal);
     }
 
+    @Override
     public boolean process() {
         if (!(sender instanceof Player) || !canUseCommand(PermType.DESTROY)) {
             sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_USER_ACCESS_DENIED));
@@ -58,7 +55,6 @@ public class CommandShopDestroy extends Command {
          */
 
         Player player = (Player) sender;
-        String playerName = player.getName();
 
         // get the shop the player is currently in
         if (!isGlobal) {
