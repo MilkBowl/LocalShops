@@ -175,9 +175,9 @@ public abstract class Shop implements Comparator<Shop>, Serializable {
         if (item == null) {
             return false;
         }
-        ShopRecord thisItem = new ShopRecord(buyPrice, sellPrice, stock, maxStock, dynamicItem);
+        ShopRecord record = new ShopRecord(item, buyPrice, sellPrice, stock, maxStock, dynamicItem);
 
-        inventory.put(item, thisItem);
+        inventory.put(item, record);
 
         return true;
     }

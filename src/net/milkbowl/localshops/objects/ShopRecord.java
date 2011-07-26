@@ -23,6 +23,7 @@ import net.milkbowl.localshops.DynamicManager;
 
 public class ShopRecord {
 
+    private Item item = null;
     private double buyPrice = 0;
     private double sellPrice = 0;
     private int stock = 0;
@@ -30,7 +31,8 @@ public class ShopRecord {
     private boolean dynamic = false;
     private int maxStock = 0;
 
-    public ShopRecord(double buyPrice, double sellPrice, int stock, int maxStock, boolean dynamic) {
+    public ShopRecord(Item item, double buyPrice, double sellPrice, int stock, int maxStock, boolean dynamic) {
+        this.item = item;
         setBuyPrice(buyPrice);
         setSellPrice(sellPrice);
         setStock(stock);
@@ -90,10 +92,9 @@ public class ShopRecord {
     }
 
     public double getSellPrice() {
-        // TODO: Fix bug!
         //for dynamic items use the currently adjusted price
-        if (dynamic && DynamicManager.getPriceAdjMap().get(this) != null) {
-            return sellPrice * DynamicManager.getPriceAdjMap().get(this);
+        if (dynamic && DynamicManager.getPriceAdjMap().get(item) != null) {
+            return sellPrice * DynamicManager.getPriceAdjMap().get(item);
         }
 
         return sellPrice;
@@ -108,10 +109,9 @@ public class ShopRecord {
     }
 
     public double getBuyPrice() {
-        // TODO: Fix bug!
         //for dynamic items use the current dynamic price
-        if (dynamic && DynamicManager.getPriceAdjMap().get(this) != null) {
-            return buyPrice * DynamicManager.getPriceAdjMap().get(this);
+        if (dynamic && DynamicManager.getPriceAdjMap().get(item) != null) {
+            return buyPrice * DynamicManager.getPriceAdjMap().get(item);
         }
 
         return buyPrice;
