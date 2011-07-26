@@ -39,13 +39,17 @@ public class ShopRecord {
     }
 
     public void setSell(double sellPrice) {
-        if(sellPrice != Double.NaN) {
-           this.sellPrice = sellPrice;
+        if(sellPrice == Double.NaN) {
+            this.sellPrice = 0;
+        } else {
+            this.sellPrice = sellPrice;
         }
     }
 
     public void setBuy(double buyPrice) {
-        if(buyPrice != Double.NaN) {
+        if(buyPrice == Double.NaN) {
+            this.buyPrice = 0;
+        } else {
             this.buyPrice = buyPrice;
         }
     }
@@ -54,11 +58,11 @@ public class ShopRecord {
         return maxStock;
     }
 
-    public void setMaxStock(int maxStock) {
+    public final void setMaxStock(int maxStock) {
         this.maxStock = maxStock;
     }
 
-    public void setStock(int stock) {
+    public final void setStock(int stock) {
         this.stock = stock;
     }
 
@@ -77,13 +81,16 @@ public class ShopRecord {
         return stock;
     }
 
-    public void setSellPrice(double price) {
-        if(price != Double.NaN) {
-            sellPrice = price;
+    public final void setSellPrice(double price) {
+        if(price == Double.NaN) {
+            this.sellPrice = 0;
+        } else {
+            this.sellPrice = price;
         }
     }
 
     public double getSellPrice() {
+        // TODO: Fix bug!
         //for dynamic items use the currently adjusted price
         if (dynamic && DynamicManager.getPriceAdjMap().get(this) != null) {
             return sellPrice * DynamicManager.getPriceAdjMap().get(this);
@@ -92,13 +99,16 @@ public class ShopRecord {
         return sellPrice;
     }
 
-    public void setBuyPrice(double price) {
-        if(price != Double.NaN) {
-            buyPrice = price;
+    public final void setBuyPrice(double price) {
+        if(price == Double.NaN) {
+            this.buyPrice = 0;
+        } else {
+            this.buyPrice = price;
         }
     }
 
     public double getBuyPrice() {
+        // TODO: Fix bug!
         //for dynamic items use the current dynamic price
         if (dynamic && DynamicManager.getPriceAdjMap().get(this) != null) {
             return buyPrice * DynamicManager.getPriceAdjMap().get(this);
@@ -116,7 +126,7 @@ public class ShopRecord {
      * 
      * @param Boolean dynamic
      */
-    public void setDynamic(boolean dynamic) {
+    public final void setDynamic(boolean dynamic) {
         this.dynamic = dynamic;
     }
 
