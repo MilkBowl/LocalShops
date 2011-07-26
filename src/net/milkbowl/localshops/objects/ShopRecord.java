@@ -41,7 +41,7 @@ public class ShopRecord {
     }
 
     public void setSell(double sellPrice) {
-        if(sellPrice == Double.NaN) {
+        if(Double.isNaN(sellPrice)) {
             this.sellPrice = 0;
         } else {
             this.sellPrice = sellPrice;
@@ -49,7 +49,7 @@ public class ShopRecord {
     }
 
     public void setBuy(double buyPrice) {
-        if(buyPrice == Double.NaN) {
+        if(Double.isNaN(buyPrice)) {
             this.buyPrice = 0;
         } else {
             this.buyPrice = buyPrice;
@@ -84,7 +84,7 @@ public class ShopRecord {
     }
 
     public final void setSellPrice(double price) {
-        if(price == Double.NaN) {
+        if(Double.isNaN(price)) {
             this.sellPrice = 0;
         } else {
             this.sellPrice = price;
@@ -101,7 +101,7 @@ public class ShopRecord {
     }
 
     public final void setBuyPrice(double price) {
-        if(price == Double.NaN) {
+        if(Double.isNaN(price)) {
             this.buyPrice = 0;
         } else {
             this.buyPrice = price;
