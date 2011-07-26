@@ -133,9 +133,16 @@ public class Config {
         try {
             stream = new FileOutputStream(Config.dirPath + "localshops.properties", false);
             properties.store(stream, null);
-            stream.close();
         } catch (IOException e) {
             log.log(Level.WARNING, "IOException writing config file: localshops.properties", e);
+        } finally {
+            try {
+                if(stream != null) {
+                    stream.close();
+                }
+            } catch (IOException ex) {
+                log.log(Level.WARNING, "Failed to close stream (Config.save()", ex);
+            }
         }
     }
 

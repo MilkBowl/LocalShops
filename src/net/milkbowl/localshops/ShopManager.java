@@ -909,10 +909,20 @@ public class ShopManager {
         }
 
         String fileName = Config.getDirShopsActivePath() + shop.getUuid().toString() + ".shop";
+        FileOutputStream stream = null;
         try {
-            props.store(new FileOutputStream(fileName, false), "LocalShops Config Version 2.0");
+            stream = new FileOutputStream(fileName, false);
+            props.store(stream, "LocalShops Config Version 2.0");
         } catch (IOException e) {
-            log.warning("IOException: " + e.getMessage());
+            log.log(Level.WARNING, "IOException: {0}", e.getMessage());
+        } finally {
+            try {
+                if(stream != null) {
+                    stream.close();
+                }
+            } catch (IOException ex) {
+                log.log(Level.WARNING, "Failed to close stream (ShopManager.saveShop(...)", ex);
+            }
         }
 
         return true;
@@ -967,6 +977,7 @@ public class ShopManager {
         String filePath = Config.getFileTransactionLog();
 
         File logFile = new File(filePath);
+        FileOutputStream logFileOut = null;
         try {
 
             logFile.createNewFile();
@@ -1017,13 +1028,20 @@ public class ShopManager {
             fileOutput += ": ";
             fileOutput += "\n";
 
-            FileOutputStream logFileOut = new FileOutputStream(logFile, true);
+            logFileOut = new FileOutputStream(logFile, true);
             logFileOut.write(fileOutput.getBytes());
-            logFileOut.close();
 
         } catch (IOException e1) {
             System.out.println(plugin.getDescription().getName() + ": Error - Could not write to file " + logFile.getName());
             return false;
+        } finally {
+            try {
+                if(logFileOut != null) {
+                    logFileOut.close();
+                }
+            } catch (IOException ex) {
+                log.log(Level.WARNING, "Failed to close stream (ShopManager.logTransaction(...)", ex);
+            }
         }
 
         return true;
