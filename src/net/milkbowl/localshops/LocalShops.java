@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.milkbowl.localshops.commands.ShopCommandExecutor;
@@ -121,9 +122,13 @@ public class LocalShops extends JavaPlugin {
 
         // setup the file IO
         File folderDir = new File(Config.getDirPath());
-        folderDir.mkdir();
         File shopsDir = new File(Config.getDirShopsActivePath());
-        shopsDir.mkdir();
+        if(folderDir.mkdir()) {
+            log.log(Level.INFO, "Created directory ''{0}''", folderDir.getName());
+        }
+        if(shopsDir.mkdir()) {
+            log.log(Level.INFO, "Created directory ''{0}''", shopsDir.getName());
+        }
 
         // read the shops into memory
         getShopManager().loadShops(shopsDir);
