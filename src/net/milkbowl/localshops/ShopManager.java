@@ -501,9 +501,13 @@ public class ShopManager {
             br.close();
 
             File dir = new File(Config.getDirShopsConvertedPath());
-            dir.mkdir();
+            if(dir.mkdir()) {
+                log.log(Level.INFO, "Created directory ''{0}''", dir.getName());
+            }
             if (file.renameTo(new File(dir, file.getName()))) {
-                file.delete();
+                if(!file.delete()) {
+                    log.log(Level.WARNING, "Failed to delete ''{0}'' during migration.", file.getName());
+                }
                 return shop;
             } else {
                 return null;
@@ -819,9 +823,10 @@ public class ShopManager {
 
     public boolean isolateBrokenShopFile(File file) {
         File dir = new File(Config.getDirShopsBrokenPath());
-        dir.mkdir();
-        if (file.renameTo(new File(dir, file.getName()))) {
-            file.delete();
+        if(dir.mkdir()) {
+            log.log(Level.INFO, "Created directory ''{0}''", dir.getName());
+        }
+        if (file.renameTo(new File(dir, file.getName())) && file.delete()) {
             return true;
         } else {
             return false;
@@ -949,9 +954,11 @@ public class ShopManager {
         // delete the file from the directory
         String filePath = Config.getDirShopsActivePath() + shop.getUuid() + ".shop";
         File shopFile = new File(filePath);
-        shopFile.delete();
-
-        return true;
+        if(shopFile.delete()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void mapWorldShop(String world, GlobalShop shop) {
@@ -980,7 +987,9 @@ public class ShopManager {
         FileOutputStream logFileOut = null;
         try {
 
-            logFile.createNewFile();
+            if(logFile.createNewFile()) {
+                log.log(Level.INFO, "Created file ''{0}''", logFile.getName());
+            }
 
             String fileOutput = "";
 
