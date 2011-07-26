@@ -31,19 +31,23 @@ public class ShopRecord {
     private int maxStock = 0;
 
     public ShopRecord(double buyPrice, double sellPrice, int stock, int maxStock, boolean dynamic) {
-        this.buyPrice = buyPrice;
-        this.sellPrice = sellPrice;
-        this.stock = stock;
-        this.maxStock = maxStock;
-        this.dynamic = dynamic;
+        setBuyPrice(buyPrice);
+        setSellPrice(sellPrice);
+        setStock(stock);
+        setMaxStock(maxStock);
+        setDynamic(dynamic);
     }
 
     public void setSell(double sellPrice) {
-        this.sellPrice = sellPrice;
+        if(sellPrice != Double.NaN) {
+           this.sellPrice = sellPrice;
+        }
     }
 
     public void setBuy(double buyPrice) {
-        this.buyPrice = buyPrice;
+        if(buyPrice != Double.NaN) {
+            this.buyPrice = buyPrice;
+        }
     }
 
     public int getMaxStock() {
@@ -74,7 +78,9 @@ public class ShopRecord {
     }
 
     public void setSellPrice(double price) {
-        sellPrice = price;
+        if(price != Double.NaN) {
+            sellPrice = price;
+        }
     }
 
     public double getSellPrice() {
@@ -87,7 +93,9 @@ public class ShopRecord {
     }
 
     public void setBuyPrice(double price) {
-        buyPrice = price;
+        if(price != Double.NaN) {
+            buyPrice = price;
+        }
     }
 
     public double getBuyPrice() {

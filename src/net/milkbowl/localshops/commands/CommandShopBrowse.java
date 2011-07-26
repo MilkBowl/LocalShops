@@ -176,11 +176,7 @@ public class CommandShopBrowse extends Command {
                 if (price == 0) {
                     continue;
                 }
-                try {
-                    subMessage += ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + plugin.getEcon().format(price) + ChatColor.DARK_AQUA + "]";
-                } catch (NumberFormatException e) {
-                    log.log(Level.WARNING, "NumberFormatException occurred on " + price + " from Shop " + shop.getUuid().toString() + " on Item " + item.toString(), e);
-                }
+                subMessage += ChatColor.DARK_AQUA + " [" + ChatColor.WHITE + plugin.getEcon().format(price) + ChatColor.DARK_AQUA + "]";
                 // get stack size
                 if (sell) {
                     int stock = shop.getItem(item).getStock();
