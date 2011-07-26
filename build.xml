@@ -41,7 +41,7 @@
   
 	<target name="compile" description="Compilation target">
 		<echo>Compiling</echo>
-		<javac srcdir="." destdir="bin" debug="on" debuglevel="lines,vars,source" classpathref="classpath">
+		<javac srcdir="." destdir="bin" debug="on" debuglevel="lines,vars,source" classpathref="classpath" includeantruntime="false">
 			<compilerarg value="-Xlint"/>
 		</javac>
 		<copy file="src/plugin.yml" tofile="bin/plugin.yml" />
