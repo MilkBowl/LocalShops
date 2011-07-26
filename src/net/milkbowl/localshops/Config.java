@@ -147,7 +147,9 @@ public class Config {
     }
 
     public static void load() {
-        new File(Config.dirPath).mkdir();
+        if(new File(Config.dirPath).mkdir()) {
+            log.log(Level.INFO, "Created configuration directory '" + Config.dirPath + "'");
+        }
 
         boolean save = false;
         Properties properties = new Properties();
