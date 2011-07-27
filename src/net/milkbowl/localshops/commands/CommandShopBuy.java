@@ -390,15 +390,10 @@ public class CommandShopBuy extends Command {
     }
 
     private int getBuyAmount(Player player, int amount, Item item, Shop shop) {
-
-        int originalAmount = amount;
-        //Get the total amount of stock in the shop
-
         //Lower our amount if the shop doesn't have enough stock to sell what was requested.
         if (!shop.isUnlimitedStock() && amount > shop.getItem(item).getStock()) {
             amount = shop.getItem(item).getStock();
         }
-        ;
 
         // check how many items the user has room for
         int freeSpots = 0;
@@ -411,14 +406,15 @@ public class CommandShopBuy extends Command {
                 freeSpots += item.getMaxBundleSize() - thisSlot.getAmount();
             }
         }
-        //If player doesn't have enough slots free reduce the amount they can buy.
+        
+        // If player doesn't have enough slots free reduce the amount they can buy.
         if (amount > freeSpots) {
             amount = freeSpots;
         }
 
 
-        //Return with special amount if this is the shop owner,
-        //honestly the shop owner should be using /remove, but this is for compatibility.
+        // Return with special amount if this is the shop owner,
+        // honestly the shop owner should be using /remove, but this is for compatibility.
         if (player.getName().equals(shop.getOwner()) && !shop.isUnlimitedStock()) {
             return amount;
         } else if (player.getName().equals(shop.getOwner()) && shop.isUnlimitedStock()) {
@@ -429,12 +425,8 @@ public class CommandShopBuy extends Command {
         double totalPrice = shop.getItem(item).getBuyPrice() * amount;
         if (totalPrice > plugin.getEcon().getBalance(player.getName())) {
             amount = (int) Math.floor(plugin.getEcon().getBalance(player.getName()) / shop.getItem(item).getBuyPrice());
+            player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PLAYER_AFFORD_QTY, new String[]{ "%AMOUNT%", "%ITEMNAME%" }, new String[]{ String.valueOf(amount), item.getName() } ));
         }
-
-        if (amount < originalAmount) {
-            player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_ORDER_REDUCED, new String[]{"%BUNDLESIZE%", "%AMOUNT%"}, new Object[]{1, amount}));
-        }
-
 
         return amount;
     }
