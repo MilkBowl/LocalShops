@@ -272,13 +272,18 @@ public class LocalShops extends JavaPlugin {
     private void notifyPlayerLeftShop(Player player, UUID shopUuid) {
         // TODO Add formatting
         Shop shop = getShopManager().getLocalShop(shopUuid);
-        player.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] You have left the shop " + ChatColor.WHITE + shop.getName());
+        if(shop != null) {
+            player.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] You have left the shop " + ChatColor.WHITE + shop.getName());
+        } else {
+            player.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] You are no longer in a shop.");
+        }
     }
 
     private void notifyPlayerEnterShop(Player player, UUID shopUuid) {
         // TODO Add formatting
         Shop shop = getShopManager().getLocalShop(shopUuid);
-        player.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] You have entered the shop " + ChatColor.WHITE + shop.getName());
-
+        if(shop != null) {
+            player.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] You have entered the shop " + ChatColor.WHITE + shop.getName());
+        }
     }
 }
