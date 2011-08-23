@@ -37,27 +37,14 @@ public class ShopLocation {
 
     public ShopLocation(int x1, int y1, int z1, int x2, int y2, int z2) {
         //second point should always be set to the larger number
-        if (x1 > x2) {
-            this.x1 = x2;
-            this.x2 = x1;
-        } else {
-            this.x1 = x1;
-            this.x2 = x2;
-        }
-        if (y1 > y2) {
-            this.y1 = y2;
-            this.y2 = y1;
-        } else {
-            this.y1 = y1;
-            this.y2 = y2;
-        }
-        if (z1 > z2) {
-            this.z1 = z2;
-            this.z2 = z1;
-        } else {
-            this.z1 = z1;
-            this.z2 = z2;
-        }
+    	this.x1 = Math.min(x1, x2);
+    	this.x2 = Math.max(x1, x2);
+    	
+    	this.y1 = Math.min(y1, y2);
+    	this.y2 = Math.max(y1, y2);
+    	
+    	this.z1 = Math.min(z1, z2);
+    	this.z2 = Math.min(z1, z2);
     }
 
     public ShopLocation(int[] locationA, int[] locationB) {
