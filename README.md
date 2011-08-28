@@ -18,8 +18,8 @@ and plugin developers alike.  Vault is required for LocalShops.
 
 ## Permissions
 LocalShops has different types of shops that can be used, global and local.
-Global shops are accessable and configurable based upon a world locale, while
-Local shops are accessable and configurable based upon a cuboid within a world.
+Global shops are accessible and configurable based upon a world locale, while
+Local shops are accessible and configurable based upon a cuboid within a world.
 Permissions are separated to allow for different permission levels and as such
 the type needs to be included.
 
