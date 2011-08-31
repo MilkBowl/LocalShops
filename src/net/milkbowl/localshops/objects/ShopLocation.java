@@ -44,7 +44,7 @@ public class ShopLocation {
     	this.y2 = Math.max(y1, y2);
     	
     	this.z1 = Math.min(z1, z2);
-    	this.z2 = Math.min(z1, z2);
+    	this.z2 = Math.max(z1, z2);
     }
 
     public ShopLocation(int[] locationA, int[] locationB) {
