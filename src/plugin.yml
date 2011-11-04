@@ -38,3 +38,33 @@ commands:
     description: Command for setting global LocalShops values
     usage: |
            /<command> - displays command help
+permissions:
+  localshops.local.*:
+    description: Gives access to buy, sell, and browse local shops
+    children:
+      localshops.local.buy: true
+      localshops.local.sell: true
+      localshops.local.browse: true
+  localshops.global.*:
+    description: Gives access to buy, sell, and browse global shops
+    children:
+      localshops.global.buy: true
+      localshops.global.sell: true
+      localshops.global.browse: true
+  localshops.manager.*:
+    description: Gives access to manage and create local shops
+    children:
+      localshops.manager.add: true
+      localshops.manager.create: true
+      localshops.manager.destroy: true
+      localshops.manager.move: true
+      localshops.manager.remove: true
+      localshops.manager.select: true
+      localshops.manager.set: true
+      localshops.manager.set.owner: true
+  localshops.admin.*:
+    description: Gives access to manage all shops on the server
+    children: 
+      localshops.admin.local: true
+      localshops.admin.global: true
+      localshops.admin.server: true
