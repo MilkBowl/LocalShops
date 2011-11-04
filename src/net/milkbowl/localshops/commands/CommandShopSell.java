@@ -127,7 +127,7 @@ public class CommandShopSell extends Command {
         // Command matching
 
         // sell int
-        Pattern pattern = Pattern.compile("(?i)sell\\s+(\\d+)");
+        Pattern pattern = Pattern.compile("(?i)sell\\s+(\\d+)$");
         Matcher matcher = pattern.matcher(command);
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
@@ -141,7 +141,7 @@ public class CommandShopSell extends Command {
 
         // sell int int
         matcher.reset();
-        pattern = Pattern.compile("(?i)sell\\s+(\\d+)\\s+(\\d+)");
+        pattern = Pattern.compile("(?i)sell\\s+(\\d+)\\s+(\\d+)$");
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
@@ -156,7 +156,7 @@ public class CommandShopSell extends Command {
 
         // sell int all
         matcher.reset();
-        pattern = Pattern.compile("(?i)sell\\s+(\\d+)\\s+all");
+        pattern = Pattern.compile("(?i)sell\\s+(\\d+)\\s+all$");
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
@@ -171,7 +171,7 @@ public class CommandShopSell extends Command {
 
         // sell int:int
         matcher.reset();
-        pattern = Pattern.compile("(?i)sell\\s+(\\d+):(\\d+)");
+        pattern = Pattern.compile("(?i)sell\\s+(\\d+):(\\d+)$");
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
@@ -186,7 +186,7 @@ public class CommandShopSell extends Command {
 
         // sell int:int int
         matcher.reset();
-        pattern = Pattern.compile("(?i)sell\\s+(\\d+):(\\d+)\\s+(\\d+)");
+        pattern = Pattern.compile("(?i)sell\\s+(\\d+):(\\d+)\\s+(\\d+)$");
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
@@ -202,7 +202,7 @@ public class CommandShopSell extends Command {
 
         // sell int:int all
         matcher.reset();
-        pattern = Pattern.compile("(?i)sell\\s+(\\d+):(\\d+)\\s+all");
+        pattern = Pattern.compile("(?i)sell\\s+(\\d+):(\\d+)\\s+all$");
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
@@ -218,7 +218,7 @@ public class CommandShopSell extends Command {
 
         // shop sell name, ... int
         matcher.reset();
-        pattern = Pattern.compile("(?i)sell\\s+(.*)\\s+(\\d+)");
+        pattern = Pattern.compile("(?i)sell\\s+(.*)\\s+(\\d+)$");
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             String itemName = matcher.group(1);
@@ -233,7 +233,7 @@ public class CommandShopSell extends Command {
 
         // shop sell name, ... all
         matcher.reset();
-        pattern = Pattern.compile("(?i)sell\\s+(.*)\\s+all");
+        pattern = Pattern.compile("(?i)sell\\s+(.*)\\s+all$");
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             Player player = (Player) sender;
@@ -249,7 +249,7 @@ public class CommandShopSell extends Command {
 
         // shop sell name, ...
         matcher.reset();
-        pattern = Pattern.compile("(?i)sell\\s+(.*)");
+        pattern = Pattern.compile("(?i)sell\\s+(.*)$");
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             String itemName = matcher.group(1);
