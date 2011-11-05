@@ -78,9 +78,8 @@ public class ShopsPlayerListener extends PlayerListener {
     @SuppressWarnings("deprecation")
     @Override
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.isCancelled()) {
+        if (event.isCancelled() || event.getClickedBlock() == null)
             return;
-        }
 
         Player player = event.getPlayer();
         String playerName = player.getName();
