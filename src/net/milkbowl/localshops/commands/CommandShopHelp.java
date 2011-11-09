@@ -42,10 +42,10 @@ public class CommandShopHelp extends Command {
         if (canUseCommand(PermType.ADD)) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " add" + ChatColor.DARK_AQUA + " - Add the item that you are holding to the shop.");
         }
-        if (canUseCommand(PermType.BROWSE)) {
+        if ((isGlobal && canUseCommand(PermType.GLOBAL_BROWSE)) || canUseCommand(PermType.BROWSE)) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " browse <buy|sell> " + ChatColor.DARK_AQUA + "- List the shop's inventory.");
         }
-        if (canUseCommand(PermType.BUY)) {
+        if ((isGlobal && canUseCommand(PermType.BUY)) || canUseCommand(PermType.BUY)) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " buy [itemname] [number] " + ChatColor.DARK_AQUA + "- Buy this item.");
         }
         if (canUseCommand(PermType.CREATE)) {
@@ -67,7 +67,7 @@ public class CommandShopHelp extends Command {
         if (canUseCommand(PermType.SELECT) && !isGlobal) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " select" + ChatColor.DARK_AQUA + " - Select two corners for custom shop size.");
         }
-        if (canUseCommand(PermType.SELL)) {
+        if ((isGlobal && canUseCommand(PermType.GLOBAL_SELL)) ||  canUseCommand(PermType.SELL)) {
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " sell <#|all>" + ChatColor.DARK_AQUA + " - Sell the item in your hand.");
             sender.sendMessage(ChatColor.WHITE + "   /" + commandLabel + " sell [itemname] [number]");
         }

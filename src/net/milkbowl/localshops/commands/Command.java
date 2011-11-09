@@ -19,8 +19,6 @@
  */
 package net.milkbowl.localshops.commands;
 
-import java.util.Iterator;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 import net.milkbowl.localshops.Config;

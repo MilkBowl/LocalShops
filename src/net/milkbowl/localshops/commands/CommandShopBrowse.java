@@ -96,7 +96,7 @@ public class CommandShopBrowse extends Command {
 
         // browse (buy|sell) pagenum
         matcher.reset();
-        pattern = Pattern.compile("(?i)bro.*\\s+(buy|sell|info)\\s+(\\d+)");
+        pattern = Pattern.compile("(?i)bro.*\\s+(buy|sell|info)\\s+(\\d+)$");
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             String type = matcher.group(1);
@@ -107,7 +107,7 @@ public class CommandShopBrowse extends Command {
 
         // browse (buy|sell)
         matcher.reset();
-        pattern = Pattern.compile("(?i)bro.*\\s+(buy|sell|info)");
+        pattern = Pattern.compile("(?i)bro.*\\s+(buy|sell|info)$");
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             String type = matcher.group(1);
@@ -117,7 +117,7 @@ public class CommandShopBrowse extends Command {
 
         // browse int
         matcher.reset();
-        pattern = Pattern.compile("(?i)bro.*\\s+(\\d+)");
+        pattern = Pattern.compile("(?i)bro.*\\s+(\\d+)$");
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             pageNumber = Integer.parseInt(matcher.group(1));
