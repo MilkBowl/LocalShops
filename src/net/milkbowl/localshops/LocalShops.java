@@ -20,7 +20,6 @@
 package net.milkbowl.localshops;
 
 import java.io.File;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
@@ -84,7 +83,12 @@ public class LocalShops extends JavaPlugin {
     public void onEnable() {
         resManager = new ResourceManager(getDescription(), new Locale(Config.getLocale()));
         log.info(resManager.getString(MsgType.MAIN_USING_LOCALE, new String[]{"%LOCALE%"}, new String[]{resManager.getLocale().getLanguage()}));
-
+        // Get services
+        if (!retrieveServices()) {
+        	log.info("[LocalShops] - An Econ or Permission plugin was not detected - Check to make sure you have both!");
+        	this.getServer().getPluginManager().disablePlugin(this);
+        	return;
+        }
         // add all the online users to the data trees
         for (Player player : this.getServer().getOnlinePlayers()) {
             getPlayerData().put(player.getName(), new PlayerData(this, player.getName()));
@@ -155,26 +159,22 @@ public class LocalShops extends JavaPlugin {
         // Start Scheduler thread
         threadManager.schedulerStart();
 
-        // Get services
-        retrieveServices();
     }
 
-    public void retrieveServices() {
-        Collection<RegisteredServiceProvider<Economy>> econs = this.getServer().getServicesManager().getRegistrations(net.milkbowl.vault.economy.Economy.class);
-        for (RegisteredServiceProvider<Economy> econ : econs) {
-            Economy e = econ.getProvider();
-            log.info(String.format("[%s] Found Service (Economy) %s", getDescription().getName(), e.getName()));
+    public boolean retrieveServices() {
+        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+        if (economyProvider != null) {
+            this.econ = economyProvider.getProvider();
+            log.info(String.format("[%s] Using Economy Provider %s", getDescription().getName(), econ.getName()));
         }
-        Collection<RegisteredServiceProvider<Permission>> perms = this.getServer().getServicesManager().getRegistrations(net.milkbowl.vault.permission.Permission.class);
-        for (RegisteredServiceProvider<Permission> perm : perms) {
-            Permission p = perm.getProvider();
-            log.info(String.format("[%s] Found Service (Permission) %s", getDescription().getName(), p.getName()));
+       
+        RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+        if (permissionProvider != null) {
+            this.perm = permissionProvider.getProvider();
+            log.info(String.format("[%s] Using Permission Provider %s", getDescription().getName(), perm.getName()));
         }
-
-        econ = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class).getProvider();
-        log.info(String.format("[%s] Using Economy Provider %s", getDescription().getName(), econ.getName()));
-        perm = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class).getProvider();
-        log.info(String.format("[%s] Using Permission Provider %s", getDescription().getName(), perm.getName()));
+        
+        return econ != null && perm != null;
     }
 
     public void onDisable() {
