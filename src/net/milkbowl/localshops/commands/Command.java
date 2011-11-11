@@ -245,9 +245,11 @@ public abstract class Command {
 			} else if (thisStack.getDurability() != item.getDurability()) {
 				continue;
 			}
+			log.info("Found itemstack with: " + thisStack.getAmount());
 			totalAmount += thisStack.getAmount();
+			log.info("New Total Amount: " + totalAmount);
 		}
-
+		log.info("Found total amount in inventory: " + totalAmount);
 		return totalAmount;
 	}
 
