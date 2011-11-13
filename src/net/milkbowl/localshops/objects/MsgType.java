@@ -99,7 +99,6 @@ public enum MsgType {
     CMD_SHP_CREATE_LOG("Command.Shop.Create.Log"),
     CMD_SHP_CREATE_SUCCESS("Command.Shop.Create.Success"),
     CMD_SHP_CREATE_FAIL("Command.Shop.Create.Fail"),
-    CMD_SHP_SET_BUNDLE_FAIL("Command.Shop.Set.Bundles.UnderOne"),
     CMD_SHP_NOT_ON_WORLD("Command.Shop.Addloc.NotOnWorld");
     String msg = null;
 

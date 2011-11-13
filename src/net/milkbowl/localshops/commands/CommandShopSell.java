@@ -382,7 +382,7 @@ public class CommandShopSell extends Command {
 
         //let our user know if there was any change in the amount
         if (amount != originalAmount) {
-            player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_ORDER_REDUCED, new String[]{"%BUNDLESIZE%", "%AMOUNT%"}, new Object[]{1, amount}));
+            player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_ORDER_REDUCED, new String[]{"%AMOUNT%"}, new Object[]{1, amount}));
         }
 
         return amount;
