@@ -336,7 +336,7 @@ public class CommandShopBuy extends Command {
             return false;
         }
 
-        double totalCost = amount * invItem.getBuyPrice();
+        double totalCost = amount * invItem.getSellPrice();
 
         /**
          * Attempt the transaction - if it errors at this point then there is a serious issue.
@@ -422,9 +422,9 @@ public class CommandShopBuy extends Command {
         }
 
         //Check player econ
-        double totalPrice = shop.getItem(item).getBuyPrice() * amount;
+        double totalPrice = shop.getItem(item).getSellPrice() * amount;
         if (totalPrice > plugin.getEcon().getBalance(player.getName())) {
-            amount = (int) Math.floor(plugin.getEcon().getBalance(player.getName()) / shop.getItem(item).getBuyPrice());
+            amount = (int) Math.floor(plugin.getEcon().getBalance(player.getName()) / shop.getItem(item).getSellPrice());
             player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_PLAYER_AFFORD_QTY, new String[]{ "%AMOUNT%", "%ITEMNAME%" }, new String[]{ String.valueOf(amount), item.getName() } ));
         }
 

@@ -292,7 +292,7 @@ public class CommandShopSell extends Command {
             return false;
         }
 
-        double totalCost = amount * invItem.getSellPrice();
+        double totalCost = amount * invItem.getBuyPrice();
 
         /**
          * Attempt the transaction - if it errors at this point then there is a serious issue.
@@ -377,11 +377,11 @@ public class CommandShopSell extends Command {
 
         //Reduce amount the player can sell if the owner doesn't have enough money, and shop is not unlimited stock.
         if (!shop.isUnlimitedMoney() && totalPrice > plugin.getEcon().getBalance(shop.getOwner())) {
-            amount = (int) Math.floor(plugin.getEcon().getBalance(shop.getOwner()) / shop.getItem(item).getSellPrice());
+            amount = (int) Math.floor(plugin.getEcon().getBalance(shop.getOwner()) / shop.getItem(item).getBuyPrice());
         }
 
         //let our user know if there was any change in the amount
-        if (amount < originalAmount) {
+        if (amount != originalAmount) {
             player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_ORDER_REDUCED, new String[]{"%BUNDLESIZE%", "%AMOUNT%"}, new Object[]{1, amount}));
         }
 

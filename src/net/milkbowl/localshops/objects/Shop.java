@@ -236,10 +236,18 @@ public abstract class Shop implements Comparator<Shop>, Serializable {
         return users;
     }
 
+    /**
+     * Returns true if this shop is set to unlimited stock
+     * @return unlimited stock
+     */
     public boolean isUnlimitedStock() {
         return unlimitedStock;
     }
 
+    /**
+     * Return true if this shop is set to unlimited money
+     * @return unlimitedMoney
+     */
     public boolean isUnlimitedMoney() {
         return unlimitedMoney;
     }
@@ -277,10 +285,20 @@ public abstract class Shop implements Comparator<Shop>, Serializable {
         return true;
     }
 
+    /**
+     * Sets how much the shop will buy this item for (for /shop sell)
+     * @param item
+     * @param price
+     */
     public void setItemBuyPrice(Item item, double price) {
         inventory.get(item).setBuyPrice(price);
     }
 
+    /**
+     * Sets how much this shop will sell the item for (for /shop buy)
+     * @param item
+     * @param price
+     */
     public void setItemSellPrice(Item item, double price) {
         inventory.get(item).setSellPrice(price);
     }
