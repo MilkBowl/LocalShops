@@ -168,10 +168,10 @@ public class CommandShopBrowse extends Command {
                 double price = 0;
                 if (buy) {
                     // get buy price
-                    price = shop.getItem(item).getBuyPrice();
+                    price = shop.getItem(item).getSellPrice();
                 }
                 if (sell) {
-                    price = shop.getItem(item).getSellPrice();
+                    price = shop.getItem(item).getBuyPrice();
                 }
                 if (price == 0) {
                     continue;

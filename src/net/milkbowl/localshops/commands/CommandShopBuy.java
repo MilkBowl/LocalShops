@@ -318,13 +318,13 @@ public class CommandShopBuy extends Command {
 
         // check if the shop is selling that item
         // check if the item has a price, or if this is a shop owner
-        if (invItem == null || invItem.getBuyPrice() == 0) {
+        if (invItem == null || invItem.getSellPrice() == 0) {
             player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_NOT_SELLING, new String[]{"%SHOPNAME%", "%ITEMNAME%"}, new Object[]{shop.getName(), item.getName()}));
             return false;
         } else if (invItem.getStock() == 0 && !shop.isUnlimitedStock()) {
             player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_SOLD_OUT, new String[]{"%SHOPNAME%", "%ITEMNAME%"}, new Object[]{shop.getName(), item.getName()}));
             return false;
-        } else if (invItem.getBuyPrice() == 0 && !isShopController(shop)) {
+        } else if (invItem.getSellPrice() == 0 && !isShopController(shop)) {
             player.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_SHOP_NOT_SELLING, new String[]{"%SHOPNAME%", "%ITEMNAME%"}, new Object[]{shop.getName(), item.getName()}));
             return false;
         }

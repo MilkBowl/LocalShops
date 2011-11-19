@@ -897,8 +897,8 @@ public class ShopManager {
             int id = item.getId();
             short subTypeId = item.getSubTypeId();
             ShopRecord record = shop.getItem(item);
-            double buyPrice = record.getBuyPrice();
-            double sellPrice = record.getSellPrice();
+            double buyPrice = record.getSellPrice();
+            double sellPrice = record.getBuyPrice();
             int stock = record.getStock();
             int maxStock = record.getMaxStock();
             int dynamic = (record.isDynamic() ? 1 : 0);

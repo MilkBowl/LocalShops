@@ -279,7 +279,7 @@ public class CommandShopSell extends Command {
         Player player = (Player) sender;
         ShopRecord invItem = shop.getItem(item);
         // check if the shop is buying that item
-        if (invItem == null || invItem.getSellPrice() == 0) {
+        if (invItem == null || invItem.getBuyPrice() == 0) {
             player.sendMessage(ChatColor.DARK_AQUA + "Sorry, " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " is not buying " + ChatColor.WHITE + item.getName() + ChatColor.DARK_AQUA + " right now.");
             return false;
         }

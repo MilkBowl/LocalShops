@@ -175,7 +175,7 @@ public abstract class Shop implements Comparator<Shop>, Serializable {
         if (item == null) {
             return false;
         }
-        ShopRecord record = new ShopRecord(item, buyPrice, sellPrice, stock, maxStock, dynamicItem);
+        ShopRecord record = new ShopRecord(item, sellPrice, buyPrice, stock, maxStock, dynamicItem);
 
         inventory.put(item, record);
 
@@ -416,8 +416,8 @@ public abstract class Shop implements Comparator<Shop>, Serializable {
 
         //Store the variables we'll be using multiple times
         int stock = shopRecord.getStock();
-        double buyPrice = shopRecord.getBuyPrice() * sign.getAmount();
-        double sellPrice = shopRecord.getSellPrice() * sign.getAmount();
+        double buyPrice = shopRecord.getSellPrice() * sign.getAmount();
+        double sellPrice = shopRecord.getBuyPrice() * sign.getAmount();
         int maxStock = shopRecord.getMaxStock();
         int available = stock / sign.getAmount();
 
