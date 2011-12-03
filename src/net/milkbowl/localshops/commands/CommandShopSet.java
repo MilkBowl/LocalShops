@@ -172,7 +172,7 @@ public class CommandShopSet extends Command {
         }
 
         // Set new values
-        shop.setItemSellPrice(item, price);
+        shop.setItemBuyPrice(item, price);
 
         // Save Shop
         plugin.getShopManager().saveShop(shop);
@@ -270,7 +270,7 @@ public class CommandShopSet extends Command {
         }
 
         // Set new values
-        shop.setItemBuyPrice(item, price);
+        shop.setItemSellPrice(item, price);
 
         // Save Shop
         plugin.getShopManager().saveShop(shop);
