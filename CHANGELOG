@@ -1,4 +1,6 @@
-Version 4.0.1
+This is the last version of LocalShops - There will be no more updates unless another developer picks up support for it.
+
+Version 4.0.2
 
 * Fixed /shop sell - not functioning properly
 * permission nodes with .* will now work for superperms
