@@ -94,6 +94,7 @@ public enum MsgType {
     CMD_SHP_CREATE_SELECTION_PROB_SIZE("Command.Shop.Create.SelectionSizeProblem"),
     CMD_SHP_CREATE_SELECTION_PROB_ONLY_ONE_POINT("Command.Shop.Create.SelectionOnePointProblem"),
     CMD_SHP_CREATE_SHOP_EXISTS("Command.Shop.Create.ShopExists"),
+    CMD_SHP_CREATE_ZONE_EXISTS("Command.Shop.Create.ZoneExists"),
     CMD_SHP_CREATE_WORLD_HAS_GLOBAL("Command.Shop.Create.WorldShopExists"),
     CMD_SHP_CREATE_INSUFFICIENT_FUNDS("Command.Shop.Create.InsufficientFunds"),
     CMD_SHP_CREATE_LOG("Command.Shop.Create.Log"),

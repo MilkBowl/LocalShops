@@ -57,6 +57,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 
 public class ShopManager {
 
@@ -227,6 +228,22 @@ public class ShopManager {
             }
         }
 
+        return true;
+    }
+
+    public boolean canBuildInPosition(Player player, int[] xyzA, int[] xyzB, World world) {
+        for (int x = 0; x < 2; x++) {
+            for (int y = 0; y < 2; y++) {
+                for (int z = 0; z < 2; z++) {
+                    Block block = world.getBlockAt(x == 0 ? xyzA[0] : xyzB[0], y == 0 ? xyzA[1] : xyzB[1], z == 0 ? xyzA[2] : xyzB[2]);
+                    BlockBreakEvent event = new BlockBreakEvent(block, player);
+                    plugin.getServer().getPluginManager().callEvent(event);
+                    if (event.isCancelled()) {
+                        return false;
+                    }
+                }
+            }
+        }
         return true;
     }
 

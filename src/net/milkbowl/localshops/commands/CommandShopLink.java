@@ -82,6 +82,10 @@ public class CommandShopLink extends Command {
                         sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_SHOP_EXISTS));
                         return false;
                     }
+                    if (!plugin.getShopManager().canBuildInPosition(player, shopLoc.getLocation1(), shopLoc.getLocation2(), player.getWorld())) {
+                        sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_ZONE_EXISTS));
+                        return false;
+                    }
                     shop.getShopLocations().add(shopLoc);
                     return true;
                 } else {

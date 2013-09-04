@@ -73,6 +73,11 @@ public class CommandShopCreate extends Command {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_SHOP_EXISTS));
                 return false;
             }
+            
+            if (!plugin.getShopManager().canBuildInPosition(player, shopLoc.getLocation1(), shopLoc.getLocation2(), player.getWorld())) {
+                sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_ZONE_EXISTS));
+                return false;
+            }
 
             if (isGlobal && plugin.getShopManager().getGlobalShopByWorld(world) != null) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_CREATE_WORLD_HAS_GLOBAL));
