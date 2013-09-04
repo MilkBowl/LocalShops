@@ -37,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,6 +50,7 @@ import net.milkbowl.localshops.util.GenericFunctions;
 import net.milkbowl.vault.item.ItemInfo;
 import net.milkbowl.vault.item.Items;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -1156,18 +1156,22 @@ public class ShopManager {
         }
     }
 
-    /**
-     * @return null
-     */
-    public Callable<Object> updateSigns() {
-        for (UUID key : shops.keySet()) {
-            Shop shop = shops.get(key);
-            if (shop.isDynamicPrices()) {
-                for (ShopSign sign : shop.getSigns()) {
-                    updateSign(shop, sign);
+    public void updateSigns() {
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new SignUpdater());
+    }
+   
+    public class SignUpdater implements Runnable {
+
+        @Override
+        public void run() {
+            for (UUID key : shops.keySet()) {
+                Shop shop = shops.get(key);
+                if (shop.isDynamicPrices()) {
+                    for (ShopSign sign : shop.getSigns()) {
+                        updateSign(shop, sign);
+                    }
                 }
             }
         }
-        return null;
     }
 }

@@ -34,9 +34,6 @@ import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.util.GenericFunctions;
 import net.milkbowl.vault.item.ItemInfo;
 
-import org.bukkit.Bukkit;
-
-
 /*
  * Represents the Dynamic Shop Task which is run in a thread
  * 
@@ -80,7 +77,6 @@ public class DynamicThread extends Thread {
             double priceAdj = GenericFunctions.getAdjustment(Config.getGlobalVolatility(), deltaStock);
             DynamicManager.getPriceAdjMap().put(item, priceAdj);
         }
-
-        Bukkit.getServer().getScheduler().callSyncMethod(plugin, plugin.getShopManager().updateSigns());
+        plugin.getShopManager().updateSigns();
     }
 }
