@@ -20,12 +20,15 @@
 package net.milkbowl.localshops.commands;
 
 import java.util.Collection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.GlobalShop;
 import net.milkbowl.localshops.objects.LocalShop;
 import net.milkbowl.localshops.objects.PermType;
+import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.vault.item.ItemInfo;
 
 import org.bukkit.ChatColor;
@@ -55,11 +58,50 @@ public class CommandShopDestroy extends Command {
          */
 
         Player player = (Player) sender;
+        Shop shop = null;
+        // parse shop id
+
+        Pattern pattern = Pattern.compile("(?i)del\\s+(.+)$");
+        Matcher matcher = pattern.matcher(command);
+        if (matcher.find()) {
+            String input = matcher.group(1);
+            shop = plugin.getShopManager().getShop(input);
+            if (shop == null) {
+                sender.sendMessage("Could not find shop with ID " + input);
+                return false;
+            }
+        }
+        
+        matcher.reset();
+        pattern = Pattern.compile("(?i)delete\\s+(.+)$");
+        matcher = pattern.matcher(command);
+        if (matcher.find()) {
+            String input = matcher.group(1);
+            shop = plugin.getShopManager().getShop(input);
+            if (shop == null) {
+                sender.sendMessage("Could not find shop with ID " + input);
+                return false;
+            }
+        }
+
+        matcher.reset();
+        pattern = Pattern.compile("(?i)destroy\\s+(.+)$");
+        matcher = pattern.matcher(command);
+        if (matcher.find()) {
+            String input = matcher.group(1);
+            shop = plugin.getShopManager().getShop(input);
+            if (shop == null) {
+                sender.sendMessage("Could not find shop with ID " + input);
+                return false;
+            }
+        }
 
         // get the shop the player is currently in
         if (!isGlobal) {
-            LocalShop shop = plugin.getShopManager().getLocalShop(player.getLocation());
-            if(shop == null) {
+            if (shop == null) {
+                shop = plugin.getShopManager().getLocalShop(player.getLocation());
+            }
+            if (shop == null || shop instanceof GlobalShop) {
                 // Not in a shop
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_NOT_IN_SHOP));
                 return true;
@@ -91,11 +133,13 @@ public class CommandShopDestroy extends Command {
                 sender.sendMessage("Could not return shop inventory!");
             }
 
-        } else if (isGlobal) {
-            GlobalShop shop = plugin.getShopManager().getGlobalShop(player.getWorld());
+        } else if (isGlobal) { 
+            if (shop == null) {
+                shop = plugin.getShopManager().getGlobalShop(player.getWorld());
+            }
 
             // Check if shop exists
-            if (shop == null) {
+            if (shop == null || shop instanceof LocalShop) {
                 player.sendMessage(ChatColor.DARK_AQUA + "You must be inside a shop to use /" + commandLabel + " destroy");
                 return true;
             }

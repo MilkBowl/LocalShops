@@ -1,7 +1,10 @@
 This is the last version of LocalShops - There will be no more updates unless another developer picks up support for it.
 
-Version 4.0.2
+Version 4.1.0
 
-* Fixed /shop sell - not functioning properly
-* permission nodes with .* will now work for superperms
-* note - PEX users will need to make sure they have the latest version of PEX
+* Fixed /shop info - was displaying buy/sell information backwards
+* Fixed logic in SignUpdater being written completely wrong
+* Added a break check for shop creation to prevent players from creating shops in areas they can't break blocks.
+* Updated for latest Vault & Bukkit
+* Fixed shop set message returning a %% with the ITEMNAME
+* Added ability to delete shops by Id
