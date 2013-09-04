@@ -8,3 +8,6 @@
 .externalToolBuilders
 manifest.mf
 nbproject/
+
+#added
+target/*
