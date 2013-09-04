@@ -1,8 +1,9 @@
-name: LocalShops
-main: net.milkbowl.localshops.LocalShops
-version: 4.0.2-b000
+name: ${project.name}
+main: ${mainClass}
+version: ${project.version}-b${BUILD_NUMBER}
 author: Cereal, Sleaker
 depend: [Vault]
+website: ${project.url}
 softdepend: [MultiVerse, DimensionDoor, SimpleSkylands, Inception, WorldManager, MultiWorld, WormholeXTremeWorlds]
 description: >
              A localized shop plugin for use with Bukkit economies.
