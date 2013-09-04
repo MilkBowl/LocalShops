@@ -123,12 +123,12 @@ public class CommandShopInfo extends Command {
         while (it.hasNext()) {
             ItemInfo i = it.next();
             if (shop.getItem(i).getBuyPrice() > 0) {
-                sellCount++;
+                buyCount++;
                 worth += (shop.getItem(i).getStock() * shop.getItem(i).getBuyPrice());
             }
 
             if (shop.getItem(i).getSellPrice() > 0) {
-                buyCount++;
+                sellCount++;
             }
         }
 
