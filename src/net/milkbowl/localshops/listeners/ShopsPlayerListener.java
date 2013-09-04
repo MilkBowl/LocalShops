@@ -19,8 +19,6 @@
  */
 package net.milkbowl.localshops.listeners;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,19 +51,6 @@ public class ShopsPlayerListener implements Listener {
 	private LocalShops plugin;
 	// Logging
 	private static final Logger log = Logger.getLogger("Minecraft");
-	// List of items that can be consumed by right click
-	private static final Set<Material> consumables = new HashSet<Material>();
-
-	static {
-		consumables.add(Material.APPLE);
-		consumables.add(Material.GOLDEN_APPLE);
-		consumables.add(Material.MUSHROOM_SOUP);
-		consumables.add(Material.PORK);
-		consumables.add(Material.BREAD);
-		consumables.add(Material.COOKED_FISH);
-		consumables.add(Material.RAW_FISH);
-		consumables.add(Material.COOKIE);
-	}
 
 	public ShopsPlayerListener(LocalShops plugin) {
 		this.plugin = plugin;
@@ -74,8 +59,9 @@ public class ShopsPlayerListener implements Listener {
 	@SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		if (event.isCancelled() || event.getClickedBlock() == null)
+		if (event.isCancelled() || event.getClickedBlock() == null) {
 			return;
+		}
 
 		Player player = event.getPlayer();
 		String playerName = player.getName();
@@ -85,10 +71,10 @@ public class ShopsPlayerListener implements Listener {
 		Location eventBlockLoc = event.getClickedBlock().getLocation();
 		LocalShop shop = plugin.getShopManager().getLocalShop(eventBlockLoc);
 		//If user Right clicks a sign try to buy/sell from it.
-		if (!plugin.getPlayerData().get(playerName).isSelecting())
+		if (!plugin.getPlayerData().get(playerName).isSelecting()) {
 			if (((event.getClickedBlock().getType().equals(Material.WALL_SIGN) || event.getClickedBlock().getType().equals(Material.SIGN_POST)) && event.getAction().equals(Action.LEFT_CLICK_BLOCK)) && shop != null) {
 				// Ignore consumables & send message to a player
-				if (consumables.contains(player.getItemInHand().getType())) {
+				if (player.getItemInHand().getType().isEdible()) {
 					event.setCancelled(true);
 					player.sendMessage(ChatColor.DARK_AQUA + "Oops!  You can't eat while working with shops!");
 					return;
@@ -119,8 +105,8 @@ public class ShopsPlayerListener implements Listener {
 						}
 					}
 				}
-
 			}
+		}
 		// If our user is select & is not holding an item, selection time
 		if (plugin.getPlayerData().get(playerName).isSelecting() && (player.getItemInHand().getType() == Material.AIR || player.getItemInHand().getType() == Material.STICK)) {
 			PlayerData pData = plugin.getPlayerData().get(playerName);
@@ -162,7 +148,6 @@ public class ShopsPlayerListener implements Listener {
 				}
 			}
 		}
-
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
