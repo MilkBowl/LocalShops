@@ -259,7 +259,7 @@ public class CommandShopSet extends Command {
         // Check if Shop has item
         if (!shop.containsItem(item)) {
             // nicely message user
-            sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[]{"%SHOPNAME%", "ITEMNAME"}, new String[]{shop.getName(), item.getName()}));
+            sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_CARRIED, new String[]{"%SHOPNAME%", "%ITEMNAME%"}, new String[]{shop.getName(), item.getName()}));
             return true;
         }
 

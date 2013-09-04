@@ -619,7 +619,7 @@ public class CommandAdminSet extends Command {
         sender.sendMessage("   " + "/" + commandLabel + " debug <value>");
         sender.sendMessage("   " + "/" + commandLabel + " find-max-distance <value>");
         sender.sendMessage("   " + "/" + commandLabel + " global-shop <value>");
-        sender.sendMessage("   " + "/" + commandLabel + "global-base-stock <value>");
+        sender.sendMessage("   " + "/" + commandLabel + " global-base-stock <value>");
         sender.sendMessage("   " + "/" + commandLabel + " log-transactions <value>");
         sender.sendMessage("   " + "/" + commandLabel + " max-damage <value>");
         sender.sendMessage("   " + "/" + commandLabel + " max-height <value>");
