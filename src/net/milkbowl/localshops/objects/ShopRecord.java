@@ -20,10 +20,11 @@
 package net.milkbowl.localshops.objects;
 
 import net.milkbowl.localshops.DynamicManager;
+import net.milkbowl.vault.item.ItemInfo;
 
 public class ShopRecord {
 
-    private Item item = null;
+    private ItemInfo item = null;
     private double buyPrice = 0;
     private double sellPrice = 0;
     private int stock = 0;
@@ -31,7 +32,7 @@ public class ShopRecord {
     private boolean dynamic = false;
     private int maxStock = 0;
 
-    public ShopRecord(Item item, double buyPrice, double sellPrice, int stock, int maxStock, boolean dynamic) {
+    public ShopRecord(ItemInfo item, double buyPrice, double sellPrice, int stock, int maxStock, boolean dynamic) {
         this.item = item;
         setBuyPrice(buyPrice);
         setSellPrice(sellPrice);

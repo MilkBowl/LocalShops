@@ -170,7 +170,7 @@ public class NotificationThread extends Thread {
                 }
 
                 // Register task to send messages ;)
-                plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable() {
+                plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 
                     public void run() {
                         log.info("test");

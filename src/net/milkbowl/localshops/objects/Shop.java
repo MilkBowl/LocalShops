@@ -35,8 +35,10 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.logging.Logger;
 
 import net.milkbowl.localshops.Config;
-import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.util.GenericFunctions;
+import net.milkbowl.vault.item.ItemInfo;
+import net.milkbowl.vault.item.Items;
+
 import org.bukkit.Location;
 
 public abstract class Shop implements Comparator<Shop>, Serializable {
@@ -51,7 +53,7 @@ public abstract class Shop implements Comparator<Shop>, Serializable {
     protected boolean unlimitedMoney = false;
     protected boolean unlimitedStock = false;
     protected boolean dynamicPrices = false;
-    protected HashMap<Item, ShopRecord> inventory = new HashMap<Item, ShopRecord>();
+    protected HashMap<ItemInfo, ShopRecord> inventory = new HashMap<ItemInfo, ShopRecord>();
     protected double minBalance = 0;
     protected double sharePercent = 0;
     transient protected ArrayBlockingQueue<Transaction> transactions;
@@ -118,11 +120,11 @@ public abstract class Shop implements Comparator<Shop>, Serializable {
         this.dynamicPrices = dynamicPrices;
     }
 
-    public ShopRecord getItem(Item item) {
+    public ShopRecord getItem(ItemInfo item) {
         return inventory.get(item);
     }
 
-    public boolean containsItem(Item item) {
+    public boolean containsItem(ItemInfo item) {
         return (inventory.containsKey(item));
     }
 
@@ -171,7 +173,7 @@ public abstract class Shop implements Comparator<Shop>, Serializable {
      */
     public boolean addItem(int itemNumber, short itemData, double buyPrice, double sellPrice, int stock, int maxStock, boolean dynamicItem) {
 
-        ItemInfo item = Search.itemById(itemNumber, itemData);
+        ItemInfo item = Items.itemById(itemNumber, itemData);
         if (item == null) {
             return false;
         }
@@ -224,8 +226,8 @@ public abstract class Shop implements Comparator<Shop>, Serializable {
         return managers;
     }
 
-    public List<Item> getItems() {
-        return new ArrayList<Item>(inventory.keySet());
+    public List<ItemInfo> getItems() {
+        return new ArrayList<ItemInfo>(inventory.keySet());
     }
 
     public Set<String> getGroupSet() {
@@ -269,7 +271,7 @@ public abstract class Shop implements Comparator<Shop>, Serializable {
         this.sharePercent = sharePercent;
     }
 
-    public boolean addStock(Item item, int amount) {
+    public boolean addStock(ItemInfo item, int amount) {
         if (!inventory.containsKey(item)) {
             return false;
         }
@@ -277,7 +279,7 @@ public abstract class Shop implements Comparator<Shop>, Serializable {
         return true;
     }
 
-    public boolean removeStock(Item item, int amount) {
+    public boolean removeStock(ItemInfo item, int amount) {
         if (!inventory.containsKey(item)) {
             return false;
         }
@@ -290,7 +292,7 @@ public abstract class Shop implements Comparator<Shop>, Serializable {
      * @param item
      * @param price
      */
-    public void setItemBuyPrice(Item item, double price) {
+    public void setItemBuyPrice(ItemInfo item, double price) {
         inventory.get(item).setBuyPrice(price);
     }
 
@@ -299,7 +301,7 @@ public abstract class Shop implements Comparator<Shop>, Serializable {
      * @param item
      * @param price
      */
-    public void setItemSellPrice(Item item, double price) {
+    public void setItemSellPrice(ItemInfo item, double price) {
         inventory.get(item).setSellPrice(price);
     }
 
@@ -308,7 +310,7 @@ public abstract class Shop implements Comparator<Shop>, Serializable {
      *
      * @param String itemName to set
      */
-    public void setItemDynamic(Item item) {
+    public void setItemDynamic(ItemInfo item) {
         inventory.get(item).setDynamic(!inventory.get(item).isDynamic());
     }
 
@@ -318,7 +320,7 @@ public abstract class Shop implements Comparator<Shop>, Serializable {
      * @param String itemName to check
      * @return Boolean dynamic
      */
-    public boolean isItemDynamic(Item item) {
+    public boolean isItemDynamic(ItemInfo item) {
         return inventory.get(item).isDynamic();
     }
 
@@ -337,15 +339,15 @@ public abstract class Shop implements Comparator<Shop>, Serializable {
         return num;
     }
 
-    public void removeItem(Item item) {
+    public void removeItem(ItemInfo item) {
         inventory.remove(item);
     }
 
-    public int itemMaxStock(Item item) {
+    public int itemMaxStock(ItemInfo item) {
         return inventory.get(item).getMaxStock();
     }
 
-    public void setItemMaxStock(Item item, int maxStock) {
+    public void setItemMaxStock(ItemInfo item, int maxStock) {
         inventory.get(item).setMaxStock(maxStock);
     }
 
@@ -399,7 +401,7 @@ public abstract class Shop implements Comparator<Shop>, Serializable {
     public String[] generateSignLines(ShopSign sign) {
         String[] signLines = {"", "", "", ""};
         //If this item no longer exists lets just return with blank lines
-        ItemInfo item = Search.itemByName(sign.getItemName());
+        ItemInfo item = Items.itemByName(sign.getItemName());
         ShopRecord shopRecord = null;
         if (item == null) {
             this.signSet.remove(sign);

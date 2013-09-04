@@ -32,7 +32,7 @@ import net.milkbowl.localshops.commands.ShopCommandExecutor;
 import net.milkbowl.localshops.listeners.ShopsBlockListener;
 import net.milkbowl.localshops.listeners.ShopsEntityListener;
 import net.milkbowl.localshops.listeners.ShopsPlayerListener;
-import net.milkbowl.localshops.listeners.ShopsVehicleListener;
+import net.milkbowl.localshops.listeners.ShopsMoveListener;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;
@@ -40,13 +40,12 @@ import net.milkbowl.localshops.objects.ShopSign;
 import net.milkbowl.localshops.threads.ThreadManager;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -62,7 +61,7 @@ public class LocalShops extends JavaPlugin {
     public ShopsPlayerListener playerListener = new ShopsPlayerListener(this);
     public ShopsBlockListener blockListener = new ShopsBlockListener(this);
     public ShopsEntityListener entityListener = new ShopsEntityListener(this);
-    public ShopsVehicleListener vehicleListener = new ShopsVehicleListener(this);
+    public ShopsMoveListener vehicleListener = new ShopsMoveListener(this);
     // Managers
     private ShopManager shopManager = new ShopManager(this);
     private DynamicManager dynamicManager = new DynamicManager();
@@ -98,20 +97,11 @@ public class LocalShops extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         if(Config.getSrvMoveEvents()) {
             // Only register movement based events if move-events is enabled
-            pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Monitor, this);
-            pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Monitor, this);
-            pm.registerEvent(Event.Type.PLAYER_PORTAL, playerListener, Priority.Monitor, this);
-            pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Monitor, this);
-            pm.registerEvent(Event.Type.VEHICLE_MOVE, vehicleListener, Priority.Monitor, this);
+            pm.registerEvents(vehicleListener, this);
         }
-        pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
-        pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.PLAYER_KICK, playerListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.SIGN_CHANGE, blockListener, Priority.Normal, this);
-        pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Priority.Normal, this);
-        pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Normal, this);
-        pm.registerEvent(Event.Type.ENTITY_EXPLODE, entityListener, Priority.Normal, this);
+        pm.registerEvents(playerListener, this);
+        pm.registerEvents(blockListener, this);
+        pm.registerEvents(entityListener, this);
 
         // Register Commands
         CommandExecutor cmdExec = new ShopCommandExecutor(this);

@@ -27,7 +27,6 @@ import java.util.UUID;
 import net.milkbowl.localshops.LocalShops;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 public class PlayerData {
     // Objects

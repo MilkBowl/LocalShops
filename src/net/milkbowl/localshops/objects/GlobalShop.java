@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.UUID;
 
 import net.milkbowl.localshops.util.GenericFunctions;
+import net.milkbowl.vault.item.ItemInfo;
+
 import org.bukkit.Location;
 
 public class GlobalShop extends Shop {
@@ -90,9 +92,9 @@ public class GlobalShop extends Shop {
         log.info("Shop Inventory");
         log.info("   BP=Buy Price, BS=Buy Size, SP=Sell Price, SS=Sell Size, ST=Stock, MX=Max Stock");
         log.info(String.format("   %-9s %-6s %-3s %-6s %-3s %-3s %-3s", "Id", "BP", "BS", "SP", "SS", "ST", "MX"));
-        Iterator<Item> it = inventory.keySet().iterator();
+        Iterator<ItemInfo> it = inventory.keySet().iterator();
         while (it.hasNext()) {
-            Item item = it.next();
+            ItemInfo item = it.next();
             ShopRecord record = inventory.get(item);
             log.info(String.format("   %6d:%-2d %-6.2f %-6.2f %-3d %-3d", item.getId(), item.getSubTypeId(), record.getBuyPrice(), record.getSellPrice(), record.getStock(), record.getMaxStock()));
         }

@@ -36,23 +36,19 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerListener;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 
 /**
  * Handle events for all Player related events
- * 
- * @author Jonbas
  */
-public class ShopsPlayerListener extends PlayerListener {
+public class ShopsPlayerListener implements Listener {
 
 	private LocalShops plugin;
 	// Logging
@@ -76,7 +72,7 @@ public class ShopsPlayerListener extends PlayerListener {
 	}
 
 	@SuppressWarnings("deprecation")
-	@Override
+    @EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (event.isCancelled() || event.getClickedBlock() == null)
 			return;
@@ -169,7 +165,7 @@ public class ShopsPlayerListener extends PlayerListener {
 
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		String playerName = player.getName();
@@ -183,7 +179,7 @@ public class ShopsPlayerListener extends PlayerListener {
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		String playerName = player.getName();
@@ -191,43 +187,11 @@ public class ShopsPlayerListener extends PlayerListener {
 		plugin.getPlayerData().remove(playerName);
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerKick(PlayerKickEvent event) {
 		Player player = event.getPlayer();
 		String playerName = player.getName();
 
 		plugin.getPlayerData().remove(playerName);
-	}
-
-	@Override
-	public void onPlayerTeleport(PlayerTeleportEvent event) {
-		Player player = event.getPlayer();
-		String playerName = player.getName();
-
-		if (!plugin.getPlayerData().containsKey(playerName)) {
-			plugin.getPlayerData().put(playerName, new PlayerData(plugin, playerName));
-		}
-
-		plugin.checkPlayerPosition(event.getPlayer(), event.getTo());
-	}
-
-	@Override
-	public void onPlayerMove(PlayerMoveEvent event) {
-		//We only check if a player has entered a shop if he has changed a full block.
-		if (event.getTo().getBlockX() == event.getFrom().getBlockX() && event.getTo().getBlockY() == event.getFrom().getBlockY() && event.getTo().getBlockZ() == event.getFrom().getBlockZ()) {
-			return;
-		}
-
-		plugin.checkPlayerPosition(event.getPlayer());
-	}
-
-	@Override
-	public void onPlayerPortal(PlayerPortalEvent event) {
-		plugin.checkPlayerPosition(event.getPlayer());
-	}
-
-	@Override
-	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		plugin.checkPlayerPosition(event.getPlayer());
 	}
 }

@@ -32,7 +32,7 @@ public class SortedProperties extends Properties {
     /**
      * Overrides, called by the store method.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes"})
     @Override
     public synchronized Enumeration<Object> keys() {
         Enumeration keysEnum = super.keys();

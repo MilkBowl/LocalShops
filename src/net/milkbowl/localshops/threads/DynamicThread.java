@@ -25,15 +25,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.logging.Logger;
 
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.DynamicManager;
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.objects.Item;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.util.GenericFunctions;
+import net.milkbowl.vault.item.ItemInfo;
 
 import org.bukkit.Bukkit;
 
@@ -56,11 +55,11 @@ public class DynamicThread extends Thread {
     }
 
     public void run() {
-        Map<Item, List<Integer>> itemStockMap = Collections.synchronizedMap(new HashMap<Item, List<Integer>>());
+        Map<ItemInfo, List<Integer>> itemStockMap = Collections.synchronizedMap(new HashMap<ItemInfo, List<Integer>>());
 
         //Dump all the shop stock data into the map.
         for (Shop shop : plugin.getShopManager().getAllShops()) {
-            for (Item item : shop.getItems()) {
+            for (ItemInfo item : shop.getItems()) {
                 if (itemStockMap.containsKey(item)) {
                     itemStockMap.get(item).add(shop.getItem(item).getStock());
                 } else {
@@ -71,8 +70,8 @@ public class DynamicThread extends Thread {
             }
         }
 
-        for (Entry<Item, List<Integer>> entry : itemStockMap.entrySet()) {
-            Item item = entry.getKey();
+        for (Entry<ItemInfo, List<Integer>> entry : itemStockMap.entrySet()) {
+            ItemInfo item = entry.getKey();
 
             List<Integer> stockList = GenericFunctions.limitOutliers(entry.getValue());
 

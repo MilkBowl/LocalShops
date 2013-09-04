@@ -22,14 +22,14 @@ package net.milkbowl.localshops.comparator;
 import java.io.Serializable;
 import java.util.Comparator;
 
-import net.milkbowl.localshops.objects.Item;
+import net.milkbowl.vault.item.ItemInfo;
 
-public class InventoryItemSortByName implements Comparator<Item>, Serializable {
+public class InventoryItemSortByName implements Comparator<ItemInfo>, Serializable {
 
     private static final long serialVersionUID = 30000L;
 
     @Override
-    public int compare(Item o1, Item o2) {
+    public int compare(ItemInfo o1, ItemInfo o2) {
         return o1.getName().compareTo(o2.getName());
     }
 }

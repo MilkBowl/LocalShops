@@ -24,14 +24,13 @@ import java.util.regex.Pattern;
 
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.Search;
-import net.milkbowl.localshops.objects.Item;
 import net.milkbowl.localshops.objects.ShopRecord;
-import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.Transaction;
+import net.milkbowl.vault.item.ItemInfo;
+import net.milkbowl.vault.item.Items;
 
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -85,7 +84,7 @@ public class CommandShopBuy extends Command {
                 if (itemStack == null) {
                     return false;
                 }
-                ItemInfo item = Search.itemByStack(itemStack);
+                ItemInfo item = Items.itemByStack(itemStack);
                 if (item == null) {
                     sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                     return true;
@@ -103,7 +102,7 @@ public class CommandShopBuy extends Command {
                     sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_BUY_NO_ITEM_IN_HAND));
                     return true;
                 }
-                ItemInfo item = Search.itemById(itemStack.getTypeId(), itemStack.getDurability());
+                ItemInfo item = Items.itemById(itemStack.getTypeId(), itemStack.getDurability());
                 if (item == null) {
                     sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                     return true;
@@ -126,7 +125,7 @@ public class CommandShopBuy extends Command {
             matcher = pattern.matcher(command);
             if (matcher.find()) {
                 int id = Integer.parseInt(matcher.group(1));
-                ItemInfo item = Search.itemById(id);
+                ItemInfo item = Items.itemById(id);
                 if (item == null) {
                     sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                     return true;
@@ -154,7 +153,7 @@ public class CommandShopBuy extends Command {
             if (matcher.find()) {
                 int id = Integer.parseInt(matcher.group(1));
                 short type = Short.parseShort(matcher.group(2));
-                Item item = Search.itemById(id, type);
+                ItemInfo item = Items.itemById(id, type);
                 if (item == null) {
                     sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                     return true;
@@ -180,7 +179,7 @@ public class CommandShopBuy extends Command {
             matcher = pattern.matcher(command);
             if (matcher.find()) {
                 String itemName = matcher.group(1);
-                Item item = Search.itemByName(itemName);
+                ItemInfo item = Items.itemByName(itemName);
                 if (item == null) {
                     sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                     return true;
@@ -212,7 +211,7 @@ public class CommandShopBuy extends Command {
         Matcher matcher = pattern.matcher(command);
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
-            Item item = Search.itemById(id);
+            ItemInfo item = Items.itemById(id);
             if (item == null) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
@@ -227,7 +226,7 @@ public class CommandShopBuy extends Command {
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
             int count = Integer.parseInt(matcher.group(2));
-            Item item = Search.itemById(id);
+            ItemInfo item = Items.itemById(id);
             if (item == null) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
@@ -246,7 +245,7 @@ public class CommandShopBuy extends Command {
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
             short type = Short.parseShort(matcher.group(2));
-            Item item = Search.itemById(id, type);
+            ItemInfo item = Items.itemById(id, type);
             if (item == null) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
@@ -261,7 +260,7 @@ public class CommandShopBuy extends Command {
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
             short type = Short.parseShort(matcher.group(2));
-            Item item = Search.itemById(id, type);
+            ItemInfo item = Items.itemById(id, type);
             int count = Integer.parseInt(matcher.group(3));
             if (item == null) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
@@ -280,7 +279,7 @@ public class CommandShopBuy extends Command {
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             String itemName = matcher.group(1);
-            ItemInfo item = Search.itemByName(itemName);
+            ItemInfo item = Items.itemByName(itemName);
             int count = Integer.parseInt(matcher.group(2));
             if (item == null) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
@@ -299,7 +298,7 @@ public class CommandShopBuy extends Command {
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             String itemName = matcher.group(1);
-            Item item = Search.itemByName(itemName);
+            ItemInfo item = Items.itemByName(itemName);
             if (item == null) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
@@ -312,7 +311,7 @@ public class CommandShopBuy extends Command {
         return true;
     }
 
-    private boolean shopBuy(Shop shop, Item item, int amount) {
+    private boolean shopBuy(Shop shop, ItemInfo item, int amount) {
         Player player = (Player) sender;
         ShopRecord invItem = shop.getItem(item);
 
@@ -389,7 +388,7 @@ public class CommandShopBuy extends Command {
         return true;
     }
 
-    private int getBuyAmount(Player player, int amount, Item item, Shop shop) {
+    private int getBuyAmount(Player player, int amount, ItemInfo item, Shop shop) {
         //Lower our amount if the shop doesn't have enough stock to sell what was requested.
         if (!shop.isUnlimitedStock() && amount > shop.getItem(item).getStock()) {
             amount = shop.getItem(item).getStock();
@@ -400,10 +399,10 @@ public class CommandShopBuy extends Command {
         for (ItemStack thisSlot : player.getInventory().getContents()) {
             if (thisSlot == null || thisSlot.getType().equals(Material.AIR)) {
                 //Adjust number of items slots by the number an air block can hold
-                freeSpots += item.getMaxBundleSize();
+                freeSpots += item.getStackSize(); // TODO: this was changed from bundle sizes to stack sizes.
                 continue;
             } else if (thisSlot.getType().equals(item.getType()) && thisSlot.getDurability() == item.getSubTypeId()) {
-                freeSpots += item.getMaxBundleSize() - thisSlot.getAmount();
+                freeSpots += item.getStackSize() - thisSlot.getAmount(); // TODO: this was changed from bundle sizes to stack sizes.
             }
         }
         

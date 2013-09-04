@@ -22,11 +22,11 @@ package net.milkbowl.localshops.commands;
 import java.util.Collection;
 
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.objects.Item;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.GlobalShop;
 import net.milkbowl.localshops.objects.LocalShop;
 import net.milkbowl.localshops.objects.PermType;
+import net.milkbowl.vault.item.ItemInfo;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -77,12 +77,12 @@ public class CommandShopDestroy extends Command {
                 }
             }
 
-            Collection<Item> shopItems = shop.getItems();
+            Collection<ItemInfo> shopItems = shop.getItems();
 
             if (plugin.getShopManager().deleteShop(shop)) {
                 // return items to player (if a player)
                 if (sender instanceof Player) {
-                    for (Item item : shopItems) {
+                    for (ItemInfo item : shopItems) {
                         givePlayerItem(item, shop.getItem(item).getStock());
                     }
                 }

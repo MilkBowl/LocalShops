@@ -24,14 +24,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.Search;
-import net.milkbowl.localshops.objects.Item;
-import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopSign;
 import net.milkbowl.localshops.util.GenericFunctions;
+import net.milkbowl.vault.item.ItemInfo;
+import net.milkbowl.vault.item.Items;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -120,7 +119,7 @@ public class CommandShopSet extends Command {
         Matcher matcher = pattern.matcher(command);
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
-            ItemInfo item = Search.itemById(id);
+            ItemInfo item = Items.itemById(id);
             double price = Double.parseDouble(matcher.group(2));
             return shopSetBuy(shop, item, price);
         }
@@ -132,7 +131,7 @@ public class CommandShopSet extends Command {
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
             short type = Short.parseShort(matcher.group(2));
-            ItemInfo item = Search.itemById(id, type);
+            ItemInfo item = Items.itemById(id, type);
             double price = Double.parseDouble(matcher.group(3));
             return shopSetBuy(shop, item, price);
         }
@@ -143,7 +142,7 @@ public class CommandShopSet extends Command {
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             String name = matcher.group(1);
-            ItemInfo item = Search.itemByName(name);
+            ItemInfo item = Items.itemByName(name);
             double price = Double.parseDouble(matcher.group(2));
             return shopSetBuy(shop, item, price);
         }
@@ -218,7 +217,7 @@ public class CommandShopSet extends Command {
         Matcher matcher = pattern.matcher(command);
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
-            ItemInfo item = Search.itemById(id);
+            ItemInfo item = Items.itemById(id);
             double price = Double.parseDouble(matcher.group(2));
             return shopSetSell(shop, item, price);
         }
@@ -230,7 +229,7 @@ public class CommandShopSet extends Command {
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
             short type = Short.parseShort(matcher.group(2));
-            ItemInfo item = Search.itemById(id, type);
+            ItemInfo item = Items.itemById(id, type);
             double price = Double.parseDouble(matcher.group(3));
             return shopSetSell(shop, item, price);
         }
@@ -241,7 +240,7 @@ public class CommandShopSet extends Command {
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             String name = matcher.group(1);
-            ItemInfo item = Search.itemByName(name);
+            ItemInfo item = Items.itemByName(name);
             double price = Double.parseDouble(matcher.group(2));
             return shopSetSell(shop, item, price);
         }
@@ -315,7 +314,7 @@ public class CommandShopSet extends Command {
         Matcher matcher = pattern.matcher(command);
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
-            ItemInfo item = Search.itemById(id);
+            ItemInfo item = Items.itemById(id);
             int max = Integer.parseInt(matcher.group(2));
             return shopSetMax(shop, item, max);
         }
@@ -327,7 +326,7 @@ public class CommandShopSet extends Command {
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
             short type = Short.parseShort(matcher.group(2));
-            ItemInfo item = Search.itemById(id, type);
+            ItemInfo item = Items.itemById(id, type);
             int max = Integer.parseInt(matcher.group(3));
             return shopSetMax(shop, item, max);
         }
@@ -338,7 +337,7 @@ public class CommandShopSet extends Command {
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             String name = matcher.group(1);
-            ItemInfo item = Search.itemByName(name);
+            ItemInfo item = Items.itemByName(name);
             int max = Integer.parseInt(matcher.group(2));
             return shopSetMax(shop, item, max);
         }
@@ -413,7 +412,7 @@ public class CommandShopSet extends Command {
         Matcher matcher = pattern.matcher(command);
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
-            ItemInfo item = Search.itemById(id);
+            ItemInfo item = Items.itemById(id);
             int max = Integer.parseInt(matcher.group(2));
             return shopSetMax(shop, item, max);
         }
@@ -749,9 +748,9 @@ public class CommandShopSet extends Command {
 
                 // Reset buy prices (0)
                 if (reset) {
-                    Iterator<Item> it = shop.getItems().iterator();
+                    Iterator<ItemInfo> it = shop.getItems().iterator();
                     while (it.hasNext()) {
-                        Item item = it.next();
+                        ItemInfo item = it.next();
                         shop.getItem(item).setSellPrice(0);
                     }
                 }
@@ -863,7 +862,7 @@ public class CommandShopSet extends Command {
         Matcher matcher = pattern.matcher(command);
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
-            ItemInfo item = Search.itemById(id);
+            ItemInfo item = Items.itemById(id);
             return shopSetDynamic(shop, item);
         }
         // set dynamic int:int
@@ -873,7 +872,7 @@ public class CommandShopSet extends Command {
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
             short type = Short.parseShort(matcher.group(2));
-            ItemInfo item = Search.itemById(id, type);
+            ItemInfo item = Items.itemById(id, type);
             return shopSetDynamic(shop, item);
         }
         matcher.reset();
@@ -882,7 +881,7 @@ public class CommandShopSet extends Command {
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             String name = matcher.group(1);
-            ItemInfo item = Search.itemByName(name);
+            ItemInfo item = Items.itemByName(name);
             return shopSetDynamic(shop, item);
         }
 

@@ -42,14 +42,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.milkbowl.localshops.objects.GlobalShop;
-import net.milkbowl.localshops.objects.Item;
 import net.milkbowl.localshops.objects.ShopRecord;
-import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.LocalShop;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopLocation;
 import net.milkbowl.localshops.objects.ShopSign;
 import net.milkbowl.localshops.util.GenericFunctions;
+import net.milkbowl.vault.item.ItemInfo;
+import net.milkbowl.vault.item.Items;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -404,6 +404,7 @@ public class ShopManager {
                         } else {
                             log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Error moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString()));
                         }
+                        br.close();
                         return null;
                     }
                 } else if (cols[0].equalsIgnoreCase("position2")) { // Position
@@ -419,6 +420,7 @@ public class ShopManager {
                         } else {
                             log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Error moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString()));
                         }
+                        br.close();
                         return null;
                     }
                 } else if (cols[0].equalsIgnoreCase("unlimited-money")) { // Unlimited
@@ -435,6 +437,7 @@ public class ShopManager {
                         } else {
                             log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Error moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString()));
                         }
+                        br.close();
                         return null;
                     }
                     int itemId = Integer.parseInt(itemInfo[0]);
@@ -447,6 +450,7 @@ public class ShopManager {
                         } else {
                             log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Error moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString()));
                         }
+                        br.close();
                         return null;
                     }
 
@@ -457,6 +461,7 @@ public class ShopManager {
                         } else {
                             log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Error moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString()));
                         }
+                        br.close();
                         return null;
                     }
                     int buyPrice = Integer.parseInt(buyInfo[0]);
@@ -468,6 +473,7 @@ public class ShopManager {
                         } else {
                             log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Error moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString()));
                         }
+                        br.close();
                         return null;
                     }
                     int sellPrice = Integer.parseInt(sellInfo[0]);
@@ -479,6 +485,7 @@ public class ShopManager {
                         } else {
                             log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Error moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString()));
                         }
+                        br.close();
                         return null;
                     }
                     int stock = Integer.parseInt(stockInfo[0]);
@@ -490,6 +497,7 @@ public class ShopManager {
                         } else {
                             log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Error moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString(), itemId, damageMod));
                         }
+                        br.close();
                         return null;
                     }
                 } else { // Not defined
@@ -794,7 +802,7 @@ public class ShopManager {
             if (!sign.isValid()) {
                 continue;
             } else {
-                ItemInfo item = Search.itemByName(sign.getItemName());
+                ItemInfo item = Items.itemByName(sign.getItemName());
                 // if We can't find the item in the shop ignore the sign
                 if (!(shop.containsItem(item))) {
                     continue;
@@ -893,7 +901,7 @@ public class ShopManager {
         }
 
         // Inventory
-        for (Item item : shop.getItems()) {
+        for (ItemInfo item : shop.getItems()) {
             int id = item.getId();
             short subTypeId = item.getSubTypeId();
             ShopRecord record = shop.getItem(item);
@@ -1087,7 +1095,7 @@ public class ShopManager {
         updateSign(shop, block.getLocation());
     }
 
-    public void updateSigns(Shop shop, Item item) {
+    public void updateSigns(Shop shop, ItemInfo item) {
         int index = 0;
         for (ShopSign sign : shop.getSigns()) {
             if (sign.getItemName().equalsIgnoreCase(item.getName())) {

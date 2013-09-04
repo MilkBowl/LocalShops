@@ -25,12 +25,12 @@ import java.util.regex.Pattern;
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.objects.MsgType;
-import net.milkbowl.localshops.Search;
-import net.milkbowl.localshops.objects.Item;
 import net.milkbowl.localshops.objects.ShopRecord;
 import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.Transaction;
+import net.milkbowl.vault.item.ItemInfo;
+import net.milkbowl.vault.item.Items;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -79,9 +79,9 @@ public class CommandShopSell extends Command {
                     sender.sendMessage("You must be holding an item, or specify an item.");
                     return true;
                 }
-                Item item = null;
+                ItemInfo item = null;
                 int amount = countItemsInInventory(player.getInventory(), itemStack);
-                item = Search.itemByStack(itemStack);
+                item = Items.itemByStack(itemStack);
 
                 if (item == null) {
                     sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
@@ -104,7 +104,7 @@ public class CommandShopSell extends Command {
             if (matcher.find()) {
                 ItemStack itemStack = player.getItemInHand();
 
-                Item item = Search.itemByStack(itemStack);
+                ItemInfo item = Items.itemByStack(itemStack);
                 ;
                 int amount = itemStack.getAmount();
                 if (item == null) {
@@ -131,7 +131,7 @@ public class CommandShopSell extends Command {
         Matcher matcher = pattern.matcher(command);
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
-            Item item = Search.itemById(id);
+            ItemInfo item = Items.itemById(id);
             if (item == null) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
@@ -146,7 +146,7 @@ public class CommandShopSell extends Command {
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
             int count = Integer.parseInt(matcher.group(2));
-            Item item = Search.itemById(id);
+            ItemInfo item = Items.itemById(id);
             if (item == null) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
@@ -161,7 +161,7 @@ public class CommandShopSell extends Command {
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
             int count = Integer.parseInt(matcher.group(2));
-            Item item = Search.itemById(id);
+            ItemInfo item = Items.itemById(id);
             if (item == null) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
@@ -176,7 +176,7 @@ public class CommandShopSell extends Command {
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
             short type = Short.parseShort(matcher.group(2));
-            Item item = Search.itemById(id, type);
+            ItemInfo item = Items.itemById(id, type);
             if (item == null) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
@@ -191,7 +191,7 @@ public class CommandShopSell extends Command {
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
             short type = Short.parseShort(matcher.group(2));
-            Item item = Search.itemById(id, type);
+            ItemInfo item = Items.itemById(id, type);
             int count = Integer.parseInt(matcher.group(3));
             if (item == null) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
@@ -207,7 +207,7 @@ public class CommandShopSell extends Command {
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
             short type = Short.parseShort(matcher.group(2));
-            Item item = Search.itemById(id, type);
+            ItemInfo item = Items.itemById(id, type);
             int count = Integer.parseInt(matcher.group(3));
             if (item == null) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
@@ -222,7 +222,7 @@ public class CommandShopSell extends Command {
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             String itemName = matcher.group(1);
-            Item item = Search.itemByName(itemName);
+            ItemInfo item = Items.itemByName(itemName);
             int count = Integer.parseInt(matcher.group(2));
             if (item == null) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
@@ -238,7 +238,7 @@ public class CommandShopSell extends Command {
         if (matcher.find()) {
             Player player = (Player) sender;
             String itemName = matcher.group(1);
-            Item item = Search.itemByName(itemName);
+            ItemInfo item = Items.itemByName(itemName);
             if (item == null) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
@@ -253,7 +253,7 @@ public class CommandShopSell extends Command {
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             String itemName = matcher.group(1);
-            Item item = Search.itemByName(itemName);
+            ItemInfo item = Items.itemByName(itemName);
             if (item == null) {
                 sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                 return true;
@@ -266,7 +266,7 @@ public class CommandShopSell extends Command {
         return true;
     }
 
-    private boolean shopSell(Shop shop, Item item, int amount) {
+    private boolean shopSell(Shop shop, ItemInfo item, int amount) {
         if (!(sender instanceof Player)) {
             sender.sendMessage("/shop sell can only be used for players!");
             return false;
@@ -345,7 +345,7 @@ public class CommandShopSell extends Command {
         return true;
     }
 
-    private int getSellAmount(Player player, int amount, Item item, Shop shop) {
+    private int getSellAmount(Player player, int amount, ItemInfo item, Shop shop) {
 
         int originalAmount = amount;
 

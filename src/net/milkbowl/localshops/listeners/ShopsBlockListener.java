@@ -25,29 +25,27 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.Search;
 import net.milkbowl.localshops.exceptions.TypeNotFoundException;
-import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.LocalShop;
 import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopSign;
+import net.milkbowl.vault.item.ItemInfo;
+import net.milkbowl.vault.item.Items;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 
-/**
- * @author sleaker
- * 
- */
-public class ShopsBlockListener extends BlockListener {
+public class ShopsBlockListener implements Listener {
 
     private LocalShops plugin;
     // Logging
@@ -57,7 +55,7 @@ public class ShopsBlockListener extends BlockListener {
         this.plugin = plugin;
     }
 
-    @Override
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onSignChange(SignChangeEvent event) {
         Shop shop = null;
         Block block = event.getBlock();
@@ -71,7 +69,7 @@ public class ShopsBlockListener extends BlockListener {
         ShopSign sign = null;
         String[] signLines = null;
 
-        ItemInfo item = Search.itemByString(event.getLine(0));
+        ItemInfo item = Items.itemByString(event.getLine(0));
 
         if (item != null) {
             if (shop.containsItem(item)) {
@@ -114,7 +112,7 @@ public class ShopsBlockListener extends BlockListener {
         }
     }
 
-    @Override
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockPlace(BlockPlaceEvent event) {
         if (event.isCancelled()) {
             return;
@@ -146,7 +144,7 @@ public class ShopsBlockListener extends BlockListener {
         }
     }
 
-    @Override
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockBreak(BlockBreakEvent event) {
         if (event.isCancelled()) {
             return;

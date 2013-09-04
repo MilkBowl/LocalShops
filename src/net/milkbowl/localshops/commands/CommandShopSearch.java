@@ -23,8 +23,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.Search;
-import net.milkbowl.localshops.objects.ItemInfo;
+import net.milkbowl.vault.item.ItemInfo;
+import net.milkbowl.vault.item.Items;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -45,7 +45,7 @@ public class CommandShopSearch extends Command {
         Matcher matcher = pattern.matcher(command);
         if (matcher.find()) {
             String name = matcher.group(1);
-            ItemInfo found = Search.itemByName(name);
+            ItemInfo found = Items.itemByName(name);
             if (found == null) {
                 sender.sendMessage(String.format("No item was not found matching \"%s\"", name));
             } else {

@@ -24,12 +24,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.objects.Item;
 import net.milkbowl.localshops.objects.LocalShop;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopLocation;
 import net.milkbowl.localshops.util.GenericFunctions;
+import net.milkbowl.vault.item.ItemInfo;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -119,9 +119,9 @@ public class CommandShopInfo extends Command {
         int buyCount = 0;
         int worth = 0;
 
-        Iterator<Item> it = shop.getItems().iterator();
+        Iterator<ItemInfo> it = shop.getItems().iterator();
         while (it.hasNext()) {
-            Item i = it.next();
+            ItemInfo i = it.next();
             if (shop.getItem(i).getBuyPrice() > 0) {
                 sellCount++;
                 worth += (shop.getItem(i).getStock() * shop.getItem(i).getBuyPrice());

@@ -29,14 +29,13 @@ import net.milkbowl.localshops.objects.LocalShop;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopSign;
 
-import org.bukkit.event.world.WorldListener;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldLoadEvent;
 
-/**
- * @author sleaker
- *
- */
-public class ShopsWorldListener extends WorldListener {
+
+public class ShopsWorldListener implements Listener {
 
     private LocalShops plugin;
 
@@ -44,6 +43,7 @@ public class ShopsWorldListener extends WorldListener {
         this.plugin = plugin;
     }
 
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onWorldLoad(WorldLoadEvent event) {
         //Loop through all shops
         for (Shop shop : plugin.getShopManager().getAllShops()) {

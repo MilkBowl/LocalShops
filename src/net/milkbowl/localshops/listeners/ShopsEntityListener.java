@@ -24,14 +24,12 @@ import net.milkbowl.localshops.objects.Shop;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntityListener;
 
-/**
- * @author sleaker
- *
- */
-public class ShopsEntityListener extends EntityListener {
+public class ShopsEntityListener implements Listener {
 
     private LocalShops plugin;
 
@@ -39,7 +37,7 @@ public class ShopsEntityListener extends EntityListener {
         this.plugin = plugin;
     }
 
-    @Override
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onEntityExplode(EntityExplodeEvent event) {
         if (event.isCancelled()) {
             return;

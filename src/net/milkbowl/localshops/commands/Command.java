@@ -23,14 +23,14 @@ import java.util.logging.Logger;
 
 import net.milkbowl.localshops.Config;
 import net.milkbowl.localshops.LocalShops;
-import net.milkbowl.localshops.Search;
-import net.milkbowl.localshops.objects.Item;
 import net.milkbowl.localshops.objects.MsgType;
 import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;
 import net.milkbowl.localshops.objects.ShopLocation;
 import net.milkbowl.localshops.util.GenericFunctions;
+import net.milkbowl.vault.item.ItemInfo;
+import net.milkbowl.vault.item.Items;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -147,7 +147,7 @@ public abstract class Command {
 		}
 	}
 
-	protected void givePlayerItem(Item item, int amount) {
+	protected void givePlayerItem(ItemInfo item, int amount) {
 		Player player = (Player) sender;
 
 		ItemStack stack = item.toStack();
@@ -233,7 +233,7 @@ public abstract class Command {
 
 	protected int countItemsInInventory(PlayerInventory inventory, ItemStack item) {
 		int totalAmount = 0;
-		boolean isDurable = Search.itemByStack(item).isDurable();
+		boolean isDurable = Items.itemByStack(item).isDurable();
 
 		for (Integer i : inventory.all(item.getType()).keySet()) {
 			ItemStack thisStack = inventory.getItem(i);
@@ -265,7 +265,7 @@ public abstract class Command {
 
 	protected int removeItemsFromInventory(PlayerInventory inventory, ItemStack itemStack, int amount) {
 
-		boolean isDurable = Search.itemByStack(itemStack).isDurable();
+		boolean isDurable = Items.itemByStack(itemStack).isDurable();
 
 		// remove number of items from player adding stock
 		for (int i : inventory.all(itemStack.getType()).keySet()) {
@@ -299,7 +299,7 @@ public abstract class Command {
 
 	}
 
-	protected int countAvailableSpaceForItemInInventory(PlayerInventory inventory, Item item) {
+	protected int countAvailableSpaceForItemInInventory(PlayerInventory inventory, ItemInfo item) {
 		int count = 0;
 		for (ItemStack thisSlot : inventory.getContents()) {
 			if (thisSlot == null || thisSlot.getType() == Material.AIR) {

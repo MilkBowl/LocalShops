@@ -1,0 +1,70 @@
+name: LocalShops
+main: net.milkbowl.localshops.LocalShops
+version: 4.0.2-b000
+author: Cereal, Sleaker
+depend: [Vault]
+softdepend: [MultiVerse, DimensionDoor, SimpleSkylands, Inception, WorldManager, MultiWorld, WormholeXTremeWorlds]
+description: >
+             A localized shop plugin for use with Bukkit economies.
+             Users can create and manage their own shops.
+commands:
+  lshop:
+    description: Command for managing shops 
+    usage: |
+           /<command> - displays command help
+    aliases: [shop]
+  gshop:
+    description: Command for managing global shop
+    usage: |
+           /<command> - displays command help
+    aliases: [global]
+  buy:
+    description: Command for buying from a shop
+    usage: |
+           /<command> - displays command help
+  sell:
+    description: Command for selling to a shop
+    usage: |
+           /<command> - displays command help
+  gbuy:
+    description: Command for buying from the global shop
+    usage: |
+           /<command> - displays command help
+  gsell:
+    description: Command for selling to the global shop
+    usage: |
+           /<command> - displays command help
+  lsadmin:
+    description: Command for setting global LocalShops values
+    usage: |
+           /<command> - displays command help
+permissions:
+  localshops.local.*:
+    description: Gives access to buy, sell, and browse local shops
+    children:
+      localshops.local.buy: true
+      localshops.local.sell: true
+      localshops.local.browse: true
+  localshops.global.*:
+    description: Gives access to buy, sell, and browse global shops
+    children:
+      localshops.global.buy: true
+      localshops.global.sell: true
+      localshops.global.browse: true
+  localshops.manager.*:
+    description: Gives access to manage and create local shops
+    children:
+      localshops.manager.add: true
+      localshops.manager.create: true
+      localshops.manager.destroy: true
+      localshops.manager.move: true
+      localshops.manager.remove: true
+      localshops.manager.select: true
+      localshops.manager.set: true
+      localshops.manager.set.owner: true
+  localshops.admin.*:
+    description: Gives access to manage all shops on the server
+    children: 
+      localshops.admin.local: true
+      localshops.admin.global: true
+      localshops.admin.server: true

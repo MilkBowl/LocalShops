@@ -24,10 +24,10 @@ import java.util.regex.Pattern;
 
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.objects.MsgType;
-import net.milkbowl.localshops.Search;
-import net.milkbowl.localshops.objects.ItemInfo;
 import net.milkbowl.localshops.objects.PermType;
 import net.milkbowl.localshops.objects.Shop;
+import net.milkbowl.vault.item.ItemInfo;
+import net.milkbowl.vault.item.Items;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -79,7 +79,7 @@ public class CommandShopRemove extends Command {
                 if (itemStack == null) {
                     return false;
                 }
-                ItemInfo item = Search.itemByStack(itemStack);
+                ItemInfo item = Items.itemByStack(itemStack);
                 if (item == null) {
                     sender.sendMessage(plugin.getResourceManager().getString(MsgType.GEN_ITEM_NOT_FOUND));
                     return false;
@@ -99,7 +99,7 @@ public class CommandShopRemove extends Command {
         Matcher matcher = pattern.matcher(command);
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
-            ItemInfo item = Search.itemById(id);
+            ItemInfo item = Items.itemById(id);
             return shopRemove(shop, item);
         }
 
@@ -110,7 +110,7 @@ public class CommandShopRemove extends Command {
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
             short type = Short.parseShort(matcher.group(2));
-            ItemInfo item = Search.itemById(id, type);
+            ItemInfo item = Items.itemById(id, type);
             return shopRemove(shop, item);
         }
 
@@ -120,7 +120,7 @@ public class CommandShopRemove extends Command {
         matcher = pattern.matcher(command);
         if (matcher.find()) {
             String itemName = matcher.group(1);
-            ItemInfo item = Search.itemByName(itemName);
+            ItemInfo item = Items.itemByName(itemName);
             return shopRemove(shop, item);
         }
 
