@@ -314,7 +314,7 @@ public abstract class Command {
 		return count;
 	}
 
-	protected boolean notifyPlayers(Shop shop, String[] messages) {
+	protected boolean notifyPlayers(Shop shop, String...messages) {
 		Player[] players = plugin.getServer().getOnlinePlayers();
 		for(Player p : players) {
 			if(shop.containsPoint(p.getLocation())) {

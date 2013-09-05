@@ -46,6 +46,8 @@ public class CommandShopSet extends Command {
         super(plugin, commandLabel, sender, command, isGlobal);
     }
 
+    // TODO: Add set messages to the Messages.properties
+    
     @Override
     public boolean process() {
         // Check Permissions
@@ -165,9 +167,9 @@ public class CommandShopSet extends Command {
             return true;
         }
 
-        // Warn about negative items
+        // Warn about negative prices
         if (price < 0) {
-            sender.sendMessage("[WARNING] This shop will loose money with negative values!");
+            sender.sendMessage(plugin.getResourceManager().getString(MsgType.CMD_SHP_SET_NEG_PRICE));
         }
 
         // Set new values
@@ -496,7 +498,7 @@ public class CommandShopSet extends Command {
             // Save Shop
             plugin.getShopManager().saveShop(shop);
 
-            notifyPlayers(shop, new String[]{ChatColor.DARK_AQUA + "The shop managers have been updated. The current managers are:", GenericFunctions.join(shop.getManagers(), ", ")});
+            notifyPlayers(shop, plugin.getResourceManager().getString(MsgType.CMD_SHP_SET_MANAGERS), GenericFunctions.join(shop.getManagers(), ", "));
             return true;
         }
 
@@ -551,7 +553,7 @@ public class CommandShopSet extends Command {
             // Save Shop
             plugin.getShopManager().saveShop(shop);
 
-            notifyPlayers(shop, new String[]{ChatColor.DARK_AQUA + "This shop's allowed users has been updated. "});
+            notifyPlayers(shop, plugin.getResourceManager().getString(MsgType.CMD_SHP_SET_ALLOWED_USERS));
             return true;
         }
 
