@@ -19,11 +19,9 @@
  */
 package net.milkbowl.localshops;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -335,17 +333,13 @@ public class ShopManager {
             Shop shop = null;
 
             // Determine if filename is a UUID or not
-            if (file.getName().matches("^(\\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\\}{0,1})\\.shop$")) {
+            if (file.getName().endsWith(".shop")) {
                 try {
                     shop = loadShop(file);
                 } catch (Exception e) {
                     // log error
                     log.log(Level.WARNING, String.format("[%s] Error loading Shop file \"%s\", ignored.", plugin.getDescription().getName(), file.toString()), e);
                 }
-            } else {
-                // Convert old format & delete the file...immediately save using
-                // the new format (will generate a new UUID for this shop)
-                shop = convertShopOldFormat(file);
             }
 
             // Check if not null, and add to world
@@ -359,193 +353,6 @@ public class ShopManager {
             }
         }
 
-    }
-
-    public Shop convertShopOldFormat(File file) {
-        if (Config.getSrvDebug()) {
-            log.info(String.format("[%s] %s.%s", plugin.getDescription().getName(), "ShopData", "loadShopOldFormat(File file)"));
-        }
-
-        try {
-            // Create new empty shop (this format has no UUID, so generate one)
-            LocalShop shop = new LocalShop(UUID.randomUUID());
-
-            // Retrieve Shop Name (from filename)
-            shop.setName(file.getName().split("\\.")[0]);
-
-            // Open file & iterate over lines
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line = br.readLine();
-            int x1 = 0, x2 = 0, y1 = 0, y2 = 0, z1 = 0, z2 = 0;
-            while (line != null) {
-
-                if (Config.getSrvDebug()) {
-                    log.info(String.format("[%s] %s", plugin.getDescription().getName(), line));
-                }
-
-                // Skip comment lines / metadata
-                if (line.startsWith("#")) {
-                    line = br.readLine();
-                    continue;
-                }
-
-                // Data is separated by =
-                String[] cols = line.split("=");
-
-                // Check if there are enough columns (needs key and value)
-                if (cols.length < 2) {
-                    line = br.readLine();
-                    continue;
-                }
-
-                if (cols[0].equalsIgnoreCase("world")) { // World
-                    shop.setWorld(cols[1]);
-                } else if (cols[0].equalsIgnoreCase("owner")) { // Owner
-                    shop.setOwner(cols[1]);
-                } else if (cols[0].equalsIgnoreCase("managers")) { // Managers
-                    String[] managers = cols[1].split(",");
-                    shop.setManagers(managers);
-                } else if (cols[0].equalsIgnoreCase("creator")) { // Creator
-                    shop.setCreator(cols[1]);
-                } else if (cols[0].equalsIgnoreCase("position1")) { // Position
-                    // A
-                    String[] xyzStr = cols[1].split(",");
-                    try {
-                        x1 = Integer.parseInt(xyzStr[0].trim());
-                        y1 = Integer.parseInt(xyzStr[1].trim());
-                        z1 = Integer.parseInt(xyzStr[2].trim());
-
-                    } catch (NumberFormatException e) {
-                        if (isolateBrokenShopFile(file)) {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString()));
-                        } else {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Error moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString()));
-                        }
-                        br.close();
-                        return null;
-                    }
-                } else if (cols[0].equalsIgnoreCase("position2")) { // Position
-                    // B
-                    String[] xyzStr = cols[1].split(",");
-                    try {
-                        x2 = Integer.parseInt(xyzStr[0].trim());
-                        y2 = Integer.parseInt(xyzStr[1].trim());
-                        z2 = Integer.parseInt(xyzStr[2].trim());
-                    } catch (NumberFormatException e) {
-                        if (isolateBrokenShopFile(file)) {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString()));
-                        } else {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Location Data, Error moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString()));
-                        }
-                        br.close();
-                        return null;
-                    }
-                } else if (cols[0].equalsIgnoreCase("unlimited-money")) { // Unlimited
-                    // Money
-                    shop.setUnlimitedMoney(Boolean.parseBoolean(cols[1]));
-                } else if (cols[0].equalsIgnoreCase("unlimited-stock")) { // Unlimited
-                    // Stock
-                    shop.setUnlimitedStock(Boolean.parseBoolean(cols[1]));
-                } else if (cols[0].matches("\\d+:\\d+")) { // Items
-                    String[] itemInfo = cols[0].split(":");
-                    if (itemInfo.length < 2) {
-                        if (isolateBrokenShopFile(file)) {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString()));
-                        } else {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Error moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString()));
-                        }
-                        br.close();
-                        return null;
-                    }
-                    int itemId = Integer.parseInt(itemInfo[0]);
-                    short damageMod = Short.parseShort(itemInfo[1]);
-
-                    String[] dataCols = cols[1].split(",");
-                    if (dataCols.length < 3) {
-                        if (isolateBrokenShopFile(file)) {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString()));
-                        } else {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Error moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString()));
-                        }
-                        br.close();
-                        return null;
-                    }
-
-                    String[] buyInfo = dataCols[0].split(":");
-                    if (buyInfo.length < 2) {
-                        if (isolateBrokenShopFile(file)) {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString()));
-                        } else {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Error moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString()));
-                        }
-                        br.close();
-                        return null;
-                    }
-                    int buyPrice = Integer.parseInt(buyInfo[0]);
-
-                    String[] sellInfo = dataCols[1].split(":");
-                    if (sellInfo.length < 2) {
-                        if (isolateBrokenShopFile(file)) {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString()));
-                        } else {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Error moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString()));
-                        }
-                        br.close();
-                        return null;
-                    }
-                    int sellPrice = Integer.parseInt(sellInfo[0]);
-
-                    String[] stockInfo = dataCols[2].split(":");
-                    if (stockInfo.length < 2) {
-                        if (isolateBrokenShopFile(file)) {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString()));
-                        } else {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data, Error moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString()));
-                        }
-                        br.close();
-                        return null;
-                    }
-                    int stock = Integer.parseInt(stockInfo[0]);
-                    int maxStock = Integer.parseInt(stockInfo[1]);
-
-                    if (!shop.addItem(itemId, damageMod, buyPrice, sellPrice, stock, maxStock)) {
-                        if (isolateBrokenShopFile(file)) {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString(), itemId, damageMod));
-                        } else {
-                            log.warning(String.format("[%s] Shop File \"%s\" has bad Item Data (%d:%d), Error moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString(), itemId, damageMod));
-                        }
-                        br.close();
-                        return null;
-                    }
-                } else { // Not defined
-                    log.info(String.format("[%s] Shop File \"%s\" has undefined data, ignoring.", plugin.getDescription().getName(), file.toString()));
-                }
-                line = br.readLine();
-            }
-            shop.getShopLocations().add(new ShopLocation(x1, y1, z1, x2, y2, z2));
-            br.close();
-
-            File dir = new File(Config.getDirShopsConvertedPath());
-            if(dir.mkdir()) {
-                log.log(Level.INFO, "Created directory ''{0}''", dir.getName());
-            }
-            if (file.renameTo(new File(dir, file.getName()))) {
-                if(!file.delete()) {
-                    log.log(Level.WARNING, "Failed to delete ''{0}'' during migration.", file.getName());
-                }
-                return shop;
-            } else {
-                return null;
-            }
-
-        } catch (IOException e) {
-            if (isolateBrokenShopFile(file)) {
-                log.warning(String.format("[%s] Shop File \"%s\" Exception: %s, Moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString(), e.toString()));
-            } else {
-                log.warning(String.format("[%s] Shop File \"%s\" Exception: %s, Error moving to \"" + Config.getDirShopsBrokenPath() + "\"", plugin.getDescription().getName(), file.toString(), e.toString()));
-            }
-            return null;
-        }
     }
 
     public static double[] convertStringArraytoDoubleArray(String[] sarray) {
@@ -873,6 +680,7 @@ public class ShopManager {
     }
 
     public boolean saveShop(Shop shop) {
+        
         SortedProperties props = new SortedProperties();
 
         // Config attributes
@@ -991,13 +799,10 @@ public class ShopManager {
     }
 
     public boolean logItems(String playerName, String shopName, String action, String itemName, int numberOfItems, int startNumberOfItems, int endNumberOfItems) {
-
         return logTransaciton(playerName, shopName, action, itemName, numberOfItems, startNumberOfItems, endNumberOfItems, 0, 0, 0);
-
     }
 
     public boolean logPayment(String playerName, String action, double moneyTransfered, double startingbalance, double endingbalance) {
-
         return logTransaciton(playerName, null, action, null, 0, 0, 0, moneyTransfered, startingbalance, endingbalance);
     }
 
@@ -1018,8 +823,7 @@ public class ShopManager {
 
             String fileOutput = "";
 
-            DateFormat dateFormat = new SimpleDateFormat(
-                    "yyyy/MM/dd HH:mm:ss z");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss z");
             Date date = new Date();
             fileOutput += dateFormat.format(date) + ": ";
             fileOutput += "Action: ";

@@ -25,7 +25,6 @@ import java.util.regex.Pattern;
 import net.milkbowl.localshops.LocalShops;
 import net.milkbowl.localshops.objects.GlobalShop;
 import net.milkbowl.localshops.objects.MsgType;
-import net.milkbowl.localshops.objects.PlayerData;
 import net.milkbowl.localshops.objects.Shop;
 
 import org.bukkit.command.CommandSender;
@@ -75,7 +74,7 @@ public class CommandShopDebug extends Command {
             Shop shop = null;
             if (sender instanceof Player) {
                 Player player = (Player) sender;
-                PlayerData pData = plugin.getPlayerData().get(player.getName());
+                //PlayerData pData = plugin.getPlayerData().get(player.getName());
 
                 // info (player only command)
                 Pattern pattern = Pattern.compile("(?i)debug$");
