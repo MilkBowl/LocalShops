@@ -63,9 +63,6 @@ public class Config {
     private static boolean srvLogTransactions = true;
     private static boolean srvDebug = false;
     private static UUID srvUuid = null;
-    private static boolean srvReport = true;
-    private static String srvReportUrl = "http://stats.cereal.sh/";
-    private static int srvReportInterval = 21600;
     private static boolean srvMoveEvents = true;
     // Dynamic Shop Price Change variables
     private static int globalBaseStock = 0;
@@ -118,7 +115,6 @@ public class Config {
 
         properties.setProperty("log-transactions", String.valueOf(srvLogTransactions));
         properties.setProperty("uuid", UUID.randomUUID().toString());
-        properties.setProperty("report-stats", String.valueOf(srvReport));
         properties.setProperty("debug", String.valueOf(srvDebug));
 
         properties.setProperty("find-max-distance", String.valueOf(findMaxDistance));
@@ -199,7 +195,6 @@ public class Config {
 
         srvLogTransactions = Boolean.parseBoolean(properties.getProperty("log-transactions", String.valueOf(srvLogTransactions)));
         srvUuid = UUID.fromString(properties.getProperty("uuid", UUID.randomUUID().toString()));
-        srvReport = Boolean.parseBoolean(properties.getProperty("report-stats", String.valueOf(srvReport)));
         srvDebug = Boolean.parseBoolean(properties.getProperty("debug", String.valueOf(srvDebug)));
         srvMoveEvents = Boolean.parseBoolean(properties.getProperty("move-events", String.valueOf(srvMoveEvents)));
 
@@ -505,14 +500,6 @@ public class Config {
     }
 
     /**
-     * Get server report setting
-     * @return
-     */
-    public static boolean getSrvReport() {
-        return srvReport;
-    }
-
-    /**
      * Set if server logs transactions
      * @param log
      */
@@ -530,51 +517,6 @@ public class Config {
 
     public static void setSrvMoveEvents(boolean moveEvents) {
         srvMoveEvents = moveEvents;
-    }
-
-    @Deprecated
-    public static void setSrvUuid(UUID uuid) {
-        // do nothing, intentionally unimplemented as is read-only parameter!
-    }
-
-    /**
-     * Set if server sends anonymous reports to the developers
-     * @param report
-     */
-    public static void setSrvReport(boolean report) {
-        srvReport = report;
-    }
-
-    /**
-     * Get reporting thread destination url
-     * @return
-     */
-    public static String getSrvReportUrl() {
-        return srvReportUrl;
-    }
-
-    /**
-     * Set reporting thread destination url (including http://)
-     * @param url
-     */
-    public static void setSrvReportUrl(String url) {
-        srvReportUrl = url;
-    }
-
-    /**
-     * Get reporting thread interval
-     * @return
-     */
-    public static int getSrvReportInterval() {
-        return srvReportInterval;
-    }
-
-    /**
-     * Set reporting thread interval
-     * @param interval
-     */
-    public static void setSrvReportInterval(int interval) {
-        srvReportInterval = interval;
     }
 
     /**

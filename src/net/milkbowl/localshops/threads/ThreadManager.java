@@ -29,7 +29,6 @@ public class ThreadManager {
     // Threads
     SchedulerThread st = null;
     NotificationThread nt = null;
-    ReportThread rt = null;
     // Thread Groups
     private ThreadGroup dynamicThreadGroup = new ThreadGroup("dynamic");
     // Logging
@@ -73,25 +72,6 @@ public class ThreadManager {
             } catch (InterruptedException e) {
                 // ruh roh
                 log.warning(String.format("[%s] %s", plugin.getDescription().getName(), "NotificationThread did not exit"));
-            }
-        }
-    }
-
-    public void reportStart() {
-        if (rt == null || !rt.isAlive()) {
-            rt = new ReportThread(plugin);
-            rt.start();
-        }
-    }
-
-    public void reportStop() {
-        if (rt != null && rt.isAlive()) {
-            try {
-                rt.setRun(false);
-                rt.join(2000);
-            } catch (InterruptedException e) {
-                // ruh roh
-                log.warning(String.format("[%s] %s", plugin.getDescription().getName(), "ReportThread did not exit"));
             }
         }
     }

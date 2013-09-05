@@ -136,11 +136,6 @@ public class LocalShops extends JavaPlugin {
             checkPlayerPosition(player);
         }
 
-        // Start reporting thread
-        if (Config.getSrvReport()) {
-            threadManager.reportStart();
-        }
-
         // Start Notification thread
         if (Config.getShopTransactionNotice()) {
             threadManager.notificationStart();
@@ -173,9 +168,6 @@ public class LocalShops extends JavaPlugin {
 
         // Save config file
         Config.save();
-
-        // Stop Reporting thread
-        threadManager.reportStop();
 
         // Stop Scheduler thread
         threadManager.schedulerStop();
