@@ -43,7 +43,7 @@ public class ShopsWorldListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onWorldLoad(WorldLoadEvent event) {
         //Loop through all shops
         for (Shop shop : plugin.getShopManager().getAllShops()) {
@@ -76,8 +76,6 @@ public class ShopsWorldListener implements Listener {
             }
             plugin.getShopManager().updateSigns(shop, addSet);
             shop.getSigns().addAll(addSet);
-
         }
-
     }
 }

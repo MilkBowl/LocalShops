@@ -37,12 +37,8 @@ public class ShopsEntityListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEntityExplode(EntityExplodeEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
-
         //Check see if explosion happens inside a shop - if it does, cancel the event.
         for (Block block : event.blockList()) {
             Location blockLoc = block.getLocation();

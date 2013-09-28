@@ -57,9 +57,9 @@ public class ShopsPlayerListener implements Listener {
 	}
 
 	@SuppressWarnings("deprecation")
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		if (event.isCancelled() || event.getClickedBlock() == null) {
+		if (event.getClickedBlock() == null) {
 			return;
 		}
 
@@ -150,7 +150,7 @@ public class ShopsPlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		String playerName = player.getName();

@@ -55,7 +55,7 @@ public class ShopsBlockListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onSignChange(SignChangeEvent event) {
         Shop shop = null;
         Block block = event.getBlock();
@@ -112,12 +112,8 @@ public class ShopsBlockListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
-
         Block block = event.getBlock();
 
         LocalShop shop = null;
@@ -144,12 +140,8 @@ public class ShopsBlockListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
-
         Block block = event.getBlock();
 
         // If not a sign ignore event.
