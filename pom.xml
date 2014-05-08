@@ -5,7 +5,7 @@
     <!-- Project information -->
     <groupId>net.milkbowl.localshops</groupId>
     <artifactId>LocalShops</artifactId>
-    <version>4.1.0-SNAPSHOT</version>
+    <version>4.1.1</version>
     <name>LocalShops</name>
     <url>http://dev.bukkit.org/server-mods/localshops/</url>
     <description></description>
