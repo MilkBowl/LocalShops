@@ -41,7 +41,6 @@ import net.milkbowl.localshops.threads.ThreadManager;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
 import org.bukkit.command.CommandExecutor;
@@ -255,9 +254,9 @@ public class LocalShops extends JavaPlugin {
         // TODO Add formatting
         Shop shop = getShopManager().getLocalShop(shopUuid);
         if(shop != null) {
-            player.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] You have left the shop " + ChatColor.WHITE + shop.getName());
+        	player.sendMessage(getResourceManager().getString(MsgType.MV_LEAVE_SHOP, new String[] {"%SHOPNAME%"}, new String[] {shop.getName()}));
         } else {
-            player.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] You are no longer in a shop.");
+        	player.sendMessage(getResourceManager().getString(MsgType.MV_NO_SHOP));
         }
     }
 
@@ -265,7 +264,7 @@ public class LocalShops extends JavaPlugin {
         // TODO Add formatting
         Shop shop = getShopManager().getLocalShop(shopUuid);
         if(shop != null) {
-            player.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.WHITE + "Shop" + ChatColor.DARK_AQUA + "] You have entered the shop " + ChatColor.WHITE + shop.getName());
+        	player.sendMessage(getResourceManager().getString(MsgType.MV_ENTER_SHOP, new String[] {"%SHOPNAME%"}, new String[] {shop.getName()}));
         }
     }
 }

@@ -12,7 +12,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <bukkitVersion>1.6.2-R0.1-SNAPSHOT</bukkitVersion>
+        <bukkitVersion>1.7.9-R0.1-SNAPSHOT</bukkitVersion>
         <mainClass>net.milkbowl.localshops.LocalShops</mainClass>
     </properties>
 
@@ -33,19 +33,14 @@
         <url>https://github.com/MilkBowl/LocalShops/issues</url>
     </issueManagement>
 
-    <ciManagement>
-        <system>jenkins</system>
-        <url>http://ci.herocraftonline.com/job/LocalShops/</url>
-    </ciManagement>
-
     <repositories>
+		<repository>
+			<id>bukkit-repo</id>
+			<url>http://repo.bukkit.org/content/groups/public/</url>
+		</repository>
         <repository>
-            <id>bukkit-repo</id>
-            <url>http://repo.bukkit.org/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>Milkbowl-repo</id>
-            <url>http://ci.herocraftonline.com/plugin/repository/everything/</url>
+            <id>Vault-repo</id>
+            <url>http://nexus.theyeticave.net/content/repositories/pub_releases/</url>
         </repository>
     </repositories>
 
@@ -58,7 +53,7 @@
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>Vault</artifactId>
-            <version>1.2.27</version>
+            <version>1.2.32</version>
         </dependency>
     </dependencies>
 
@@ -81,28 +76,10 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.0.2</version>
                 <configuration>
+                	<compilerVersion>1.8</compilerVersion>
                     <source>1.6</source>
                     <target>1.6</target>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.5</version>
-                <executions>
-                    <execution>
-                        <id>add-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>${project.basedir}/src</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
