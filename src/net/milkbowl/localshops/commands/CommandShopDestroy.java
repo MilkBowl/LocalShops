@@ -112,8 +112,7 @@ public class CommandShopDestroy extends Command {
                 return false;
             }
 
-            Player[] players = plugin.getServer().getOnlinePlayers();
-            for(Player p : players) {
+            for(Player p : plugin.getServer().getOnlinePlayers()) {
                 if(shop.containsPoint(p.getLocation())) {
                     p.sendMessage(plugin.getResourceManager().getChatPrefix() + " " + ChatColor.WHITE + shop.getName() + ChatColor.DARK_AQUA + " has been destroyed");
                 }
